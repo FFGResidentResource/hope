@@ -6,6 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://getbootstrap.com/docs/3.3/assets/css/ie10-viewport-bug-workaround.css">
+
+<!-- Custom styles for this template -->
+<link href="/css/signin.css" rel="stylesheet">
+
+<script src="https://getbootstrap.com/docs/3.3/assets/js/ie-emulation-modes-warning.js"></script>
 
 <style>
 .bd-placeholder-img {
@@ -18,12 +24,19 @@
 		font-size: 3.5rem;
 	}
 }
+
+.navbar-brand>img {
+  height: 100%;
+}
+.navbar-brand {
+  padding: 0;
+}
 </style>
-<!-- Custom styles for this template -->
-<link href="/css/signin.css" rel="stylesheet">
 
 </head>
-<body style="height: 1500px; margin-top:50px;">
+<body>
+
+	
 
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
@@ -35,12 +48,14 @@
 	</div>
 
 
+
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script
-	<script src="/js/bootstrap.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
 

@@ -8,8 +8,6 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-
-
 <style>
 .bd-placeholder-img {
 	font-size: 1.125rem;
@@ -21,12 +19,19 @@
 		font-size: 3.5rem;
 	}
 }
+
+.navbar-brand>img {
+  height: 100%;
+}
+.navbar-brand {
+  padding: 0;
+}
 </style>
 <!-- Custom styles for this template -->
 <link href="/css/signin.css" rel="stylesheet">
 
 </head>
-<body style="height: 1500px">
+<body>
 
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
@@ -62,7 +67,7 @@
 						</div>
 
 						<div class="form-group">
-							<button class="btn btn-lg btn-block" type="submit">Sign
+							<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
 								in</button>
 						</div>
 
@@ -79,8 +84,9 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script
-	<script src="/js/bootstrap.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 
 </body>
 </html>

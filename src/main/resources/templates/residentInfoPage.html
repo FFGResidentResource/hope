@@ -19,10 +19,17 @@
 		font-size: 3.5rem;
 	}
 }
+
+.navbar-brand>img {
+  height: 100%;
+}
+.navbar-brand {
+  padding: 0;
+}
 </style>
 
 </head>
-<body style="height: 1500px; margin-top:50px;">
+<body>
 
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
@@ -41,8 +48,9 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script
-	<script src="/js/bootstrap.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 
 </html>
