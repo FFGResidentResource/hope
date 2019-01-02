@@ -25,7 +25,7 @@ public class AppRoleDAO extends JdbcDaoSupport {
         this.setDataSource(dataSource);
     }
  
-    public List<String> getRoleNames(Long userId) {
+    public List<String> getRoleNames(Integer userId) {
         String sql = "Select r.Role_Name " //
                 + " from User_Role ur, App_Role r " //
                 + " where ur.Role_Id = r.Role_Id and ur.User_Id = ? ";

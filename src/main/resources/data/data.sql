@@ -1,11 +1,36 @@
 -- PostGreSQL - Initial Datasetup
 -- Create table
+
+create table RESIDENT
+(
+  RESIDENT_ID       BIGINT PRIMARY KEY NOT NULL,
+  ACTIVE	    	VARCHAR(10) NOT NULL,
+  FIRST_NAME        VARCHAR(20) NOT NULL,
+  MIDDLE        	VARCHAR(20),
+  LAST_NAME        	VARCHAR(20) NOT NULL,
+  ADDRESS			VARCHAR(128),
+  CITY				VARCHAR(20),
+  STATE				VARCHAR(20),
+  ZIP_CODE			VARCHAR(20),
+  PHONE				VARCHAR(15),
+  MOBILE_PHONE		VARCHAR(15),
+  EMAIL				VARCHAR(128),
+  COMMUNITY_NAME	VARCHAR(30),
+  LAST_UPDATED		TIMESTAMP NOT NULL DEFAULT NOW(),
+  LAST_UPDATED_BY	VARCHAR(50) NOT NULL
+) ;
+
+--  
+
 create table APP_USER
 (
-  USER_ID           BIGINT not null,
-  USER_NAME         VARCHAR(36) not null,
-  ENCRYTED_PASSWORD VARCHAR(128) not null,
-  ENABLED           Int not null 
+  USER_ID           INT NOT NULL,
+  USER_NAME         VARCHAR(36) NOT NULL,
+  ENCRYTED_PASSWORD VARCHAR(128) NOT NULL,
+  ACTIVE            VARCHAR(10) NOT NULL,
+  EMAIL		    	VARCHAR (128) UNIQUE NOT NULL,
+  CREATED_ON	    TIMESTAMP NOT NULL DEFAULT NOW(),
+  LAST_LOGIN	    TIMESTAMP 
 ) ;
 --  
 alter table APP_USER
@@ -18,7 +43,7 @@ alter table APP_USER
 -- Create table
 create table APP_ROLE
 (
-  ROLE_ID   BIGINT not null,
+  ROLE_ID   INT not null,
   ROLE_NAME VARCHAR(30) not null
 ) ;
 --  
@@ -32,9 +57,9 @@ alter table APP_ROLE
 -- Create table
 create table USER_ROLE
 (
-  ID      BIGINT not null,
-  USER_ID BIGINT not null,
-  ROLE_ID BIGINT not null
+  ID      INT not null,
+  USER_ID INT not null,
+  ROLE_ID INT not null
 );
 --  
 alter table USER_ROLE
@@ -66,13 +91,13 @@ CREATE TABLE Persistent_Logins (
   
 --------------------------------------
  
-insert into App_User (USER_ID, USER_NAME, ENCRYTED_PASSWORD, ENABLED)
-values (2, 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu', 1);
+insert into App_User (USER_ID, USER_NAME, ENCRYTED_PASSWORD, ACTIVE, EMAIL)
+values (2, 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu','A', 'dbuser1@email.com');
  
-insert into App_User (USER_ID, USER_NAME, ENCRYTED_PASSWORD, ENABLED)
-values (1, 'dbadmin1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu', 1);
- 
----
+insert into App_User (USER_ID, USER_NAME, ENCRYTED_PASSWORD, ACTIVE, EMAIL)
+values (1, 'dbadmin1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu','A','dbadmin1@email.com');
+
+-------------------------------------------
  
 insert into app_role (ROLE_ID, ROLE_NAME)
 values (1, 'ROLE_ADMIN');
@@ -91,4 +116,7 @@ values (2, 1, 2);
 insert into user_role (ID, USER_ID, ROLE_ID)
 values (3, 2, 2);
 ---
+
+
+
 Commit;
