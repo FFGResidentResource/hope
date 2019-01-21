@@ -9,7 +9,7 @@
       </button>
       
         <a class="navbar-brand" th:href="@{/welcome}">
-          <img src="/images/rrnlogo_horz.png" />
+          <img src="/images/rrnlogo.png" />
         </a>
       
 
@@ -30,3 +30,12 @@
     </div>
   </div>
 </nav>
+
+<script type="text/javascript">	
+jQuery(document).ready(function(){
+    jQuery('a').click(function(){
+        jQuery('a').removeClass("active");
+       jQuery(this).addClass("active");
+    });
+  });
+</script>
