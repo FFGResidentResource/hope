@@ -30,3 +30,13 @@
 	color:white;
 }
 
+.btn-primary:hover{
+	background-color: cadetblue;
+	border-color: goldenrod;
+}
+
+.btn-primary{
+	background-color: cadetblue;
+	border-color: transparent;	
+}
+

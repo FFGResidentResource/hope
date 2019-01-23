@@ -57,6 +57,21 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
 	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	
+	<script type="text/javascript">	
+	//Code to Style Active Tab
+	jQuery(document).ready(function(){
+		
+		jQuery('a').parent().removeClass('active');
+		var path = window.location.pathname;
+		if(path == '/residentInfo'){			
+			jQuery("a[href='/residentInfo']").parent().addClass('active');
+		}
+		else if(path == '/admin'){			
+			jQuery("a[href='/admin']").parent().addClass('active');
+		}
+  	});
+	</script>
 </body>
 </html>
 
