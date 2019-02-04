@@ -3,49 +3,74 @@
  */
 package com.ffg.rrn.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
 
 /**
  * @author FFGRRNTeam
  * 
- * RESIDENT_ID      BIGINT PIMARY KEY NOT NULL,
- * FIRST_NAME       VARCHAR(20) NOT NULL,
- * MIDDLE        	VARCHAR(20),
- * LAST_NAME        VARCHAR(20) NOT NULL,
- * ADDRESS			VARCHAR(128),
- * CITY				VARCHAR(20),
- * STATE			VARCHAR(20),
- * ZIP_CODE			VARCHAR(20),
- * PHONE			VARCHAR(15),
- * MOBILE_PHONE		VARCHAR(15),
- * EMAIL			VARCHAR(128),
- * COMMUNITY_NAME	VARCHAR(30), 
- * LAST_UPDATED		TIMESTAMP NOT NULL DEFAULT NOW(),
- * LAST_UPDATED_BY	VARCHAR(50) 
+	RESIDENT_ID		BIGINT PRIMARY KEY NOT NULL,
+	ACTIVE			BOOLEAN DEFAULT FALSE,
+	FIRST_NAME		VARCHAR(20),
+	MIDDLE			VARCHAR(20),
+	LAST_NAME		VARCHAR(20),
+	UNIT_ID			BIGINT REFERENCES UNIT(UNIT_ID),
+	VOICEMAIL_NO	VARCHAR(20),
+	TEXT_NO			VARCHAR(20),
+	EMAIL			VARCHAR(128),
+	ALLOW_CONTACT	BOOLEAN DEFAULT FALSE,
+	WANTS_SURVEY	BOOLEAN DEFAULT FALSE,
+	PHOTO_RELEASE	BOOLEAN DEFAULT FALSE,
+	DATE_ADDED		TIMESTAMP DEFAULT NOW(),
+	SERVICE_COORD	BIGINT REFERENCES SERVICE_COORDINATOR(SC_ID)
 **/ 
 
 @Data
+@JsonView
 public class Resident {
 	
 	private Long residentId;	
-	private String firstName;	
-	private String middle;	
-	private String lastName;	
-	private String address;	
-	private String city;	
-	private String state;	
-	private String zipCode;	
-	private String phone;	
-	private String mobilePhone;	
+	private Boolean active;
+	private String firstName;
+	private String middle;
+	private String lastName;
+	private String unitName;
+	private String voiceMail;
+	private String text;
 	private String email;
-	private String communityName;	
-	private Timestamp lastUpdated;	
-	private String lastUpdatedBy;
+	private Boolean allowContact;
+	private Boolean wantSurvey;
+	private Boolean photoRelease;
+	private Date dateAdded;
+	private String serviceCoord;
+	
 	
 	public Resident() {
 		
+	}
+
+
+	public Resident(Long residentId, Boolean active, String firstName, String middle, String lastName, String unitName,
+			String voiceMail, String text, String email, Boolean allowContact, Boolean wantSurvey, Boolean photoRelease,
+			Date dateAdded, String serviceCoord) {
+		super();
+		this.residentId = residentId;
+		this.active = active;
+		this.firstName = firstName;
+		this.middle = middle;
+		this.lastName = lastName;
+		this.unitName = unitName;
+		this.voiceMail = voiceMail;
+		this.text = text;
+		this.email = email;
+		this.allowContact = allowContact;
+		this.wantSurvey = wantSurvey;
+		this.photoRelease = photoRelease;
+		this.dateAdded = dateAdded;
+		this.serviceCoord = serviceCoord;
 	}
 
 }
