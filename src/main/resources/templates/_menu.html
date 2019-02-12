@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default" role="navigation" id="my-navbar">
-  <div class="container">
+  <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-brand-centered">
         <span class="sr-only">Toggle navigation</span>
@@ -9,9 +9,8 @@
       </button>
       
         <a class="navbar-brand" th:href="@{/welcome}">
-          <img src="/images/rrnlogo.png" />
-        </a>
-      
+          <!-- <img src="/images/rrnlogo.png" /> -->
+        </a>  
 
     </div>
     <div class="collapse navbar-collapse" id="navbar-brand-centered">
@@ -21,7 +20,7 @@
 						<span class="glyphicon glyphicon-user" style="color:darkseagreen; font-weight:bold; padding-top:15px;" th:if="${serviceCordInfo != null}"
 							th:utext="${serviceCordInfo}"></span>
 				</li>
-				<li class="active"><a th:href="@{/residentInfo}">Add Resident</a></li>				
+				<li class="active"><a th:href="@{/residents}">Residents</a></li>				
 				<li><a th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}"
 					th:href="@{/logout}">Logout</a></li>

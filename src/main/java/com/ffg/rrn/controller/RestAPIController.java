@@ -32,25 +32,25 @@ public class RestAPIController {
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         date = cal.getTime();
 		
-		Resident r = new Resident(1L, false, "Rishabh", "", "Sharma", "A-17", "6141234567", "6141234567", "rishabh@rishabh.com", true, false, false, date, "sc1");
+		Resident r = new Resident(1L, false, "Rishabh", "", "Sharma", "Cutter Apts", "6141234567", "6141234567", "rishabh@rishabh.com", true, false, false, date, "sc1");
 		data.add(r);
 		
-		r = new Resident(2L, false, "Eric", null, "Podolsky", "B-17", "1234567890", "1234567890", "eric@eric.com", true, false, false, date, "sc1");
+		r = new Resident(2L, false, "Eric", null, "Podolsky", "The Meadows (CMHA)", "1234567890", "1234567890", "eric@eric.com", true, false, false, date, "sc1");
 		data.add(r);
 		
-		r = new Resident(3L, false, "Joshua", "M", "Schraivogel", "C-17", "6147654321", "6147654321", "joshua@joshua.com", true, false, false, date, "sc1");
+		r = new Resident(3L, false, "Joshua", "M", "Schraivogel", "The Meadows (Marrysville)", "6147654321", "6147654321", "joshua@joshua.com", true, false, false, date, "sc1");
 		data.add(r);
 		
-		r = new Resident(4L, false, "Jeremy", "M", "Clark", "D-17", "6141223344", "6141223344", "jeremy@jeremy.com", true, false, false, date, "sc1");		
+		r = new Resident(4L, false, "Jeremy", "M", "Clark", "Rosewind", "6141223344", "6141223344", "jeremy@jeremy.com", true, false, false, date, "sc1");		
 		data.add(r);
 		
-		r = new Resident(5L, false, "Alexander", null, "Giovannelli", "E-17", "6141122334", "6141122334", "gio@gio.com", true, false, false, date, "sc1");
+		r = new Resident(5L, false, "Alexander", null, "Giovannelli", "Thornwood", "6141122334", "6141122334", "gio@gio.com", true, false, false, date, "sc1");
 		data.add(r);
 		
-		r = new Resident(6L, false, "John", null, "Ransom", "F-17", "6141234566", "6141234566", "john@john.com", true, false, false, date, "sc2");
+		r = new Resident(6L, false, "John", null, "Ransom", "Fair Park", "6141234566", "6141234566", "john@john.com", true, false, false, date, "sc2");
 		data.add(r);
 		
-		r = new Resident(7L, false, "Alexander", null, "Giovannelli", "G-17", "6141234577", "6141234577", "alex@alex.com", true, false, false, date, "sc2");
+		r = new Resident(7L, false, "Alexander", null, "Giovannelli", "Faith Village", "6141234577", "6141234577", "alex@alex.com", true, false, false, date, "sc2");
 		data.add(r);    
  
         return ResponseEntity.ok(data); 

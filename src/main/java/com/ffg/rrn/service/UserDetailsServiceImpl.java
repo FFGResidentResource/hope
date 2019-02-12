@@ -16,35 +16,35 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.AppRoleDAO;
-import com.ffg.rrn.dao.AppUserDAO;
-import com.ffg.rrn.model.AppUser;
+import com.ffg.rrn.dao.ServiceCoordinatorDAO;
+import com.ffg.rrn.model.ServiceCoordinator;
 
 /**
- * @author mycomputer
+ * @author FFGRRNTeam
  *
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
  
     @Autowired
-    private AppUserDAO appUserDAO;
+    private ServiceCoordinatorDAO serviceCoordinatorDAO;
  
     @Autowired
     private AppRoleDAO appRoleDAO;
  
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        AppUser appUser = this.appUserDAO.findUserAccount(userName);
+    	ServiceCoordinator sc = this.serviceCoordinatorDAO.findUserAccount(userName);
  
-        if (appUser == null) {
+        if (sc == null) {
             System.out.println("User not found! " + userName);
             throw new UsernameNotFoundException("User " + userName + " was not found in the database");
         }
  
-        System.out.println("Found User: " + appUser);
+        System.out.println("Found User: " + sc);
  
         // [ROLE_USER, ROLE_ADMIN,..]
-        List<String> roleNames = this.appRoleDAO.getRoleNames(appUser.getUserId());
+        List<String> roleNames = this.appRoleDAO.getRoleNames(sc.getScId());
  
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
         if (roleNames != null) {
@@ -55,8 +55,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             }
         }
  
-        UserDetails userDetails = (UserDetails) new User(appUser.getUserName(), //
-                appUser.getEncrytedPassword(), grantList);
+        UserDetails userDetails = (UserDetails) new User(sc.getUserName(), //
+        		sc.getEncrytedPassword(), grantList);
  
         return userDetails;
     }

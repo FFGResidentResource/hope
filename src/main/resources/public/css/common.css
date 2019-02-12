@@ -7,7 +7,7 @@
 }
 .navbar-default .navbar-collapse, .navbar-default .navbar-form
 {
-	background-color: cadetblue;
+	background-color: #31708f;
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
@@ -30,13 +30,18 @@
 	color:white;
 }
 
-.btn-primary:hover{
-	background-color: cadetblue;
-	border-color: goldenrod;
-}
-
 .btn-primary{
-	background-color: cadetblue;
+	background-color: #31708f;
 	border-color: transparent;	
 }
+
+.btn-primary:active:focus:hover{
+	background-color: #31708f;
+	border-color: #004000;
+}
+
+.bs-linebreak {
+  padding:30px;
+}
+
 

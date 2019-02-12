@@ -42,7 +42,7 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container">
+	<div class="container-fluid">
 		<h2>
 			<span th:utext="${message}"></span>
 		</h2>
@@ -64,8 +64,8 @@
 		
 		jQuery('a').parent().removeClass('active');
 		var path = window.location.pathname;
-		if(path == '/residentInfo'){			
-			jQuery("a[href='/residentInfo']").parent().addClass('active');
+		if(path == '/residents'){			
+			jQuery("a[href='/residents']").parent().addClass('active');
 		}
 		else if(path == '/admin'){			
 			jQuery("a[href='/admin']").parent().addClass('active');
