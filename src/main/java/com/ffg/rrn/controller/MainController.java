@@ -78,13 +78,13 @@ public class MainController {
 	}
 	
 	@PostMapping("/addResident")
-    public String submit(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+    public String signup(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
         
 		if (bindingResult.hasErrors()) {
             return "residentPage";
         }
 		
-            
+        int count = residentService.saveResident(resident);    
         
         return "residentPage";
     }

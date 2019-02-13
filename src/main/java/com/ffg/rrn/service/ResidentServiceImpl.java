@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.Resident;
 
 /**
  * @author FFGRRNTeam
@@ -23,6 +24,10 @@ public class ResidentServiceImpl {
 	
 	public List<Property> getAllProperty(){		
 		return this.residentDao.getAllProperty();
-	}	
+	}
+	
+	public int saveResident(final Resident resident) {		
+		return residentDao.saveResident(resident);		
+	}
 	
 }

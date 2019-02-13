@@ -118,7 +118,7 @@
 								<label class="col-md-3 control-label" for="_property">Property:</label>
 								<div class="col-md-6">
 									<select class="form-control" id="_property"
-										th:field="*{propertyId}" onchange="populateUnitAndFee(this.value)">
+										th:field="*{propertyId}">
 										<option value="0">Select</option>
 										<option th:each="property : ${resident.propertyList}"
 											th:value="${property.propertyId}"
@@ -131,21 +131,12 @@
 							</div>
 
 							<div class="form-group form-group-md">
-								<label class="col-md-3 control-label" for="unit">Unit: </label>
+								<label class="col-md-3 control-label" for="unit">Address: </label>
 								<div class="col-md-6">
-									<input class="form-control" id="unit" value=""
-										placeholder="Select Property" readonly>
+									<input class="form-control" id="unit" th:field="*{address}"
+										placeholder="Enter UnitNo. and Street" >
 								</div>
-							</div>
-
-							<div class="form-group form-group-md">
-								<label class="col-md-3 control-label" for="unitFee">Unit
-									Fee:</label>
-								<div class="col-md-6">
-									<input class="form-control" id="unitFee" value=""
-										placeholder="Select Property" readonly>
-								</div>
-							</div>
+							</div>						
 
 						</div>
 
@@ -233,6 +224,11 @@
 					<div class="row text-center">
 
 						<div>
+							<label class="checkbox-inline" for="ackPR">
+							<input
+								 id="ackPR" type="checkbox"
+								th:field="*{ackRightToPrivacy}">I was informed of my right to privacy.
+							</label> 
 							<label class="checkbox-inline" for="allowcontact">
 							<input
 								 id="allowcontact" type="checkbox"
@@ -258,7 +254,7 @@
 					<div class="row text-center bs-linebreak">
 						<input type="hidden" th:field="*{serviceCoord}" />
 						<input type="hidden" id="propertyString" th:value="${resident.propertyList}" />
-						<input type="button" class="btn btn-primary btn-md" value="Reset">
+						<input type="button" class="btn btn-primary btn-md" value="Reset" onclick="jQuery(':input').val("");">
 						<input type="submit" class="btn btn-primary btn-md" value="Sign up">
 					</div>
 
@@ -408,23 +404,7 @@
 									});
 						});
 		
-		function populateUnitAndFee(selVal){
-			
-			debugger;
-			var valueString = jQuery("#_p"+selVal).val();
-			 
-			
-			if(valueString === undefined){
-				jQuery("#unit").val("");
-				jQuery("#unitFee").val("");
-			}
-			else{
-				var unitAndFee = valueString.split("_");
-				jQuery("#unit").val(unitAndFee[0]);
-				jQuery("#unitFee").val(unitAndFee[1]);
-			}
-			
-		}
+		
 	</script>
 </body>
 

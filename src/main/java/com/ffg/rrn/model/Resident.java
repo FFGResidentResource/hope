@@ -51,6 +51,8 @@ public class Resident {
 	private String text;
 	@Email
 	private String email;
+	private String address;
+	private Boolean ackRightToPrivacy;
 	private Boolean allowContact;
 	private Boolean wantSurvey;
 	private Boolean photoRelease;
