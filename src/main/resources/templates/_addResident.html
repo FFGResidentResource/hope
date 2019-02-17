@@ -1,0 +1,206 @@
+<div id="addResident_Form">
+	<h2>Add Resident</h2>
+	<form name='f' th:action="@{/addResident}" th:object="${resident}"
+		method='POST' class="form-horizontal" novalidate>
+
+		<!-- <div id="logo-container"></div> -->
+
+		<div class="row">
+
+			<div class="col-md-2">
+				<div class="form-group form-group-md">
+					<label class="col-md-5 control-label" for="firstName">First
+						Name: </label>
+					<div class="col-md-7">
+						<input class="form-control" id="firstName" th:field="*{firstName}"
+							placeholder="Enter first name" required>
+					</div>
+				</div>
+
+				<div class="form-group form-group-md">
+					<label class="col-md-5 control-label" for="middle">Middle:
+					</label>
+					<div class="col-md-7">
+						<input class="form-control" id="middle" th:field="*{middle}"
+							placeholder="middle" required>
+					</div>
+				</div>
+
+				<div class="form-group form-group-md">
+					<label class="col-md-5 control-label" for="lastname">Last
+						Name: </label>
+					<div class="col-md-7">
+						<input class="form-control" id="lastname" th:field="*{lastName}"
+							placeholder="Enter last name" required>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-3">
+				<div class="form-group form-group-md">
+					<label class="col-md-3 control-label" for="voicemail">Voicemail:</label>
+					<div class="col-md-6">
+						<input class="form-control" id="voicemail" th:field="*{voiceMail}"
+							placeholder="Enter voicemail">
+					</div>
+				</div>
+
+				<div class="form-group form-group-md">
+					<label class="col-md-3 control-label" for="text">Text: </label>
+					<div class="col-md-6">
+						<input class="form-control" id="text" th:field="*{text}"
+							placeholder="Enter cell phone">
+					</div>
+				</div>
+
+				<div class="form-group form-group-md">
+					<label class="col-md-3 control-label" for="email">Email:</label>
+					<div class="col-md-8">
+						<input class="form-control" id="email" type="email"
+							th:field="*{email}" placeholder="Enter email">
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-3">
+				<div class="form-group form-group-md">
+					<label class="col-md-3 control-label" for="_property">Property:</label>
+					<div class="col-md-6">
+						<select class="form-control" id="_property"
+							th:field="*{propertyId}">
+							<option value="0">Select</option>
+							<option th:each="property : ${resident.propertyList}"
+								th:value="${property.propertyId}"
+								th:utext="${property.propertyName}" />
+						</select>
+					</div>
+					<span th:each="prop : ${resident.propertyList}"> <input
+						type="hidden" th:id="${'_p' + prop.propertyId}"
+						th:value="${prop.unit+'_'+prop.unitFee}" />
+					</span>
+				</div>
+
+				<div class="form-group form-group-md">
+					<label class="col-md-3 control-label" for="unit">Address: </label>
+					<div class="col-md-6">
+						<input class="form-control" id="unit" th:field="*{address}"
+							placeholder="Enter UnitNo. and Street">
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-2">
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+						<input class="form-control" id="child1" th:field="*{child1}"
+							placeholder="Child 1 fullname">
+
+					</div>
+				</div>
+
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+						<input class="form-control" id="child2" th:field="*{child2}"
+							placeholder="Child 2 fullname">
+
+					</div>
+				</div>
+
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+						<input class="form-control" id="child3" th:field="*{child3}"
+							placeholder="Child 3 fullname">
+
+					</div>
+				</div>
+
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+						<input class="form-control" id="child4" th:field="*{child4}"
+							placeholder="Child 4 fullname">
+
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-2">
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+
+						<input class="form-control" id="child5" th:field="*{child5}"
+							placeholder="Child 5 fullname">
+					</div>
+				</div>
+
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+
+						<input class="form-control" id="child6" th:field="*{child6}"
+							placeholder="Child 6 fullname">
+					</div>
+				</div>
+
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+
+						<input class="form-control" id="child7" th:field="*{child7}"
+							placeholder="Child 7 fullname">
+					</div>
+				</div>
+
+				<div class="form-group form-group-sm">
+
+					<div class="col-md-10">
+
+						<input class="form-control" id="child8" th:field="*{child8}"
+							placeholder="Child 8 fullname">
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+
+		<div class="row text-center">
+
+			<div>
+				<label class="checkbox-inline" for="ackPR"> <input
+					id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}">I
+					was informed of my right to privacy.
+				</label> <label class="checkbox-inline" for="allowcontact"> <input
+					id="allowcontact" type="checkbox" th:field="*{allowContact}">Not
+					interested in being contacted by [SC]
+				</label> <label class="checkbox-inline" for="wantSurvey"> <input
+					id="wantSurvey" th:field="*{wantSurvey}" type="checkbox">Will
+					complete survey within 10 days
+				</label> <label class="checkbox-inline" for="photoRelease"> <input
+					id="photoRelease" th:field="*{photoRelease}" type="checkbox">Photo
+					and video release
+				</label>
+			</div>
+
+		</div>
+
+		<div class="row text-center bs-linebreak">
+			<input type="hidden" th:field="*{serviceCoord}" /> <input
+				type="hidden" id="propertyString"
+				th:value="${resident.propertyList}" /> <input type="button"
+				class="btn btn-primary btn-md" value="Reset"
+				onclick="jQuery(':input').val("");"> <input type="submit"
+				class="btn btn-primary btn-md" value="Sign up">
+		</div>
+
+	</form>
+</div>

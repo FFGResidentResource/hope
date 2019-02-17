@@ -39,450 +39,70 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid">
-
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h3 class="panel-title">SERVICE COORDINATION SIGNUP</h3>
-			</div>
-			<div class="panel-body">
-
-				<div class="row bs-wizard" style="border-bottom: 0;">
-
-					<div class="col-xs-1 bs-wizard-step complete" id="addResidentView">
-						<div class="text-center bs-wizard-stepnum">Add Resident</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-
-					</div>
-
-					<div class="col-xs-2 bs-wizard-step complete" id="housingStabilityView">
-						<!-- complete -->
-						<div class="text-center bs-wizard-stepnum">Housing Stability</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-					</div>
-
-					<div class="col-xs-2 bs-wizard-step disabled">
-						<!-- active -->
-						<div class="text-center bs-wizard-stepnum">Money Mgmt</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-					</div>
-
-					<div class="col-xs-2 bs-wizard-step disabled">
-						<!-- active -->
-						<div class="text-center bs-wizard-stepnum">Network Support</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-					</div>
-
-					<div class="col-xs-2 bs-wizard-step disabled">
-						<!-- active -->
-						<div class="text-center bs-wizard-stepnum">Household Mgmt</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-					</div>
-
-					<div class="col-xs-2 bs-wizard-step disabled">
-						<!-- active -->
-						<div class="text-center bs-wizard-stepnum">Education</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-					</div>
-
-					<div class="col-xs-1 bs-wizard-step disabled">
-						<!-- active -->
-						<div class="text-center bs-wizard-stepnum">Employment</div>
-						<div class="progress">
-							<div class="progress-bar"></div>
-						</div>
-						<a href="#" class="bs-wizard-dot"></a>
-					</div>
-				</div>
-
-				<div id="housingStabilityForm">
-				
-				</div>
-
-				<div id="addResidentForm">
-					<form name='f' th:action="@{/addResident}" th:object="${resident}"
-						method='POST' class="form-horizontal" novalidate>
-
-						<!-- <div id="logo-container"></div> -->
-
-						<div class="row">
-
-							<div class="col-md-2">
-								<div class="form-group form-group-md">
-									<label class="col-md-5 control-label" for="firstName">First
-										Name: </label>
-									<div class="col-md-7">
-										<input class="form-control" id="firstName"
-											th:field="*{firstName}" placeholder="Enter first name"
-											required>
-									</div>
-								</div>
-
-								<div class="form-group form-group-md">
-									<label class="col-md-5 control-label" for="middle">Middle:
-									</label>
-									<div class="col-md-7">
-										<input class="form-control" id="middle" th:field="*{middle}"
-											placeholder="middle" required>
-									</div>
-								</div>
-
-								<div class="form-group form-group-md">
-									<label class="col-md-5 control-label" for="lastname">Last
-										Name: </label>
-									<div class="col-md-7">
-										<input class="form-control" id="lastname"
-											th:field="*{lastName}" placeholder="Enter last name" required>
-									</div>
-								</div>
-
-							</div>
-
-							<div class="col-md-3">
-								<div class="form-group form-group-md">
-									<label class="col-md-3 control-label" for="voicemail">Voicemail:</label>
-									<div class="col-md-6">
-										<input class="form-control" id="voicemail"
-											th:field="*{voiceMail}" placeholder="Enter voicemail">
-									</div>
-								</div>
-
-								<div class="form-group form-group-md">
-									<label class="col-md-3 control-label" for="text">Text:
-									</label>
-									<div class="col-md-6">
-										<input class="form-control" id="text" th:field="*{text}"
-											placeholder="Enter cell phone">
-									</div>
-								</div>
-
-								<div class="form-group form-group-md">
-									<label class="col-md-3 control-label" for="email">Email:</label>
-									<div class="col-md-8">
-										<input class="form-control" id="email" type="email"
-											th:field="*{email}" placeholder="Enter email">
-									</div>
-								</div>
-
-							</div>
-
-							<div class="col-md-3">
-								<div class="form-group form-group-md">
-									<label class="col-md-3 control-label" for="_property">Property:</label>
-									<div class="col-md-6">
-										<select class="form-control" id="_property"
-											th:field="*{propertyId}">
-											<option value="0">Select</option>
-											<option th:each="property : ${resident.propertyList}"
-												th:value="${property.propertyId}"
-												th:utext="${property.propertyName}" />
-										</select>
-									</div>
-									<span th:each="prop : ${resident.propertyList}"> <input
-										type="hidden" th:id="${'_p' + prop.propertyId}"
-										th:value="${prop.unit+'_'+prop.unitFee}" />
-									</span>
-								</div>
-
-								<div class="form-group form-group-md">
-									<label class="col-md-3 control-label" for="unit">Address:
-									</label>
-									<div class="col-md-6">
-										<input class="form-control" id="unit" th:field="*{address}"
-											placeholder="Enter UnitNo. and Street">
-									</div>
-								</div>
-
-							</div>
-
-							<div class="col-md-2">
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-										<input class="form-control" id="child1" th:field="*{child1}"
-											placeholder="Child 1 fullname">
-
-									</div>
-								</div>
-
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-										<input class="form-control" id="child2" th:field="*{child2}"
-											placeholder="Child 2 fullname">
-
-									</div>
-								</div>
-
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-										<input class="form-control" id="child3" th:field="*{child3}"
-											placeholder="Child 3 fullname">
-
-									</div>
-								</div>
-
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-										<input class="form-control" id="child4" th:field="*{child4}"
-											placeholder="Child 4 fullname">
-
-									</div>
-								</div>
-
-							</div>
-
-							<div class="col-md-2">
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-
-										<input class="form-control" id="child5" th:field="*{child5}"
-											placeholder="Child 5 fullname">
-									</div>
-								</div>
-
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-
-										<input class="form-control" id="child6" th:field="*{child6}"
-											placeholder="Child 6 fullname">
-									</div>
-								</div>
-
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-
-										<input class="form-control" id="child7" th:field="*{child7}"
-											placeholder="Child 7 fullname">
-									</div>
-								</div>
-
-								<div class="form-group form-group-sm">
-
-									<div class="col-md-10">
-
-										<input class="form-control" id="child8" th:field="*{child8}"
-											placeholder="Child 8 fullname">
-									</div>
-								</div>
-
-							</div>
-
-						</div>
-
-
-						<div class="row text-center">
-
-							<div>
-								<label class="checkbox-inline" for="ackPR"> <input
-									id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}">I
-									was informed of my right to privacy.
-								</label> <label class="checkbox-inline" for="allowcontact"> <input
-									id="allowcontact" type="checkbox" th:field="*{allowContact}">Not
-									interested in being contacted by [SC]
-								</label> <label class="checkbox-inline" for="wantSurvey"> <input
-									id="wantSurvey" th:field="*{wantSurvey}" type="checkbox">Will
-									complete survey within 10 days
-								</label> <label class="checkbox-inline" for="photoRelease"> <input
-									id="photoRelease" th:field="*{photoRelease}" type="checkbox">Photo
-									and video release
-								</label>
-							</div>
-
-						</div>
-
-						<div class="row text-center bs-linebreak">
-							<input type="hidden" th:field="*{serviceCoord}" /> <input
-								type="hidden" id="propertyString"
-								th:value="${resident.propertyList}" /> <input type="button"
-								class="btn btn-primary btn-md" value="Reset"
-								onclick="jQuery(':input').val("");"> <input
-								type="submit" class="btn btn-primary btn-md" value="Sign up">
-						</div>
-
-					</form>
-				</div>
-
-			</div>
-		</div>
-
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h3 class="panel-title">All Residents</h3>
-			</div>
-			<div class="panel-body">
-				<div class="col-sm-12">
-
-					<table id="residentTable" class="display" style="width: 100%">
-						<thead>
-							<tr>
-								<th>Active</th>
-								<th>Full Name</th>
-								<th>Property Name</th>
-								<th>Voicemail</th>
-								<th>Text</th>
-								<th>Email</th>
-								<th>Date Added</th>
-								<th>SC</th>
-							</tr>
-						</thead>
-					</table>
-
-				</div>
-			</div>
-		</div>
-
-
-
+	<div class="container">
+		<th:block th:include="/_wizard"></th:block>
 	</div>
+	<div class="container-fluid">
+		<th:block th:include="/_addResident"></th:block>
+		<th:block th:include="/_housing"></th:block>
+		<th:block th:include="/_moneyMgmt"></th:block>
+		<th:block th:include="/_networkSupport"></th:block>
+		<th:block th:include="/_householdMgmt"></th:block>
+		<th:block th:include="/_education"></th:block>
+		<th:block th:include="/_employment"></th:block>
+	</div>
+
+
+	<footer class="footer">
+		<div class="container-fluid">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">All Residents</h3>
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-12">
+
+						<table id="residentTable" class="display" style="width: 100%">
+							<thead>
+								<tr>
+									<th>Active</th>
+									<th>Full Name</th>
+									<th>Property Name</th>
+									<th>Voicemail</th>
+									<th>Text</th>
+									<th>Email</th>
+									<th>Date Added</th>
+									<th>SC</th>
+								</tr>
+							</thead>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
 
 
 
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="/js/moment.js"></script>
-	<script src="/js/moment-timezone.js"></script>
+
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/residentPage.js"></script>
+
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
+
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 
-	<script type="text/javascript">
-		//Code to Style Active Tab
-		jQuery(document)
-				.ready(
-						function() {
 
-							jQuery('a').parent().removeClass('active');
-							var path = window.location.pathname;
-							if (path == '/residents') {
-								jQuery("a[href='/residents']").parent()
-										.addClass('active');
-							} else if (path == '/admin') {
-								jQuery("a[href='/admin']").parent().addClass(
-										'active');
-							}
-
-							//$('#residentTable').DataTable();
-
-							jQuery
-									.ajax({
-										type : "POST",
-										contentType : "application/json",
-										url : "/getAllResidents",
-										dataType : 'json',
-										cache : false,
-										timeout : 600000,
-										success : function(data) {
-
-											debugger;
-											$('#residentTable')
-													.dataTable(
-															{
-																"data" : data,
-																"columns" : [
-																		{
-																			data : 'active'
-																		},
-																		{
-																			data : 'firstName',
-																			render : function(
-																					t,
-																					type,
-																					row) {
-																				return row.firstName
-																						+ ' '
-																						+ row.middle
-																						+ ' '
-																						+ row.lastName;
-																			}
-																		},
-																		{
-																			data : 'propertyName'
-																		},
-																		{
-																			data : 'voiceMail'
-																		},
-																		{
-																			data : 'text'
-																		},
-																		{
-																			data : 'email'
-																		},
-																		{
-																			data : 'dateAdded.time',
-																			render : {
-																				_ : 'display',
-																				sort : 'timestamp'
-																			},
-																			render : function(
-																					t,
-																					type,
-																					row) {
-																				debugger;
-																				return moment(
-																						row.dateAdded)
-																						.format(
-																								"MM/DD/YY hh:mm A");
-																			}
-																		},
-																		{
-																			data : 'serviceCoord'
-																		} ],
-																"order" : [ [6, "desc" ] ],
-																pageLength : 10,
-																pagingType : "full_numbers"
-															});
-
-										},
-										error : function(e) {
-											console.log("ERROR : ", e);
-										}
-									});
-						});
-		
-		 jQuery("#addResidentView").click(function () { 
-			 
-			 jQuery("#addResidentForm").html("<div> ADD RESIDENT </div>");
-			 
-		 });
-		 
- 	jQuery("#housingStabilityView").click(function () { 
-			 
-			 jQuery("#housingStabilityForm").html("<div> Housing Stability </div>");
-			 
-		 });
-		
-		 
-		
-	</script>
 </body>
 
 </html>

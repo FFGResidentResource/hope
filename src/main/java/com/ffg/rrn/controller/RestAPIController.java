@@ -31,6 +31,8 @@ public class RestAPIController {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         date = cal.getTime();
+        
+        
 		
 		Resident r = new Resident(1L, false, "Rishabh", "", "Sharma", "Cutter Apts", "6141234567", "6141234567", "rishabh@rishabh.com", true, false, false, date, "sc1");
 		data.add(r);

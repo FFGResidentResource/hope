@@ -13,8 +13,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.ffg.rrn.mapper.AssessmentMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
+import com.ffg.rrn.mapper.ReferralMapper;
+import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
 
 /**
@@ -28,8 +32,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 	@Autowired
 	public ResidentDAO(DataSource dataSource) {
 		this.setDataSource(dataSource);
-	}
-
+	}	
+		
 	/**
 	 * 
 	 * @return
@@ -37,6 +41,16 @@ public class ResidentDAO extends JdbcDaoSupport {
 	public List<Property> getAllProperty() {
 		PropertyMapper rowMapper = new PropertyMapper();
 		return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+	}
+	
+	public List<AssessmentType> getAllAType() {
+		AssessmentMapper rowMapper = new AssessmentMapper();
+		return this.getJdbcTemplate().query(AssessmentMapper.A_SQL, rowMapper);
+	}
+	
+	public List<Referral> getAllReferral() {
+		ReferralMapper rowMapper = new ReferralMapper();
+		return this.getJdbcTemplate().query(ReferralMapper.REF_SQL, rowMapper);
 	}
 
 	/**
@@ -98,5 +112,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		return count;
 	}
+
+
 
 }

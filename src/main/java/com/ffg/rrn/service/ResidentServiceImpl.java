@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ResidentDAO;
+import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
 
 /**
@@ -28,6 +30,14 @@ public class ResidentServiceImpl {
 	
 	public int saveResident(final Resident resident) {		
 		return residentDao.saveResident(resident);		
+	}
+
+	public List<Referral> getAllReferral() {		
+		return this.residentDao.getAllReferral();
+	}
+
+	public List<AssessmentType> getAllAType() {
+		return this.residentDao.getAllAType();
 	}
 	
 }

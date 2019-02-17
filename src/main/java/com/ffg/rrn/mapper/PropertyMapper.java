@@ -17,7 +17,7 @@ import com.ffg.rrn.model.Property;
 public class PropertyMapper implements RowMapper<Property> {
 	
 	public static final String PROPERTY_SQL //
-    = "SELECT PROP_ID, PROP_NAME, UNIT, UNIT_FEE, ACTIVE FROM PROPERTY";
+    = "SELECT PROP_ID, PROP_NAME, UNIT, UNIT_FEE, ACTIVE FROM PROPERTY where ACTIVE = 'TRUE'";
 
 	@Override
 	public Property mapRow(ResultSet rs, int row) throws SQLException {

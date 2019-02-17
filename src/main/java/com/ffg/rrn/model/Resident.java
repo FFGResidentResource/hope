@@ -73,13 +73,21 @@ public class Resident {
 	@JsonView
 	private List<Property> propertyList;
 	
+	@JsonView
+	private List<AssessmentType> atList;
+	
+	@JsonView
+	private List<Referral> refList;
+	
 	
 	public Resident() {
 		
 	}
 	
-	public Resident(List<Property> propertyList, String serviceCoord) {
-		this.propertyList = propertyList;	
+	public Resident(List<Property> propertyList, List<AssessmentType> atList, List<Referral> refList, String serviceCoord) {
+		this.propertyList = propertyList;
+		this.atList = atList;
+		this.refList = refList;
 		this.serviceCoord = serviceCoord;		
 	}
 

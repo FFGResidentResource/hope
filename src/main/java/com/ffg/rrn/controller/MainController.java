@@ -71,7 +71,7 @@ public class MainController {
 		if (principal != null) {
 			serviceCoord = populateSCinModel(model, principal);
 		}		
-		model.addAttribute("resident", new Resident(residentService.getAllProperty(), serviceCoord));		
+		model.addAttribute("resident", new Resident(residentService.getAllProperty(), residentService.getAllAType(), residentService.getAllReferral(), serviceCoord));		
 		
 		return "residentPage";
 		
