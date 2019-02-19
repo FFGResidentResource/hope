@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import com.ffg.rrn.mapper.AssessmentMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
+import com.ffg.rrn.mapper.ResidentMapper;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Referral;
@@ -52,6 +53,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ReferralMapper rowMapper = new ReferralMapper();
 		return this.getJdbcTemplate().query(ReferralMapper.REF_SQL, rowMapper);
 	}
+	
+	public List<Resident> getAllResident() {
+		ResidentMapper rowMapper = new ResidentMapper();
+		return this.getJdbcTemplate().query(ResidentMapper.RESIDENT_SQL, rowMapper);
+	}
 
 	/**
 	 * 
@@ -60,12 +66,12 @@ public class ResidentDAO extends JdbcDaoSupport {
 	public int saveResident(Resident resident) {
 
 		int count = this.getJdbcTemplate().update(
-				"INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD) VALUES (nextval('RESIDENT_SQ'), true, '"
+				"INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD, REF_TYPE) VALUES (nextval('RESIDENT_SQ'), true, '"
 						+ resident.getFirstName() + "','" + resident.getMiddle() + "','" + resident.getLastName() + "',"
 						+ resident.getPropertyId() + ",'" + resident.getVoiceMail() + "','" + resident.getText() + "','"
 						+ resident.getEmail() + "','" + resident.getAddress() + "'," + resident.getAckRightToPrivacy()
 						+ "," + resident.getAllowContact() + "," + resident.getWantSurvey() + ","
-						+ resident.getPhotoRelease() + ",'" + resident.getServiceCoord() + "')");
+						+ resident.getPhotoRelease() + ",'" + resident.getServiceCoord() + "',"	+ resident.getRefId() + ")");
 
 		if (count > 0) {
 			if (!StringUtils.isEmpty(resident.getChild1())) {
@@ -112,6 +118,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		return count;
 	}
+
+	
 
 
 

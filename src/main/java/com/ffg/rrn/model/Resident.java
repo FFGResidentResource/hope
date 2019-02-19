@@ -44,12 +44,20 @@ public class Resident {
 	private String firstName;
 	private String middle;	
 	private String lastName;
-
+	
 	private Integer propertyId;
-	private String propertyName;	
+	private String propertyName;		
+	
+	private Integer refId;
+	private String refValue;
+	
+	private Integer aId;
+	private String aValue;
+	
 	private String voiceMail;
 	private String text;
-	@Email
+	
+	@Email @NotEmpty
 	private String email;
 	private String address;
 	private Boolean ackRightToPrivacy;
@@ -57,9 +65,11 @@ public class Resident {
 	private Boolean wantSurvey;
 	private Boolean photoRelease;
 	private Date dateAdded;
-	private Date modifiedDate;
+	private Date dateModified;
 	private String modifiedBy;
 	private String serviceCoord;
+	
+	private String childList;
 	
 	private String child1;
 	private String child2;	

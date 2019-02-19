@@ -40,4 +40,8 @@ public class ResidentServiceImpl {
 		return this.residentDao.getAllAType();
 	}
 	
+	public List<Resident> getAllResident() {
+		return this.residentDao.getAllResident();
+	}
+	
 }

@@ -74,3 +74,22 @@
 #addResident_Form, #housingStability_Form, #moneyMgmt_Form, #networkSupport_Form, #household_Form, #education_Form, #employment_Form{
 	min-height: 350px;
 }
+
+div.myPanel {
+	color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    padding: 10px;
+}
+
+hr.solidline1{
+	border-top: 1px solid #bce8f1;
+}
+
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../images/details_close.png') no-repeat center center;
+}

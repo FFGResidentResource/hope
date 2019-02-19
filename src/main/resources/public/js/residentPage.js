@@ -1,10 +1,11 @@
+var table;
 jQuery(document)
 		.ready(
 				function() {				
 					
 					jQuery('a').parent().removeClass('active');
 					var path = window.location.pathname;
-					if (path == '/residents') {
+					if (path == '/residents' || path == '/addResident') {
 						jQuery("a[href='/residents']").parent().addClass(
 								'active');
 					} else if (path == '/admin') {
@@ -24,22 +25,25 @@ jQuery(document)
 								cache : false,
 								timeout : 600000,
 								success : function(data) {
-
-									debugger;
-									$('#residentTable')
-											.dataTable(
+									
+									table = jQuery('#residentTable')
+											.DataTable(
 													{
 														"data" : data,
 														"columns" : [
 																{
-																	data : 'active'
+													                "className":      'details-control',
+													                "orderable":      false,
+													                "data":           null,
+													                "defaultContent": ''
+													            },
+																{
+																	data : 'active',
+																	visible: false
 																},
 																{
 																	data : 'firstName',
-																	render : function(
-																			t,
-																			type,
-																			row) {
+																	render : function(t,type,row) {
 																		return row.firstName
 																				+ ' '
 																				+ row.middle
@@ -76,12 +80,28 @@ jQuery(document)
 														pageLength : 5,
 														pagingType : "full_numbers"
 													});
+									
+									jQuery('#residentTable tbody').on('click', 'td.details-control', function () {
+									    var tr = jQuery(this).closest('tr');
+									    var row = table.row( tr );
+
+									    if ( row.child.isShown() ) {
+									        // This row is already open - close it
+									        row.child.hide();
+									        tr.removeClass('shown');
+									    }
+									    else {
+									        // Open this row
+									        row.child( format(row.data()) ).show();
+									        tr.addClass('shown');
+									    }
+									});
 
 								},
 								error : function(e) {
 									console.log("ERROR : ", e);
 								}
-							});
+							});					
 				});
 
 function toggleForm(prefix){	
@@ -101,4 +121,15 @@ function toggleForm(prefix){
 	jQuery(formName+"_View").removeClass("disabled");
 	jQuery(formName+"_View").removeClass('active');
 	jQuery(formName+"_View").addclass('active');
+}
+
+/* Formatting function for row details - modify as you need */
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Children:</td>'+
+            '<td>'+d.childList+'</td>'+
+        '</tr>'+        
+    '</table>';
 }
