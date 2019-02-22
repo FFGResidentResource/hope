@@ -66,53 +66,54 @@ public class ResidentDAO extends JdbcDaoSupport {
 	public int saveResident(Resident resident) {
 
 		int count = this.getJdbcTemplate().update(
-				"INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD, REF_TYPE) VALUES (nextval('RESIDENT_SQ'), true, '"
-						+ resident.getFirstName() + "','" + resident.getMiddle() + "','" + resident.getLastName() + "',"
-						+ resident.getPropertyId() + ",'" + resident.getVoiceMail() + "','" + resident.getText() + "','"
-						+ resident.getEmail() + "','" + resident.getAddress() + "'," + resident.getAckRightToPrivacy()
-						+ "," + resident.getAllowContact() + "," + resident.getWantSurvey() + ","
-						+ resident.getPhotoRelease() + ",'" + resident.getServiceCoord() + "',"	+ resident.getRefId() + ")");
+				"INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD, REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL) VALUES (nextval('RESIDENT_SQ'), true, '"
+						+ resident.getFirstName() + "','" + resident.getMiddle() + "','" + resident.getLastName() 
+						+ "',"  + resident.getPropertyId() + ",'" + resident.getVoiceMail() + "','" + resident.getText() 
+						+ "','" + resident.getEmail() + "','" + resident.getAddress() + "'," + resident.getAckRightToPrivacy()
+						+ ","   + resident.getAllowContact() + "," + resident.getWantSurvey() 
+						+ ","   + resident.getPhotoRelease() + ",'" + resident.getServiceCoord() + "',"	+ resident.getRefId() 
+						+ ","   + resident.getViaVoicemail() +","+ resident.getViaText() +"," + resident.getViaEmail() + ")");
 
 		if (count > 0) {
 			if (!StringUtils.isEmpty(resident.getChild1())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild1() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild1() + "', currval('RESIDENT_SQ') ,"+ resident.getPvrChild1()+" )");
 			}
 			if (!StringUtils.isEmpty(resident.getChild2())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild2() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild2()+ "', currval('RESIDENT_SQ') ,"+ resident.getPvrChild2()+" )");
 			}
 			if (!StringUtils.isEmpty(resident.getChild3())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild3() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild3() + "', currval('RESIDENT_SQ') ,"+ resident.getPvrChild3()+" )");
 			}
 			if (!StringUtils.isEmpty(resident.getChild4())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild4() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild4() + "', currval('RESIDENT_SQ') ,"+ resident.getPvrChild4()+" )");
 			}
 			if (!StringUtils.isEmpty(resident.getChild5())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild5() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild5() + "', currval('RESIDENT_SQ') ,"+ resident.getPvrChild5()+" )");
 			}
 			if (!StringUtils.isEmpty(resident.getChild6())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild6() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild6() + "', currval('RESIDENT_SQ') ,"+ resident.getPvrChild6()+" )");
 			}
 			if (!StringUtils.isEmpty(resident.getChild7())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild7() + "',currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild7() + "',currval('RESIDENT_SQ'),"+ resident.getPvrChild7()+")");
 			}
 			if (!StringUtils.isEmpty(resident.getChild8())) {
 				this.getJdbcTemplate()
-						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild8() + "', currval('RESIDENT_SQ'))");
+						.update("INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
+								+ resident.getChild8() + "', currval('RESIDENT_SQ'),"+ resident.getPvrChild8()+")");
 			}
 		}
 

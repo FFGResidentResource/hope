@@ -17,10 +17,9 @@ import com.ffg.rrn.model.Resident;
 public class ResidentMapper implements RowMapper<Resident> {
 
 	public static final String RESIDENT_SQL //
-			= "select r.RESIDENT_ID, r.ACTIVE, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VOICEMAIL_NO, r.TEXT_NO, r.EMAIL, r.ADDRESS, r.ACK_PR, "
+			= "select r.RESIDENT_ID, r.ACTIVE, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
 					+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
-					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
-					+ " (select string_agg(full_name, ', ') from child where parent_id = r.resident_id) as children "
+					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value "					
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
 					+ " left join assessment_type a on a.a_id = r.a_type;";
@@ -36,8 +35,11 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setMiddle(rs.getString("MIDDLE"));
 		r.setLastName(rs.getString("LAST_NAME"));
 		r.setPropertyId(rs.getInt("PROP_ID"));
+		r.setViaVoicemail(rs.getBoolean("VIA_VOICEMAIL"));
 		r.setVoiceMail(rs.getString("VOICEMAIL_NO"));
+		r.setViaText(rs.getBoolean("VIA_TEXT"));
 		r.setText(rs.getString("TEXT_NO"));
+		r.setViaEmail(rs.getBoolean("VIA_EMAIL"));
 		r.setEmail(rs.getString("EMAIL"));
 		r.setAddress(rs.getString("ADDRESS"));
 		r.setAckRightToPrivacy(rs.getBoolean("ACK_PR"));
@@ -46,14 +48,13 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setPhotoRelease(rs.getBoolean("PHOTO_RELEASE"));
 		r.setServiceCoord(rs.getString("SERVICE_COORD"));
 		r.setRefId(rs.getInt("REF_TYPE"));
-		r.setAId(rs.getInt("A_TYPE"));
-		r.setPropertyName(rs.getString("PROP_NAME"));
-		r.setRefValue(rs.getString("REF_VALUE"));
-		r.setAValue(rs.getString("A_VALUE"));
+		r.setAId(rs.getInt("A_TYPE"));		
 		r.setDateAdded(rs.getTimestamp("DATE_ADDED"));
 		r.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 		r.setModifiedBy(rs.getString("MODIFIED_BY"));
-		r.setChildList(rs.getString("children"));
+		r.setPropertyName(rs.getString("PROP_NAME"));
+		r.setRefValue(rs.getString("REF_VALUE"));
+		r.setAValue(rs.getString("A_VALUE"));
 
 		return r;
 

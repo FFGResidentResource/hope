@@ -22,4 +22,5 @@ public class Child {
 	private Long childId;
 	private String fullName;
 	private Long parentId;
+	private Boolean pvrFlag;
 }

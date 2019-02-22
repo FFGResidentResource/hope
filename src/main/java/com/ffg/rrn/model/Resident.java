@@ -61,9 +61,16 @@ public class Resident {
 	private String email;
 	private String address;
 	private Boolean ackRightToPrivacy;
+	
+	private Boolean viaVoicemail;
+	private Boolean viaText;
+	private Boolean viaEmail;
+	
+	
 	private Boolean allowContact;
 	private Boolean wantSurvey;
 	private Boolean photoRelease;
+	
 	private Date dateAdded;
 	private Date dateModified;
 	private String modifiedBy;
@@ -79,6 +86,15 @@ public class Resident {
 	private String child6;
 	private String child7;
 	private String child8;
+	
+	private Boolean pvrChild1;
+	private Boolean pvrChild2;	
+	private Boolean pvrChild3;
+	private Boolean pvrChild4;	
+	private Boolean pvrChild5;
+	private Boolean pvrChild6;
+	private Boolean pvrChild7;
+	private Boolean pvrChild8;
 	
 	@JsonView
 	private List<Property> propertyList;
