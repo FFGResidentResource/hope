@@ -1,3 +1,44 @@
+@media print {
+  [class*="col-sm-"] {
+    float: left;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only{  
+  	display:block !important;
+  }
+  
+  .my-text-print{
+  	font-family: monospace;
+  	font-size: 	larger;
+  }
+  
+  .stepPanel{
+	height: auto !important;
+	overflow-y: hidden;
+    overflow-x: hidden;    
+  }  
+}
+
+.navbar-default .navbar-text {
+    color: #FFF;
+}
+
+.stepPanel{
+	
+	height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+	
+}
+
+.hideme{
+	display:none;
+}
+
 .navbar {
     background-color: white;
     position: relative;
@@ -44,13 +85,13 @@
   padding:30px;
 }
 
-.bs-wizard {margin-top: 20px;}
+.bs-wizard {}
 
 /*Form Wizard*/
 .bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0;}
 .bs-wizard > .bs-wizard-step {padding: 0; position: relative; cursor:pointer;}
 .bs-wizard > .bs-wizard-step + .bs-wizard-step {}
-.bs-wizard > .bs-wizard-step .bs-wizard-stepnum {color: #595959; font-size: 14px; margin-bottom: 5px;}
+.bs-wizard > .bs-wizard-step .bs-wizard-stepnum {color: #595959; font-size: 14px; margin-bottom: 5px; height:20px;}
 .bs-wizard > .bs-wizard-step .bs-wizard-info {color: #999; font-size: 12px;}
 .bs-wizard > .bs-wizard-step > .bs-wizard-dot {position: absolute; width: 30px; height: 30px; display: block; background: #fbe8aa; top: 45px; left: 50%; margin-top: -15px; margin-left: -15px; border-radius: 50%;} 
 .bs-wizard > .bs-wizard-step > .bs-wizard-dot:after {content: ' '; width: 14px; height: 14px; background: #fbbd19; border-radius: 50px; position: absolute; top: 8px; left: 8px; } 
@@ -72,10 +113,6 @@
     background-color: #999;   
 }
 
-.hideme{
-	display:none;
-}
-
 div.myPanel {
 	color: #31708f;
     background-color: #d9edf7;
@@ -84,7 +121,9 @@ div.myPanel {
 }
 
 hr.solidline1{
-	border-top: 1px solid #bce8f1;
+	border-top: 5px solid #bce8f1;
+	margin-top:10px;
+	margin-bottom:10px;
 }
 
 td.details-control {
@@ -94,3 +133,5 @@ td.details-control {
 tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
+
+

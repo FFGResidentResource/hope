@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -35,7 +36,7 @@ public class MainController {
 	// Either you don't pass anything or pass welcome from the url, it hit below API
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
-		model.addAttribute("title", "Welcome");
+		model.addAttribute("title", "Resident Resource Network");
 		model.addAttribute("message", "Welcome to Resident Resource Hope portal");
 		return "welcomePage";
 	}
@@ -61,6 +62,22 @@ public class MainController {
 		model.addAttribute("title", "Logout");
 		return "logoutSuccessfulPage";
 	}
+	
+	@RequestMapping(value = "/assessment", method = RequestMethod.GET)
+	public String ssmAssessment(@RequestParam("residentId") int residentId, Model model, Principal principal) {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}		
+		
+		model.addAttribute("resident", new Resident(residentService.getAllProperty(), residentService.getAllAType(), residentService.getAllReferral(), serviceCoord));	
+		
+		return "residentPage";
+		
+	}
 
 	@RequestMapping(value = "/residents", method = RequestMethod.GET)
 	public String residents(Model model, Principal principal) {
@@ -71,7 +88,8 @@ public class MainController {
 		if (principal != null) {
 			serviceCoord = populateSCinModel(model, principal);
 		}		
-		model.addAttribute("resident", new Resident(residentService.getAllProperty(), residentService.getAllAType(), residentService.getAllReferral(), serviceCoord));		
+		model.addAttribute("resident", new Resident(residentService.getAllProperty(), residentService.getAllAType(), residentService.getAllReferral(), serviceCoord));
+		model.addAttribute("message", "Please select resident from All Resident Table first");
 		
 		return "residentPage";
 		
@@ -86,7 +104,7 @@ public class MainController {
 		
         int count = residentService.saveResident(resident);    
         
-        return "residentPage";
+        return "redirect:/residents";
     }
 	
 	

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Resident Hope</title>
+<title>Resident Resource Network</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,8 +42,9 @@
 	<div class="container">
 		<th:block th:include="/_wizard"></th:block>
 	</div>
-	<div class="container-fluid">
+	<div class="container">
 		<th:block th:include="/_addResident"></th:block>
+		<th:block th:include="/_assessment"></th:block>
 		<th:block th:include="/_housing"></th:block>
 		<th:block th:include="/_moneyMgmt"></th:block>
 		<th:block th:include="/_networkSupport"></th:block>
@@ -52,7 +53,7 @@
 		<th:block th:include="/_employment"></th:block>
 	</div>
 
-
+	<hr>
 
 	<div class="container-fluid hidden-print">
 		<div class="panel panel-info">
@@ -66,14 +67,18 @@
 						<thead>
 							<tr>
 								<th></th>
+								<th>ID</th>
 								<th>Active</th>
 								<th>Full Name</th>
 								<th>Property Name</th>
 								<th>Voicemail</th>
 								<th>Text</th>
 								<th>Email</th>
+								<th>PVR</th>
 								<th>Date Added</th>
 								<th>Added By</th>
+								<th>Referral</th>
+								<th>Address</th>
 							</tr>
 						</thead>
 					</table>

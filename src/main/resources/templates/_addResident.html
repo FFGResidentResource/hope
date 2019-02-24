@@ -1,13 +1,18 @@
-<div id="addResident_Form">
+<div id="addResident_Form" class="stepPanel">
 
 	<form name='f' th:action="@{/addResident}" th:object="${resident}"
 		method='POST' class="form-horizontal" novalidate>
 
 		<div class="col-sm-12 myPanel">
-			<div class="row text-center">
-				<div class="col-sm-12">
-					<h4>SERVICE COORDINATION SIGNUP</h4>
+			<div class="row">
+
+				<div class="col-sm-10">
+					<h3>SERVICE COORDINATION SIGNUP</h3>
 				</div>
+				<div class="col-sm-2 hideme print-only">
+					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+				</div>
+
 			</div>
 			<hr class="solidline1">
 
@@ -53,7 +58,7 @@
 
 					<p>
 					<h5>
-						<strong>I. Right to Privacy</strong>
+						<strong>I. <u>Right to Privacy</u></strong>
 					</h5>
 					</p>
 
@@ -93,16 +98,66 @@
 							<td><label class="checkbox-inline" for="ackPR"> <input
 									id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}">I
 									acknowledge that I was informed of my right to privacy.
-							</label></td>
-						</tr>
-					</table>
+							</label>
 
-					<div class="col-sm-12">
-						<div class="form-horizontal">
-							<div class="form-group">
-
-								<div class="col-sm-4">
+								<p>
+								<div class="hideme print-only">
+									<p>
 									<div class="row">
+										<div class="col-sm-6">
+											<div class="col-sm-2">
+												<strong>Name:&nbsp;</strong>
+											</div>
+											<div class="col-sm-10">
+												<span id="residentFullName" class="my-text-print">
+													Rishabh Sharma </span>
+											</div>
+										</div>
+									</div>
+									</p>
+									<p>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="col-sm-2">
+												<strong>Referral:&nbsp;</strong>
+											</div>
+											<div class="col-sm-10">
+												<span id="printreferralType" class="my-text-print">
+													Walk-in</span>
+											</div>
+										</div>
+									</div>
+									</p>
+									<p>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="col-sm-2">
+												<strong>Property:&nbsp;</strong>
+											</div>
+											<div class="col-sm-10">
+												<span id="printproperty" class="my-text-print">
+													Cutter Appts</span>
+											</div>
+										</div>
+									</div>
+									</p>
+									<p>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="col-sm-2">
+												<strong>Address:&nbsp;</strong>
+											</div>
+											<div class="col-sm-10">
+												<span id="printaddress" class="my-text-print"> 1234
+													Cool St</span>
+											</div>
+										</div>
+									</div>
+									</p>
+								</div>
+
+								<div class="row hidden-print">
+									<div class="col-sm-6">
 
 										<label class="col-sm-2 control-label" for="firstName">Name:
 										</label>
@@ -121,23 +176,23 @@
 										</div>
 
 									</div>
+									<div class="col-sm-6">
 
-								</div>
+										<label class="col-sm-2 control-label" for="_referral">Referral:</label>
+										<div class="col-sm-10">
+											<select class="form-control" id="_referral"
+												th:field="*{refId}">
+												<option value="0">Select</option>
+												<option th:each="referral : ${resident.refList}"
+													th:value="${referral.refId}"
+													th:utext="${referral.refValue}" />
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
 
-
-								<label class="col-sm-1 control-label" for="_referral">Referral:</label>
-								<div class="col-sm-2">
-									<select class="form-control" id="_referral" th:field="*{refId}">
-										<option value="0">Select</option>
-										<option th:each="referral : ${resident.refList}"
-											th:value="${referral.refId}" th:utext="${referral.refValue}" />
-									</select>
-								</div>
-
-								<div class="col-sm-5">
-									<div class="row">
 										<label class="col-sm-2 control-label" for="_property">Property:</label>
-										<div class="col-sm-4">
+										<div class="col-sm-10">
 											<select class="form-control" id="_property"
 												th:field="*{propertyId}">
 												<option value="0">Select</option>
@@ -146,23 +201,26 @@
 													th:utext="${property.propertyName}" />
 											</select>
 										</div>
+									</div>
+									<div class="col-sm-6">
+
 										<label class="col-sm-2 control-label" for="unit">Address:
 										</label>
-										<div class="col-sm-4">
-											<input class="form-control" id="unit" th:field="*{address}"
-												placeholder="Enter UnitNo. and Street">
+										<div class="col-sm-10">
+											<input class="form-control" id="address"
+												th:field="*{address}" placeholder="No. and Street">
 										</div>
-
 									</div>
 								</div>
-							</div>
-						</div>
-					</div>
 
+								</p></td>
+						</tr>
+
+					</table>
 
 					<p>
 					<h5>
-						<strong>II. Services Acknowledgement</strong>
+						<strong>II. <u>Services Acknowledgement</u></strong>
 					</h5>
 					</p>
 
@@ -176,26 +234,73 @@
 
 					<table class="table table-bordered table-condensed">
 						<tr>
-							<td>I am <strong>willing to be contacted by a
-									Service Coordinator</strong> about services, programs, events and
-								resources via:
-								<p>
-								<div class="form-group">
+							<td><p>
+									I am <strong>willing to be contacted by a Service
+										Coordinator</strong> about services, programs, events and resources
+									via:
+								</p>
+
+
+								<div class="hideme print-only">
+									<p>
+									<div class="row">
+										<div class="col-sm-3">
+											<label class="checkbox-inline" for="printEmail"> <input
+												id="printEmail" type="checkbox"><strong>Email:&nbsp;&nbsp;</strong>
+
+											</label>
+										</div>
+										<div class="col-sm-9">
+											<span id="printEmailText" class="my-text-print">rishabh@rishabh.com</span>
+										</div>
+									</div>
+									</p>
+									<p>
+									<div class="row">
+										<div class="col-sm-3">
+											<label class="checkbox-inline" for="printvoicemail">
+												<input id="printvoicemail" type="checkbox"><strong>Voicemail:&nbsp;&nbsp;</strong>
+
+											</label>
+										</div>
+										<div class="col-sm-9">
+											<span id="printvm" class="my-text-print">614-404-9874</span>
+										</div>
+									</div>
+									</p>
+									<p>
+									<div class="row">
+										<div class="col-sm-3">
+											<label class="checkbox-inline" for="printtext"> <input
+												id="printtext" type="checkbox"><strong>Text:&nbsp;&nbsp;</strong>
+										</div>
+										<div class="col-sm-9">
+											<span id="printtxt" class="my-text-print">614-404-9874</span>
+											</label>
+										</div>
+									</div>
+									</p>
+								</div>
+
+
+
+								<div class="form-group hidden-print">
+
 									<label class="col-sm-1 control-label" for="viaemail"> <input
 										id="viaemail" type="checkbox" th:field="*{viaEmail}">
 										Email:
 									</label>
 									<div class="col-sm-3">
 										<input class="form-control" id="email" type="email"
-											th:field="*{email}" placeholder="Enter email">
+											th:field="*{email}" placeholder="email">
 									</div>
-									<label class="col-sm-1 control-label" for="viavoicemail">
+									<label class="col-sm-2 control-label" for="viavoicemail">
 										<input id="viavoicemail" type="checkbox"
 										th:field="*{viaVoicemail}"> Voicemail:
 									</label>
 									<div class="col-sm-2">
 										<input class="form-control" id="voicemail"
-											th:field="*{voiceMail}" placeholder="Enter voicemail">
+											th:field="*{voiceMail}" placeholder="voicemail">
 									</div>
 									<label class="col-sm-1 control-label" for="viatext"> <input
 										id="viatext" type="checkbox" th:field="*{viaText}">
@@ -203,10 +308,11 @@
 									</label>
 									<div class="col-sm-2">
 										<input class="form-control" id="text" th:field="*{text}"
-											placeholder="Enter cell phone">
+											placeholder="cell phone">
 									</div>
 								</div>
 								</p>
+
 								<p>
 									<label class="checkbox-inline" for="wantSurvey"> <input
 										id="wantSurvey" type="checkbox" th:field="*{wantSurvey}">I
@@ -221,14 +327,13 @@
 										I am <strong>NOT interested</strong> in being contacted by a
 										Service Coordinator.
 									</label>
-								</p>
-							</td>
+								</p></td>
 						</tr>
 					</table>
 
 					<p>
 					<h5>
-						<strong>Photo and Video Release</strong>
+						<strong>III. <u>Photo and Video Release</u></strong>
 					</h5>
 					</p>
 
@@ -319,6 +424,24 @@
 
 						</tbody>
 					</table>
+					<br>
+					<div class="row hideme print-only">
+
+						<div class="col-sm-6">
+							<div class="col-sm-4">Resident Signature:</div>
+							<div class="col-sm-8" style="width: 200px;">
+								<hr>
+							</div>
+						</div>
+						<div class="col-sm-6">
+
+							<div class="col-sm-4">Date:</div>
+							<div class="col-sm-8" style="width: 200px;">
+								<hr>
+							</div>
+
+						</div>
+					</div>
 
 
 					<div class="row text-center bs-linebreak hidden-print">

@@ -96,6 +96,8 @@ public class Resident {
 	private Boolean pvrChild7;
 	private Boolean pvrChild8;
 	
+	private String currentStep;
+	
 	@JsonView
 	private List<Property> propertyList;
 	
@@ -114,7 +116,8 @@ public class Resident {
 		this.propertyList = propertyList;
 		this.atList = atList;
 		this.refList = refList;
-		this.serviceCoord = serviceCoord;		
+		this.serviceCoord = serviceCoord;
+		this.aId = 1;
 	}
 
 

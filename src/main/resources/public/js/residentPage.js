@@ -1,7 +1,7 @@
 var table;
 jQuery(document)
 		.ready(
-				function() {				
+				function() {					
 					
 					jQuery('a').parent().removeClass('active');
 					var path = window.location.pathname;
@@ -10,9 +10,7 @@ jQuery(document)
 								'active');
 					} else if (path == '/admin') {
 						jQuery("a[href='/admin']").parent().addClass('active');
-					}
-
-					
+					}					
 
 					// $('#residentTable').DataTable();
 
@@ -37,6 +35,9 @@ jQuery(document)
 													                "data":           null,
 													                "defaultContent": ''
 													            },
+													            {
+																	data : 'residentId'																	
+																},
 																{
 																	data : 'active',
 																	visible: false
@@ -55,13 +56,40 @@ jQuery(document)
 																	data : 'propertyName'
 																},
 																{
-																	data : 'voiceMail'
+																	data : 'voiceMail',
+																	render : function(t,type,row){
+																		if(row.viaVoicemail == true){
+																			return row.voiceMail + '&nbsp;<span class="glyphicon glyphicon-hand-left"></span>';
+																		}
+																		return row.voiceMail;
+																	}
 																},
 																{
-																	data : 'text'
+																	data : 'text',
+																	render : function(t,type,row){
+																		if(row.viaText == true){
+																			return row.text + '&nbsp;<span class="glyphicon glyphicon-hand-left"></span>';
+																		}
+																		return row.text;
+																	}
 																},
 																{
-																	data : 'email'
+																	data : 'email',
+																	render : function(t,type,row){
+																		if(row.viaEmail == true){
+																			return row.email + '&nbsp;<span class="glyphicon glyphicon-hand-left"></span>';
+																		}
+																		return row.email;
+																	}
+																},
+																{
+																	data : 'photoRelease',
+																	render: function(t,type,row){
+																		if(row.photoRelease == true){
+																			return '<span class="glyphicon glyphicon-ok"></span>';
+																		}
+																		return '<span class="glyphicon glyphicon-remove"></span>';
+																	}
 																},
 																{
 																	data : 'dateAdded.time',
@@ -75,13 +103,22 @@ jQuery(document)
 																},
 																{
 																	data : 'serviceCoord'
-																} ],
-														"order" : [ [ 7, "desc" ] ],
+																},
+																{
+																	data : 'refValue',
+																	visible:false
+																},
+																{
+																	data : 'address',
+																	visible:false
+																}
+																],
+														"order" : [ [ 9, "desc" ] ],
 														pageLength : 5,
 														pagingType : "full_numbers"
 													});
 									
-									jQuery('#residentTable tbody').on('click', 'td.details-control', function () {
+									jQuery('#residentTable tbody').on('click', 'td.details-control', function (e) {
 									    var tr = jQuery(this).closest('tr');
 									    var row = table.row( tr );
 
@@ -95,7 +132,24 @@ jQuery(document)
 									        row.child( format(row.data()) ).show();
 									        tr.addClass('shown');
 									    }
+									    
+									    e.preventDefault();
+									    return false;
 									});
+									
+									jQuery('#residentTable tbody').on( 'click', 'tr', function () {
+										
+										var tr = $(this);
+										var row = table.row( tr );
+										
+										if ($(this).hasClass('selected') ) {
+								        	$(this).removeClass('selected');
+								        }
+								        else {
+								            table.$('tr.selected').removeClass('selected');
+								            $(this).addClass('selected');
+								        }
+								    });
 
 								},
 								error : function(e) {
