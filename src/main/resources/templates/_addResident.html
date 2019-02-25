@@ -1,6 +1,6 @@
 <div id="addResident_Form" class="stepPanel">
 
-	<form name='f' th:action="@{/addResident}" th:object="${resident}"
+	<form name='f' th:action="@{/saveResident}" th:object="${resident}"
 		method='POST' class="form-horizontal" novalidate>
 
 		<div class="col-sm-12 myPanel">
@@ -445,12 +445,14 @@
 
 
 					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> <input
+						<input type="hidden" th:field="*{serviceCoord}" /> 
+						<input id="_currentResidentId" type="hidden" th:value="*{residentId}" />
+						<input
 							type="hidden" id="propertyString"
 							th:value="${resident.propertyList}" /> <input type="button"
 							class="btn btn-primary btn-md" value="Reset"
 							onclick="jQuery(':input').val("");"> <input type="submit"
-							class="btn btn-primary btn-md" value="Save">
+							class="btn btn-primary btn-md" value="Save Resident">
 					</div>
 				</div>
 			</div>

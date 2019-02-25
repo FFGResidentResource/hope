@@ -63,48 +63,67 @@ public class MainController {
 		return "logoutSuccessfulPage";
 	}
 	
-	@RequestMapping(value = "/assessment", method = RequestMethod.GET)
-	public String ssmAssessment(@RequestParam("residentId") int residentId, Model model, Principal principal) {
+	@RequestMapping(value = "/saveAssessment", method = RequestMethod.GET)
+	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
 
-		// (1) (en)
-		// After user login successfully.
-		String serviceCoord = null;
-		if (principal != null) {
-			serviceCoord = populateSCinModel(model, principal);
-		}		
+		if (bindingResult.hasErrors()) {
+            return "residentPage";
+        }	
 		
-		model.addAttribute("resident", new Resident(residentService.getAllProperty(), residentService.getAllAType(), residentService.getAllReferral(), serviceCoord));	
+		int count = residentService.saveAssessment(resident);  
 		
-		return "residentPage";
+		return "redirect:/getResidentById?residentId="+ resident.getResidentId();
 		
 	}
 
-	@RequestMapping(value = "/residents", method = RequestMethod.GET)
-	public String residents(Model model, Principal principal) {
+	@RequestMapping(value = "/getResidentById", method = RequestMethod.GET)
+	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception{
 
 		// (1) (en)
 		// After user login successfully.
 		String serviceCoord = null;
 		if (principal != null) {
 			serviceCoord = populateSCinModel(model, principal);
-		}		
-		model.addAttribute("resident", new Resident(residentService.getAllProperty(), residentService.getAllAType(), residentService.getAllReferral(), serviceCoord));
+		}
+					
+		Resident resident  = residentService.getResidentById(residentId, serviceCoord);
+				
+		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 		
 		return "residentPage";
 		
 	}
 	
-	@PostMapping("/addResident")
+	@RequestMapping(value = "/newResident", method = RequestMethod.GET)
+	public String residents(Model model, Principal principal) throws Exception{
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+					
+		Resident resident  = residentService.getResidentById(0l, serviceCoord);
+				
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+		
+		return "residentPage";
+		
+	}
+	
+	@PostMapping("/saveResident")
     public String signup(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
         
 		if (bindingResult.hasErrors()) {
             return "residentPage";
         }
-		
-        int count = residentService.saveResident(resident);    
+		//This will be new ResidentId always
+        Long residentId = residentService.saveResident(resident);    
         
-        return "redirect:/residents";
+        return "redirect:/getResidentById?residentId="+ residentId;
     }
 	
 	

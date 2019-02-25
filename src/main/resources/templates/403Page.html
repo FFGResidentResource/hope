@@ -57,8 +57,8 @@
 		
 		jQuery('a').parent().removeClass('active');
 		var path = window.location.pathname;
-		if(path == '/residents'){			
-			jQuery("a[href='/residents']").parent().addClass('active');
+		if(path == '/getResidentById' || path == '/newResident'){			
+			jQuery("a[href='/newResident']").parent().addClass('active');
 		}
 		else if(path == '/admin'){			
 			jQuery("a[href='/admin']").parent().addClass('active');

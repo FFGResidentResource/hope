@@ -1,13 +1,13 @@
 var table;
+var currentRow;
 jQuery(document)
 		.ready(
 				function() {					
 					
 					jQuery('a').parent().removeClass('active');
 					var path = window.location.pathname;
-					if (path == '/residents' || path == '/addResident') {
-						jQuery("a[href='/residents']").parent().addClass(
-								'active');
+					if(path == '/getResidentById' || path == '/newResident'){			
+						jQuery("a[href='/newResident']").parent().addClass('active');
 					} else if (path == '/admin') {
 						jQuery("a[href='/admin']").parent().addClass('active');
 					}					
@@ -36,7 +36,7 @@ jQuery(document)
 													                "defaultContent": ''
 													            },
 													            {
-																	data : 'residentId'																	
+																	data : 'residentId'
 																},
 																{
 																	data : 'active',
@@ -140,7 +140,9 @@ jQuery(document)
 									jQuery('#residentTable tbody').on( 'click', 'tr', function () {
 										
 										var tr = $(this);
-										var row = table.row( tr );
+										currentRow = table.row(this).data();
+										
+										console.log(currentRow);
 										
 										if ($(this).hasClass('selected') ) {
 								        	$(this).removeClass('selected');
@@ -148,7 +150,10 @@ jQuery(document)
 								        else {
 								            table.$('tr.selected').removeClass('selected');
 								            $(this).addClass('selected');
-								        }
+								            
+								            jQuery("#loadResident").attr('href',  "/getResidentById?residentId=" + currentRow.residentId);
+								        }									
+																		
 								    });
 
 								},
@@ -174,7 +179,8 @@ function toggleForm(prefix){
 	
 	jQuery(formName+"_View").removeClass("disabled");
 	jQuery(formName+"_View").removeClass('active');
-	jQuery(formName+"_View").addclass('active');
+	jQuery(formName+"_View").addclass('active');	
+	
 }
 
 /* Formatting function for row details - modify as you need */

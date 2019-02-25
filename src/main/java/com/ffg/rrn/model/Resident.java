@@ -116,8 +116,7 @@ public class Resident {
 		this.propertyList = propertyList;
 		this.atList = atList;
 		this.refList = refList;
-		this.serviceCoord = serviceCoord;
-		this.aId = 1;
+		this.serviceCoord = serviceCoord;		
 	}
 
 

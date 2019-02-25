@@ -53,12 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// /serviceCordinatorInfo page requires login as ROLE_USER or ROLE_ADMIN.
 		// If no login, it will redirect to /login page.
-		http.authorizeRequests().antMatchers("/residents").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/getResidentById", "/saveResident", "/newResident", "/saveAssessment").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");		
 		
-		http.authorizeRequests().antMatchers("/addResident").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
-		
-		http.authorizeRequests().antMatchers("/assessment").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
-
 		// For ADMIN only.
 		http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
 
@@ -72,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Submit URL of login page.
 				.loginProcessingUrl("/j_spring_security_check") // Submit URL
 				.loginPage("/login")//
-				.defaultSuccessUrl("/residents")//
+				.defaultSuccessUrl("/newResident")//
 				.failureUrl("/login?error=true")//
 				.usernameParameter("username")//
 				.passwordParameter("password")

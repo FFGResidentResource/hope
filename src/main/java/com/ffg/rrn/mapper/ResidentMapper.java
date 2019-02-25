@@ -22,7 +22,8 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value "					
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
-					+ " left join assessment_type a on a.a_id = r.a_type;";
+					+ " left join assessment_type a on a.a_id = r.a_type ";	
+
 
 	@Override
 	public Resident mapRow(ResultSet rs, int row) throws SQLException {
