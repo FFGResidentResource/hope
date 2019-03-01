@@ -22,6 +22,7 @@
 					style="color: darkseagreen; font-weight: bold; padding-top: 15px;"
 					th:if="${serviceCordInfo != null}" th:utext="${serviceCordInfo}"></span>
 				</li>
+				<li><a th:href="@{/allResident}">All Residents</a></li>
 				<li class="active"><a th:href="@{/newResident}">Add Resident</a></li>
 				<li><a th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}"

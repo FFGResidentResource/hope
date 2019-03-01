@@ -114,6 +114,19 @@ public class MainController {
 		
 	}
 	
+	@RequestMapping(value = "/allResident", method = RequestMethod.GET)
+	public String getAllResidents(Model model, Principal principal) throws Exception{
+
+		// (1) (en)
+		// After user login successfully.
+		
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+		
+		return "allResident";		
+	}
+	
 	@PostMapping("/saveResident")
     public String signup(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
         
@@ -123,10 +136,8 @@ public class MainController {
 		//This will be new ResidentId always
         Long residentId = residentService.saveResident(resident);    
         
-        return "redirect:/getResidentById?residentId="+ residentId;
-    }
-	
-	
+        return "allResident";
+    }	
 
 	private String populateSCinModel(Model model, Principal principal) {
 
@@ -147,10 +158,7 @@ public class MainController {
 			model.addAttribute("message", message);
 
 		}
-
 		return "403Page";
-	}
-	
-	
+	}	
 
 }

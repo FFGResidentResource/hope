@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link href="/css/common.css" rel="stylesheet">
+
+<link href="/css/datatables.min.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<div class="container-fluid hidden-print">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title col-sm-10">All Residents</h3>
+			</div>
+			<div class="panel-body">
+				<div class="col-sm-12">
+
+					<table id="residentTable" class="display" style="width: 100%">
+						<thead>
+							<tr>
+								<th></th>
+								<th>ID</th>
+								<th>Active</th>
+								<th>Full Name</th>
+								<th>Property Name</th>
+								<th>Voicemail</th>
+								<th>Text</th>
+								<th>Email</th>
+								<th>PVR</th>
+								<th>Date Added</th>
+								<th>Added By</th>
+								<th>Referral</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+					</table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/allResident.js"></script>
+
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
+
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="/js/datatables.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+</body>
+
+</html>

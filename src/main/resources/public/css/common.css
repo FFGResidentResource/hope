@@ -16,24 +16,12 @@
   	font-size: 	larger;
   }
   
-  .stepPanel{
-	height: auto !important;
-	overflow-y: hidden;
-    overflow-x: hidden;    
-  }  
 }
 
 .navbar-default .navbar-text {
     color: #FFF;
 }
 
-.stepPanel{
-	
-	height: 400px;
-    overflow-y: auto;
-    overflow-x: hidden;
-	
-}
 
 .hideme{
 	display:none;
