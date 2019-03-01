@@ -45,6 +45,12 @@
 				<h3 class="panel-title">All Residents</h3>
 			</div>
 			<div class="panel-body">
+			
+			<select class="form-control" id="_active" onchange = "filterActives(this)">
+				<option value="all">All</option>
+				<option value="true">Active</option>
+				<option value="false">Inactive</option>
+			</select>
 				<div class="col-sm-12">
 
 					<table id="residentTable" class="display" style="width: 100%">

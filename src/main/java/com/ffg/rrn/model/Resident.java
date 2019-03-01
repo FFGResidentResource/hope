@@ -9,6 +9,8 @@ import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import org.thymeleaf.util.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
@@ -140,4 +142,32 @@ public class Resident {
 		this.serviceCoord = serviceCoord;
 	}
 
+	public String getChildrenList() {
+		String temp="";
+		if(!StringUtils.isEmpty(child8)) {
+			temp = child1+','+child2+','+child3+','+child4+','+child5+','+child6+','+child7+','+child8;
+		}
+		else if(!StringUtils.isEmpty(child7)) {
+			temp = child1+','+child2+','+child3+','+child4+','+child5+','+child6+','+child7;
+		}
+		else if(!StringUtils.isEmpty(child6)) {
+			temp = child1+','+child2+','+child3+','+child4+','+child5+','+child6;
+		}
+		else if(!StringUtils.isEmpty(child5)) {
+			temp = child1+','+child2+','+child3+','+child4+','+child5;
+		}
+		else if(!StringUtils.isEmpty(child4)) {
+			temp = child1+','+child2+','+child3+','+child4;
+		}
+		else if(!StringUtils.isEmpty(child3)) {
+			temp = child1+','+child2+','+child3;
+		}
+		else if(!StringUtils.isEmpty(child2)) {
+			temp = child1+','+child2;
+		}
+		else if(!StringUtils.isEmpty(child1)) {
+			temp = child1;
+		}
+		return temp;
+	}
 }

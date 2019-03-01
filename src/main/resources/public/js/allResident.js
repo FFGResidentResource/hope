@@ -181,5 +181,19 @@ function format ( d ) {
         	'<td>Assessment:</td>'+
         	'<td>'+d.aValue+'</td>'+
         '</tr>'+
+        '<tr>'+
+        	'<td>Children:</td>'+
+        	'<td>'+d.childrenList+'</td>'+
+        '</tr>'+
     '</table>';
+}
+
+function filterActives (dat) {
+	//Toggles Active
+	if(dat.value != "all"){
+		table.columns(2).search(dat.value).draw();
+	}
+	else {
+		table.columns(2).search('').draw();
+	}
 }
