@@ -1,1 +1,52 @@
-<div id="housingStability_Form" class="hideme"><h2>Housing Questions Under Construction...</h2></div>
+<div id="housingStability_Form" class="hideme"><h2>Housing Questions Under Construction...</h2>
+
+	<form name='f' th:action="@{/saveHousing}" th:object="${resident}"
+		method='POST' class="form-horizontal" novalidate>
+		
+		
+		<div class="col-sm-12 myPanel">
+			<div class="row">
+
+				<div class="col-sm-10">
+					<h3>Housing </h3>
+					<span class="hidden-print" style="color: red; font-size: larger;"
+						th:if="${firstName == null}" th:text="${message}"></span>
+				</div>
+				
+				<div class="col-sm-2 hideme print-only">
+					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+				</div>
+
+
+			</div>
+			<hr class="solidline1">
+
+			<div class="row">
+				<div class="col-sm-12">
+
+					<p>
+						<span>Greetings! In case you were not aware, Resident Resources Network, Inc. (RRN), a nonprofit organization established by 
+						Wallick Communities in 2011, operates a Resident Services program for your, and other affordable housing communities. 
+						The Resident Services program is designed to connect residents to support services that help to improve housing stability, 
+						increase self-sufficiency, and contribute to healthy, vibrant communities (e.g., eviction prevention, access to government benefits, 
+						assistance with college and financial aid applications, job training, health and wellness workshops, etc.). </span>
+						<span>The following survey is being <strong>conducted every two years</strong> by RRN as a way to gather some information that can 
+						help our staff and partners bring programs and services to your housing community that will be of interest to you, your family, 
+						and your neighbors. <strong>You are not required to provide this information and can choose to not answer any of the questions.</strong> 
+						We are asking you to voluntarily provide this information to help us better serve you. All of your responses are strictly 
+						confidential and none of them will be shared with other residents, Community Managers, or anyone outside the surveying process, 
+						without your permission. In addition, your participation in the survey will in no way impact your housing status or current tenancy.</span>
+					</p>
+					<h5><strong>Directions</strong></h5>
+					<p>
+						<span>Please provide the information requested below. The survey will take about 10 minutes to complete. <strong>Only complete one survey 
+						per household</strong>. If you prefer to complete the survey online, you are welcome to use the following link to access it: 
+						<a href="https://www.surveymonkey.com/s/KD92X25">https://www.surveymonkey.com/s/KD92X25</a>. Any questions you may have can be 
+						answered by the person administering the survey, your Service Coordinator, or Shon Burch at (614) 552-5668 or 
+						<a mailto="sburch@residentresources.org">sburch@residentresources.org</a>.  Your Community Manager CANNOT answer questions 
+						about this survey. We appreciate your time and your input and look forward to serving you better. Thank you!</span>
+					</p>
+
+
+
+</div>
