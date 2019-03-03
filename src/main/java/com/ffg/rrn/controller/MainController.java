@@ -76,7 +76,7 @@ public class MainController {
 		
 	}
 
-	@RequestMapping(value = "/getResidentById", method = RequestMethod.GET)
+	@PostMapping(value = "/getResidentById")
 	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception{
 
 		// (1) (en)

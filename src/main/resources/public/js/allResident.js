@@ -2,11 +2,12 @@ var table;
 var currentRow;
 jQuery(document)
 		.ready(
-				function() {					
+				function() {				
+					
 					
 					jQuery('a').parent().removeClass('active');
 					var path = window.location.pathname;
-					if(path == '/newResident'){			
+					if(path == '/newResident' || path == "/getResidentById"){
 						jQuery("a[href='/newResident']").parent().addClass('active');
 					} else if (path == '/admin') {
 						jQuery("a[href='/admin']").parent().addClass('active');
@@ -118,7 +119,16 @@ jQuery(document)
 																],
 														"order" : [ [ 9, "desc" ] ],
 														pageLength : 15,
-														pagingType : "full_numbers"
+														pagingType : "full_numbers",
+														"initComplete": function(settings, json) {
+															var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="residents" value="all" onchange="filterActives(this);"> All '
+																+' <input type="radio" name="residents" value="true" onchange="filterActives(this);"> Active '
+																+' <input type="radio" name="residents" value="false" onchange="filterActives(this);"> Inactive </span>';
+															
+															//This prints all radio Options on AllResident DataTables.
+															var pre = jQuery('.dataTables_length').html();
+															jQuery('.dataTables_length').html(pre + radioHtml);
+														 }
 													});
 									
 									jQuery('#residentTable tbody').on('click', 'td.details-control', function (e) {
@@ -149,10 +159,14 @@ jQuery(document)
 										
 										if ($(this).hasClass('selected') ) {
 								        	$(this).removeClass('selected');
+								        	jQuery("#_loadResident").addAttr('disabled');
 								        }
 								        else {
 								            table.$('tr.selected').removeClass('selected');
 								            $(this).addClass('selected');
+								            
+								            jQuery("#_resId").val(currentRow.residentId);
+								            jQuery("#_loadResident").removeAttr('disabled');
 								        }									
 																		
 								    });
@@ -183,7 +197,7 @@ function format ( d ) {
         '</tr>'+
         '<tr>'+
         	'<td>Children:</td>'+
-        	'<td>'+d.childrenList+'</td>'+
+        	'<td>'+d.childList+'</td>'+
         '</tr>'+
     '</table>';
 }

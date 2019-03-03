@@ -39,44 +39,48 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid hidden-print">
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h3 class="panel-title">All Residents</h3>
-			</div>
-			<div class="panel-body">
-			
-			<select class="form-control" id="_active" onchange = "filterActives(this)">
-				<option value="all">All</option>
-				<option value="true">Active</option>
-				<option value="false">Inactive</option>
-			</select>
-				<div class="col-sm-12">
+	<form th:action="@{/getResidentById}" method='POST'>
+		<div class="container-fluid hidden-print">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">All Residents</h3>
+				</div>
+				<div class="panel-body">
 
-					<table id="residentTable" class="display" style="width: 100%">
-						<thead>
-							<tr>
-								<th></th>
-								<th>ID</th>
-								<th>Active</th>
-								<th>Full Name</th>
-								<th>Property Name</th>
-								<th>Voicemail</th>
-								<th>Text</th>
-								<th>Email</th>
-								<th>PVR</th>
-								<th>Date Added</th>
-								<th>Added By</th>
-								<th>Referral</th>
-								<th>Address</th>
-							</tr>
-						</thead>
-					</table>
 
+					<div class="col-sm-12">
+
+						<table id="residentTable" class="display" style="width: 100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>ID</th>
+									<th>Active</th>
+									<th>Full Name</th>
+									<th>Property Name</th>
+									<th>Voicemail</th>
+									<th>Text</th>
+									<th>Email</th>
+									<th>PVR</th>
+									<th>Date Added</th>
+									<th>Added By</th>
+									<th>Referral</th>
+									<th>Address</th>
+								</tr>
+							</thead>
+						</table>
+
+					</div>
+
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" id="_resId" name="residentId" value="" />
+						<input type="submit" id="_loadResident" 
+							class="btn btn-primary btn-lg" value="Load Selected Resident" disabled />
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 
 
 
