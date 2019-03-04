@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ffg.rrn.model.Resident;
-import com.ffg.rrn.model.ResidentAssessment;
 import com.ffg.rrn.service.ResidentServiceImpl;
 import com.ffg.rrn.utils.WebUtils;
 
@@ -82,18 +81,8 @@ public class MainController {
 			serviceCoord = populateSCinModel(model, principal);
 		}		
 		
-		Resident resident  = residentService.getResidentById(residentId, serviceCoord);	
-		
-		ResidentAssessment ra = new ResidentAssessment();
-		
-		ra.setResidentId(resident.getResidentId());
-		ra.setFirstName(resident.getFirstName());
-		ra.setMiddle(resident.getMiddle());
-		ra.setLastName(resident.getLastName());
-		ra.setAId(resident.getAId());
-		ra.setServiceCoord(serviceCoord);
-		
-		model.addAttribute("residentAssessment", ra);				
+		Resident resident  = residentService.getResidentById(residentId, serviceCoord);
+				
 		model.addAttribute("resident", resident);		
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 		
