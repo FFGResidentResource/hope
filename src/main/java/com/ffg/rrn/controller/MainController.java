@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.ResidentAssessment;
 import com.ffg.rrn.service.ResidentServiceImpl;
 import com.ffg.rrn.utils.WebUtils;
 
 /**
- * @author FFGRRNTEam
+ * @author FFGRRNTeam
  *
  */
 @Controller
@@ -63,20 +64,15 @@ public class MainController {
 		return "logoutSuccessfulPage";
 	}
 	
-	@RequestMapping(value = "/saveAssessment", method = RequestMethod.GET)
+	@PostMapping(value = "/saveAssessment")
 	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
 
-		if (bindingResult.hasErrors()) {
-            return "residentPage";
-        }	
+		int count = residentService.saveAssessment(resident);		
 		
-		int count = residentService.saveAssessment(resident);  
-		
-		return "redirect:/getResidentById?residentId="+ resident.getResidentId();
-		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();		
 	}
 
-	@PostMapping(value = "/getResidentById")
+	@RequestMapping(value = "/getResidentById",  method = { RequestMethod.GET, RequestMethod.POST })
 	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception{
 
 		// (1) (en)
@@ -84,11 +80,21 @@ public class MainController {
 		String serviceCoord = null;
 		if (principal != null) {
 			serviceCoord = populateSCinModel(model, principal);
-		}
-					
-		Resident resident  = residentService.getResidentById(residentId, serviceCoord);
-				
-		model.addAttribute("resident", resident);
+		}		
+		
+		Resident resident  = residentService.getResidentById(residentId, serviceCoord);	
+		
+		ResidentAssessment ra = new ResidentAssessment();
+		
+		ra.setResidentId(resident.getResidentId());
+		ra.setFirstName(resident.getFirstName());
+		ra.setMiddle(resident.getMiddle());
+		ra.setLastName(resident.getLastName());
+		ra.setAId(resident.getAId());
+		ra.setServiceCoord(serviceCoord);
+		
+		model.addAttribute("residentAssessment", ra);				
+		model.addAttribute("resident", resident);		
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 		
 		return "residentPage";

@@ -23,17 +23,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children "
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
-					+ " left join assessment_type a on a.a_id = r.a_type ";	
-	
-	public static final String RESIDENT_SQL_BYID //
-	= "select r.RESIDENT_ID, r.ACTIVE, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
-			+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
-			+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
-			+ " '_' as children "
-			+ " from Resident r join referral ref on ref.ref_id = r.ref_type and r.resident_id = ?"
-			+ " join property p on p.prop_id = r.prop_id"
-			+ " left join assessment_type a on a.a_id = r.a_type;";
-
+					+ " left join assessment_type a on a.a_id = r.a_type ";
 
 	@Override
 	public Resident mapRow(ResultSet rs, int row) throws SQLException {

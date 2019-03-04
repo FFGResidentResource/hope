@@ -12,13 +12,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.ffg.rrn.mapper.AssessmentMapper;
+import com.ffg.rrn.mapper.ChildrenMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
 import com.ffg.rrn.model.AssessmentType;
+import com.ffg.rrn.model.Child;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
@@ -59,14 +62,14 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ResidentMapper rowMapper = new ResidentMapper();
 		return this.getJdbcTemplate().query(ResidentMapper.RESIDENT_SQL, rowMapper);
 	}
-	
-	public Resident getResidentByEmail(String email, String serviceCoord)  {
+
+	public Resident getResidentByEmail(String email, String serviceCoord) {
 
 		ResidentMapper rowMapper = new ResidentMapper();
 		Resident resident = new Resident();
-		
+
 		resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.email = ? ",
-					new Object[] { email }, rowMapper);		
+				new Object[] { email }, rowMapper);
 
 		resident.setPropertyList(this.getAllProperty());
 		resident.setRefList(this.getAllReferral());
@@ -78,12 +81,56 @@ public class ResidentDAO extends JdbcDaoSupport {
 	public Resident getResidentById(Long residentId, String serviceCoord) throws Exception {
 
 		ResidentMapper rowMapper = new ResidentMapper();
+		ChildrenMapper childMapper = new ChildrenMapper();
 		Resident resident = new Resident();
 
 		try {
 			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? ",
-					new Object[] { residentId }, rowMapper);
+					new Object[] { residentId }, rowMapper);			
+			
+			List<Child> children = this.getJdbcTemplate().query(ChildrenMapper.CHILDREN_SQL_BY_RESIDENT_ID, new Object[] { residentId },childMapper);
+			if(!CollectionUtils.isEmpty(children)) {
+								
+				for (Child child : children) {
+					if(StringUtils.isEmpty(resident.getChild1())) {
+						resident.setChild1(child.getFullName());
+						resident.setPvrChild1(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild2())) {
+						resident.setChild2(child.getFullName());
+						resident.setPvrChild2(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild3())) {
+						resident.setChild3(child.getFullName());
+						resident.setPvrChild3(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild4())) {
+						resident.setChild4(child.getFullName());
+						resident.setPvrChild4(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild5())) {
+						resident.setChild5(child.getFullName());
+						resident.setPvrChild5(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild6())) {
+						resident.setChild6(child.getFullName());
+						resident.setPvrChild6(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild7())) {
+						resident.setChild7(child.getFullName());
+						resident.setPvrChild7(child.getPvrFlag());
+					}
+					else if(StringUtils.isEmpty(resident.getChild8())) {
+						resident.setChild8(child.getFullName());
+						resident.setPvrChild8(child.getPvrFlag());
+					}
+				}
+				
+			}
+			
+			
 		} catch (EmptyResultDataAccessException ex) {
+			//When No resident found - Page will open for NewResident
 			return new Resident(this.getAllProperty(), this.getAllAType(), this.getAllReferral(), serviceCoord);
 		}
 
@@ -93,16 +140,17 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		return resident;
 	}
-	
+
 	/**
 	 * 
 	 * @param resident
 	 */
 	public int saveAssessment(Resident resident) {
-		
+
 		int count = this.getJdbcTemplate().update(
-				"UPDATE RESIDENT SET A_TYPE = ?, A_DATE = NOW() where RESIDENT_ID = ?", resident.getAId(), resident.getResidentId());
-		
+				"UPDATE RESIDENT SET A_TYPE = ?, A_DATE = NOW() where RESIDENT_ID = ?", resident.getAId(),
+				resident.getResidentId());
+
 		return count;
 	}
 
@@ -111,7 +159,25 @@ public class ResidentDAO extends JdbcDaoSupport {
 	 * @param resident
 	 */
 	public Long saveResident(Resident resident) {
+		
+		Long residentId = resident.getResidentId();
 
+		//Logic on when to insert vs update existing Resident
+		if(residentId == 0l) {
+			residentId = insertNewResident(resident);
+		}else {
+			residentId = updateExistingResident(resident);
+		}
+
+		return residentId;
+	}
+
+	private long updateExistingResident(Resident resident) {
+		
+		return -1;
+	}
+
+	private long insertNewResident(Resident resident) {
 		int count = this.getJdbcTemplate().update(
 				"INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD, REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL) VALUES (nextval('RESIDENT_SQ'), true, '"
 						+ resident.getFirstName() + "','" + resident.getMiddle() + "','" + resident.getLastName() + "',"
@@ -121,13 +187,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 						+ resident.getPhotoRelease() + ",'" + resident.getServiceCoord() + "'," + resident.getRefId()
 						+ "," + resident.getViaVoicemail() + "," + resident.getViaText() + "," + resident.getViaEmail()
 						+ ")");
-		
+
 		long residentId = 0l;
 
 		if (count > 0) {
-			
+
 			residentId = (this.getResidentByEmail(resident.getEmail(), resident.getServiceCoord())).getResidentId();
-			
+
 			if (!StringUtils.isEmpty(resident.getChild1())) {
 				this.getJdbcTemplate().update(
 						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
@@ -174,12 +240,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
 								+ resident.getChild8() + "', currval('RESIDENT_SQ')," + resident.getPvrChild8() + ")");
 			}
-			
-			
-			
+
 		}
 
 		return residentId;
+		
 	}
 
 }

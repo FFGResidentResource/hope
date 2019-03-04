@@ -9,8 +9,6 @@ import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import org.thymeleaf.util.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
@@ -59,7 +57,7 @@ public class Resident {
 	private String voiceMail;
 	private String text;
 	
-	@Email @NotEmpty
+	@Email
 	private String email;
 	private String address;
 	private Boolean ackRightToPrivacy;
@@ -108,7 +106,6 @@ public class Resident {
 	
 	@JsonView
 	private List<Referral> refList;
-	
 	
 	public Resident() {
 		
