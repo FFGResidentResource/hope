@@ -6,8 +6,10 @@ package com.ffg.rrn.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -43,11 +45,14 @@ public class Resident {
 	@NotEmpty
 	private String firstName;
 	private String middle;	
+	@NotEmpty
 	private String lastName;
 	
+	@NotNull
 	private Integer propertyId;
 	private String propertyName;		
 	
+	@NotNull
 	private Integer refId;
 	private String refValue;
 	
@@ -60,6 +65,8 @@ public class Resident {
 	@Email
 	private String email;
 	private String address;
+	
+	@AssertTrue
 	private Boolean ackRightToPrivacy;
 	
 	private Boolean viaVoicemail;

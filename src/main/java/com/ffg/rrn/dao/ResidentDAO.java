@@ -163,7 +163,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		Long residentId = resident.getResidentId();
 
 		//Logic on when to insert vs update existing Resident
-		if(residentId == 0l) {
+		if(null == residentId) {
 			residentId = insertNewResident(resident);
 		}else {
 			residentId = updateExistingResident(resident);

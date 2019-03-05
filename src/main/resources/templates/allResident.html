@@ -12,6 +12,8 @@
 
 <link href="/css/datatables.min.css" rel="stylesheet">
 
+<link href="/css/c3.min.css" rel="stylesheet">
+
 <style>
 .bd-placeholder-img {
 	font-size: 1.125rem;
@@ -38,6 +40,8 @@
 
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
+
+	<div class="row text-center" id="allResidentPieChart"></div>
 
 	<form th:action="@{/getResidentById}" method='POST'>
 		<div class="container-fluid hidden-print">
@@ -99,6 +103,10 @@
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>
+	
+	<script src="/js/c3.min.js"></script>
+	<script src="/js/d3-5.4.0.min.js"></script>
+	
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 

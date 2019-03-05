@@ -1,5 +1,6 @@
 var table;
 var currentRow;
+
 jQuery(document)
 		.ready(
 				function() {				
@@ -27,6 +28,8 @@ jQuery(document)
 								cache : false,
 								timeout : 600000,
 								success : function(data) {
+									
+									buildPieChartData(data);
 									
 									table = jQuery('#residentTable')
 											.DataTable(
@@ -210,4 +213,45 @@ function filterActives (dat) {
 	else {
 		table.columns(2).search('').draw();
 	}
+}
+
+function buildPieChartData(data){
+	
+	var columns = [];
+	var arr=[];
+	var found = false;
+	
+	jQuery.each(data, function(key,resident){
+		found = false;
+		if(key==0){
+			arr= [];
+			arr.push(resident.propertyName);
+			arr.push(1);
+			columns.push(arr);			
+		}else{
+			jQuery.each(columns, function(index,value){				
+				if(columns[index][0] == resident.propertyName){
+					found = true;
+					columns[index][1] = columns[index][1] + 1;
+				}				
+			});				
+			if(found == false){				
+				arr= [];
+				arr.push(resident.propertyName);
+				arr.push(1);
+				columns.push(arr);
+			}
+			
+		}		
+	});
+	
+	var chart = c3.generate({
+		bindto: '#allResidentPieChart',
+	    data: {
+	        columns: columns,
+	        type: 'pie'
+	    }
+	});
+	
+	
 }

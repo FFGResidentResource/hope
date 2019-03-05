@@ -172,7 +172,7 @@
 										</div>
 										<div class="col-sm-4">
 											<input class="form-control" id="lastname"
-												th:field="*{lastName}" placeholder="Enter last name">
+												th:field="*{lastName}" placeholder="Enter last name" required>
 										</div>
 
 									</div>
@@ -181,7 +181,7 @@
 										<label class="col-sm-2 control-label" for="_referral">Referral:</label>
 										<div class="col-sm-10">
 											<select class="form-control" id="_referral"
-												th:field="*{refId}">
+												th:field="*{refId}" required>
 												<option value="0">Select</option>
 												<option th:each="referral : ${resident.refList}"
 													th:value="${referral.refId}"
@@ -194,7 +194,7 @@
 										<label class="col-sm-2 control-label" for="_property">Property:</label>
 										<div class="col-sm-10">
 											<select class="form-control" id="_property"
-												th:field="*{propertyId}">
+												th:field="*{propertyId}" required>
 												<option value="0">Select</option>
 												<option th:each="property : ${resident.propertyList}"
 													th:value="${property.propertyId}"
