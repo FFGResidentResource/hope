@@ -1,3 +1,4 @@
+
 jQuery(document).ready(function() {
 
 	jQuery('a').parent().removeClass('active');
@@ -9,7 +10,19 @@ jQuery(document).ready(function() {
 	} else if (path == '/allResident') {
 		jQuery("a[href='/allResident']").parent().addClass('active');
 	}
+	
+	stepCounter();	
 });
+
+function stepCounter(){
+	
+	if(res !=null && res.wsCounter.signUpComplete){
+    	jQuery('#addResident_View').attr('class','col-xs-1 bs-wizard-step complete');
+    }
+    if(res !=null && res.wsCounter.assessmentComplete){
+    	jQuery('#ssm_View').attr('class','col-xs-1 bs-wizard-step complete');
+    }	
+}
 
 function toggleForm(prefix) {
 
@@ -25,8 +38,12 @@ function toggleForm(prefix) {
 	jQuery("[id$='_View']").removeClass('disabled');
 	jQuery("[id$='_View']").addClass('disabled');
 
+	stepCounter();
+	
 	jQuery(formName + "_View").removeClass("disabled");
 	jQuery(formName + "_View").removeClass('active');
 	jQuery(formName + "_View").addclass('active');
+	
+		
 
 }

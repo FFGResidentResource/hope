@@ -103,7 +103,7 @@ public class Resident {
 	private Boolean pvrChild7;
 	private Boolean pvrChild8;
 	
-	private String currentStep;
+	private WizardStepCounter wsCounter;
 	
 	@JsonView
 	private List<Property> propertyList;

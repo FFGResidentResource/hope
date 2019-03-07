@@ -25,6 +25,7 @@ import com.ffg.rrn.model.Child;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.WizardStepCounter;
 
 /**
  * @author FFGRRNTeam
@@ -86,52 +87,65 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		try {
 			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? ",
-					new Object[] { residentId }, rowMapper);			
-			
-			List<Child> children = this.getJdbcTemplate().query(ChildrenMapper.CHILDREN_SQL_BY_RESIDENT_ID, new Object[] { residentId },childMapper);
-			if(!CollectionUtils.isEmpty(children)) {
-								
+					new Object[] { residentId }, rowMapper);
+
+			WizardStepCounter wsCounter = new WizardStepCounter();
+
+			if (!StringUtils.isEmpty(resident.getFirstName()) && !StringUtils.isEmpty(resident.getLastName())
+					&& resident.getRefId() != null && resident.getAckRightToPrivacy()
+					&& resident.getPropertyId() != null
+					&& ((resident.getAllowContact() && (!StringUtils.isEmpty(resident.getEmail())
+							|| !StringUtils.isEmpty(resident.getVoiceMail())
+							|| !StringUtils.isEmpty(resident.getText()))) || (resident.getAllowContact() == false))) {
+				wsCounter.setSignUpComplete(true);
+			}
+
+			if (resident.getAId() != null) {
+				wsCounter.setAssessmentComplete(true);
+			}
+
+			List<Child> children = this.getJdbcTemplate().query(ChildrenMapper.CHILDREN_SQL_BY_RESIDENT_ID,
+					new Object[] { residentId }, childMapper);
+			if (!CollectionUtils.isEmpty(children)) {
+
 				for (Child child : children) {
-					if(StringUtils.isEmpty(resident.getChild1())) {
+					if (StringUtils.isEmpty(resident.getChild1())) {
 						resident.setChild1(child.getFullName());
 						resident.setPvrChild1(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild2())) {
+					} else if (StringUtils.isEmpty(resident.getChild2())) {
 						resident.setChild2(child.getFullName());
 						resident.setPvrChild2(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild3())) {
+					} else if (StringUtils.isEmpty(resident.getChild3())) {
 						resident.setChild3(child.getFullName());
 						resident.setPvrChild3(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild4())) {
+					} else if (StringUtils.isEmpty(resident.getChild4())) {
 						resident.setChild4(child.getFullName());
 						resident.setPvrChild4(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild5())) {
+					} else if (StringUtils.isEmpty(resident.getChild5())) {
 						resident.setChild5(child.getFullName());
 						resident.setPvrChild5(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild6())) {
+					} else if (StringUtils.isEmpty(resident.getChild6())) {
 						resident.setChild6(child.getFullName());
 						resident.setPvrChild6(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild7())) {
+					} else if (StringUtils.isEmpty(resident.getChild7())) {
 						resident.setChild7(child.getFullName());
 						resident.setPvrChild7(child.getPvrFlag());
-					}
-					else if(StringUtils.isEmpty(resident.getChild8())) {
+					} else if (StringUtils.isEmpty(resident.getChild8())) {
 						resident.setChild8(child.getFullName());
 						resident.setPvrChild8(child.getPvrFlag());
 					}
 				}
-				
+
 			}
 			
-			
+			resident.setWsCounter(wsCounter);
+
 		} catch (EmptyResultDataAccessException ex) {
-			//When No resident found - Page will open for NewResident
-			return new Resident(this.getAllProperty(), this.getAllAType(), this.getAllReferral(), serviceCoord);
+			// When No resident found - Page will open for NewResident
+			Resident r = new Resident(this.getAllProperty(), this.getAllAType(), this.getAllReferral(), serviceCoord);
+			WizardStepCounter wsCounter = new WizardStepCounter();
+			r.setWsCounter(wsCounter);
+			return r;
 		}
 
 		resident.setPropertyList(this.getAllProperty());
@@ -159,13 +173,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 	 * @param resident
 	 */
 	public Long saveResident(Resident resident) {
-		
+
 		Long residentId = resident.getResidentId();
 
-		//Logic on when to insert vs update existing Resident
-		if(null == residentId) {
+		// Logic on when to insert vs update existing Resident
+		if (null == residentId) {
 			residentId = insertNewResident(resident);
-		}else {
+		} else {
 			residentId = updateExistingResident(resident);
 		}
 
@@ -173,7 +187,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 
 	private long updateExistingResident(Resident resident) {
-		
+		// TODO
 		return -1;
 	}
 
@@ -244,7 +258,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		}
 
 		return residentId;
-		
+
 	}
 
 }
