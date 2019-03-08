@@ -3,6 +3,10 @@
  */
 package com.ffg.rrn.dao;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +44,13 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport{
             return null;
         }
     }
+    
+    public void updateServiceCoordinator(List<Integer> scIDs, boolean active) {
+    	String sql = "UPDATE SERVICE_COORDINATOR SET ACTIVE = :active WHERE SC_ID in (:scIDs)";
+    	Map parameters = new HashMap<String, Object>();
+    	parameters.put("active", active);
+    	parameters.put("scIDs", scIDs);
+    	this.getJdbcTemplate().update(sql, parameters);
+    }
+    
 }

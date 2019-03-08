@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.ServiceCoordinator;
 import com.ffg.rrn.service.ResidentServiceImpl;
+import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
 import com.ffg.rrn.utils.WebUtils;
 
 /**
@@ -33,6 +35,9 @@ public class MainController {
 	@Autowired
 	private ResidentServiceImpl residentService;
 
+	@Autowired
+	private ServiceCoordinatorServiceImpl serviceCoordinatorService;
+	
 	// Either you don't pass anything or pass welcome from the url, it hit below API
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
@@ -134,6 +139,18 @@ public class MainController {
         return "allResident";
     }	
 
+	@PostMapping("/approveServiceCoordinator")
+    public String signup(@Valid @ModelAttribute ServiceCoordinator sc, BindingResult bindingResult) {      
+        
+		if (bindingResult.hasErrors()) {
+            return "adminPage";
+        }
+		//This will be new ResidentId always
+		//serviceCoordinatorService.updateServiceCoordinator(scIDs, Boolean.TRUE);
+        
+        return "adminPage";
+    }	
+	
 	private String populateSCinModel(Model model, Principal principal) {
 
 		User loggedinUser = (User) ((Authentication) principal).getPrincipal();

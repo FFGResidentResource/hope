@@ -36,11 +36,37 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container">
+	<div class="container-fluid">
 		<h2>Service Coordinator Admin Page</h2>
 		
 		<b>This is protected page for administration purpose only!</b> 
 
+		<div class="container">
+			<th:block th:include="/_addSC"></th:block>
+		</div>
+		<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">All Service Coordinators</h3>
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-12">
+
+						<table id="scTable" class="display compact" style="width: 100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>ID</th>
+									<th>User Name</th>
+									<th>Email</th>
+								</tr>
+							</thead>
+						</table>
+
+					</div>
+				</div>
+		</div>
+				
+	
 	</div>
 	<!-- Bootstrap core JavaScript
     ================================================== -->
