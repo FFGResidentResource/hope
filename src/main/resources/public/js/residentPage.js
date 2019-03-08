@@ -47,3 +47,13 @@ function toggleForm(prefix) {
 		
 
 }
+
+document.getElementById('allowcontact').onchange = function() {
+    document.getElementById('viaemail').disabled = this.checked;
+    document.getElementById('email').disabled = this.checked;
+    document.getElementById('viavoicemail').disabled = this.checked;
+    document.getElementById('voicemail').disabled = this.checked;
+    document.getElementById('viatext').disabled = this.checked;
+    document.getElementById('text').disabled = this.checked;
+    document.getElementById('wantSurvey').disabled = this.checked;
+};
