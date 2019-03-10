@@ -4,6 +4,7 @@
 package com.ffg.rrn.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ServiceCoordinator;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -87,6 +89,7 @@ public class MainController {
 		}		
 		
 		Resident resident  = residentService.getResidentById(residentId, serviceCoord);
+		resident = residentService.getAllQuestionnaire(resident);		
 				
 		model.addAttribute("resident", resident);		
 		model.addAttribute("message", "Please select resident from All Resident Table first");
@@ -106,6 +109,7 @@ public class MainController {
 		}
 					
 		Resident resident  = residentService.getResidentById(0l, serviceCoord);
+		resident = residentService.getAllQuestionnaire(resident);
 				
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");

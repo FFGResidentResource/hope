@@ -1,7 +1,7 @@
 <div id="ssm_Form" class="hideme stepPanel">
 
-	<form name='_assessmentF' th:action="@{/saveAssessment}" th:object="${resident}"
-		method='POST' class="form-horizontal" >
+	<form name='_assessmentF' th:action="@{/saveAssessment}"
+		th:object="${resident}" method='POST' class="form-horizontal">
 
 		<div class="col-sm-12 myPanel">
 			<div class="row">
@@ -65,14 +65,29 @@
 			</h5>
 			</p>
 
+			<p>This assessment form is user to gauge resident&#39;s levels of
+				self-sufficiency in six life domains, inlcuding(1) Housing, (2)
+				Money Mangement, (3) Employment, (4) Education, () Network Support,
+				and (6) Household Management. All six domains have a direct impact
+				on resident&#39;s ability to remain stable in their housing, which
+				is one of the primary goals of Resident Resources Network.</p>
+
+			<p>Assessments of all six domains are to be completed for every
+				resident over the age of 18 with whom a Service Coordinator comes in
+				contact.Assessments should be completed at initial contact with the
+				resident and every six (6) months thereafter.</p>
+
+			<p>As you begin the assessment, be sure to:</p>
+
 			<table>
 				<tr>
 					<td>
 						<ul>
-							<li>Highlight their (or their agency&#39;s) commitment to
+							<li>Highlight RRN&#39;s/your agency&#39;s commitment to
 								self-sufficiency</li>
 							<li>Stress their commitment to cultivating a holistic
-								understanding of their resident&#39;s lives</li>
+								understanding of their resident&#39;s lives to ensure that the
+								most needed serves are provided</li>
 							<li>Explain that the assessment helps to identify other
 								possible ways in which residents may benefit from services,
 								thereby informing additional referrals</li>
@@ -89,11 +104,10 @@
 
 
 			<div class="row text-center bs-linebreak hidden-print">
-				
-				<input type="hidden" th:field="*{serviceCoord}" />
-				<input type="hidden" th:field="*{residentId}" />					
-				<input
-					type="submit" class="btn btn-primary btn-lg" value="Save Assessment">
+
+				<input type="hidden" th:field="*{serviceCoord}" /> <input
+					type="hidden" th:field="*{residentId}" /> <input type="submit"
+					class="btn btn-primary btn-lg" value="Save Assessment">
 			</div>
 		</div>
 	</form>

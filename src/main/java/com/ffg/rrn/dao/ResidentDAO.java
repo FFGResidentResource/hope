@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +21,12 @@ import com.ffg.rrn.mapper.ChildrenMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
+import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Child;
+import com.ffg.rrn.model.Choice;
 import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.WizardStepCounter;
@@ -38,6 +42,25 @@ public class ResidentDAO extends JdbcDaoSupport {
 	@Autowired
 	public ResidentDAO(DataSource dataSource) {
 		this.setDataSource(dataSource);
+	}
+
+	public List<AssessmentQuestionnaire> getAllQuestionnaire() {
+		List<AssessmentQuestionnaire> aqList = this.getJdbcTemplate().query(
+				"SELECT * FROM ASSESSMENT_QUESTIONNAIRE order by sort",
+				new BeanPropertyRowMapper(AssessmentQuestionnaire.class));
+		return aqList;
+	}
+
+	public List<QuestionChoice> getChoicesPerQuestion() {
+		List<QuestionChoice> quesChoiceList = this.getJdbcTemplate().query("SELECT * FROM QUESTION_CHOICE",
+				new BeanPropertyRowMapper(QuestionChoice.class));
+		return quesChoiceList;
+	}
+	
+	public List<Choice> getChoices() {
+		List<Choice> choiceList = this.getJdbcTemplate().query("SELECT * FROM CHOICE",
+				new BeanPropertyRowMapper(Choice.class));
+		return choiceList;
 	}
 
 	/**
@@ -137,7 +160,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 				}
 
 			}
-			
+
 			resident.setWsCounter(wsCounter);
 
 		} catch (EmptyResultDataAccessException ex) {
@@ -187,7 +210,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 
 	private long updateExistingResident(Resident resident) {
-		// TODO
+		// TODO - Modify Resident use case is all pending
 		return -1;
 	}
 

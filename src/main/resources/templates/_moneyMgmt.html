@@ -1,1 +1,53 @@
-<div id="moneyMgmt_Form" class="hideme"><h2>Money Mgmt Questions Under Construction...</h2></div>
+<div id="moneyMgmt_Form" class="hideme">
+	<form name='_moneyMgmtF' th:action="@{/saveMoneyMgmt}"
+		th:object="${resident}" method='POST' class="form-horizontal">
+
+		<div class="col-sm-12 myPanel">
+			<div class="row">
+
+				<div class="col-sm-10">
+					<h3>MONEY MANAGEMENT</h3>
+					<span class="hidden-print" style="color: red; font-size: larger;"
+						th:if="*{firstName == null}" th:text="${message}"></span>
+				</div>
+				<div class="col-sm-2 hideme print-only">
+					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+				</div>
+
+			</div>
+			<hr class="solidline1">
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="col-sm-3">
+						<strong>Resident Name:</strong>
+					</div>
+					<div class="col-sm-5">
+						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="col-sm-3">
+						<strong>Resident Id:</strong>
+					</div>
+					<div class="col-sm-5">
+						<u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div th:each="monetMgmt: ${resident.moneyMgmtQuestionnaire}">
+					<div class="col-sm-6" th:text="${monetMgmt.questionNumber}">
+						<div class="col-sm-6" th:each="choice: ${monetMgmt.choices}">
+							<span th:text="${choice.choice}" /> </span>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+</div>

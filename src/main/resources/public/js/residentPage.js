@@ -1,27 +1,27 @@
-
 jQuery(document).ready(function() {
 
 	jQuery('a').parent().removeClass('active');
 	var path = window.location.pathname;
-	if(path == '/newResident' || path == "/getResidentById"){
+	if (path == '/newResident' || path == "/getResidentById") {
 		jQuery("a[href='/newResident']").parent().addClass('active');
 	} else if (path == '/admin') {
 		jQuery("a[href='/admin']").parent().addClass('active');
 	} else if (path == '/allResident') {
 		jQuery("a[href='/allResident']").parent().addClass('active');
 	}
-	
-	stepCounter();	
+
+	stepCounter();
 });
 
-function stepCounter(){
-	
-	if(res !=null && res.wsCounter.signUpComplete){
-    	jQuery('#addResident_View').attr('class','col-xs-1 bs-wizard-step complete');
-    }
-    if(res !=null && res.wsCounter.assessmentComplete){
-    	jQuery('#ssm_View').attr('class','col-xs-1 bs-wizard-step complete');
-    }	
+function stepCounter() {
+
+	if (res != null && res.wsCounter.signUpComplete) {
+		jQuery('#addResident_View').attr('class',
+				'col-xs-1 bs-wizard-step complete');
+	}
+	if (res != null && res.wsCounter.assessmentComplete) {
+		jQuery('#ssm_View').attr('class', 'col-xs-1 bs-wizard-step complete');
+	}
 }
 
 function toggleForm(prefix) {
@@ -39,21 +39,19 @@ function toggleForm(prefix) {
 	jQuery("[id$='_View']").addClass('disabled');
 
 	stepCounter();
-	
+
 	jQuery(formName + "_View").removeClass("disabled");
 	jQuery(formName + "_View").removeClass('active');
 	jQuery(formName + "_View").addclass('active');
-	
-		
 
 }
 
 document.getElementById('allowcontact').onchange = function() {
-    document.getElementById('viaemail').disabled = this.checked;
-    document.getElementById('email').disabled = this.checked;
-    document.getElementById('viavoicemail').disabled = this.checked;
-    document.getElementById('voicemail').disabled = this.checked;
-    document.getElementById('viatext').disabled = this.checked;
-    document.getElementById('text').disabled = this.checked;
-    document.getElementById('wantSurvey').disabled = this.checked;
+	document.getElementById('viaemail').disabled = this.checked;
+	document.getElementById('email').disabled = this.checked;
+	document.getElementById('viavoicemail').disabled = this.checked;
+	document.getElementById('voicemail').disabled = this.checked;
+	document.getElementById('viatext').disabled = this.checked;
+	document.getElementById('text').disabled = this.checked;
+	document.getElementById('wantSurvey').disabled = this.checked;
 };
