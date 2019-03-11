@@ -123,7 +123,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 				wsCounter.setSignUpComplete(true);
 			}
 
-			if (resident.getAId() != null) {
+			if (resident.getAId() != null && resident.getAId() > 0L ) {
 				wsCounter.setAssessmentComplete(true);
 			}
 

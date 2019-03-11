@@ -92,7 +92,7 @@ public class MainController {
 		resident = residentService.getAllQuestionnaire(resident);		
 				
 		model.addAttribute("resident", resident);		
-		model.addAttribute("message", "Please select resident from All Resident Table first");
+		model.addAttribute("message", "Save new resident first or load existing Resident from All Resident Tab.");
 		
 		return "residentPage";
 		
@@ -141,7 +141,19 @@ public class MainController {
         Long residentId = residentService.saveResident(resident);    
         
         return "allResident";
-    }	
+    }
+	
+	@PostMapping("/saveHousing")
+    public String saveHousingAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+        
+		if (bindingResult.hasErrors()) {
+            return "residentPage";
+        }
+		//This will be new ResidentId always
+        //Long residentId = residentService.saveResident(resident);    
+        
+        return "allResident";
+    }
 
 	@PostMapping("/approveServiceCoordinator")
     public String signup(@Valid @ModelAttribute ServiceCoordinator sc, BindingResult bindingResult) {      

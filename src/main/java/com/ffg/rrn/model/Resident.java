@@ -106,17 +106,27 @@ public class Resident {
 	@JsonView
 	private List<Referral> refList;
 
+	@JsonView
 	private List<ResidentAssessmentQuestionnaire> housingQuestionnaire;
 
+	@JsonView
 	private List<ResidentAssessmentQuestionnaire> moneyMgmtQuestionnaire;
 
+	@JsonView
 	private List<ResidentAssessmentQuestionnaire> employmentQuestionnaire;
 
+	@JsonView
 	private List<ResidentAssessmentQuestionnaire> educationQuestionnaire;
 
+	@JsonView
 	private List<ResidentAssessmentQuestionnaire> netSupportQuestionnaire;
 
+	@JsonView
 	private List<ResidentAssessmentQuestionnaire> householdMgmtQuestionnaire;
+	
+	private Integer currentScore;
+	
+	private Integer goal;
 
 	public Resident() {
 

@@ -29,6 +29,7 @@ public class ResidentAssessmentQuestionnaire {
 
 	private String lifeDomain;
 	
+	@JsonView
 	private List<Choice> choices;
 	
 
