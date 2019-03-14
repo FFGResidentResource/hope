@@ -6,12 +6,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
 <link href="/css/common.css" rel="stylesheet">
-
 <link href="/css/datatables.min.css" rel="stylesheet">
-
 <link href="/css/c3.min.css" rel="stylesheet">
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
 
 <style>
 .bd-placeholder-img {
@@ -82,9 +80,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
 	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
-	
 	<script src="/js/datatables.min.js"></script>
-		
+	<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
 		
 	<script type="text/javascript">	
 	//Code to Style Active Tab
@@ -111,16 +108,17 @@
 				cache : false,
 				timeout : 600000,
 				success : function(data) {
-					jQuery('#scTable')
+					var table = jQuery('#scTable')
 					.DataTable(
 						{
 							"data" : data,
 							"columns" : [
 										{
-											"className":      'details-control',
 											"orderable":      false,
 											"data":           null,
-											"defaultContent": ''
+											"defaultContent": '',
+											'targets': 0,
+								            'checkboxes': {'selectRow': true}
 										},
 										{	data : 'scId'},
 										{	data : 'active'},
@@ -130,6 +128,7 @@
 										{	data : 'createdOn'},
 										{	data : 'lastLogin'}
 										],
+							'select': {'style': 'multi'},
 							"order" : [ [ 1, "desc" ] ],
 							pageLength : 15,
 							pagingType : "full_numbers",
@@ -146,6 +145,8 @@
 					);
 				}
 			});
+			
+			
 		
 	});
 
