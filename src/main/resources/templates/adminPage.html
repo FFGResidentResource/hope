@@ -5,10 +5,13 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <link href="/css/common.css" rel="stylesheet">
+
+<link href="/css/datatables.min.css" rel="stylesheet">
+
+<link href="/css/c3.min.css" rel="stylesheet">
 
 <style>
 .bd-placeholder-img {
@@ -41,9 +44,11 @@
 		
 		<b>This is protected page for administration purpose only!</b> 
 
+<!-- 
 		<div class="container">
-			<th:block th:include="/_addSC"></th:block>
+			<th:block th:include="/_addServiceCoordinator"></th:block>
 		</div>
+-->
 		<div class="panel panel-info">
 				<div class="panel-heading">
 					<h3 class="panel-title">All Service Coordinators</h3>
@@ -56,12 +61,15 @@
 								<tr>
 									<th></th>
 									<th>ID</th>
+									<th>Active</th>
 									<th>User Name</th>
+									<th>Password</th>
 									<th>Email</th>
+									<th>Created On</th>
+									<th>Last Login</th>
 								</tr>
 							</thead>
 						</table>
-
 					</div>
 				</div>
 		</div>
@@ -71,25 +79,86 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
 	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	
+	<script src="/js/datatables.min.js"></script>
+		
+		
 	<script type="text/javascript">	
 	//Code to Style Active Tab
-	jQuery(document).ready(function(){
+	jQuery(document).ready(
+				
+		function(){
+			
+			jQuery('a').parent().removeClass('active');
+			var path = window.location.pathname;
+			if(path == '/newResident' || path == "/getResidentById"){			
+				jQuery("a[href='/newResident']").parent().addClass('active');
+			} else if (path == '/admin') {
+				jQuery("a[href='/admin']").parent().addClass('active');
+			}else if (path == '/allResident') {
+				jQuery("a[href='/allResident']").parent().addClass('active');
+			};
 		
-		jQuery('a').parent().removeClass('active');
-		var path = window.location.pathname;
-		if(path == '/newResident' || path == "/getResidentById"){			
-			jQuery("a[href='/newResident']").parent().addClass('active');
-		} else if (path == '/admin') {
-			jQuery("a[href='/admin']").parent().addClass('active');
-		}else if (path == '/allResident') {
-			jQuery("a[href='/allResident']").parent().addClass('active');
-		}	
-  	});
+			jQuery
+			.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "/getAllServiceCoordinators",
+				dataType : 'json',
+				cache : false,
+				timeout : 600000,
+				success : function(data) {
+					jQuery('#scTable')
+					.DataTable(
+						{
+							"data" : data,
+							"columns" : [
+										{
+											"className":      'details-control',
+											"orderable":      false,
+											"data":           null,
+											"defaultContent": ''
+										},
+										{	data : 'scId'},
+										{	data : 'active'},
+										{	data : 'userName'},
+										{	data : 'encrytedPassword'},
+										{	data : 'email'},
+										{	data : 'createdOn'},
+										{	data : 'lastLogin'}
+										],
+							"order" : [ [ 1, "desc" ] ],
+							pageLength : 15,
+							pagingType : "full_numbers",
+							"initComplete": function(settings, json) {
+								var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="serviceCoordinators" value="all" onchange="filterActives(this);"> All '
+									+' <input type="radio" name="serviceCoordinators" value="true" onchange="filterActives(this);"> Active '
+									+' <input type="radio" name="serviceCoordinators" value="false" onchange="filterActives(this);"> Inactive </span>';
+								
+								//This prints all radio Options on AllResident DataTables.
+								var pre = jQuery('.dataTables_length').html();
+								jQuery('.dataTables_length').html(pre + radioHtml);
+							}
+						}
+					);
+				}
+			});
+		
+	});
+
+	function filterActives (dat) {
+		//Toggles Active
+		if(dat.value != "all"){
+			table.columns(2).search(dat.value).draw();
+		}
+		else {
+			table.columns(2).search('').draw();
+		}
+	}
+
 	</script>
 
 </body>

@@ -52,5 +52,10 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		parameters.put("scIDs", scIDs);
 		this.getJdbcTemplate().update(sql, parameters);
 	}
+	
+	public List<ServiceCoordinator> getAllServiceCoordinators() {
+		ServiceCoordinatorMapper rowMapper = new ServiceCoordinatorMapper();
+		return this.getJdbcTemplate().query(ServiceCoordinatorMapper.BASE_SQL, rowMapper);
+	}
 
 }

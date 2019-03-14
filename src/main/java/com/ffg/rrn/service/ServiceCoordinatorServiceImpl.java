@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ServiceCoordinatorDAO;
+import com.ffg.rrn.model.ServiceCoordinator;
 
 /**
  * @author FFGRRNTeam
@@ -22,6 +23,10 @@ public class ServiceCoordinatorServiceImpl {
 
 	public void updateServiceCoordinator(List<Integer> scIDs, boolean active) {
 		serviceCoordinatorDao.updateServiceCoordinator(scIDs, active);
+	}
+	
+	public List<ServiceCoordinator> getAllServiceCoordinators() {
+		return this.serviceCoordinatorDao.getAllServiceCoordinators();
 	}
 
 }
