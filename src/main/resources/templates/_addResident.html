@@ -2,7 +2,8 @@
 
 	<form name='_addResidentF' th:action="@{/saveResident}"
 		th:object="${resident}" method='POST' class="form-horizontal">
-
+		<input name="residentId" type="hidden" id="residentId"
+			   th:field="*{residentId}" >
 		<div class="col-sm-12 myPanel">
 			<div class="row">
 
