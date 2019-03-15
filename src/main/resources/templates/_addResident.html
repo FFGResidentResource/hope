@@ -448,7 +448,7 @@
 							th:value="${resident.propertyList}" /> <input type="button"
 							class="btn btn-primary btn-lg" value="Reset"
 							onclick="jQuery(':input').val("");"> <input type="submit"
-							class="btn btn-primary btn-lg" value="Save Resident">
+							class="btn btn-primary btn-lg" th:value="${resident.residentId==null}?'Save Resident':'Update Resident'">
 					</div>
 				</div>
 			</div>
