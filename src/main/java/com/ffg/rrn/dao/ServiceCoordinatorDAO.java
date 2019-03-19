@@ -45,11 +45,13 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		}
 	}
 
-	public void updateServiceCoordinator(List<Integer> scIDs, boolean active) {
+	public void updateServiceCoordinator(List <ServiceCoordinator> scIDs, boolean active) {
 		String sql = "UPDATE SERVICE_COORDINATOR SET ACTIVE = :active WHERE SC_ID in (:scIDs)";
+		//String sql = "UPDATE SERVICE_COORDINATOR SET ACTIVE = :active WHERE SC_ID = ? ";
 		Map parameters = new HashMap<String, Object>();
 		parameters.put("active", active);
 		parameters.put("scIDs", scIDs);
+		//Object[] params = new Object[] { scID };
 		this.getJdbcTemplate().update(sql, parameters);
 	}
 	

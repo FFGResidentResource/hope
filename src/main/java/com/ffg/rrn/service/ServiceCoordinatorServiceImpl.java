@@ -21,8 +21,8 @@ public class ServiceCoordinatorServiceImpl {
 	@Autowired
 	private ServiceCoordinatorDAO serviceCoordinatorDao;
 
-	public void updateServiceCoordinator(List<Integer> scIDs, boolean active) {
-		serviceCoordinatorDao.updateServiceCoordinator(scIDs, active);
+	public void updateServiceCoordinator(List<ServiceCoordinator> scID, boolean active) {
+		serviceCoordinatorDao.updateServiceCoordinator(scID, active);
 	}
 	
 	public List<ServiceCoordinator> getAllServiceCoordinators() {

@@ -37,7 +37,8 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid">
+	<form th:action="@{/approveServiceCoordinator}" method='POST'>
+	<div class="container-fluid"> <!--  th:object="${serviceCoordinator}" -->
 		<h2>Service Coordinator Admin Page</h2>
 		
 		<b>This is protected page for administration purpose only!</b> 
@@ -69,11 +70,19 @@
 							</thead>
 						</table>
 					</div>
+					
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" id="_scId" name="serviceCoordinatorID" value="" />
+						<input type="submit" id="_activateServiceCoordinator" class="btn btn-primary btn-lg" value="Activate Selected Service Coordinator(s)" disabled />
+						<input type="submit" id="_deactivateServiceCoordinator" class="btn btn-primary btn-lg" value="Deactivate Selected Service Coordinator(s)" disabled />
+					</div>
+					
 				</div>
 		</div>
 				
 	
 	</div>
+	</form>
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
@@ -82,85 +91,7 @@
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	<script src="/js/datatables.min.js"></script>
 	<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
-		
-	<script type="text/javascript">	
-	//Code to Style Active Tab
-	jQuery(document).ready(
-				
-		function(){
-			
-			jQuery('a').parent().removeClass('active');
-			var path = window.location.pathname;
-			if(path == '/newResident' || path == "/getResidentById"){			
-				jQuery("a[href='/newResident']").parent().addClass('active');
-			} else if (path == '/admin') {
-				jQuery("a[href='/admin']").parent().addClass('active');
-			}else if (path == '/allResident') {
-				jQuery("a[href='/allResident']").parent().addClass('active');
-			};
-		
-			jQuery
-			.ajax({
-				type : "POST",
-				contentType : "application/json",
-				url : "/getAllServiceCoordinators",
-				dataType : 'json',
-				cache : false,
-				timeout : 600000,
-				success : function(data) {
-					var table = jQuery('#scTable')
-					.DataTable(
-						{
-							"data" : data,
-							"columns" : [
-										{
-											"orderable":      false,
-											"data":           null,
-											"defaultContent": '',
-											'targets': 0,
-								            'checkboxes': {'selectRow': true}
-										},
-										{	data : 'scId'},
-										{	data : 'active'},
-										{	data : 'userName'},
-										{	data : 'encrytedPassword'},
-										{	data : 'email'},
-										{	data : 'createdOn'},
-										{	data : 'lastLogin'}
-										],
-							'select': {'style': 'multi'},
-							"order" : [ [ 1, "desc" ] ],
-							pageLength : 15,
-							pagingType : "full_numbers",
-							"initComplete": function(settings, json) {
-								var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="serviceCoordinators" value="all" onchange="filterActives(this);"> All '
-									+' <input type="radio" name="serviceCoordinators" value="true" onchange="filterActives(this);"> Active '
-									+' <input type="radio" name="serviceCoordinators" value="false" onchange="filterActives(this);"> Inactive </span>';
-								
-								//This prints all radio Options on AllResident DataTables.
-								var pre = jQuery('.dataTables_length').html();
-								jQuery('.dataTables_length').html(pre + radioHtml);
-							}
-						}
-					);
-				}
-			});
-			
-			
-		
-	});
-
-	function filterActives (dat) {
-		//Toggles Active
-		if(dat.value != "all"){
-			table.columns(2).search(dat.value).draw();
-		}
-		else {
-			table.columns(2).search('').draw();
-		}
-	}
-
-	</script>
+	<script src="/js/adminPage.js"></script>
 
 </body>
 
