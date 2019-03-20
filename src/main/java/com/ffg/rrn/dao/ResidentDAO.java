@@ -3,33 +3,24 @@
  */
 package com.ffg.rrn.dao;
 
-import java.util.List;
-
-import javax.sql.DataSource;
-
+import com.ffg.rrn.mapper.*;
+import com.ffg.rrn.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.ffg.rrn.mapper.AssessmentMapper;
-import com.ffg.rrn.mapper.ChildrenMapper;
-import com.ffg.rrn.mapper.PropertyMapper;
-import com.ffg.rrn.mapper.ReferralMapper;
-import com.ffg.rrn.mapper.ResidentMapper;
-import com.ffg.rrn.model.AssessmentQuestionnaire;
-import com.ffg.rrn.model.AssessmentType;
-import com.ffg.rrn.model.Child;
-import com.ffg.rrn.model.Choice;
-import com.ffg.rrn.model.Property;
-import com.ffg.rrn.model.QuestionChoice;
-import com.ffg.rrn.model.Referral;
-import com.ffg.rrn.model.Resident;
-import com.ffg.rrn.model.WizardStepCounter;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author FFGRRNTeam
@@ -38,6 +29,17 @@ import com.ffg.rrn.model.WizardStepCounter;
 @Repository
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
+	
+	private final static String INSERTION_SQL_RESIDENT="INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, " +
+			"VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD," +
+			" REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL) VALUES (nextval('RESIDENT_SQ'), true, "+
+			" ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+	private final static String UPDATE_SQL_RESIDENT="UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, " +
+			"VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?," +
+			" REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? WHERE RESIDENT_ID=?";
+	private final static String INSERTION_SQL_CHILD="INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'), ?,?,?)";
+	private final static String DELETION_SQL_CHILD="DELETE FROM CHILD WHERE PARENT_ID=?";
 
 	@Autowired
 	public ResidentDAO(DataSource dataSource) {
@@ -200,7 +202,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		Long residentId = resident.getResidentId();
 
 		// Logic on when to insert vs update existing Resident
-		if (null == residentId) {
+		if (residentId==null || residentId==0) {
 			residentId = insertNewResident(resident);
 		} else {
 			residentId = updateExistingResident(resident);
@@ -210,78 +212,96 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 
 	private long updateExistingResident(Resident resident) {
-		// TODO - Modify Resident use case is all pending
-		return -1;
+		//do we need to retrieve the record first and then update fields with new values?
+		this.getJdbcTemplate().update(conn ->buildUpdateResidentPreparedStatement(conn,resident));
+
+		deleteAllChildrenByResidentId(resident.getResidentId());
+		insertNewChildren(resident);
+
+		return resident.getResidentId();
 	}
 
 	private long insertNewResident(Resident resident) {
-		int count = this.getJdbcTemplate().update(
-				"INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD, REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL) VALUES (nextval('RESIDENT_SQ'), true, '"
-						+ resident.getFirstName() + "','" + resident.getMiddle() + "','" + resident.getLastName() + "',"
-						+ resident.getPropertyId() + ",'" + resident.getVoiceMail() + "','" + resident.getText() + "','"
-						+ resident.getEmail() + "','" + resident.getAddress() + "'," + resident.getAckRightToPrivacy()
-						+ "," + resident.getAllowContact() + "," + resident.getWantSurvey() + ","
-						+ resident.getPhotoRelease() + ",'" + resident.getServiceCoord() + "'," + resident.getRefId()
-						+ "," + resident.getViaVoicemail() + "," + resident.getViaText() + "," + resident.getViaEmail()
-						+ ")");
+		final KeyHolder keyHolder = new GeneratedKeyHolder();
+		String[] pkColumnNames = new String[] {"resident_id"};
+		this.getJdbcTemplate().update(conn ->buildInsertResidentPreparedStatement(conn,resident, pkColumnNames), keyHolder);
 
-		long residentId = 0l;
-
-		if (count > 0) {
-
-			residentId = (this.getResidentByEmail(resident.getEmail(), resident.getServiceCoord())).getResidentId();
-
-			if (!StringUtils.isEmpty(resident.getChild1())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild1() + "', currval('RESIDENT_SQ') ," + resident.getPvrChild1()
-								+ " )");
-			}
-			if (!StringUtils.isEmpty(resident.getChild2())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild2() + "', currval('RESIDENT_SQ') ," + resident.getPvrChild2()
-								+ " )");
-			}
-			if (!StringUtils.isEmpty(resident.getChild3())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild3() + "', currval('RESIDENT_SQ') ," + resident.getPvrChild3()
-								+ " )");
-			}
-			if (!StringUtils.isEmpty(resident.getChild4())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild4() + "', currval('RESIDENT_SQ') ," + resident.getPvrChild4()
-								+ " )");
-			}
-			if (!StringUtils.isEmpty(resident.getChild5())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild5() + "', currval('RESIDENT_SQ') ," + resident.getPvrChild5()
-								+ " )");
-			}
-			if (!StringUtils.isEmpty(resident.getChild6())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild6() + "', currval('RESIDENT_SQ') ," + resident.getPvrChild6()
-								+ " )");
-			}
-			if (!StringUtils.isEmpty(resident.getChild7())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild7() + "',currval('RESIDENT_SQ')," + resident.getPvrChild7() + ")");
-			}
-			if (!StringUtils.isEmpty(resident.getChild8())) {
-				this.getJdbcTemplate().update(
-						"INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'),'"
-								+ resident.getChild8() + "', currval('RESIDENT_SQ')," + resident.getPvrChild8() + ")");
-			}
-
+		long newResidentId = keyHolder.getKey().longValue();
+		resident.setResidentId(newResidentId);
+		if (newResidentId > 0) {
+			insertNewChildren(resident);
 		}
 
-		return residentId;
-
+		return newResidentId;
 	}
 
+	private void insertNewChildren(Resident resident) {
+		createOneChild(resident.getChild1(),resident.getResidentId(), resident.getPvrChild1());
+		createOneChild(resident.getChild2(),resident.getResidentId(), resident.getPvrChild2());
+		createOneChild(resident.getChild3(),resident.getResidentId(), resident.getPvrChild3());
+		createOneChild(resident.getChild4(),resident.getResidentId(), resident.getPvrChild4());
+		createOneChild(resident.getChild5(),resident.getResidentId(), resident.getPvrChild5());
+		createOneChild(resident.getChild6(),resident.getResidentId(), resident.getPvrChild6());
+		createOneChild(resident.getChild7(),resident.getResidentId(), resident.getPvrChild7());
+		createOneChild(resident.getChild8(),resident.getResidentId(), resident.getPvrChild8());
+	}
+
+	private void createOneChild(String childName, long residentId, Boolean pvrChild) {
+		if (StringUtils.isEmpty(childName)) {
+			return;
+		}
+		this.getJdbcTemplate().update(INSERTION_SQL_CHILD, childName, residentId, pvrChild);
+	}
+
+	private void deleteAllChildrenByResidentId(long residentId){
+		this.getJdbcTemplate().update(DELETION_SQL_CHILD,residentId);
+	}
+	private PreparedStatement buildInsertResidentPreparedStatement(Connection connection,
+																   Resident resident, String[] pkColumnNames) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement(INSERTION_SQL_RESIDENT, pkColumnNames);
+		ps.setString(1, resident.getFirstName());
+		ps.setString(2, resident.getMiddle());
+		ps.setString(3, resident.getLastName());
+		ps.setInt(4, resident.getPropertyId());
+		ps.setString(5, resident.getVoiceMail());
+		ps.setString(6, resident.getText());
+		ps.setString(7, resident.getEmail());
+		ps.setString(8, resident.getAddress());
+		ps.setBoolean(9, resident.getAckRightToPrivacy());
+		ps.setBoolean(10, resident.getAllowContact());
+		ps.setBoolean(11, resident.getWantSurvey());
+		ps.setBoolean(12, resident.getPhotoRelease());
+		ps.setString(13, resident.getServiceCoord());
+		ps.setInt(14, resident.getRefId());
+		ps.setBoolean(15, resident.getViaVoicemail());
+		ps.setBoolean(16, resident.getViaText());
+		ps.setBoolean(17, resident.getViaEmail());
+		return ps;
+	}
+
+	private PreparedStatement buildUpdateResidentPreparedStatement(Connection connection,
+																   Resident resident) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement(UPDATE_SQL_RESIDENT);
+		ps.setString(1, resident.getFirstName());
+		ps.setString(2, resident.getMiddle());
+		ps.setString(3, resident.getLastName());
+		ps.setInt(4, resident.getPropertyId());
+		ps.setString(5, resident.getVoiceMail());
+		ps.setString(6, resident.getText());
+		ps.setString(7, resident.getEmail());
+		ps.setString(8, resident.getAddress());
+		ps.setBoolean(9, resident.getAckRightToPrivacy());
+		ps.setBoolean(10, resident.getAllowContact());
+		ps.setBoolean(11, resident.getWantSurvey());
+		ps.setBoolean(12, resident.getPhotoRelease());
+		ps.setString(13, resident.getServiceCoord());
+		ps.setInt(14, resident.getRefId());
+		ps.setBoolean(15, resident.getViaVoicemail());
+		ps.setBoolean(16, resident.getViaText());
+		ps.setBoolean(17, resident.getViaEmail());
+		ps.setLong(18, resident.getResidentId());
+		return ps;
+	}
 }
