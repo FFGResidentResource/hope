@@ -55,6 +55,10 @@ document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('text').disabled = this.checked;	
 };
 
+function reset(chk){
+	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
+}
+
 function calculateHousingScoreAndGoal(){
 
 	jQuery('#hst_6_body').text('');

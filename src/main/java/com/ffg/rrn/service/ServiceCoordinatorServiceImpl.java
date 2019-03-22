@@ -5,6 +5,8 @@ package com.ffg.rrn.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,12 @@ public class ServiceCoordinatorServiceImpl {
 	
 	public List<ServiceCoordinator> getAllServiceCoordinators() {
 		return this.serviceCoordinatorDao.getAllServiceCoordinators();
+	}
+
+	public Long saveServiceCoordinator(final ServiceCoordinator sc) {
+		// TODO Auto-generated method stub
+		return serviceCoordinatorDao.saveServiceCoordinator(sc);
+		//return null;
 	}
 
 }

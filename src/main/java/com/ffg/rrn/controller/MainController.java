@@ -155,6 +155,18 @@ public class MainController {
         return "allResident";
     }
 
+	@PostMapping("/saveServiveCoordinator")
+    public String onBoard(@Valid @ModelAttribute ServiceCoordinator sc, BindingResult bindingResult) {      
+        
+		if (bindingResult.hasErrors()) {
+            return "adminPage";
+        }
+		//This will be new scID always
+        Long residentId = serviceCoordinatorService.saveServiceCoordinator(sc); //residentService.saveResident(resident);    
+        
+        return "adminPage";
+    }
+	
 	@PostMapping("/approveServiceCoordinator")
     public String signup(@Valid @ModelAttribute ServiceCoordinator sc, BindingResult bindingResult) {      
         

@@ -34,12 +34,10 @@ jQuery(document).ready(
 										{	data : 'scId'},
 										{	data : 'active'},
 										{	data : 'userName'},
-										{	data : 'encrytedPassword'},
 										{	data : 'email'},
 										{	data : 'createdOn'},
 										{	data : 'lastLogin'}
 										],
-							'select': {'style': 'multi'},
 							"order" : [ [ 3, "desc" ] ],
 							pageLength : 15,
 							pagingType : "full_numbers",
@@ -101,3 +99,8 @@ jQuery(document).ready(
 			table.columns(2).search('').draw();
 		}
 	}
+	
+	
+	function showForm() {
+		document.getElementById("scForm").style.display = "none";
+		} 
