@@ -38,7 +38,7 @@
 								<label class="control-label" for="email">Email:</label>
 							</td>
 							<td>
-								<input class="form-control  setable" id="middle" placeholder="Enter Email" required> <!--  th:field="*{email}" -->
+								<input class="form-control setable" id="email" placeholder="Enter Email" required> <!--  th:field="*{email}" -->
 							</td>
 						</tr>
 						<tr>
@@ -46,7 +46,8 @@
 								<label class=" control-label" for="password">Password:</label>
 							</td>
 							<td>
-								<input class="form-control  setable" id="lastname" placeholder="Enter Password" required> <!--  th:field="*{password}" -->
+								<input class="form-control setable" id="password" placeholder="Enter Password" required disabled> <!--  th:field="*{password}" -->
+								<input type="button" class="btn btn-primary btn-lg" value="Generate Random Password" onclick="genPassword()">
 							</td>
 						</tr>
 					</table>

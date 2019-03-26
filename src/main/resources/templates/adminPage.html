@@ -43,17 +43,13 @@
 		
 		<b>This is protected page for administration purpose only!</b> 
 
-		<div id="scForm" class="container" style.display = "block">
-			<th:block th:include="/_addServiceCoordinator"></th:block>
-		</div>
-		<span><p></p></span>
 		<div class="panel panel-info">
 				<div class="panel-heading">
 					<h3 class="panel-title">All Service Coordinators</h3>
 				</div>
 				<div class="panel-body">
 					<div class="col-sm-12">
-						<input type="button" onclick="showForm" class="btn btn-primary navbar-btn" value="Add+" enabled >
+						<input type="button" onclick="addSC()" class="btn btn-primary navbar-btn" value="Add+" enabled >
 						<table id="scTable" class="display compact" style="width: 100%">
 							<thead>
 								<tr>
@@ -71,11 +67,15 @@
 					
 					<div class="row text-center bs-linebreak hidden-print">
 						<input type="hidden" id="_scId" name="serviceCoordinatorID" value="" />
-						<input type="submit" id="_activateServiceCoordinator" class="btn btn-primary btn-lg" value="Activate Selected Service Coordinator(s)" disabled />
-						<input type="submit" id="_deactivateServiceCoordinator" class="btn btn-primary btn-lg" value="Deactivate Selected Service Coordinator(s)" disabled />
 					</div>
 					
 				</div>
+		</div>
+		<span><p></p></span>
+		<div id="scForm" style.display = "none">
+			<div class="container">
+				<th:block th:include="/_addServiceCoordinator"></th:block>
+			</div>
 		</div>
 				
 	
@@ -90,6 +90,21 @@
 	<script src="/js/datatables.min.js"></script>
 	<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
 	<script src="/js/adminPage.js"></script>
+
+	<script>
+		function genPassword() {
+			document.getElementById("password").value = "1234"; // Not working: EncryptedPasswordUtils.createRandomPassword();
+		};
+		
+		function addSC(){
+			var x = document.getElementById("scForm");
+			  if (x.style.display == "none") {
+			    x.style.display = "block";
+			  } else {
+			    x.style.display = "none";
+			  }
+		};
+	</script>
 
 </body>
 

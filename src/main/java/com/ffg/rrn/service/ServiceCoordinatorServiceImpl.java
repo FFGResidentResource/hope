@@ -22,19 +22,13 @@ public class ServiceCoordinatorServiceImpl {
 
 	@Autowired
 	private ServiceCoordinatorDAO serviceCoordinatorDao;
-
-	public void updateServiceCoordinator(List<ServiceCoordinator> scID, boolean active) {
-		serviceCoordinatorDao.updateServiceCoordinator(scID, active);
-	}
 	
 	public List<ServiceCoordinator> getAllServiceCoordinators() {
 		return this.serviceCoordinatorDao.getAllServiceCoordinators();
 	}
 
 	public Long saveServiceCoordinator(final ServiceCoordinator sc) {
-		// TODO Auto-generated method stub
 		return serviceCoordinatorDao.saveServiceCoordinator(sc);
-		//return null;
 	}
 
 }

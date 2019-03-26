@@ -54,16 +54,6 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			return null;
 		}
 	}
-
-	public void updateServiceCoordinator(List <ServiceCoordinator> scIDs, boolean active) {
-		String sql = "UPDATE SERVICE_COORDINATOR SET ACTIVE = :active WHERE SC_ID in (:scIDs)";
-		//String sql = "UPDATE SERVICE_COORDINATOR SET ACTIVE = :active WHERE SC_ID = ? ";
-		Map parameters = new HashMap<String, Object>();
-		parameters.put("active", active);
-		parameters.put("scIDs", scIDs);
-		//Object[] params = new Object[] { scID };
-		this.getJdbcTemplate().update(sql, parameters);
-	}
 	
 	public List<ServiceCoordinator> getAllServiceCoordinators() {
 		ServiceCoordinatorMapper rowMapper = new ServiceCoordinatorMapper();
@@ -71,11 +61,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	}
 
 	public Long saveServiceCoordinator(ServiceCoordinator sc) {
-		// TODO Auto-generated method stub
-		
 		Long scID = Long.valueOf(sc.getScId());
-
-		
 		scID = insertNewServiceCoordinator(sc);
 
 		return scID;
@@ -89,9 +75,6 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 		long newSCId = keyHolder.getKey().longValue();
 		sc.setScId(toIntExact(newSCId));
-/**		if (newSCId > 0) {
-			insertNewChildren(resident);
-		} */
 
 		return newSCId;
 	}

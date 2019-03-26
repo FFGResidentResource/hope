@@ -38,7 +38,7 @@ jQuery(document).ready(
 										{	data : 'createdOn'},
 										{	data : 'lastLogin'}
 										],
-							"order" : [ [ 3, "desc" ] ],
+							"order" : [ [ 4, "desc" ] ],
 							pageLength : 15,
 							pagingType : "full_numbers",
 							"initComplete": function(settings, json) {
@@ -51,37 +51,6 @@ jQuery(document).ready(
 								jQuery('.dataTables_length').html(pre + radioHtml);
 							}
 					});
-	
-					
-//This section still does not add disabled when a row is clicked a second time - unselected.
-					jQuery('#scTable tbody').on( 'click', 'tr', function () {
-						var tr = $(this);
-						currentRow = table.row(this).data();
-						
-						console.log(currentRow);
-						
-						if ($(this).hasClass('selected')) {
-				        	$(this).removeClass('selected');
-				        	
-				        	if (currentRow.active == "t") {
-				        		jQuery("#_deactivateServiceCoordinator").attr('disabled');
-				        	} else {
-				        		jQuery("#_activateServiceCoordinator").attr('disabled');
-				        	}
-				        }
-				        else {
-				            table.$('tr.selected').removeClass('selected');
-				            $(this).addClass('selected');
-				            //jQuery("#_scId").val(currentRow.scID);
-				            
-				            if (currentRow.active == "t") {
-				        		jQuery("#_deactivateServiceCoordinator").removeAttr('disabled');
-				        	} else {
-				        		jQuery("#_activateServiceCoordinator").removeAttr('disabled');
-				        	}
-				        }
-						
-				    });
 				},
 				error : function(e) {
 					console.log("ERROR : ", e);
@@ -100,7 +69,3 @@ jQuery(document).ready(
 		}
 	}
 	
-	
-	function showForm() {
-		document.getElementById("scForm").style.display = "none";
-		} 

@@ -162,22 +162,10 @@ public class MainController {
             return "adminPage";
         }
 		//This will be new scID always
-        Long residentId = serviceCoordinatorService.saveServiceCoordinator(sc); //residentService.saveResident(resident);    
+        Long scID = serviceCoordinatorService.saveServiceCoordinator(sc); //Long residentId = residentService.saveResident(resident);    
         
         return "adminPage";
     }
-	
-	@PostMapping("/approveServiceCoordinator")
-    public String signup(@Valid @ModelAttribute ServiceCoordinator sc, BindingResult bindingResult) {      
-        
-		if (bindingResult.hasErrors()) {
-            return "adminPage";
-        }
-		//This will be new ResidentId always
-		//serviceCoordinatorService.updateServiceCoordinator(scIDs, Boolean.TRUE);
-        
-        return "adminPage";
-    }	
 	
 	private String populateSCinModel(Model model, Principal principal) {
 
