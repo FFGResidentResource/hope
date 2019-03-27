@@ -59,7 +59,7 @@ function reset(chk){
 	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
 }
 
-function calculateHousingScoreAndGoal(){
+function calculateHousingScore(){
 
 	jQuery('#hst_6_body').text('');
 	jQuery('[id^=hst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');
