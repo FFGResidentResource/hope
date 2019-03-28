@@ -1,7 +1,15 @@
 <div id="addResident_Form">
 
 	<form name='_addResidentF' th:action="@{/saveResident}"
-		th:object="${resident}" method='POST' class="form-horizontal">
+		th:object="${resident}" method='POST' class="form-horizontal" onsubmit="submitResidentForm(this);return false;">
+		<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+			<ul>
+				<li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
+					<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> |
+					<span th:text="${e.message}">The error message</span>
+				</li>
+			</ul>
+		</div>
 		<input name="residentId" type="hidden" id="residentId"
 			   th:field="*{residentId}" >
 		<div class="col-sm-12 myPanel">
@@ -445,9 +453,8 @@
 					<div class="row text-center bs-linebreak hidden-print">
 						<input type="hidden" th:field="*{serviceCoord}" /> 
 						<input
-							type="hidden" id="propertyString"
-							th:value="${resident.propertyList}" /> 
-						<input type="button" class="btn btn-primary btn-lg" value="Reset" onclick="reset('#allowcontact')"> 
+							type="hidden" id="propertyString" th:value="${resident.propertyList}" /> 
+						<input type="reset" class="btn btn-primary btn-lg" value="Reset"> 
 						<input type="submit" class="btn btn-primary btn-lg" th:value="${resident.residentId==null}?'Save Resident':'Update Resident'">
 					</div>
 				</div>

@@ -6,10 +6,7 @@ package com.ffg.rrn.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -36,9 +33,11 @@ public class Resident {
 	private Long residentId;
 	private Boolean active;
 	@NotEmpty
+	@Size(max=20)
 	private String firstName;
 	private String middle;
 	@NotEmpty
+	@Size(max=20)
 	private String lastName;
 
 	@NotNull
@@ -56,6 +55,7 @@ public class Resident {
 	private String text;
 
 	@Email
+	@Size(max=128)
 	private String email;
 	private String address;
 
@@ -77,13 +77,21 @@ public class Resident {
 
 	private String childList;
 
+	@Size(max=50)
 	private String child1;
+	@Size(max=50)
 	private String child2;
+	@Size(max=50)
 	private String child3;
+	@Size(max=50)
 	private String child4;
+	@Size(max=50)
 	private String child5;
+	@Size(max=50)
 	private String child6;
+	@Size(max=50)
 	private String child7;
+	@Size(max=50)
 	private String child8;
 
 	private Boolean pvrChild1;

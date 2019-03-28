@@ -12,7 +12,16 @@ jQuery(document).ready(function() {
 
 	stepCounter();
 });
-
+var isSubmitted = false;
+function submitResidentForm(form){
+  if(!isSubmitted){
+     form.submit();
+     jQuery("#btnSubmit").attr("disabled", true);
+     isSubmitted = true;
+  } else{
+    alert("System is processing, please be patient.");
+  }
+}
 function stepCounter() {
 
 	if (res != null && res.wsCounter.signUpComplete) {
