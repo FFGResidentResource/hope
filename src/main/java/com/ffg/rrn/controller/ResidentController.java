@@ -24,7 +24,7 @@ import java.security.Principal;
  *
  */
 @Controller
-public class ResidentController {
+public class ResidentController extends BaseController{
 	
 	@Autowired
 	private ResidentServiceImpl residentService;
@@ -96,14 +96,6 @@ public class ResidentController {
 		Long residentId = residentService.saveResident(resident);
 
 		return "allResident";
-	}
-
-	private String populateSCinModel(Model model, Principal principal) {
-
-		User loggedinUser = (User) ((Authentication) principal).getPrincipal();
-		String serviceCordInfo = WebUtils.toString(loggedinUser);
-		model.addAttribute("serviceCordInfo", serviceCordInfo);
-		return loggedinUser.getUsername();
 	}
 
 	private void setupDropdownList(Resident resident){

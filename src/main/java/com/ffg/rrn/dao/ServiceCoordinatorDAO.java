@@ -33,7 +33,8 @@ import com.ffg.rrn.model.ServiceCoordinator;
 @Transactional
 public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
-	private final static String INSERTION_SQL_SERVICECOORDINATOR="INSERT INTO SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)"
+	private final static String INSERTION_SQL_SERVICECOORDINATOR="INSERT INTO SERVICE_COORDINATOR " +
+			"(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)"
 			+ " VALUES (nextval('SC_SQ'), ?,?,true,?)";
 	
 	@Autowired
@@ -61,16 +62,13 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	}
 
 	public Long saveServiceCoordinator(ServiceCoordinator sc) {
-		Long scID = Long.valueOf(sc.getScId());
-		scID = insertNewServiceCoordinator(sc);
-
-		return scID;
+		return insertNewServiceCoordinator(sc);
 	}
 	
 	private long insertNewServiceCoordinator(ServiceCoordinator sc) {
 		
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		String[] pkColumnNames = new String[] {"user_id"};
+		String[] pkColumnNames = new String[] {"sc_id"};
 		this.getJdbcTemplate().update(conn ->buildInsertServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
 
 		long newSCId = keyHolder.getKey().longValue();
@@ -79,7 +77,9 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		return newSCId;
 	}
 	
-	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
+	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection,
+																			 ServiceCoordinator sc,
+																			 String[] pkColumnNames) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR, pkColumnNames);
 		ps.setString(1, sc.getUserName());
 		ps.setString(2, sc.getEncrytedPassword());
