@@ -1,9 +1,16 @@
 <div id="addServiceCoordinator_Form">
 
-	<form name='_addServiceCoordinatorF' th:action="@{/saveServiveCoordinator}"
+	<form name='_addServiceCoordinatorF' th:action="@{/saveServiceCoordinator}"
 		th:object="${serviceCoordinator}" method='POST' class="form-horizontal">
 		<!-- <input name="scId" type="hidden" id="scId" th:field="*{scId}" > -->
-
+	<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+		<ul>
+			<li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
+				<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> |
+				<span th:text="${e.message}">The error message</span>
+			</li>
+		</ul>
+	</div>
 		<div class="col-sm-12 myPanel">
 			<div class="row">
 
@@ -30,7 +37,7 @@
 								<label class=" control-label" for="userName">Username:</label>
 							</td>
 							<td>
-								<input class="form-control setable" id="userName" placeholder="Enter User Name" required> <!-- th:field="*{userName}"  -->
+								<input class="form-control setable" id="userName" th:field="*{userName}" placeholder="Enter User Name" required> <!-- th:field="*{userName}"  -->
 							</td>
 						</tr>
 						<tr>
@@ -38,7 +45,7 @@
 								<label class="control-label" for="email">Email:</label>
 							</td>
 							<td>
-								<input class="form-control setable" id="email" placeholder="Enter Email" required> <!--  th:field="*{email}" -->
+								<input class="form-control setable" id="email" th:field="*{email}" placeholder="Enter Email"> <!--  th:field="*{email}" -->
 							</td>
 						</tr>
 						<tr>
@@ -46,8 +53,8 @@
 								<label class=" control-label" for="password">Password:</label>
 							</td>
 							<td>
-								<input class="form-control setable" id="password" placeholder="Enter Password" required disabled> <!--  th:field="*{password}" -->
-								<input type="button" class="btn btn-primary btn-lg" value="Generate Random Password" onclick="genPassword()">
+								<input class="form-control setable" id="password" th:field="*{password}" placeholder="Enter Password" required> <!--  th:field="*{password}" -->
+								<input type="button" class="btn btn-primary btn-lg" value="Generate Random Password" onclick="generatePassword();">
 							</td>
 						</tr>
 					</table>
@@ -57,7 +64,8 @@
 					<div class="row text-center bs-linebreak hidden-print">
 						<!-- <input type="hidden" th:field="*{serviceCoord}" />  -->
 						<input type="button" class="btn btn-primary btn-lg" value="Reset" onclick="$('.setable').val('');"> 
-						<input type="submit" class="btn btn-primary btn-lg" value="Onboard Service Coordinator"> <!-- th:value="${serviceCoordinator.scId==null}?'Onboard Service Coordinator':'Update Service Coordinator'" -->
+						<input type="submit" class="btn btn-primary btn-lg" value="Onboard Service Coordinator">
+						<!-- th:value="${serviceCoordinator.scId==null}?'Onboard Service Coordinator':'Update Service Coordinator'" -->
 					</div>
 				</div>
 			</div>

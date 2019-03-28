@@ -37,40 +37,41 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<form th:action="@{/approveServiceCoordinator}" method='POST'>
+
 	<div class="container-fluid"> <!--  th:object="${serviceCoordinator}" -->
 		<h2>Service Coordinator Admin Page</h2>
 		
-		<b>This is protected page for administration purpose only!</b> 
+		<b>This is protected page for administration purpose only!</b>
+		<form th:action="@{/approveServiceCoordinator}" method='POST'>
+			<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">All Service Coordinators</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-sm-12">
+							<input type="button" onclick="addSC()" class="btn btn-primary navbar-btn" value="Add+" enabled >
+							<table id="scTable" class="display compact" style="width: 100%">
+								<thead>
+									<tr>
+										<th></th>
+										<th>ID</th>
+										<th>Active</th>
+										<th>User Name</th>
+										<th>Email</th>
+										<th>Created On</th>
+										<th>Last Login</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
 
-		<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">All Service Coordinators</h3>
-				</div>
-				<div class="panel-body">
-					<div class="col-sm-12">
-						<input type="button" onclick="addSC()" class="btn btn-primary navbar-btn" value="Add+" enabled >
-						<table id="scTable" class="display compact" style="width: 100%">
-							<thead>
-								<tr>
-									<th></th>
-									<th>ID</th>
-									<th>Active</th>
-									<th>User Name</th>
-									<th>Email</th>
-									<th>Created On</th>
-									<th>Last Login</th>
-								</tr>
-							</thead>
-						</table>
+						<div class="row text-center bs-linebreak hidden-print">
+							<input type="hidden" id="_scId" name="serviceCoordinatorID" value="" />
+						</div>
+
 					</div>
-					
-					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" id="_scId" name="serviceCoordinatorID" value="" />
-					</div>
-					
-				</div>
-		</div>
+			</div>
+		</form>
 		<span><p></p></span>
 		<div id="scForm" style.display = "none">
 			<div class="container">
@@ -80,7 +81,7 @@
 				
 	
 	</div>
-	</form>
+
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
@@ -104,6 +105,17 @@
 			    x.style.display = "none";
 			  }
 		};
+
+		function generatePassword(){
+			var length = 10;
+			var charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*_=+-/.?<>():,;";
+			var generatedPassword = "";
+			for (var i = 0, n = charset.length; i < length; ++i) {
+				generatedPassword += charset.charAt(Math.floor(Math.random() * n));
+			}
+			document.getElementById("password").value = generatedPassword;
+		}
+
 	</script>
 
 </body>

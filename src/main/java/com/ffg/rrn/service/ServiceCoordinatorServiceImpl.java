@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.ffg.rrn.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class ServiceCoordinatorServiceImpl {
 	}
 
 	public Long saveServiceCoordinator(final ServiceCoordinator sc) {
+		sc.setEncrytedPassword(PasswordUtils.encryptPassword(sc.getPassword()));
 		return serviceCoordinatorDao.saveServiceCoordinator(sc);
 	}
 

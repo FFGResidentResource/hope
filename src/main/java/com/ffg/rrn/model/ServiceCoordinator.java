@@ -9,6 +9,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * @author FFGRRNTeam
  * 
@@ -26,9 +31,16 @@ import lombok.Data;
 public class ServiceCoordinator {
 	 
     private Integer scId;
+    @NotEmpty
+    @Size(max=36)
     private String userName;
+    @NotEmpty
+    @Size(max=10)
+    private String password;
     private String encrytedPassword;
     private String active;
+    @Email
+    @NotEmpty
     private String email;
     private Timestamp createdOn;
     private Timestamp lastLogin;
