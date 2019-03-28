@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Hope</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/datatables.min.css" rel="stylesheet">
+<link href="/css/c3.min.css" rel="stylesheet">
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+  height: 100%;
+}
+.navbar-brand {
+  padding: 0;
+}
+</style>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<form th:action="@{/approveServiceCoordinator}" method='POST'>
+	<div class="container-fluid"> <!--  th:object="${serviceCoordinator}" -->
+		<h2>Service Coordinator Admin Page</h2>
+		
+		<b>This is protected page for administration purpose only!</b> 
+
+		<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">All Service Coordinators</h3>
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<input type="button" onclick="addSC()" class="btn btn-primary navbar-btn" value="Add+" enabled >
+						<table id="scTable" class="display compact" style="width: 100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>ID</th>
+									<th>Active</th>
+									<th>User Name</th>
+									<th>Email</th>
+									<th>Created On</th>
+									<th>Last Login</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" id="_scId" name="serviceCoordinatorID" value="" />
+					</div>
+					
+				</div>
+		</div>
+		<span><p></p></span>
+		<div id="scForm" style.display = "none">
+			<div class="container">
+				<th:block th:include="/_addServiceCoordinator"></th:block>
+			</div>
+		</div>
+				
+	
+	</div>
+	</form>
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/datatables.min.js"></script>
+	<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+	<script src="/js/adminPage.js"></script>
+
+	<script>
+		function genPassword() {
+			document.getElementById("password").value = "1234"; // Not working: EncryptedPasswordUtils.createRandomPassword();
+		};
+		
+		function addSC(){
+			var x = document.getElementById("scForm");
+			  if (x.style.display == "none") {
+			    x.style.display = "block";
+			  } else {
+			    x.style.display = "none";
+			  }
+		};
+	</script>
+
+</body>
+
+</html>

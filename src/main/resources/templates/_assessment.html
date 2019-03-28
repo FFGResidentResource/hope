@@ -1,0 +1,115 @@
+<div id="ssm_Form" class="hideme stepPanel">
+
+	<form name='_assessmentF' th:action="@{/saveAssessment}"
+		th:object="${resident}" method='POST' class="form-horizontal">
+
+		<div class="col-sm-12 myPanel">
+			<div class="row">
+
+				<div class="col-sm-10">
+					<h3>SELF-SUFFICIENCY MATRIX</h3>
+					<span class="hidden-print" style="color: red; font-size: larger;"
+						th:if="*{firstName == null}" th:text="${message}"></span>
+				</div>
+				<div class="col-sm-2 hideme print-only">
+					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+				</div>
+
+			</div>
+			<hr class="solidline1">
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="col-sm-3">
+						<strong>Resident Name:</strong>
+					</div>
+					<div class="col-sm-5">
+						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="col-sm-3">
+						<strong>Resident Id:</strong>
+					</div>
+					<div class="col-sm-5">
+						<u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="col-sm-2">
+						<strong>Assessment Type:</strong>
+					</div>
+					<div class="col-sm-5">
+						<ul>
+							<span th:each="radioValue: ${resident.atList}">&nbsp;&nbsp;&nbsp;&nbsp;<input
+								type="radio" th:field="*{aId}" th:value="${radioValue.aId}" /><label
+								th:for="${#ids.prev('aId')}" th:text="${radioValue.aValue}">&nbsp;&nbsp;</label></span>
+
+						</ul>
+					</div>
+				</div>
+
+
+			</div>
+
+			<br>
+			<p>
+			<h5>
+				<u><strong>Instructions:</strong></u>
+			</h5>
+			</p>
+
+			<p>This assessment form is user to gauge resident&#39;s levels of
+				self-sufficiency in six life domains, inlcuding(1) Housing, (2)
+				Money Mangement, (3) Employment, (4) Education, () Network Support,
+				and (6) Household Management. All six domains have a direct impact
+				on resident&#39;s ability to remain stable in their housing, which
+				is one of the primary goals of Resident Resources Network.</p>
+
+			<p>Assessments of all six domains are to be completed for every
+				resident over the age of 18 with whom a Service Coordinator comes in
+				contact.Assessments should be completed at initial contact with the
+				resident and every six (6) months thereafter.</p>
+
+			<p>As you begin the assessment, be sure to:</p>
+
+			<table>
+				<tr>
+					<td>
+						<ul>
+							<li>Highlight RRN&#39;s/your agency&#39;s commitment to
+								self-sufficiency</li>
+							<li>Stress their commitment to cultivating a holistic
+								understanding of their resident&#39;s lives to ensure that the
+								most needed serves are provided</li>
+							<li>Explain that the assessment helps to identify other
+								possible ways in which residents may benefit from services,
+								thereby informing additional referrals</li>
+							<li>State upfront that the assessment will be completed at
+								regular intervals in order to ensure that any new needs do not
+								go unaddressed.</li>
+							<li>Mention that residents may decline to answer any
+								question without impacting their access to services.</li>
+						</ul>
+					</td>
+
+				</tr>
+			</table>
+
+
+			<div class="row text-center bs-linebreak hidden-print">
+
+				<input type="hidden" th:field="*{serviceCoord}" /> <input
+					type="hidden" th:field="*{residentId}" /> <input type="submit"
+					class="btn btn-primary btn-lg" value="Save Assessment">
+			</div>
+		</div>
+	</form>
+
+</div>
