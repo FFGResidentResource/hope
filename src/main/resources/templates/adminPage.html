@@ -5,10 +5,11 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
+<link href="/css/datatables.min.css" rel="stylesheet">
+<link href="/css/c3.min.css" rel="stylesheet">
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
 
 <style>
 .bd-placeholder-img {
@@ -36,60 +37,73 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid">
+	<form th:action="@{/approveServiceCoordinator}" method='POST'>
+	<div class="container-fluid"> <!--  th:object="${serviceCoordinator}" -->
 		<h2>Service Coordinator Admin Page</h2>
 		
 		<b>This is protected page for administration purpose only!</b> 
 
-		<div class="container">
-			<th:block th:include="/_addSC"></th:block>
-		</div>
 		<div class="panel panel-info">
 				<div class="panel-heading">
 					<h3 class="panel-title">All Service Coordinators</h3>
 				</div>
 				<div class="panel-body">
 					<div class="col-sm-12">
-
+						<input type="button" onclick="addSC()" class="btn btn-primary navbar-btn" value="Add+" enabled >
 						<table id="scTable" class="display compact" style="width: 100%">
 							<thead>
 								<tr>
 									<th></th>
 									<th>ID</th>
+									<th>Active</th>
 									<th>User Name</th>
 									<th>Email</th>
+									<th>Created On</th>
+									<th>Last Login</th>
 								</tr>
 							</thead>
 						</table>
-
 					</div>
+					
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" id="_scId" name="serviceCoordinatorID" value="" />
+					</div>
+					
 				</div>
+		</div>
+		<span><p></p></span>
+		<div id="scForm" style.display = "none">
+			<div class="container">
+				<th:block th:include="/_addServiceCoordinator"></th:block>
+			</div>
 		</div>
 				
 	
 	</div>
+	</form>
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
 	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
-	
-	<script type="text/javascript">	
-	//Code to Style Active Tab
-	jQuery(document).ready(function(){
+	<script src="/js/datatables.min.js"></script>
+	<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+	<script src="/js/adminPage.js"></script>
+
+	<script>
+		function genPassword() {
+			document.getElementById("password").value = "1234"; // Not working: EncryptedPasswordUtils.createRandomPassword();
+		};
 		
-		jQuery('a').parent().removeClass('active');
-		var path = window.location.pathname;
-		if(path == '/newResident' || path == "/getResidentById"){			
-			jQuery("a[href='/newResident']").parent().addClass('active');
-		} else if (path == '/admin') {
-			jQuery("a[href='/admin']").parent().addClass('active');
-		}else if (path == '/allResident') {
-			jQuery("a[href='/allResident']").parent().addClass('active');
-		}	
-  	});
+		function addSC(){
+			var x = document.getElementById("scForm");
+			  if (x.style.display == "none") {
+			    x.style.display = "block";
+			  } else {
+			    x.style.display = "none";
+			  }
+		};
 	</script>
 
 </body>
