@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Hope</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+  height: 100%;
+}
+.navbar-brand {
+  padding: 0;
+}
+</style>
+<!-- Custom styles for this template -->
+<link href="/css/signin.css" rel="stylesheet">
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<div class="container">
+		<div class="row">
+			<div class="Absolute-Center is-Responsive">
+				<!-- <div id="logo-container"></div> -->
+				<div class="col-sm-12 col-md-10 col-md-offset-1">
+					<form name='f' th:action="@{/j_spring_security_check}"
+						method='POST'>
+
+						<!-- /login?error=true -->
+						<div th:if="${#request.getParameter('error') == 'true'}"
+							style="color: red; margin: 10px 0px;">
+							Login Failed!!!<br /> Reason : <span
+								th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
+								th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
+								Static summary </span>
+
+						</div>
+						<div class="form-group input-group input-group-lg">
+							<span class="input-group-addon"><i
+								class="glyphicon glyphicon-user"></i></span> <input
+								class="form-control" type="text" name='username'
+								placeholder="username" />
+						</div>
+						<div class="form-group input-group input-group-lg">
+							<span class="input-group-addon"><i
+								class="glyphicon glyphicon-lock"></i></span> <input
+								class="form-control" type="password" name='password'
+								placeholder="password" />
+						</div>
+
+						<div class="form-group">
+							<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
+								in</button>
+						</div>
+
+						<p class="mt-5 mb-3 text-muted text-center">&copy; 2018-2019</p>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+	<script type="text/javascript">	
+	//Code to Style Active Tab
+	jQuery(document).ready(function(){
+		
+		jQuery('a').parent().removeClass('active');
+		var path = window.location.pathname;
+		if(path == '/newResident' || path == "/getResidentById"){
+			jQuery("a[href='/newResident']").parent().addClass('active');
+		} else if (path == '/admin') {
+			jQuery("a[href='/admin']").parent().addClass('active');
+		}else if (path == '/allResident') {
+			jQuery("a[href='/allResident']").parent().addClass('active');
+		}	
+  	});
+	</script>
+
+</body>
+</html>
