@@ -55,7 +55,7 @@
 									type="radio"
 									th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculateHousingScoreAndGoal();"
+									onclick="calculateHousingScore();"
 									> <strong><lable
 											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
@@ -77,7 +77,7 @@
 									type="radio"
 									th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculateHousingScoreAndGoal();"
+									onclick="calculateHousingScore();"
 									> <strong><lable
 											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
@@ -95,7 +95,7 @@
 			<input type="hidden" th:field="*{serviceCoord}" /> 
 			<input type="hidden" th:field="*{residentId}" /> 
 			<input type="hidden" id="currentHousingScore" th:field="*{currentScore}" /> 
-			<input type="hidden" id="housingGoal" th:field="*{goal}" /> 
+			
 				<input type="submit" class="btn btn-primary btn-lg"
 					value="Save Housing Assessment">
 			</div>
@@ -126,7 +126,9 @@
 					<td id="hst_4_body">Household is in adequate, subsidized housing.</td>
 					<td id="hst_5_body">Household is in adequate, unsubsidized housing.</td>
 					<td id="hst_6_body"></td>
-					<td id="hst_7_body"></td>
+					<td id="hst_7_body"> 
+						<input class="form-control" id="goalId"	th:field="*{goal}" placeholder="Enter goal"> 
+					</td>
 
 				</tr>
 			</tbody>

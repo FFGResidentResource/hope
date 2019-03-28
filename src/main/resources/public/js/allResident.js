@@ -162,7 +162,7 @@ jQuery(document)
 										
 										if ($(this).hasClass('selected') ) {
 								        	$(this).removeClass('selected');
-								        	jQuery("#_loadResident").addAttr('disabled');
+								        	jQuery("#_loadResident").attr('disabled');
 								        }
 								        else {
 								            table.$('tr.selected').removeClass('selected');

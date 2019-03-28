@@ -64,7 +64,11 @@ document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('text').disabled = this.checked;	
 };
 
-function calculateHousingScoreAndGoal(){
+function reset(chk){
+	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
+}
+
+function calculateHousingScore(){
 
 	jQuery('#hst_6_body').text('');
 	jQuery('[id^=hst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');

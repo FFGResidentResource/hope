@@ -104,7 +104,7 @@
 
 					<table class="table table-bordered table-condensed">
 						<tr>
-							<td><label class="checkbox-inline" for="ackPR"> <input
+							<td><label class="checkbox-inline" for="ackPR"> <input class="setable"
 									id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}">I
 									acknowledge that I was informed of my right to privacy.
 							</label>
@@ -167,16 +167,16 @@
 										<label class="col-sm-2 control-label" for="firstName">Name:
 										</label>
 										<div class="col-sm-4">
-											<input class="form-control" id="firstName"
+											<input class="form-control setable" id="firstName"
 												th:field="*{firstName}" placeholder="Enter first name"
 												required>
 										</div>
 										<div class="col-sm-2">
-											<input class="form-control" id="middle" th:field="*{middle}"
+											<input class="form-control setable" id="middle" th:field="*{middle}"
 												placeholder="middle">
 										</div>
 										<div class="col-sm-4">
-											<input class="form-control" id="lastname"
+											<input class="form-control setable" id="lastname"
 												th:field="*{lastName}" placeholder="Enter last name"
 												required>
 										</div>
@@ -186,7 +186,7 @@
 
 										<label class="col-sm-2 control-label" for="_referral">Referral:</label>
 										<div class="col-sm-10">
-											<select class="form-control" id="_referral"
+											<select class="form-control setable" id="_referral"
 												th:field="*{refId}" required>
 												<option value="0">Select</option>
 												<option th:each="referral : ${resident.refList}"
@@ -199,7 +199,7 @@
 
 										<label class="col-sm-2 control-label" for="_property">Property:</label>
 										<div class="col-sm-10">
-											<select class="form-control" id="_property"
+											<select class="form-control setable" id="_property"
 												th:field="*{propertyId}" required>
 												<option value="0">Select</option>
 												<option th:each="property : ${resident.propertyList}"
@@ -213,7 +213,7 @@
 										<label class="col-sm-2 control-label" for="unit">Address:
 										</label>
 										<div class="col-sm-10">
-											<input class="form-control" id="address"
+											<input class="form-control setable" id="address"
 												th:field="*{address}" placeholder="No. and Street">
 										</div>
 									</div>
@@ -243,7 +243,7 @@
 							<td>
 
 								<p>
-									<label class="checkbox-inline" for="allowcontact"> <input
+									<label class="checkbox-inline" for="allowcontact"> <input class="setable"
 										id="allowcontact" type="checkbox" th:field="*{allowContact}">
 										I am <strong>NOT interested</strong> in being contacted by a
 										Service Coordinator.
@@ -259,7 +259,7 @@
 									<p>
 									<div class="row">
 										<div class="col-sm-3">
-											<label class="checkbox-inline" for="printEmail"> <input
+											<label class="checkbox-inline" for="printEmail"> <input class="setable"
 												id="printEmail" type="checkbox"><strong>Email:&nbsp;&nbsp;</strong>
 
 											</label>
@@ -273,7 +273,7 @@
 									<div class="row">
 										<div class="col-sm-3">
 											<label class="checkbox-inline" for="printvoicemail">
-												<input id="printvoicemail" type="checkbox"><strong>Voicemail:&nbsp;&nbsp;</strong>
+												<input class="setable" id="printvoicemail" type="checkbox"><strong>Voicemail:&nbsp;&nbsp;</strong>
 
 											</label>
 										</div>
@@ -285,8 +285,8 @@
 									<p>
 									<div class="row">
 										<div class="col-sm-3">
-											<label class="checkbox-inline" for="printtext"> <input
-												id="printtext" type="checkbox"><strong>Text:&nbsp;&nbsp;</strong>
+											<label class="checkbox-inline" for="printtext"> <input class="setable" 
+											id="printtext" type="checkbox"><strong>Text:&nbsp;&nbsp;</strong>
 										</div>
 										<div class="col-sm-9">
 											<span id="printtxt" class="my-text-print"></span> </label>
@@ -297,35 +297,35 @@
 
 								<div class="form-group hidden-print">
 
-									<label class="col-sm-1 control-label" for="viaemail"> <input
+									<label class="col-sm-1 control-label" for="viaemail"> <input class="setable"
 										id="viaemail" type="checkbox" th:field="*{viaEmail}">
 										Email:
 									</label>
 									<div class="col-sm-3">
-										<input class="form-control" id="email" type="email"
+										<input class="form-control setable" id="email" type="email"
 											th:field="*{email}" placeholder="email">
 									</div>
 									<label class="col-sm-2 control-label" for="viavoicemail">
-										<input id="viavoicemail" type="checkbox"
+										<input class="setable" id="viavoicemail" type="checkbox"
 										th:field="*{viaVoicemail}"> Voicemail:
 									</label>
 									<div class="col-sm-2">
-										<input class="form-control" id="voicemail"
+										<input class="form-control setable" id="voicemail"
 											th:field="*{voiceMail}" placeholder="voicemail">
 									</div>
-									<label class="col-sm-1 control-label" for="viatext"> <input
+									<label class="col-sm-1 control-label" for="viatext"> <input class="setable"
 										id="viatext" type="checkbox" th:field="*{viaText}">
 										Text:
 									</label>
 									<div class="col-sm-2">
-										<input class="form-control" id="text" th:field="*{text}"
+										<input class="form-control setable" id="text" th:field="*{text}"
 											placeholder="cell phone">
 									</div>
 								</div>
 								</p>
 
 								<p>
-									<label class="checkbox-inline" for="wantSurvey"> <input
+									<label class="checkbox-inline" for="wantSurvey"> <input class="setable"
 										id="wantSurvey" type="checkbox" th:field="*{wantSurvey}">I
 										will <strong>complete a Household Survey within 10
 											days</strong> so that the Service Coordinator can better understand
@@ -353,7 +353,7 @@
 					<table class="table table-bordered table-condensed">
 						<tr>
 							<td><label class="checkbox-inline" for="photoVideoRelease">
-									<input id="photoVideoRelease" type="checkbox"
+									<input class="setable" id="photoVideoRelease" type="checkbox"
 									th:field="*{photoRelease}">I give permission for me to
 									be photographed and recorded on video. I understand that the
 									images will be used in several mediums (e.g., newsletters,
@@ -380,49 +380,49 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td><input class="form-control" id="child1"
+								<td><input class="form-control setable" id="child1"
 									th:field="*{child1}" placeholder="Child 1 fullname"></td>
-								<td><input id="pvrchild1" type="checkbox"
+								<td><input class="setable" id="pvrchild1" type="checkbox"
 									th:field="*{pvrChild1}"></td>
-								<td><input class="form-control" id="child2"
+								<td><input class="form-control setable" id="child2"
 									th:field="*{child2}" placeholder="Child 2 fullname"></td>
-								<td><input id="pvrchild2" type="checkbox"
+								<td><input class="setable" id="pvrchild2" type="checkbox"
 									th:field="*{pvrChild2}"></td>
 								</td>
 							</tr>
 							<tr>
-								<td><input class="form-control" id="child3"
+								<td><input class="form-control setable" id="child3"
 									th:field="*{child3}" placeholder="Child 3 fullname"></td>
-								<td><input id="pvrchild3" type="checkbox"
+								<td><input class="setable" id="pvrchild3" type="checkbox"
 									th:field="*{pvrChild3}"></td>
 								</td>
-								<td><input class="form-control" id="child4"
+								<td><input class="form-control setable" id="child4"
 									th:field="*{child4}" placeholder="Child 4 fullname"></td>
-								<td><input id="pvrchild4" type="checkbox"
+								<td><input class="setable" id="pvrchild4" type="checkbox"
 									th:field="*{pvrChild4}"></td>
 								</td>
 							</tr>
 							<tr>
-								<td><input class="form-control" id="child5"
+								<td><input class="form-control setable" id="child5"
 									th:field="*{child5}" placeholder="Child 5 fullname"></td>
-								<td><input id="pvrchild5" type="checkbox"
+								<td><input class="setable" id="pvrchild5" type="checkbox"
 									th:field="*{pvrChild5}"></td>
 								</td>
-								<td><input class="form-control" id="child6"
+								<td><input class="form-control setable" id="child6"
 									th:field="*{child6}" placeholder="Child 6 fullname"></td>
-								<td><input id="pvrchild6" type="checkbox"
+								<td><input class="setable" id="pvrchild6" type="checkbox"
 									th:field="*{pvrChild6}"></td>
 								</td>
 							</tr>
 							<tr>
-								<td><input class="form-control" id="child7"
+								<td><input class="form-control setable" id="child7"
 									th:field="*{child7}" placeholder="Child 7 fullname"></td>
-								<td><input id="pvrchild7" type="checkbox"
+								<td><input class="setable" id="pvrchild7" type="checkbox"
 									th:field="*{pvrChild7}"></td>
 								</td>
-								<td><input class="form-control" id="child8"
+								<td><input class="form-control setable" id="child8"
 									th:field="*{child8}" placeholder="Child 8 fullname"></td>
-								<td><input id="pvrchild8" type="checkbox"
+								<td><input class="setable" id="pvrchild8" type="checkbox"
 									th:field="*{pvrChild8}"></td>
 								</td>
 							</tr>
@@ -451,13 +451,11 @@
 
 
 					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> <input
-							type="hidden" id="propertyString"
-							th:value="${resident.propertyList}" /> <input type="reset"
-							class="btn btn-primary btn-lg" value="Reset"
-							onclick="jQuery(':input').val("");">
-						<input type="submit" id="btnSubmit"
-							class="btn btn-primary btn-lg" th:value="${resident.residentId==null}?'Save Resident':'Update Resident'">
+						<input type="hidden" th:field="*{serviceCoord}" /> 
+						<input
+							type="hidden" id="propertyString" th:value="${resident.propertyList}" /> 
+						<input type="reset" class="btn btn-primary btn-lg" value="Reset"> 
+						<input type="submit" class="btn btn-primary btn-lg" th:value="${resident.residentId==null}?'Save Resident':'Update Resident'">
 					</div>
 				</div>
 			</div>
