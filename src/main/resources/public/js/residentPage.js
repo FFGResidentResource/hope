@@ -13,15 +13,28 @@ jQuery(document).ready(function() {
 	stepCounter();
 });
 var isSubmitted = false;
-function submitResidentForm(form){
+function saveOrUpdateResident(form){
   if(!isSubmitted){
+     form.action="saveResident";
      form.submit();
      jQuery("#btnSubmit").attr("disabled", true);
      isSubmitted = true;
   } else{
     alert("System is processing, please be patient.");
   }
-}
+};
+
+function deactivateResident(form){
+  if(!isSubmitted){
+     form.action="deactivateResident";
+     form.submit();
+     jQuery("#btnDeactivateResident").attr("disabled", true);
+     isSubmitted = true;
+  } else{
+    alert("System is processing, please be patient.");
+  }
+};
+
 function stepCounter() {
 
 	if (res != null && res.wsCounter.signUpComplete) {
@@ -31,7 +44,7 @@ function stepCounter() {
 	if (res != null && res.wsCounter.assessmentComplete) {
 		jQuery('#ssm_View').attr('class', 'col-xs-1 bs-wizard-step complete');
 	}
-}
+};
 
 function toggleForm(prefix) {
 
@@ -53,7 +66,7 @@ function toggleForm(prefix) {
 	jQuery(formName + "_View").removeClass('active');
 	jQuery(formName + "_View").addClass('active');
 
-}
+};
 
 document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('viaemail').disabled = this.checked;
@@ -66,7 +79,7 @@ document.getElementById('allowcontact').onchange = function() {
 
 function reset(chk){
 	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
-}
+};
 
 function calculateHousingScore(){
 
@@ -137,4 +150,4 @@ function calculateHousingScore(){
 		jQuery('input[id^=housingQuestionnaire4]').attr('disabled', false);		
 	}
 	
-}
+};
