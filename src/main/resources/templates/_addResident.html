@@ -1,7 +1,7 @@
 <div id="addResident_Form">
 
 	<form name='_addResidentF' th:action="@{/saveResident}"
-		th:object="${resident}" method='POST' class="form-horizontal" onsubmit="submitResidentForm(this);return false;">
+		th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
 		<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
 			<ul>
 				<li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
@@ -452,10 +452,14 @@
 
 					<div class="row text-center bs-linebreak hidden-print">
 						<input type="hidden" th:field="*{serviceCoord}" /> 
-						<input
-							type="hidden" id="propertyString" th:value="${resident.propertyList}" /> 
-						<input type="reset" class="btn btn-primary btn-lg" value="Reset"> 
-						<input type="submit" class="btn btn-primary btn-lg" th:value="${resident.residentId==null}?'Save Resident':'Update Resident'">
+						<input type="hidden" id="propertyString" th:value="${resident.propertyList}" />
+						<input type="submit" id="btnSubmit" class="btn btn-primary btn-lg"
+							   th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
+							   onclick="saveOrUpdateResident(this.form);"/>
+						<input type="button" id="btnDeactivateResident" class="btn btn-primary btn-lg"
+							   value="Deactivate"
+							   onclick="deactivateResident(this.form);"/>
+						<input type="reset" class="btn btn-primary btn-lg" value="Reset"/>
 					</div>
 				</div>
 			</div>
