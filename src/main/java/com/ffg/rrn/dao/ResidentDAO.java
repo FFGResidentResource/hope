@@ -3,8 +3,13 @@
  */
 package com.ffg.rrn.dao;
 
-import com.ffg.rrn.mapper.*;
-import com.ffg.rrn.model.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -23,6 +28,22 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.ffg.rrn.mapper.AssessmentMapper;
+import com.ffg.rrn.mapper.ChildrenMapper;
+import com.ffg.rrn.mapper.PropertyMapper;
+import com.ffg.rrn.mapper.ReferralMapper;
+import com.ffg.rrn.mapper.ResidentMapper;
+import com.ffg.rrn.model.AssessmentQuestionnaire;
+import com.ffg.rrn.model.AssessmentType;
+import com.ffg.rrn.model.Child;
+import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.QuestionChoice;
+import com.ffg.rrn.model.Referral;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.WizardStepCounter;
+
 
 /**
  * @author FFGRRNTeam

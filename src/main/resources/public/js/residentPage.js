@@ -1,5 +1,6 @@
 jQuery(document).ready(function() {
 
+	debugger;
 	jQuery('a').parent().removeClass('active');
 	var path = window.location.pathname;
 	if (path == '/newResident' || path == "/getResidentById") {
@@ -98,24 +99,32 @@ function calculateHousingScore(){
 	
 	if(qChoice1[1].checked == true){		
 		jQuery('[id^=hst_1_]').removeClass('danger').addClass('danger');
-		jQuery('#currentHousingScore').val(1);
+		jQuery('#currentHousingScore').val(1);		
 		jQuery('#hst_6_body').text(1);
+		jQuery('#currentHousingGoal').val(2);
+		jQuery('#hst_7_body').text(2);
 		
 	}else if(qChoice2[0].checked == true){		
 		jQuery('[id^=hst_1_]').removeClass('danger').addClass('danger');
 		jQuery('#currentHousingScore').val(1);
 		jQuery('#hst_6_body').text(1);
+		jQuery('#currentHousingGoal').val(2);
+		jQuery('#hst_7_body').text(2);
 						
 	}else if(qChoice4[1].checked == true){		
 		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
 		jQuery('#currentHousingScore').val(2);
 		jQuery('#hst_6_body').text(2);
+		jQuery('#currentHousingGoal').val(3);
+		jQuery('#hst_7_body').text(3);
 				
 	}
 	else if(qChoice5[0].checked == true){		
 		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
 		jQuery('#currentHousingScore').val(2);
 		jQuery('#hst_6_body').text(2);
+		jQuery('#currentHousingGoal').val(3);
+		jQuery('#hst_7_body').text(3);
 					
 	}
 	else if(qChoice6[0].checked == true){		
@@ -127,19 +136,25 @@ function calculateHousingScore(){
 	else if(qChoice7[1].checked == true){		
 		jQuery('[id^=hst_3_]').removeClass('info').addClass('info');
 		jQuery('#currentHousingScore').val(3);
-		jQuery('#hst_6_body').text(3);		
+		jQuery('#hst_6_body').text(3);
+		jQuery('#currentHousingGoal').val(4);
+		jQuery('#hst_7_body').text(4);
 		
 	}
 	else if(qChoice8[0].checked == true){		
 		jQuery('[id^=hst_4_]').removeClass('success').addClass('success');
 		jQuery('#currentHousingScore').val(4);
 		jQuery('#hst_6_body').text(4);
+		jQuery('#currentHousingGoal').val(5);
+		jQuery('#hst_7_body').text(5);
 		
 	}
 	else if(qChoice8[1].checked == true){		
 		jQuery('[id^=hst_5_]').removeClass('success').addClass('success');
 		jQuery('#currentHousingScore').val(5);
-		jQuery('#hst_6_body').text(5);		
+		jQuery('#hst_6_body').text(5);
+		jQuery('#currentHousingGoal').val(5);
+		jQuery('#hst_7_body').text(5);
 	}
 	
 	if(qChoice3[0].checked == true){		

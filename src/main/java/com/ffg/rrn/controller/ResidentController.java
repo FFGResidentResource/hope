@@ -3,21 +3,23 @@
  */
 package com.ffg.rrn.controller;
 
-import com.ffg.rrn.model.Resident;
-import com.ffg.rrn.model.ServiceCoordinator;
-import com.ffg.rrn.service.ResidentServiceImpl;
-import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
-import com.ffg.rrn.utils.WebUtils;
+import java.security.Principal;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
-import java.security.Principal;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.service.ResidentServiceImpl;
+import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
 
 /**
  * @author FFGRRNTeam
