@@ -15,7 +15,7 @@ import com.ffg.rrn.mapper.AppUserMapper;
 import com.ffg.rrn.model.AppUser;
 
 /**
- * @author mycomputer
+ * @author FFGRRNTeam
  *
  */
 @Repository
