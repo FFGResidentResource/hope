@@ -1,107 +1,146 @@
 <div id="addServiceCoordinator_Form">
 
-	<form name='_addServiceCoordinatorF' th:action="@{/saveServiceCoordinator}"
-		th:object="${serviceCoordinator}" method='POST' class="form-horizontal">
-		<!-- <input name="scId" type="hidden" id="scId" th:field="*{scId}" > -->
-	<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-		<ul>
-			<li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
-				<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> |
-				<span th:text="${e.message}">The error message</span>
-			</li>
-		</ul>
-	</div>
-		<div class="col-sm-12 myPanel">
-			<div class="row">
 
-				<div class="col-sm-10">
-					<h3>ADD SERVICE COORDINATOR</h3>
-				</div>
-				<div class="col-sm-2 hideme print-only">
-					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
-				</div>
 
-			</div>
-			<hr class="solidline1">
+    <form name='_addServiceCoordinatorF' th:action="@{/saveServiceCoordinator}"
+          th:object="${serviceCoordinator}" method='POST' class="form-horizontal">
 
-			<div class="row">
-				<div class="col-sm-12">
+        <!-- <input name="scId" type="hidden" id="scId" th:field="*{scId}" > -->
 
-					<p>
-						<span>Use this form to onboard a Service Coordinator and set up their online account.</span>
-					</p>
-					
-					<table class="table table-bordered table-condensed text-center">
-						<tr>
-							<td>
-								<label class=" control-label" for="userName">Username:</label>
-							</td>
-							<td>
-<<<<<<< Upstream, based on branch 'Release1' of https://github.com/FFGResidentResource/hope.git
-								<input class="form-control setable" id="userName" th:field="*{userName}" placeholder="Enter User Name" required> <!-- th:field="*{userName}"  -->
-=======
-								<input class="form-control" id="userName" placeholder="Enter User Name" required> <!-- th:field="*{userName}"  -->
->>>>>>> 4271435 Added a password assistant button to generate random password.
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class="control-label" for="email">Email:</label>
-							</td>
-							<td>
-<<<<<<< Upstream, based on branch 'Release1' of https://github.com/FFGResidentResource/hope.git
-								<input class="form-control setable" id="email" th:field="*{email}" placeholder="Enter Email"> <!--  th:field="*{email}" -->
-=======
-								<input class="form-control" id="middle" placeholder="Enter Email" required> <!--  th:field="*{email}" -->
->>>>>>> 4271435 Added a password assistant button to generate random password.
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label class=" control-label" for="password">Password:</label>
-								<input onclick="rndpwd();" type="button" title="Password Assistant" class="btn btn-success" value="?" id="btnpwd"/>
-							</td>
-							<td>
-<<<<<<< Upstream, based on branch 'Release1' of https://github.com/FFGResidentResource/hope.git
-								<input class="form-control setable" id="password" th:field="*{password}" placeholder="Enter Password" required> <!--  th:field="*{password}" -->
-								<input type="button" class="btn btn-primary btn-lg" value="Generate Random Password" onclick="generatePassword();">
-=======
-								<input class="form-control" id="lastname" placeholder="Enter Password" required> <!--  th:field="*{password}" -->
->>>>>>> 4271435 Added a password assistant button to generate random password.
-							</td>
-						</tr>
-					</table>
-					
-					<script>
-					
-					function rndpwd()
-					{
-						var length=8;
-						var pwd = "";
-						var possible = "!$#-+&ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
 
-					    for (var i = 0; i < length; i++)
-						    pwd += possible.charAt(Math.floor(Math.random() * possible.length));
-						pwd = btoa(pwd).substr(0,length);
-						$("#lastname").val(pwd);
-					}
-					
-					</script>
+            <ul>
 
-					<div class="row text-center bs-linebreak hidden-print">
-					
-						<!-- <input type="hidden" th:field="*{serviceCoord}" />  -->
-<<<<<<< Upstream, based on branch 'Release1' of https://github.com/FFGResidentResource/hope.git
-						<input type="button" class="btn btn-primary btn-lg" value="Reset" onclick="$('.setable').val('');"> 
-						<input type="submit" class="btn btn-primary btn-lg" value="Onboard Service Coordinator">
-						<!-- th:value="${serviceCoordinator.scId==null}?'Onboard Service Coordinator':'Update Service Coordinator'" -->
-=======
-						<input type="button" class="btn btn-primary btn-lg" value="Reset" onclick="$(':text').val('');" title="reset"> 
-						<input type="submit" class="btn btn-primary btn-lg" value="Onboard Service Coordinator"> <!-- th:value="${serviceCoordinator.scId==null}?'Onboard Service Coordinator':'Update Service Coordinator'" -->
->>>>>>> 4271435 Added a password assistant button to generate random password.
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
+                <li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
+
+                    <span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> |
+
+                    <span th:text="${e.message}">The error message</span>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="col-sm-12 myPanel">
+
+            <div class="row">
+
+
+
+                <div class="col-sm-10">
+
+                    <h3>ADD SERVICE COORDINATOR</h3>
+
+                </div>
+
+                <div class="col-sm-2 hideme print-only">
+
+                    <img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+
+                </div>
+
+
+
+            </div>
+
+            <hr class="solidline1">
+
+
+
+            <div class="row">
+
+                <div class="col-sm-12">
+
+
+
+                    <p>
+
+                        <span>Use this form to onboard a Service Coordinator and set up their online account.</span>
+
+                    </p>
+
+
+
+                    <table class="table table-bordered table-condensed text-center">
+
+                        <tr>
+
+                            <td>
+
+                                <label class=" control-label" for="userName">Username:</label>
+
+                            </td>
+
+                            <td>
+
+                                <input class="form-control setable" id="userName" th:field="*{userName}" placeholder="Enter User Name" required> <!-- th:field="*{userName}"  -->
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+
+                                <label class="control-label" for="email">Email:</label>
+
+                            </td>
+
+                            <td>
+
+                                <input class="form-control setable" id="email" th:field="*{email}" placeholder="Enter Email"> <!--  th:field="*{email}" -->
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+
+                                <label class=" control-label" for="password">Password:</label>
+
+                            </td>
+
+                            <td>
+
+                                <input class="form-control setable" id="password" th:field="*{password}" placeholder="Enter Password" required> <!--  th:field="*{password}" -->
+
+                                <input type="button" class="btn btn-primary btn-lg" value="Generate Random Password" onclick="generatePassword();">
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+
+
+
+
+
+
+                    <div class="row text-center bs-linebreak hidden-print">
+
+                        <!-- <input type="hidden" th:field="*{serviceCoord}" />  -->
+
+                        <input type="button" class="btn btn-primary btn-lg" value="Reset" onclick="$('.setable').val('');">
+
+                        <input type="submit" class="btn btn-primary btn-lg" value="Onboard Service Coordinator">
+
+                        <!-- th:value="${serviceCoordinator.scId==null}?'Onboard Service Coordinator':'Update Service Coordinator'" -->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
 </div>
