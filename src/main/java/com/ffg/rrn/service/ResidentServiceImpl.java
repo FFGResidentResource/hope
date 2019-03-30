@@ -114,6 +114,10 @@ public class ResidentServiceImpl {
 		return this.residentDao.getAllProperty();
 	}
 
+	public void updateResidentStatus(final Resident resident) {
+		residentDao.updateResidentStatus(resident);
+	}
+
 	public Long saveResident(final Resident resident) {
 		return residentDao.saveResident(resident);
 	}

@@ -3,8 +3,10 @@
  */
 package com.ffg.rrn.controller;
 
-import com.ffg.rrn.model.Resident;
-import com.ffg.rrn.service.ResidentServiceImpl;
+import java.security.Principal;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.validation.Valid;
-import java.security.Principal;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.service.ResidentServiceImpl;
 
 /**
  * @author FFGRRNTeam
@@ -28,24 +30,24 @@ public class MainController extends BaseController{
 	private ResidentServiceImpl residentService;
 	
 	// Either you don't pass anything or pass welcome from the url, it hit below API
-	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/welcome" }, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
 		model.addAttribute("title", "Resident Resource Network");
 		model.addAttribute("message", "Welcome to Resident Resource Hope portal");
 		return "welcomePage";
 	}
 
-	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/", "/login", "/logoutSuccessful" }, method = RequestMethod.GET)
 	public String loginPage(Model model) {
 
 		return "loginPage";
 	}
 
-	@RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
+/**	@RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
 	public String logoutSuccessfulPage(Model model) {
 		model.addAttribute("title", "Logout");
 		return "logoutSuccessfulPage";
-	}
+	}*/
 	
 	@PostMapping(value = "/saveAssessment")
 	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {

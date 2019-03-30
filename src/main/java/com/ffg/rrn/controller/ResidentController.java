@@ -3,21 +3,23 @@
  */
 package com.ffg.rrn.controller;
 
-import com.ffg.rrn.model.Resident;
-import com.ffg.rrn.model.ServiceCoordinator;
-import com.ffg.rrn.service.ResidentServiceImpl;
-import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
-import com.ffg.rrn.utils.WebUtils;
+import java.security.Principal;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
-import java.security.Principal;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.service.ResidentServiceImpl;
+import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
 
 /**
  * @author FFGRRNTeam
@@ -53,7 +55,7 @@ public class ResidentController extends BaseController{
 	}
 
 	@RequestMapping(value = "/newResident", method = RequestMethod.GET)
-	public String residents(Model model, Principal principal) throws Exception{
+	public String createResident(Model model, Principal principal) throws Exception{
 
 		// (1) (en)
 		// After user login successfully.
@@ -86,14 +88,32 @@ public class ResidentController extends BaseController{
 	}
 
 	@PostMapping("/saveResident")
-	public String signup(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+	public String saveOrUpdate(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
 			setupDropdownList(resident);
 			return "residentPage";
 		}
 		//This will be new ResidentId always
+		//by default this new resident is active
+		resident.setActive(true);
+		resident.setModifiedBy(getSessionUsername());
 		Long residentId = residentService.saveResident(resident);
+
+		return "allResident";
+	}
+
+	@PostMapping("/deactivateResident")
+	public String deactivateResident(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			setupDropdownList(resident);
+			return "residentPage";
+		}
+
+		resident.setActive(false);
+		resident.setModifiedBy(getSessionUsername());
+		residentService.updateResidentStatus(resident);
 
 		return "allResident";
 	}

@@ -3,8 +3,13 @@
  */
 package com.ffg.rrn.dao;
 
-import com.ffg.rrn.mapper.*;
-import com.ffg.rrn.model.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -20,7 +25,25 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.ffg.rrn.mapper.AssessmentMapper;
+import com.ffg.rrn.mapper.ChildrenMapper;
+import com.ffg.rrn.mapper.PropertyMapper;
+import com.ffg.rrn.mapper.ReferralMapper;
+import com.ffg.rrn.mapper.ResidentMapper;
+import com.ffg.rrn.model.AssessmentQuestionnaire;
+import com.ffg.rrn.model.AssessmentType;
+import com.ffg.rrn.model.Child;
+import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.QuestionChoice;
+import com.ffg.rrn.model.Referral;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.WizardStepCounter;
+
 
 /**
  * @author FFGRRNTeam
@@ -30,16 +53,20 @@ import java.util.List;
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
 	
-	private final static String INSERTION_SQL_RESIDENT="INSERT INTO RESIDENT (RESIDENT_ID, ACTIVE, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, " +
+	private final static String SQL_INSERT_RESIDENT ="INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, " +
 			"VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD," +
-			" REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL) VALUES (nextval('RESIDENT_SQ'), true, "+
-			" ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			" REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY) VALUES (nextval('RESIDENT_SQ'), "+
+			" ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-	private final static String UPDATE_SQL_RESIDENT="UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, " +
+	private final static String SQL_UPDATE_RESIDENT ="UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, " +
 			"VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?," +
-			" REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? WHERE RESIDENT_ID=?";
-	private final static String INSERTION_SQL_CHILD="INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'), ?,?,?)";
-	private final static String DELETION_SQL_CHILD="DELETE FROM CHILD WHERE PARENT_ID=?";
+			" REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=? WHERE RESIDENT_ID=?";
+
+	private final static String SQL_CHANGE_STATUS_OF_RESIDENT ="UPDATE RESIDENT SET ACTIVE=?, DATE_MODIFIED=?, MODIFIED_BY=? " +
+			" WHERE RESIDENT_ID=?";
+
+	private final static String SQL_INSERT_CHILD ="INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'), ?,?,?)";
+	private final static String SQL_DELETE_CHILD ="DELETE FROM CHILD WHERE PARENT_ID=?";
 
 	@Autowired
 	public ResidentDAO(DataSource dataSource) {
@@ -211,9 +238,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return residentId;
 	}
 
+	public void updateResidentStatus(Resident resident) {
+		this.getJdbcTemplate().update(conn -> buildChangeStatusOfResidentPS(conn,resident));
+	}
+
 	private long updateExistingResident(Resident resident) {
 		//do we need to retrieve the record first and then update fields with new values?
-		this.getJdbcTemplate().update(conn ->buildUpdateResidentPreparedStatement(conn,resident));
+		this.getJdbcTemplate().update(conn -> buildUpdateResidentPS(conn,resident));
 
 		deleteAllChildrenByResidentId(resident.getResidentId());
 		insertNewChildren(resident);
@@ -224,7 +255,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	private long insertNewResident(Resident resident) {
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] {"resident_id"};
-		this.getJdbcTemplate().update(conn ->buildInsertResidentPreparedStatement(conn,resident, pkColumnNames), keyHolder);
+		this.getJdbcTemplate().update(conn -> buildInsertResidentPS(conn,resident, pkColumnNames), keyHolder);
 
 		long newResidentId = keyHolder.getKey().longValue();
 		resident.setResidentId(newResidentId);
@@ -250,16 +281,16 @@ public class ResidentDAO extends JdbcDaoSupport {
 		if (StringUtils.isEmpty(childName)) {
 			return;
 		}
-		this.getJdbcTemplate().update(INSERTION_SQL_CHILD, childName, residentId, pvrChild);
+		this.getJdbcTemplate().update(SQL_INSERT_CHILD, childName, residentId, pvrChild);
 	}
 
 	private void deleteAllChildrenByResidentId(long residentId){
-		this.getJdbcTemplate().update(DELETION_SQL_CHILD,residentId);
+		this.getJdbcTemplate().update(SQL_DELETE_CHILD,residentId);
 	}
-	private PreparedStatement buildInsertResidentPreparedStatement(Connection connection,
-																   Resident resident, String[] pkColumnNames) throws SQLException {
+	private PreparedStatement buildInsertResidentPS(Connection connection,
+													Resident resident, String[] pkColumnNames) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement(INSERTION_SQL_RESIDENT, pkColumnNames);
+				.prepareStatement(SQL_INSERT_RESIDENT, pkColumnNames);
 		ps.setString(1, resident.getFirstName());
 		ps.setString(2, resident.getMiddle());
 		ps.setString(3, resident.getLastName());
@@ -277,13 +308,15 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setBoolean(15, resident.getViaVoicemail());
 		ps.setBoolean(16, resident.getViaText());
 		ps.setBoolean(17, resident.getViaEmail());
+		ps.setBoolean(18, resident.getActive());
+		ps.setString(19, resident.getModifiedBy());
 		return ps;
 	}
 
-	private PreparedStatement buildUpdateResidentPreparedStatement(Connection connection,
-																   Resident resident) throws SQLException {
+	private PreparedStatement buildUpdateResidentPS(Connection connection,
+													Resident resident) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement(UPDATE_SQL_RESIDENT);
+				.prepareStatement(SQL_UPDATE_RESIDENT);
 		ps.setString(1, resident.getFirstName());
 		ps.setString(2, resident.getMiddle());
 		ps.setString(3, resident.getLastName());
@@ -301,7 +334,20 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setBoolean(15, resident.getViaVoicemail());
 		ps.setBoolean(16, resident.getViaText());
 		ps.setBoolean(17, resident.getViaEmail());
-		ps.setLong(18, resident.getResidentId());
+		ps.setTimestamp(18, Timestamp.valueOf(LocalDateTime.now()));//modify date
+		ps.setString(19, resident.getModifiedBy());
+		ps.setLong(20, resident.getResidentId());
+		return ps;
+	}
+
+	private PreparedStatement buildChangeStatusOfResidentPS(Connection connection,
+														Resident resident) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement(SQL_CHANGE_STATUS_OF_RESIDENT);
+		ps.setBoolean(1, resident.getActive());
+		ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));//modify date
+		ps.setString(3, resident.getModifiedBy());
+		ps.setLong(4, resident.getResidentId());
 		return ps;
 	}
 }

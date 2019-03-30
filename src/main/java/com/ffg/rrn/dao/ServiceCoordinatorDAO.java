@@ -3,13 +3,12 @@
  */
 package com.ffg.rrn.dao;
 
+import static java.lang.Math.toIntExact;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import static java.lang.Math.toIntExact;
 
 import javax.sql.DataSource;
 
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ffg.rrn.mapper.ServiceCoordinatorMapper;
-import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ServiceCoordinator;
 
 /**

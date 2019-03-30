@@ -28,7 +28,8 @@ DROP TABLE Persistent_Logins;
 DROP TABLE USER_ROLE;
 DROP TABLE APP_ROLE;
 DROP TABLE SERVICE_COORDINATOR;
-
+DROP TABLE QUESTION_CHOICE;
+DROP TABLE RESIDENT_ASSESSMENT_QUESTIONNAIRE;
 
 CREATE SEQUENCE SC_SQ START 1;
 
@@ -52,7 +53,6 @@ CREATE SEQUENCE AQ_SQ START 1;
 
 CREATE SEQUENCE CHOICE_SQ START 1;
 
-
 CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
 	QUESTION_ID		INT PRIMARY KEY NOT NULL,
 	QUESTION_NUMBER INT,
@@ -62,14 +62,14 @@ CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
 );
 
 
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1, 'Are you currently housed?', 'HOUSING', 1);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Are you currently housed?', 'HOUSING', 1);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Are you at immediate risk of losing your housing?', 'HOUSING', 2);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Are you obtaining rental assistance or rent subsidy (e.g., housing choice voucher)?', 'HOUSING',3);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Can you continue living in your current residence for as long as you would like?', 'HOUSING', 4);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Do you - or whoever is responsible for paying for your housing - spend more than 30% of your income on jousting related expenses?', 'HOUSING',5);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Do you have any safety concerns or accessibility concerns with respect to the physical structure of your housing?', 'HOUSING',6);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Do you consider your housing to be adequate and meeting your needs?', 'HOUSING',7);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8, 'Is the housing subsidized, low-income housing, a subsidized co-op, or some other type of government-supported housing?', 'HOUSING',8);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Is the housing subsidized, low-income housing, a subsidized co-op, or some other type of government-supported housing?', 'HOUSING',8);
 --MONEY MANAGEMENT
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Do you know how to use a budget and use it on a regular basis?', 'MONEY MANAGEMENT',9);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Do you know whether or not you have monthly deficit or surplus?', 'MONEY MANAGEMENT',10);
@@ -131,7 +131,6 @@ INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '18-25', 8);
 INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '26-35', 9);
 INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '36-50', 10);
 INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '+50', 11);
-
 
 CREATE TABLE QUESTION_CHOICE(
 	QUESTION_ID INT REFERENCES ASSESSMENT_QUESTIONNAIRE(QUESTION_ID) NOT NULL,
@@ -344,11 +343,6 @@ INSERT INTO QUESTION_CHOICE VALUES (41, 2);
 INSERT INTO QUESTION_CHOICE VALUES (41, 3);
 INSERT INTO QUESTION_CHOICE VALUES (41, 4);
 
-INSERT INTO QUESTION_CHOICE VALUES (41, 1);
-INSERT INTO QUESTION_CHOICE VALUES (41, 2);
-INSERT INTO QUESTION_CHOICE VALUES (41, 3);
-INSERT INTO QUESTION_CHOICE VALUES (41, 4);
-
 INSERT INTO QUESTION_CHOICE VALUES (42, 1);
 INSERT INTO QUESTION_CHOICE VALUES (42, 2);
 INSERT INTO QUESTION_CHOICE VALUES (42, 3);
@@ -368,7 +362,6 @@ INSERT INTO QUESTION_CHOICE VALUES (45, 1);
 INSERT INTO QUESTION_CHOICE VALUES (45, 2);
 INSERT INTO QUESTION_CHOICE VALUES (45, 3);
 INSERT INTO QUESTION_CHOICE VALUES (45, 4);
-
 
 CREATE TABLE SCORE(
 	SCORE_ID		INT PRIMARY KEY NOT NULL,
@@ -422,7 +415,6 @@ CREATE table PROPERTY (
 	ACTIVE			BOOLEAN DEFAULT TRUE
 );
 
-
 CREATE table RESIDENT (
 	RESIDENT_ID		BIGINT PRIMARY KEY NOT NULL,
 	ACTIVE			BOOLEAN DEFAULT FALSE,
@@ -450,10 +442,8 @@ CREATE table RESIDENT (
 	A_DATE			TIMESTAMP
 );
 
-
 alter table RESIDENT
   add constraint RESIDENT_UK unique (FIRST_NAME, LAST_NAME, PROP_ID, ADDRESS);
-
 
 CREATE table CHILD (
 	CHILD_ID		BIGINT PRIMARY KEY NOT NULL,
@@ -463,14 +453,12 @@ CREATE table CHILD (
 );
 
 CREATE TABLE RESIDENT_ASSESSMENT_QUESTIONNAIRE(
-
 	RAQ_ID			BIGINT PRIMARY KEY NOT NULL,
 	RESIDENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	QUESTION_ID		INT REFERENCES ASSESSMENT_QUESTIONNAIRE(QUESTION_ID),
 	CHOICE_ID		INT REFERENCES CHOICE(CHOICE_ID),
-	LIFE_DOMAIN		VARCHAR(50)	
+	LIFE_DOMAIN		VARCHAR(50)
 );
-
 
 
 CREATE TABLE RESIDENT_SCORE_GOAL(
@@ -489,12 +477,12 @@ CREATE table APP_ROLE
   ROLE_NAME VARCHAR(30) not null
 ) ;
 --  
+
 alter table APP_ROLE
   add constraint APP_ROLE_PK primary key (ROLE_ID);
  
 alter table APP_ROLE
   add constraint APP_ROLE_UK unique (ROLE_NAME);
- 
  
 -- Create table
 CREATE table USER_ROLE
@@ -521,7 +509,6 @@ alter table USER_ROLE
   
 -- Used by Spring Remember Me API.  
 CREATE TABLE Persistent_Logins (
- 
     username varchar(64) not null,
     series varchar(64) not null,
     token varchar(64) not null,
@@ -529,18 +516,25 @@ CREATE TABLE Persistent_Logins (
     PRIMARY KEY (series)     
 );
   
-
 commit;
 
 --------------------------------------
-
  
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbadmin1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE,'dbadmin1@email.com');
 
-
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE, 'dbuser1@email.com');
+
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
+values (nextval('SC_SQ'), 'dbuser2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser2@email.com');
+
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
+values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser3@email.com');
+
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
+values (nextval('SC_SQ'), 'dbadmin2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbadmin2@email.com');
+
 -------------------------------------------
  
 insert into app_role (ROLE_ID, ROLE_NAME)
@@ -550,6 +544,7 @@ insert into app_role (ROLE_ID, ROLE_NAME)
 values (2, 'ROLE_USER');
  
 --- 
+
 insert into user_role (ID, USER_ID, ROLE_ID)
 values (1, 1, 1);
  
@@ -558,6 +553,18 @@ values (2, 1, 2);
  
 insert into user_role (ID, USER_ID, ROLE_ID)
 values (3, 2, 2);
+
+insert into user_role (ID, USER_ID, ROLE_ID)
+values (4, 3, 2);
+
+insert into user_role (ID, USER_ID, ROLE_ID)
+values (5, 4, 2);
+
+insert into user_role (ID, USER_ID, ROLE_ID)
+values (6, 5, 1);
+
+insert into user_role (ID, USER_ID, ROLE_ID)
+values (7, 5, 2);
 
 ---
 
