@@ -40,13 +40,13 @@
 			</div>
 
 			<hr class="solidline1">
-
+            
 			<div class="row col-sm-12">
 
 				<div class="col-sm-6">
-					<div th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
+					<div class="q-seq" th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
 
-						<div th:if="${iStat.index%2} == 0">
+						<div>
 
 							<strong><span th:text="${moneymgmt.questionNumber}"></span></strong>
 							<span th:text="${moneymgmt.question}" />
@@ -65,27 +65,7 @@
 					</div>
 				</div>
 
-				<div class="col-sm-6">
-					<div th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
-
-						<div th:if="${iStat.index % 2} == 1">
-
-							<strong><span th:text="${moneymgmt.questionNumber}"></span></strong>
-							<span th:text="${moneymgmt.question}" />
-							<ul>
-								<span th:each="radioChoice, stat : ${moneymgmt.choices}"> <input
-									type="radio"
-									th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].choiceId}"
-									th:value="${radioChoice.choiceId}"
-									onclick="calculateHousingScore();"> <strong><lable
-											th:text="${radioChoice.choice}"> </label></strong>
-								</span>
-							</ul>
-
-						</div>
-					</div>
-
-				</div>
+				<div class="col-sm-6" id="col2"></div>
 			</div>
 
 

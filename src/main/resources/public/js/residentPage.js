@@ -1,6 +1,5 @@
 jQuery(document).ready(function() {
-
-	debugger;
+    debugger;
 	jQuery('a').parent().removeClass('active');
 	var path = window.location.pathname;
 	if (path == '/newResident' || path == "/getResidentById") {
@@ -11,8 +10,18 @@ jQuery(document).ready(function() {
 		jQuery("a[href='/allResident']").parent().addClass('active');
 	}
 
-	stepCounter();
+    stepCounter();
 });
+
+$(function () {
+    var allQs = $(".q-seq");
+    var len = allQs.length;
+    var half = Math.floor(allQs.length / 2);
+    
+    for (var i = half; i < len; i++)
+        $(allQs[i]).appendTo($("#col2"));
+});
+
 var isSubmitted = false;
 function saveOrUpdateResident(form){
   if(!isSubmitted){
