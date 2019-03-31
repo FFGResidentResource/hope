@@ -39,15 +39,108 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<hr class="solidline1">
 
-				<div th:each="household: ${resident.householdMgmtQuestionnaire}">
-					<div class="col-sm-6" th:text="${household.questionNumber}">
-						<div class="col-sm-6" th:each="choice: ${household.choices}">
-							<span th:text="${choice.choice}" /> </span>
+			<div class="row col-sm-12">
+
+				<div class="col-sm-6">
+					<div th:each="hhMgmt, iStat: *{householdMgmtQuestionnaire}">
+
+						<div th:if="${iStat.index} &lt; 4">
+
+							<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
+							<span th:text="${hhMgmt.question}" /
+							<input type="hidden" th:field="*{housingQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<ul>
+								<span th:each="radioChoice, stat : ${hhMgmt.choices}">
+									<input type="radio"
+									th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+									th:value="${radioChoice.choiceId}"
+									onclick="calculateHouseHoldScore();"> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
+								</span>
+							</ul>
+
 						</div>
 					</div>
 				</div>
+
+				<div class="col-sm-6">
+					<div th:each="hhMgmt, iStat: *{householdMgmtQuestionnaire}">
+
+						<div th:if="${iStat.index} &gt;= 4">
+
+							<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
+							<span th:text="${hhMgmt.question}" />
+							<input type="hidden" th:field="*{housingQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<ul>
+								<span th:each="radioChoice, stat : ${hhMgmt.choices}">
+									<input type="radio"
+									th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+									th:value="${radioChoice.choiceId}"
+									onclick="calculateHouseHoldScore();"> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
+								</span>
+							</ul>
+
+						</div>
+					</div>
+
+				</div>
 			</div>
+
+
+
+			<div class="row text-center bs-linebreak hidden-print">
+				<input type="hidden" th:field="*{serviceCoord}" /> 
+				<input type="hidden" th:field="*{residentId}" /> 
+				<input type="hidden" th:field="*{firstName}" /> 
+				<input type="hidden" th:field="*{lastName}" />
+				<input type="hidden" th:field="*{propertyId}" />
+				<input type="hidden" th:field="*{refId}" />
+				<input type="hidden" id="currentHHGoal" th:field="*{goal}" /> 
+				<input type="hidden" id="currentHHMgmtScore" th:field="*{currentScore}" />
+
+				<input type="submit" class="btn btn-primary btn-lg"
+					value="Save Household Assessment">
+			</div>
+
+
+		</div>
 	</form>
+
+	<div class="col-sm-12">
+
+		<table id="houseHoldMgmtTable" class="table table-bordered">
+			<thead>
+				<th id="hhmst_1_head">In Crisis(1)</th>
+				<th id="hhmst_2_head">Vulnerable (2)</th>
+				<th id="hhmst_3_head">Safe (3)</th>
+				<th id="hhmst_4_head">Building Capacity (4)</th>
+				<th id="hhmst_5_head">Empowered (5)</th>
+				<th id="hhmst_6_head">Score</th>
+				<th id="hhmst_7_head">Goal</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td id="hhmst_1_body">Homeless or threatened with eviction.</td>
+					<td id="hhmst_2_body">In transitional, temporary, or substandard
+						housing OR current rent/mortgage payment is unaffordable (over 30%
+						of income).</td>
+					<td id="hhmst_3_body">In stable housing that is only marginally
+						adequate.</td>
+					<td id="hhmst_4_body">Household is in adequate, subsidized
+						housing.</td>
+					<td id="hhmst_5_body">Household is in adequate, unsubsidized
+						housing.</td>
+					<td id="hhmst_6_body"></td>
+					<td id="hhmst_7_body"></td>
+
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+
 </div>

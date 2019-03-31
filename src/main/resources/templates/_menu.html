@@ -8,7 +8,7 @@
 				<span class="icon-bar"></span>
 			</button>
 
-			<a class="navbar-brand" th:href="@{/welcome}"> <img src="/images/rrnlogo.png" style="margin-left: 15px; padding: 2px;" /></a>
+			<a class="navbar-brand" th:href="@{/allResident}"> <img src="/images/rrnlogo.png" style="margin-left: 15px; padding: 2px;" /></a>
 			
 			 <h4 class="navbar-text">Resident Resource Network</h4>
 
@@ -24,7 +24,7 @@
 				<li><a th:href="@{/403}">Action Plans</a></li>
 				<li><a th:href="@{/403}">Case Notes</a></li>
 				<li><a th:href="@{/403}">Dashboard</a></li>
-				<li><a th:if="${#strings.contains(serviceCordInfo,'ROLE_ADMIN')}"
+				<li><a th:if="${serviceCordInfo != null and #strings.contains(serviceCordInfo,'ROLE_ADMIN')}"
 					th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}"
 					th:href="@{/logout}">Logout</a></li>

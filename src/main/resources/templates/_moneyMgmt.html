@@ -1,6 +1,6 @@
 <div id="moneyMgmt_Form" class="hideme">
 
-	<form name='_moneymgmtF' th:action="@{/saveHousing}"
+	<form name='_moneymgmtF' th:action="@{/saveMoneyMgmt}"
 		th:object="${resident}" method='POST' class="form-horizontal">
 
 		<div class="col-sm-12 myPanel">
@@ -20,7 +20,7 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="col-sm-3">
-						<strong>Management Name:</strong>
+						<strong>Resident Name:</strong>
 					</div>
 					<div class="col-sm-5">
 						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
@@ -31,7 +31,7 @@
 
 				<div class="col-sm-6">
 					<div class="col-sm-3">
-						<strong>Management Id:</strong>
+						<strong>Resident Id:</strong>
 					</div>
 					<div class="col-sm-5">
 						<u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
@@ -40,22 +40,25 @@
 			</div>
 
 			<hr class="solidline1">
-            
-			<div class="row col-sm-12 q-row">
 
-				<div class="col-sm-6 left-col">
-					<div class="q-item" th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
+			<div class="row col-sm-12">
 
-						<div>
+				<div class="col-sm-6">
+					<div th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
+
+						<div th:if="${iStat.index} &lt; 4">
+
 							<strong><span th:text="${moneymgmt.questionNumber}"></span></strong>
 							<span th:text="${moneymgmt.question}" />
+							<input type="hidden" th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].questionNumber}" /> 
 							<ul>
 								<span th:each="radioChoice, stat : ${moneymgmt.choices}"> <input
 									type="radio"
 									th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculateHousingScore();"><strong>
-                                            <lable th:text="${radioChoice.choice}"></label></strong>
+									onclick="calculateMoneyMgmtScore();"
+									> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
 							</ul>
 
@@ -63,15 +66,37 @@
 					</div>
 				</div>
 
-				<div class="col-sm-6 right-col">
-                </div>
+				<div class="col-sm-6">
+					<div th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
+
+						<div th:if="${iStat.index} &gt;= 4">
+
+							<strong><span th:text="${moneymgmt.questionNumber}"></span></strong>
+							<span th:text="${moneymgmt.question}" />
+							<input type="hidden" th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<ul>
+								<span th:each="radioChoice, stat : ${moneymgmt.choices}"> <input
+									type="radio"
+									th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+									th:value="${radioChoice.choiceId}"
+									onclick="calculateMoneyMgmtScore();"> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
+								</span>
+							</ul>
+
+						</div>
+					</div>
+
+				</div>
 			</div>
-
-
 
 			<div class="row text-center bs-linebreak hidden-print">
 			<input type="hidden" th:field="*{serviceCoord}" /> 
 			<input type="hidden" th:field="*{residentId}" /> 
+			<input type="hidden" th:field="*{firstName}" /> 
+			<input type="hidden" th:field="*{lastName}" />
+			<input type="hidden" th:field="*{propertyId}" />
+			<input type="hidden" th:field="*{refId}" />
 			<input type="hidden" id="currentMoneyMgmtGoal" th:field="*{goal}" /> 
 			<input type="hidden" id="currentMoneyMgmtScore" th:field="*{currentScore}" /> 
 			
@@ -85,7 +110,7 @@
 
 	<div class="col-sm-12">
 
-		<table id="housingScoreTable" class="table table-bordered">
+		<table id="mmScoreTable" class="table table-bordered">
 			<thead>
 				<th id="hst_1_head">In Crisis(1)</th>
 				<th id="hst_2_head">Vulnerable (2)</th>
@@ -97,11 +122,13 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td id="hst_1_body">No knowledge or implementation of money management skills; not aware of resources or supports.</td>
-					<td id="hst_2_body">Has limited knowledge of building and money management; aware of resources to help; unprepared for any financial emergency.</td>
-					<td id="hst_3_body">Understands importance of budgeting and money management; uses monthly budget; unprepared for most financial emergencies.</td>
-					<td id="hst_4_body">Able to save sporadically; makes and lives within monthly budget; unprepared for large financial emergencies.</td>
-					<td id="hst_5_body">Able to save consistently; comprehensive knowledge and full implementation of money.</td>
+					<td id="hst_1_body">Homeless or threatened with eviction.</td>
+					<td id="hst_2_body">In transitional, temporary, or substandard housing OR
+						current rent/mortgage payment is unaffordable (over 30% of
+						income).</td>
+					<td id="hst_3_body">In stable housing that is only marginally adequate.</td>
+					<td id="hst_4_body">Household is in adequate, subsidized housing.</td>
+					<td id="hst_5_body">Household is in adequate, unsubsidized housing.</td>
 					<td id="hst_6_body"></td>
 					<td id="hst_7_body"> 
 						

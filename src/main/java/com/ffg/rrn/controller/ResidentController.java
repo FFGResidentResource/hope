@@ -4,6 +4,7 @@
 package com.ffg.rrn.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
 import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
 
@@ -100,7 +102,7 @@ public class ResidentController extends BaseController{
 		resident.setModifiedBy(getSessionUsername());
 		Long residentId = residentService.saveResident(resident);
 
-		return "allResident";
+		return "redirect:/allResident";
 	}
 
 	@PostMapping("/deactivateResident")
@@ -115,7 +117,7 @@ public class ResidentController extends BaseController{
 		resident.setModifiedBy(getSessionUsername());
 		residentService.updateResidentStatus(resident);
 
-		return "allResident";
+		return "redirect:/allResident";
 	}
 
 	private void setupDropdownList(Resident resident){
@@ -123,4 +125,68 @@ public class ResidentController extends BaseController{
 		resident.setRefList(residentService.getAllReferral());
 		resident.setAtList(residentService.getAllAType());
 	}
+	
+	@PostMapping(value = "/saveAssessment")
+	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+
+		int count = residentService.saveAssessment(resident);		
+		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();		
+	}
+	
+	@PostMapping("/saveHousing")
+    public String saveHousingAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+        
+		saveAssessmentAndScore(resident,resident.getHousingQuestionnaire(), "HOUSING" );		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();
+    }
+	
+	@PostMapping("/saveMoneyMgmt")
+    public String saveMoneyMgmtAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {   
+     
+		saveAssessmentAndScore(resident,resident.getMoneyMgmtQuestionnaire(), "MONEY MANAGEMENT" );			
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();
+    }
+	
+	@PostMapping("/saveEmployment")
+    public String saveEmploymentAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+       
+		saveAssessmentAndScore(resident,resident.getEmploymentQuestionnaire(), "EMPLOYMENT" );		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();
+    }
+	
+	@PostMapping("/saveEducation")
+    public String saveEducation(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+        
+		saveAssessmentAndScore(resident,resident.getEducationQuestionnaire(), "EDUCATION" );		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();
+    }
+	
+	@PostMapping("/saveNetworkSupport")
+    public String saveNetworkSupport(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+       
+		saveAssessmentAndScore(resident, resident.getNetSupportQuestionnaire(),"NETWORK SUPPORT" );		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();
+    }
+	
+	@PostMapping("/saveHouseHoldMgmt")
+    public String saveHouseHoldMgmt(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {      
+        
+		saveAssessmentAndScore(resident,resident.getHouseholdMgmtQuestionnaire(),"HOUSEHOLD MANAGEMENT" );		
+		return "redirect:/getResidentById?residentId="+resident.getResidentId();
+    }
+	
+	private void saveAssessmentAndScore(Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) {
+		
+			
+		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
+			if(residentAssessmentQuestionnaire.getQuestionNumber()!=null || residentAssessmentQuestionnaire.getChoiceId() != null) {
+				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
+				residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
+			}
+		}		
+        
+		residentService.saveResidentScoreGoal(resident, lifeDomain);
+	}
+
 }
