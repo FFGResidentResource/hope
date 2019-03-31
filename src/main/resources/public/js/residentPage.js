@@ -14,12 +14,14 @@ jQuery(document).ready(function() {
 });
 
 $(function () {
-    var allQs = $(".q-seq");
-    var len = allQs.length;
-    var half = Math.floor(allQs.length / 2);
-    
-    for (var i = half; i < len; i++)
-        $(allQs[i]).appendTo($("#col2"));
+    var qRows = $(".q-row");
+    $(qRows).each(function () {
+        var allQs = $(this).find(".left-col").find(".q-item");
+        var len = allQs.length;
+        var half = Math.floor(allQs.length / 2);
+        for (var i = half; i < len; i++)
+            $(allQs[i]).appendTo($(this).find(".right-col"));
+    });
 });
 
 var isSubmitted = false;
