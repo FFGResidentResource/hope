@@ -82,20 +82,37 @@ function reset(chk){
 	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
 };
 
+function calculateHouseHoldScore(){
+	
+}
+function calculatNetworkSupportScore(){
+	
+}
+function calculateEducationScore(){
+	
+}
+function calculateEmploymentScore(){
+	
+}
+function calculateMoneyMgmtScore(){
+	
+}
+
 function calculateHousingScore(){
 
 	jQuery('#hst_6_body').text('');
+	jQuery('#hst_7_body').text('');
 	jQuery('[id^=hst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');
 	
 	debugger;
-	var qChoice1 = jQuery('input[id^=housingQuestionnaire0]');
-	var qChoice2 = jQuery('input[id^=housingQuestionnaire1]');
-	var qChoice3 = jQuery('input[id^=housingQuestionnaire2]');
-	var qChoice4 = jQuery('input[id^=housingQuestionnaire3]');
-	var qChoice5 = jQuery('input[id^=housingQuestionnaire4]');
-	var qChoice6 = jQuery('input[id^=housingQuestionnaire5]');
-	var qChoice7 = jQuery('input[id^=housingQuestionnaire6]');
-	var qChoice8 = jQuery('input[id^=housingQuestionnaire7]');
+	var qChoice1 = jQuery('input[id^=housingQuestionnaire0]:radio');
+	var qChoice2 = jQuery('input[id^=housingQuestionnaire1]:radio');
+	var qChoice3 = jQuery('input[id^=housingQuestionnaire2]:radio');
+	var qChoice4 = jQuery('input[id^=housingQuestionnaire3]:radio');
+	var qChoice5 = jQuery('input[id^=housingQuestionnaire4]:radio');
+	var qChoice6 = jQuery('input[id^=housingQuestionnaire5]:radio');
+	var qChoice7 = jQuery('input[id^=housingQuestionnaire6]:radio');
+	var qChoice8 = jQuery('input[id^=housingQuestionnaire7]:radio');
 	
 	if(qChoice1[1].checked == true){		
 		jQuery('[id^=hst_1_]').removeClass('danger').addClass('danger');
@@ -131,6 +148,8 @@ function calculateHousingScore(){
 		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
 		jQuery('#currentHousingScore').val(2);
 		jQuery('#hst_6_body').text(2);
+		jQuery('#currentHousingGoal').val(3);
+		jQuery('#hst_7_body').text(3);
 					
 	}
 	else if(qChoice7[1].checked == true){		

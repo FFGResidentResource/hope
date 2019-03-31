@@ -50,6 +50,7 @@
 
 							<strong><span th:text="${housing.questionNumber}"></span></strong>
 							<span th:text="${housing.question}" />
+							<input type="hidden" th:field="*{housingQuestionnaire[__${iStat.index}__].questionNumber}" /> 
 							<ul>
 								<span th:each="radioChoice, stat : ${housing.choices}"> <input
 									type="radio"
@@ -72,6 +73,7 @@
 
 							<strong><span th:text="${housing.questionNumber}"></span></strong>
 							<span th:text="${housing.question}" />
+							<input type="hidden" th:field="*{housingQuestionnaire[__${iStat.index}__].questionNumber}" /> 
 							<ul>
 								<span th:each="radioChoice, stat : ${housing.choices}"> <input
 									type="radio"
@@ -93,6 +95,10 @@
 			<div class="row text-center bs-linebreak hidden-print">
 			<input type="hidden" th:field="*{serviceCoord}" /> 
 			<input type="hidden" th:field="*{residentId}" /> 
+			<input type="hidden" th:field="*{firstName}" /> 
+			<input type="hidden" th:field="*{lastName}" />
+			<input type="hidden" th:field="*{propertyId}" />
+			<input type="hidden" th:field="*{refId}" />   
 			<input type="hidden" id="currentHousingGoal" th:field="*{goal}" /> 
 			<input type="hidden" id="currentHousingScore" th:field="*{currentScore}" /> 
 			
@@ -105,7 +111,6 @@
 	</form>
 
 	<div class="col-sm-12">
-
 		<table id="housingScoreTable" class="table table-bordered">
 			<thead>
 				<th id="hst_1_head">In Crisis(1)</th>
@@ -126,15 +131,9 @@
 					<td id="hst_4_body">Household is in adequate, subsidized housing.</td>
 					<td id="hst_5_body">Household is in adequate, unsubsidized housing.</td>
 					<td id="hst_6_body"></td>
-					<td id="hst_7_body"> 
-						
-					</td>
-
+					<td id="hst_7_body"></td>
 				</tr>
 			</tbody>
 		</table>
-
 	</div>
-
-
 </div>

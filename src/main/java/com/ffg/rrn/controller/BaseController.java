@@ -23,7 +23,7 @@ public class BaseController {
     protected String getSessionUsername(){
         UserDetails userDetails= (UserDetails)(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         if(userDetails==null){
-            throw new RuntimeException("Session might be time out. Login again please.");
+            throw new RuntimeException("Session might be timed out. Login again please.");
         }
         return userDetails.getUsername();
     }

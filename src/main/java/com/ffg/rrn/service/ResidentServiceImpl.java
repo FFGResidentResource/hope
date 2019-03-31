@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.StringUtils;
 
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
@@ -30,6 +29,11 @@ public class ResidentServiceImpl {
 	@Autowired
 	private ResidentDAO residentDao;
 
+	/**
+	 * Get all Assessment Questions as ref data to display on Page for Resident.
+	 * @param resident
+	 * @return
+	 */
 	public Resident getAllQuestionnaire(Resident resident) {
 
 		List<AssessmentQuestionnaire> allQuestionnaireRef = this.residentDao.getAllQuestionnaire();
@@ -68,36 +72,33 @@ public class ResidentServiceImpl {
 			raq.setResidentId(resident.getResidentId());
 			raq.setQuestionNumber(question.getQuestionNumber());
 			raq.setQuestion(question.getQuestion());
-
-			if (StringUtils.equals(question.getLifeDomain(), "HOUSING")) {
-				raq.setLifeDomain(question.getLifeDomain());
-				housingQuestionnaire.add(raq);
-			}
-
-			if (StringUtils.equals(question.getLifeDomain(), "MONEY MANAGEMENT")) {
-				raq.setLifeDomain(question.getLifeDomain());
-				moneyMgmtQuestionnaire.add(raq);
-			}
-
-			if (StringUtils.equals(question.getLifeDomain(), "EMPLOYMENT")) {
-				raq.setLifeDomain(question.getLifeDomain());
-				employmentQuestionnaire.add(raq);
-			}
-
-			if (StringUtils.equals(question.getLifeDomain(), "EDUCATION")) {
-				raq.setLifeDomain(question.getLifeDomain());
-				educationQuestionnaire.add(raq);
-			}
-
-			if (StringUtils.equals(question.getLifeDomain(), "NETWORK SUPPORT")) {
-				raq.setLifeDomain(question.getLifeDomain());
-				netSupportQuestionnaire.add(raq);
-			}
-
-			if (StringUtils.equals(question.getLifeDomain(), "HOUSEHOLD MANAGEMENT")) {
-				raq.setLifeDomain(question.getLifeDomain());
-				householdMgmtQuestionnaire.add(raq);
-			}
+			
+			switch (question.getLifeDomain()) {
+				case "HOUSING":
+					raq.setLifeDomain(question.getLifeDomain());
+					housingQuestionnaire.add(raq);
+					break;
+				case "MONEY MANAGEMENT":
+					raq.setLifeDomain(question.getLifeDomain());
+					moneyMgmtQuestionnaire.add(raq);
+					break;
+				case "EMPLOYMENT":
+					raq.setLifeDomain(question.getLifeDomain());
+					employmentQuestionnaire.add(raq);
+					break;
+				case "EDUCATION":
+					raq.setLifeDomain(question.getLifeDomain());
+					educationQuestionnaire.add(raq);
+					break;
+				case "NETWORK SUPPORT":
+					raq.setLifeDomain(question.getLifeDomain());
+					netSupportQuestionnaire.add(raq);
+					break;
+				case "HOUSEHOLD MANAGEMENT":
+					raq.setLifeDomain(question.getLifeDomain());
+					householdMgmtQuestionnaire.add(raq);
+					break;
+			}			
 		}
 
 		resident.setHousingQuestionnaire(housingQuestionnaire);
@@ -141,5 +142,15 @@ public class ResidentServiceImpl {
 	public Resident getResidentById(Long residentId, String serviceCoord) throws Exception {
 		return this.residentDao.getResidentById(residentId, serviceCoord);
 	}
+
+	public long saveResidentAssessmentQuestionnaire(final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
+		return residentDao.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
+	}
+	
+	public long saveResidentScoreGoal(final Resident resident, String lifeDomain) {
+		return residentDao.saveResidentScoreGoal(resident, lifeDomain);
+	}
+	
+	
 
 }
