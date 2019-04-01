@@ -7,7 +7,7 @@
 			<div class="row">
 
 				<div class="col-sm-10">
-					<h3>HOUSING</h3>
+					<span><h3 style="width: 400px;">HOUSING</h3></span>
 					<span class="hidden-print" style="color: red; font-size: larger;"
 						th:if="*{firstName == null}" th:text="${message}"></span>
 				</div>
@@ -16,25 +16,56 @@
 				</div>
 
 			</div>
+			
+			<div class="row hideme print-only">
+					<div class="col-sm-6">
+						<span>Full Name:&nbsp;</span>
+						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+					</div>
+					<div class="col-sm-2">
+						<span>Resident Id:&nbsp;</span><u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+					</div>
+					<div class="col-sm-4">
+						<u><span id="_selectedDateHousing">Date:</span></u>
+					</div>
+				
+			</div>
 
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="col-sm-3">
+			<div class="row hidden-print">
+				<div class="col-sm-5">
+					<div class="col-sm-4">
 						<strong>Resident Name:</strong>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
 							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
 							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
 					</div>
 				</div>
 
-				<div class="col-sm-6">
-					<div class="col-sm-3">
+				<div class="col-sm-3">
+					<div class="col-sm-6">
 						<strong>Resident Id:</strong>
 					</div>
-					<div class="col-sm-5">
-						<u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+					<div class="col-sm-2">
+						<u><span th:if="*{firstName != null}" id="_residentIdText" th:text="*{residentId}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="col-sm-3">
+						<strong>Date:</strong>
+					</div>
+					<div class="col-sm-9">
+						<select class="form-control setable" id="_dates"
+							th:field="*{selectedHousingDate}" onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSING');" required>
+							<option value="NewAssessment">Start New Assessment</option>
+							<option th:each="assessmentDate : ${resident.housingDates}"
+								th:value="${assessmentDate}" 
+								th:utext="${assessmentDate}" />
+						</select>
 					</div>
 				</div>
 			</div>
@@ -49,15 +80,15 @@
 						<div th:if="${iStat.index} &lt; 4">
 
 							<strong><span th:text="${housing.questionNumber}"></span></strong>
-							<span th:text="${housing.question}" />
-							<input type="hidden" th:field="*{housingQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<span th:text="${housing.question}" /> <input type="hidden"
+								th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
 							<ul>
 								<span th:each="radioChoice, stat : ${housing.choices}"> <input
 									type="radio"
+									th:id="'_housingQuestionnaire_'+ ${housing.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculateHousingScore();"
-									> <strong><lable
+									onclick="calculateHousingScore();"> <strong><lable
 											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
 							</ul>
@@ -72,11 +103,12 @@
 						<div th:if="${iStat.index} &gt;= 4">
 
 							<strong><span th:text="${housing.questionNumber}"></span></strong>
-							<span th:text="${housing.question}" />
-							<input type="hidden" th:field="*{housingQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<span th:text="${housing.question}" /> <input type="hidden"
+								th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
 							<ul>
 								<span th:each="radioChoice, stat : ${housing.choices}"> <input
 									type="radio"
+									th:id="'_housingQuestionnaire_'+ ${housing.questionId} + '_' + ${radioChoice.choiceId}"									
 									th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
 									onclick="calculateHousingScore();"> <strong><lable
@@ -89,8 +121,7 @@
 
 				</div>
 			</div>
-
-
+			
 
 			<div class="row text-center bs-linebreak hidden-print">
 			<input type="hidden" th:field="*{serviceCoord}" /> 
@@ -111,7 +142,7 @@
 	</form>
 
 	<div class="col-sm-12">
-		<table id="housingScoreTable" class="table table-bordered">
+		<table id="housingScoreTable" class="table table-condensed table-bordered">
 			<thead>
 				<th id="hst_1_head">In Crisis(1)</th>
 				<th id="hst_2_head">Vulnerable (2)</th>

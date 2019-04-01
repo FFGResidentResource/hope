@@ -33,11 +33,11 @@ public class Resident {
 	private Long residentId;
 	private Boolean active;
 	@NotEmpty
-	@Size(max=20)
+	@Size(max = 20)
 	private String firstName;
 	private String middle;
 	@NotEmpty
-	@Size(max=20)
+	@Size(max = 20)
 	private String lastName;
 
 	@NotNull
@@ -55,7 +55,7 @@ public class Resident {
 	private String text;
 
 	@Email
-	@Size(max=128)
+	@Size(max = 128)
 	private String email;
 	private String address;
 
@@ -77,21 +77,21 @@ public class Resident {
 
 	private String childList;
 
-	@Size(max=50)
+	@Size(max = 50)
 	private String child1;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child2;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child3;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child4;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child5;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child6;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child7;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child8;
 
 	private Boolean pvrChild1;
@@ -131,9 +131,29 @@ public class Resident {
 
 	@JsonView
 	private List<ResidentAssessmentQuestionnaire> householdMgmtQuestionnaire;
-	
+
+	@JsonView
+	private List<String> housingDates;
+	@JsonView
+	private List<String> moneymgmtDates;
+	@JsonView
+	private List<String> employmentDates;
+	@JsonView
+	private List<String> educationDates;
+	@JsonView
+	private List<String> netSupportDates;
+	@JsonView
+	private List<String> householdDates;
+
+	private String selectedHousingDate;
+	private String selectedMoneyMgmtgDate;
+	private String selectedEmploymentDate;
+	private String selectedEducationDate;
+	private String selectedNetSupportDate;
+	private String selectedHouseholdDate;
+
 	private Integer currentScore;
-	
+
 	private Integer goal;
 
 	public Resident() {

@@ -13,6 +13,7 @@ jQuery(document).ready(function() {
 
 	stepCounter();
 });
+
 var isSubmitted = false;
 function saveOrUpdateResident(form){
   if(!isSubmitted){
@@ -78,25 +79,47 @@ document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('text').disabled = this.checked;	
 };
 
+function getHistoricalAssessmentByResidentIdAndLifeDomain(that, residentId, lifeDomain){
+	
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/getHistoricalAssessmentByResidentIdAndLifeDomain?residentId="+residentId+"&onThisDate="+that.value+"&lifeDomain="+lifeDomain,
+		dataType : 'json',		
+		cache : false,
+		timeout : 600000,
+		success : function(response) {			
+			jQuery.each(response, function(idx, obj){				
+				jQuery("#_housingQuestionnaire_"+obj.questionId+'_'+obj.choiceId).prop('checked', true);
+			});			
+			calculateHousingScore();			
+		},
+		error : function(){
+			jQuery('input[id^=_housingQuestionnaire_]:radio').prop('checked',false);
+			calculateHousingScore();
+		}
+	});
+};
+
 function reset(chk){
 	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
 };
 
 function calculateHouseHoldScore(){
 	
-}
+};
 function calculatNetworkSupportScore(){
 	
-}
+};
 function calculateEducationScore(){
 	
-}
+};
 function calculateEmploymentScore(){
 	
-}
+};
 function calculateMoneyMgmtScore(){
 	
-}
+};
 
 function calculateHousingScore(){
 
@@ -105,14 +128,14 @@ function calculateHousingScore(){
 	jQuery('[id^=hst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');
 	
 	debugger;
-	var qChoice1 = jQuery('input[id^=housingQuestionnaire0]:radio');
-	var qChoice2 = jQuery('input[id^=housingQuestionnaire1]:radio');
-	var qChoice3 = jQuery('input[id^=housingQuestionnaire2]:radio');
-	var qChoice4 = jQuery('input[id^=housingQuestionnaire3]:radio');
-	var qChoice5 = jQuery('input[id^=housingQuestionnaire4]:radio');
-	var qChoice6 = jQuery('input[id^=housingQuestionnaire5]:radio');
-	var qChoice7 = jQuery('input[id^=housingQuestionnaire6]:radio');
-	var qChoice8 = jQuery('input[id^=housingQuestionnaire7]:radio');
+	var qChoice1 = jQuery('input[id^=_housingQuestionnaire_1]:radio');
+	var qChoice2 = jQuery('input[id^=_housingQuestionnaire_2]:radio');
+	var qChoice3 = jQuery('input[id^=_housingQuestionnaire_3]:radio');
+	var qChoice4 = jQuery('input[id^=_housingQuestionnaire_4]:radio');
+	var qChoice5 = jQuery('input[id^=_housingQuestionnaire_5]:radio');
+	var qChoice6 = jQuery('input[id^=_housingQuestionnaire_6]:radio');
+	var qChoice7 = jQuery('input[id^=_housingQuestionnaire_7]:radio');
+	var qChoice8 = jQuery('input[id^=_housingQuestionnaire_8]:radio');
 	
 	if(qChoice1[1].checked == true){		
 		jQuery('[id^=hst_1_]').removeClass('danger').addClass('danger');
@@ -177,11 +200,10 @@ function calculateHousingScore(){
 	}
 	
 	if(qChoice3[0].checked == true){		
-		jQuery('input[id^=housingQuestionnaire3]').attr('disabled', true);
-		jQuery('input[id^=housingQuestionnaire4]').attr('disabled', true);			
+		jQuery('input[id^=_housingQuestionnaire_4]').attr('disabled', true);
+		jQuery('input[id^=_housingQuestionnaire_5]').attr('disabled', true);			
 	}else if (qChoice3[0].checked == false){	
-		jQuery('input[id^=housingQuestionnaire3]').attr('disabled', false);
-		jQuery('input[id^=housingQuestionnaire4]').attr('disabled', false);		
-	}
-	
+		jQuery('input[id^=_housingQuestionnaire_4]').attr('disabled', false);
+		jQuery('input[id^=_housingQuestionnaire_5]').attr('disabled', false);		
+	}	
 };

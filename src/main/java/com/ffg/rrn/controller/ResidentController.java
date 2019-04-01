@@ -180,7 +180,7 @@ public class ResidentController extends BaseController{
 		
 			
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
-			if(residentAssessmentQuestionnaire.getQuestionNumber()!=null || residentAssessmentQuestionnaire.getChoiceId() != null) {
+			if(residentAssessmentQuestionnaire.getQuestionId()!=null || residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
 				residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
 			}

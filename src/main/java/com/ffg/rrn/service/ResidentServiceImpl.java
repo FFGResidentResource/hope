@@ -31,6 +31,7 @@ public class ResidentServiceImpl {
 
 	/**
 	 * Get all Assessment Questions as ref data to display on Page for Resident.
+	 * 
 	 * @param resident
 	 * @return
 	 */
@@ -66,39 +67,40 @@ public class ResidentServiceImpl {
 							choices.add(c);
 						}
 					}
-				raq.setChoices(choices);
+					raq.setChoices(choices);
 				}
 			}
 			raq.setResidentId(resident.getResidentId());
+			raq.setQuestionId(question.getQuestionId());
 			raq.setQuestionNumber(question.getQuestionNumber());
 			raq.setQuestion(question.getQuestion());
-			
+
 			switch (question.getLifeDomain()) {
-				case "HOUSING":
-					raq.setLifeDomain(question.getLifeDomain());
-					housingQuestionnaire.add(raq);
-					break;
-				case "MONEY MANAGEMENT":
-					raq.setLifeDomain(question.getLifeDomain());
-					moneyMgmtQuestionnaire.add(raq);
-					break;
-				case "EMPLOYMENT":
-					raq.setLifeDomain(question.getLifeDomain());
-					employmentQuestionnaire.add(raq);
-					break;
-				case "EDUCATION":
-					raq.setLifeDomain(question.getLifeDomain());
-					educationQuestionnaire.add(raq);
-					break;
-				case "NETWORK SUPPORT":
-					raq.setLifeDomain(question.getLifeDomain());
-					netSupportQuestionnaire.add(raq);
-					break;
-				case "HOUSEHOLD MANAGEMENT":
-					raq.setLifeDomain(question.getLifeDomain());
-					householdMgmtQuestionnaire.add(raq);
-					break;
-			}			
+			case "HOUSING":
+				raq.setLifeDomain(question.getLifeDomain());
+				housingQuestionnaire.add(raq);
+				break;
+			case "MONEY MANAGEMENT":
+				raq.setLifeDomain(question.getLifeDomain());
+				moneyMgmtQuestionnaire.add(raq);
+				break;
+			case "EMPLOYMENT":
+				raq.setLifeDomain(question.getLifeDomain());
+				employmentQuestionnaire.add(raq);
+				break;
+			case "EDUCATION":
+				raq.setLifeDomain(question.getLifeDomain());
+				educationQuestionnaire.add(raq);
+				break;
+			case "NETWORK SUPPORT":
+				raq.setLifeDomain(question.getLifeDomain());
+				netSupportQuestionnaire.add(raq);
+				break;
+			case "HOUSEHOLD MANAGEMENT":
+				raq.setLifeDomain(question.getLifeDomain());
+				householdMgmtQuestionnaire.add(raq);
+				break;
+			}
 		}
 
 		resident.setHousingQuestionnaire(housingQuestionnaire);
@@ -143,14 +145,18 @@ public class ResidentServiceImpl {
 		return this.residentDao.getResidentById(residentId, serviceCoord);
 	}
 
-	public long saveResidentAssessmentQuestionnaire(final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
+	public long saveResidentAssessmentQuestionnaire(
+			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
 		return residentDao.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
 	}
-	
+
 	public long saveResidentScoreGoal(final Resident resident, String lifeDomain) {
 		return residentDao.saveResidentScoreGoal(resident, lifeDomain);
 	}
-	
-	
+
+	public List<ResidentAssessmentQuestionnaire> getHistoricalAssessmentByResidentIdAndLifeDomain(Long residentId,
+			String onThisDate, String lifeDomain) {
+		return residentDao.getHistoricalAssessmentByResidentIdAndLifeDomain(residentId, onThisDate, lifeDomain);
+	}
 
 }
