@@ -8,6 +8,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,6 +72,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_INSERT_RESIDENT_SCORE_GOAL = "INSERT INTO RESIDENT_SCORE_GOAL (RSG_ID, RESIDENT_ID, LIFE_DOMAIN, SCORE, GOAL, ON_THIS_DATE) "
 			+ "VALUES (nextval('RSG_SQ'), ?, ?, ?, ?, ?)";
+	
+	private final static String SQL_UPDATE_RESIDENT_ASSESSMENT_QUES = "UPDATE RESIDENT_ASSESSMENT_QUESTIONNAIRE SET RESIDENT_ID = ?, QUESTION_ID = ?, CHOICE_ID = ?, LIFE_DOMAIN = ? WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ? and ON_THIS_DATE = ? AND QUESTION_ID = ?";			
+
+	private final static String SQL_UPDATE_RESIDENT_SCORE_GOAL = "UPDATE RESIDENT_SCORE_GOAL SET RESIDENT_ID = ?, LIFE_DOMAIN = ?, SCORE = ?, GOAL = ? WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ? and ON_THIS_DATE = ?";
+			
 
 	@Autowired
 	public ResidentDAO(DataSource dataSource) {
@@ -433,6 +440,64 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setInt(4, resident.getGoal());
 		ps.setDate(5, Date.valueOf(LocalDate.now()));
 		return ps;
+	}
+
+	public int updateResidentAssessmentQuestionnaire(String selectedDate,
+			ResidentAssessmentQuestionnaire raqs, String lifeDomain) {
+		return this.getJdbcTemplate().update(conn -> {
+			try {
+				return buildUpateResidentAssessmentQuestionnaire(conn, raqs, lifeDomain, parseMyDate(selectedDate));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		});
+	}
+
+	private PreparedStatement buildUpateResidentAssessmentQuestionnaire(Connection conn, ResidentAssessmentQuestionnaire raqs,
+			String lifeDomain, Date sqlDate) throws SQLException{
+		PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_RESIDENT_ASSESSMENT_QUES);
+		ps.setLong(1, raqs.getResidentId());
+		ps.setInt(2, raqs.getQuestionId());
+		ps.setInt(3,  raqs.getChoiceId());
+		ps.setString(4, lifeDomain);
+		ps.setLong(5, raqs.getResidentId());
+		ps.setString(6, lifeDomain);		
+		ps.setDate(7, sqlDate);
+		ps.setInt(8, raqs.getQuestionId());
+		return ps;
+	}
+
+	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException{			
+		return this.getJdbcTemplate().update(conn -> {
+			try {
+				return buildUpateResidentScoreGoal(conn, resident, lifeDomain);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		});		
+	}
+
+	private PreparedStatement buildUpateResidentScoreGoal(Connection conn, @Valid Resident resident, String lifeDomain) throws SQLException, ParseException{
+		PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_RESIDENT_SCORE_GOAL);
+		ps.setLong(1, resident.getResidentId());
+		ps.setString(2, lifeDomain);
+		ps.setInt(3, resident.getCurrentScore());
+		ps.setInt(4,  resident.getGoal());
+		ps.setLong(5, resident.getResidentId());
+		ps.setString(6, lifeDomain);
+		ps.setDate(7, parseMyDate(resident.getSelectedDate()));		
+		return ps;
+	}
+	
+	private java.sql.Date parseMyDate(String selectedDate) throws ParseException {
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+		java.util.Date parsed = format.parse(selectedDate);
+		return new java.sql.Date(parsed.getTime());
 	}
 
 }

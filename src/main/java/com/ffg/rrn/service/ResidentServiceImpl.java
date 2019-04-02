@@ -3,11 +3,19 @@
  */
 package com.ffg.rrn.service;
 
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
@@ -158,5 +166,16 @@ public class ResidentServiceImpl {
 			String onThisDate, String lifeDomain) {
 		return residentDao.getHistoricalAssessmentByResidentIdAndLifeDomain(residentId, onThisDate, lifeDomain);
 	}
+
+	public int updateResidentAssessmentQuestionnaire(String selectedDate, ResidentAssessmentQuestionnaire raqs,
+			String lifeDomain) {		
+
+		return residentDao.updateResidentAssessmentQuestionnaire(selectedDate, raqs, lifeDomain);
+	}
+
+	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException {
+		return residentDao.updateResidentScoreGoal(resident, lifeDomain);
+	}
+	
 
 }

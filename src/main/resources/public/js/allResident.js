@@ -66,7 +66,7 @@ jQuery(document)
 																	data : 'voiceMail',
 																	render : function(t,type,row){
 																		if(row.viaVoicemail == true){
-																			return row.voiceMail + '&nbsp;<span class="glyphicon glyphicon-hand-left"></span>';
+																			return row.voiceMail + '&nbsp;<span class="glyphicon glyphicon-hand-left" style="color:blue;"></span>';
 																		}
 																		return row.voiceMail;
 																	}
@@ -75,7 +75,7 @@ jQuery(document)
 																	data : 'text',
 																	render : function(t,type,row){
 																		if(row.viaText == true){
-																			return row.text + '&nbsp;<span class="glyphicon glyphicon-hand-left"></span>';
+																			return row.text + '&nbsp;<span class="glyphicon glyphicon-hand-left" style="color:blue;"></span>';
 																		}
 																		return row.text;
 																	}
@@ -84,7 +84,7 @@ jQuery(document)
 																	data : 'email',
 																	render : function(t,type,row){
 																		if(row.viaEmail == true){
-																			return row.email + '&nbsp;<span class="glyphicon glyphicon-hand-left"></span>';
+																			return row.email + '&nbsp;<span class="glyphicon glyphicon-hand-left" style="color:blue;"></span>';
 																		}
 																		return row.email;
 																	}
@@ -249,7 +249,19 @@ function buildPieChartData(data){
 		bindto: '#allResidentPieChart',
 	    data: {
 	        columns: columns,
-	        type: 'pie'
+	        type: 'bar'
+	    },
+	    axis: {
+	    	 x: {
+	    		    tick: {
+	    		      values: ['']
+	    		    }
+	    		  },
+	        y: {
+	            min: 0,
+	            // Range includes padding, set 0 if no padding needed
+	            // padding: {top:0, bottom:0}
+	        }
 	    }
 	});
 	

@@ -41,7 +41,16 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="row text-center" id="allResidentPieChart"></div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-6">
+				<div id="allResidentPieChart" style="min-height: 300px;"></div>
+			</div>
+			<div class="col-sm-6"></div>
+		</div>
+	</div>
+
+
 
 	<form th:action="@{/getResidentById}" method='POST'>
 		<div class="container-fluid hidden-print">
@@ -51,7 +60,8 @@
 				</div>
 				<div class="panel-body">
 					<div class="col-sm-12">
-						<table id="residentTable" class="display compact" style="width: 100%">
+						<table id="residentTable" class="display compact"
+							style="width: 100%">
 							<thead>
 								<tr>
 									<th></th>
@@ -74,8 +84,59 @@
 
 					<div class="row text-center bs-linebreak hidden-print">
 						<input type="hidden" id="_resId" name="residentId" value="" />
-						<input type="submit" id="_loadResident" 
-							class="btn btn-primary btn-lg" value="Load Selected Resident" disabled />
+
+						<button type="submit" id="_loadResident"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-user" style="color:blue;" aria-hidden="true"></span>
+							Modify Resident
+						</button>
+						
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-equalizer" style="color:purple;" aria-hidden="true"></span>
+							Begin Assessment
+						</button>
+						
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-home" style="color:darkturquoise;" aria-hidden="true"></span>
+							Housing
+						</button>
+
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-usd" style="color:green;" aria-hidden="true"></span>
+							Money Management
+						</button>
+
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-briefcase" style="color:maroon;" aria-hidden="true"></span>
+							Employment
+						</button>
+
+
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-education" style="color:goldenrod;" aria-hidden="true"></span>
+							Education
+						</button>
+
+
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-link" style="color:red;" aria-hidden="true"></span>
+							Network Support
+						</button>
+
+
+						<button type="submit" id="_loadSSM"
+							class="btn btn-default btn-lg" disabled>
+							<span class="glyphicon glyphicon-leaf" style="color:darkgreen" aria-hidden="true"></span>
+							Household Management
+						</button>
+
+
 					</div>
 				</div>
 			</div>
@@ -96,10 +157,10 @@
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>
-	
+
 	<script src="/js/c3.min.js"></script>
 	<script src="/js/d3-5.4.0.min.js"></script>
-	
+
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>

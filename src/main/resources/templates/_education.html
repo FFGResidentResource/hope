@@ -1,45 +1,77 @@
 <div id="education_Form" class="hideme">
-	<form name='_educationF' th:action="@{/saveEducation}"
+
+	<form name='_educationF' th:action="@{/saveEachAssessment}"
 		th:object="${resident}" method='POST' class="form-horizontal">
 
 		<div class="col-sm-12 myPanel">
 			<div class="row">
-
 				<div class="col-sm-10">
-					<h3>EDUCATION</h3>
+					<h3 style="width: 400px;">EDUCATION</h3>
 					<span class="hidden-print" style="color: red; font-size: larger;"
 						th:if="*{firstName == null}" th:text="${message}"></span>
 				</div>
 				<div class="col-sm-2 hideme print-only">
 					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 				</div>
+			</div>
+
+			<div class="row hideme print-only">
+				<div class="col-sm-6">
+					<span>Full Name:&nbsp;</span> <u><span
+						th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+						<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+						<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+				</div>
+				<div class="col-sm-2">
+					<span>Resident Id:&nbsp;</span><u><span
+						th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+				</div>
+				<div class="col-sm-4">
+					<u><span id="_selectedDateEmp">Date:</span></u>
+				</div>
 
 			</div>
-			<hr class="solidline1">
 
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="col-sm-3">
+			<div class="row hidden-print">
+				<div class="col-sm-5">
+					<div class="col-sm-4">
 						<strong>Resident Name:</strong>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
 							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
 							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
 					</div>
 				</div>
 
-				<div class="col-sm-6">
-					<div class="col-sm-3">
+				<div class="col-sm-3">
+					<div class="col-sm-6">
 						<strong>Resident Id:</strong>
 					</div>
-					<div class="col-sm-5">
-						<u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+					<div class="col-sm-2">
+						<u><span th:if="*{firstName != null}" id="_residentIdText"
+							th:text="*{residentId}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="col-sm-3">
+						<strong>Date:</strong>
+					</div>
+					<div class="col-sm-9">
+						<select class="form-control setable" id="_dates"
+							th:field="*{selectedDate}"
+							onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'EMPLOYMENT', '_employment');"
+							required>
+							<option value="NewAssessment">Start New Assessment</option>
+							<option th:each="assessmentDate : ${resident.educationDates}"
+								th:value="${assessmentDate}" th:utext="${assessmentDate}" />
+						</select>
 					</div>
 				</div>
 			</div>
 
-						<hr class="solidline1">
+			<hr class="solidline1">
 
 			<div class="row col-sm-12">
 
@@ -49,15 +81,16 @@
 						<div th:if="${iStat.index} &lt; 4">
 
 							<strong><span th:text="${education.questionNumber}"></span></strong>
-							<span th:text="${education.question}" />
-							<input type="hidden" th:field="*{educationQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<span th:text="${education.question}" /> <input type="hidden"
+								th:field="*{educationQuestionnaire[__${iStat.index}__].questionId}" />
 							<ul>
-								<span th:each="radioChoice, stat : ${education.choices}"> <input
-									type="radio"
+								<span th:each="radioChoice, stat : ${education.choices}">
+									<input type="radio"
+									th:id="'_educationQuestionnaire_'+ ${education.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{educationQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculateEducationScore();"> 
-								<strong><lable th:text="${radioChoice.choice}"> </label></strong>
+									onclick="calculateEducationScore();"> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
 							</ul>
 
@@ -71,11 +104,12 @@
 						<div th:if="${iStat.index} &gt;= 4">
 
 							<strong><span th:text="${education.questionNumber}"></span></strong>
-							<span th:text="${education.question}" />
-							<input type="hidden" th:field="*{educationQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<span th:text="${education.question}" /> <input type="hidden"
+								th:field="*{educationQuestionnaire[__${iStat.index}__].questionId}" />
 							<ul>
-								<span th:each="radioChoice, stat : ${education.choices}"> <input
-									type="radio"
+								<span th:each="radioChoice, stat : ${education.choices}">
+									<input type="radio"
+									th:id="'_educationQuestionnaire_'+ ${education.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{educationQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
 									onclick="calculateEducationScore();"> <strong><lable
@@ -92,17 +126,18 @@
 
 
 			<div class="row text-center bs-linebreak hidden-print">
-			<input type="hidden" th:field="*{serviceCoord}" /> 
-			<input type="hidden" th:field="*{residentId}" />
-			<input type="hidden" th:field="*{firstName}" /> 
-			<input type="hidden" th:field="*{lastName}" />
-			<input type="hidden" th:field="*{propertyId}" />
-			<input type="hidden" th:field="*{refId}" /> 
-			<input type="hidden" id="currentEducationGoal" th:field="*{goal}" /> 
-			<input type="hidden" id="currentEducationScore" th:field="*{currentScore}" /> 
-			
+				<input type="hidden" th:field="*{serviceCoord}" /> <input
+					type="hidden" th:field="*{residentId}" /> <input type="hidden"
+					th:field="*{firstName}" /> <input type="hidden"
+					th:field="*{lastName}" /> <input type="hidden"
+					th:field="*{propertyId}" /> <input type="hidden"
+					th:field="*{refId}" /> <input type="hidden"
+					th:field="*{lifeDomain}"  /> <input
+					type="hidden" id="currentEducationGoal" th:field="*{goal}" /> <input
+					type="hidden" id="currentEducationScore" th:field="*{currentScore}" />
+
 				<input type="submit" class="btn btn-primary btn-lg"
-					value="Save Education Assessment">
+					value="Save EDUCATION Assessment">
 			</div>
 
 
@@ -123,17 +158,19 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td id="edust_1_body">Homeless or threatened with eviction.</td>
-					<td id="edust_2_body">In transitional, temporary, or substandard housing OR
-						current rent/mortgage payment is unaffordable (over 30% of
-						income).</td>
-					<td id="edust_3_body">In stable housing that is only marginally adequate.</td>
-					<td id="edust_4_body">Household is in adequate, subsidized housing.</td>
-					<td id="edust_5_body">Household is in adequate, unsubsidized housing.</td>
-					<td id="edust_6_body"></td>
-					<td id="edust_7_body"> 
-						
-					</td>
+					<td id="empst_1_body">No HS diploma/GED and is not enrolled in
+						high school or a GED program.</td>
+					<td id="empst_2_body">No HS diploma/ GED, but the resident is
+						enrolled in high school or a GED program.</td>
+					<td id="empst_3_body">Resident has HS diploma/GED but is not
+						seeking additional education/ training to benefit employment.</td>
+					<td id="empst_4_body">Resident has HS diploma/GED and is
+						seeking additional education/training to benefit employment.</td>
+					<td id="empst_5_body">Resident has completed additional
+						education/training beyond HS diploma/ GED (and is in a position
+						where s/he is employable).</td>
+					<td id="empst_6_body"></td>
+					<td id="empst_7_body"></td>
 
 				</tr>
 			</tbody>

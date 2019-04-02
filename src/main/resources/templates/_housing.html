@@ -1,20 +1,18 @@
 <div id="housingStability_Form" class="hideme">
 
-	<form name='_housingF' th:action="@{/saveHousing}"
+	<form name='_housingF' th:action="@{/saveEachAssessment}"
 		th:object="${resident}" method='POST' class="form-horizontal">
 
 		<div class="col-sm-12 myPanel">
 			<div class="row">
-
 				<div class="col-sm-10">
-					<span><h3 style="width: 400px;">HOUSING</h3></span>
+					<h3 style="width: 400px;">HOUSING</h3>
 					<span class="hidden-print" style="color: red; font-size: larger;"
 						th:if="*{firstName == null}" th:text="${message}"></span>
 				</div>
 				<div class="col-sm-2 hideme print-only">
 					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 				</div>
-
 			</div>
 			
 			<div class="row hideme print-only">
@@ -60,7 +58,7 @@
 					</div>
 					<div class="col-sm-9">
 						<select class="form-control setable" id="_dates"
-							th:field="*{selectedHousingDate}" onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSING');" required>
+							th:field="*{selectedDate}" onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSING', '_housing' );" required>
 							<option value="NewAssessment">Start New Assessment</option>
 							<option th:each="assessmentDate : ${resident.housingDates}"
 								th:value="${assessmentDate}" 
@@ -77,7 +75,7 @@
 				<div class="col-sm-6">
 					<div th:each="housing, iStat: *{housingQuestionnaire}">
 
-						<div th:if="${iStat.index} &lt; 4">
+						<div th:if="${iStat.index} &lt; 5">
 
 							<strong><span th:text="${housing.questionNumber}"></span></strong>
 							<span th:text="${housing.question}" /> <input type="hidden"
@@ -100,7 +98,7 @@
 				<div class="col-sm-6">
 					<div th:each="housing, iStat: *{housingQuestionnaire}">
 
-						<div th:if="${iStat.index} &gt;= 4">
+						<div th:if="${iStat.index} &gt;= 5">
 
 							<strong><span th:text="${housing.questionNumber}"></span></strong>
 							<span th:text="${housing.question}" /> <input type="hidden"
@@ -129,11 +127,12 @@
 			<input type="hidden" th:field="*{firstName}" /> 
 			<input type="hidden" th:field="*{lastName}" />
 			<input type="hidden" th:field="*{propertyId}" />
-			<input type="hidden" th:field="*{refId}" />   
+			<input type="hidden" th:field="*{refId}" /> 
+			<input type="hidden" id="_lifeDomain" th:field="*{lifeDomain}" />    
 			<input type="hidden" id="currentHousingGoal" th:field="*{goal}" /> 
 			<input type="hidden" id="currentHousingScore" th:field="*{currentScore}" /> 
 			
-				<input type="submit" class="btn btn-primary btn-lg"
+				<input type="submit" id="_housingSubmit" class="btn btn-primary btn-lg"
 					value="Save Housing Assessment">
 			</div>
 

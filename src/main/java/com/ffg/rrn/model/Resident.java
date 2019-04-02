@@ -3,10 +3,15 @@
  */
 package com.ffg.rrn.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.*;
+
+import org.thymeleaf.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -145,17 +150,14 @@ public class Resident {
 	@JsonView
 	private List<String> householdDates;
 
-	private String selectedHousingDate;
-	private String selectedMoneyMgmtgDate;
-	private String selectedEmploymentDate;
-	private String selectedEducationDate;
-	private String selectedNetSupportDate;
-	private String selectedHouseholdDate;
+	private String selectedDate;
 
 	private Integer currentScore;
 
 	private Integer goal;
-
+	
+	private String lifeDomain;
+	
 	public Resident() {
 
 	}
