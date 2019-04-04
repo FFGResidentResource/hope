@@ -6,7 +6,11 @@ package com.ffg.rrn.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -33,11 +37,11 @@ public class Resident {
 	private Long residentId;
 	private Boolean active;
 	@NotEmpty
-	@Size(max=20)
+	@Size(max = 20)
 	private String firstName;
 	private String middle;
 	@NotEmpty
-	@Size(max=20)
+	@Size(max = 20)
 	private String lastName;
 
 	@NotNull
@@ -55,7 +59,7 @@ public class Resident {
 	private String text;
 
 	@Email
-	@Size(max=128)
+	@Size(max = 128)
 	private String email;
 	private String address;
 
@@ -77,21 +81,21 @@ public class Resident {
 
 	private String childList;
 
-	@Size(max=50)
+	@Size(max = 50)
 	private String child1;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child2;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child3;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child4;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child5;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child6;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child7;
-	@Size(max=50)
+	@Size(max = 50)
 	private String child8;
 
 	private Boolean pvrChild1;
@@ -131,11 +135,41 @@ public class Resident {
 
 	@JsonView
 	private List<ResidentAssessmentQuestionnaire> householdMgmtQuestionnaire;
-	
-	private Integer currentScore;
-	
-	private Integer goal;
 
+	@JsonView
+	private List<String> housingDates;
+	@JsonView
+	private List<String> moneymgmtDates;
+	@JsonView
+	private List<String> employmentDates;
+	@JsonView
+	private List<String> educationDates;
+	@JsonView
+	private List<String> netSupportDates;
+	@JsonView
+	private List<String> householdDates;
+
+	private String selectedDate;
+
+	private Integer currentScore;
+
+	private Integer goal;
+	
+	private String lifeDomain;
+	
+	private String housingScoreGoal;
+	
+	private String moneyMgmtScoreGoal;
+	
+	private String employmentScoreGoal;
+	
+	private String educationScoreGoal;
+		
+	private String netSupportScoreGoal;
+	
+	private String householdScoreGoal;
+	
+	
 	public Resident() {
 
 	}

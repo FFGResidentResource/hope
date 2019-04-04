@@ -8,6 +8,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,6 +72,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_INSERT_RESIDENT_SCORE_GOAL = "INSERT INTO RESIDENT_SCORE_GOAL (RSG_ID, RESIDENT_ID, LIFE_DOMAIN, SCORE, GOAL, ON_THIS_DATE) "
 			+ "VALUES (nextval('RSG_SQ'), ?, ?, ?, ?, ?)";
+	
+	private final static String SQL_UPDATE_RESIDENT_ASSESSMENT_QUES = "UPDATE RESIDENT_ASSESSMENT_QUESTIONNAIRE SET RESIDENT_ID = ?, QUESTION_ID = ?, CHOICE_ID = ?, LIFE_DOMAIN = ? WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ? and ON_THIS_DATE = ? AND QUESTION_ID = ?";			
+
+	private final static String SQL_UPDATE_RESIDENT_SCORE_GOAL = "UPDATE RESIDENT_SCORE_GOAL SET RESIDENT_ID = ?, LIFE_DOMAIN = ?, SCORE = ?, GOAL = ? WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ? and ON_THIS_DATE = ?";
+			
 
 	@Autowired
 	public ResidentDAO(DataSource dataSource) {
@@ -79,20 +86,50 @@ public class ResidentDAO extends JdbcDaoSupport {
 	public List<AssessmentQuestionnaire> getAllQuestionnaire() {
 		List<AssessmentQuestionnaire> aqList = this.getJdbcTemplate().query(
 				"SELECT * FROM ASSESSMENT_QUESTIONNAIRE order by sort",
-				new BeanPropertyRowMapper(AssessmentQuestionnaire.class));
+				new BeanPropertyRowMapper<AssessmentQuestionnaire>(AssessmentQuestionnaire.class));
 		return aqList;
 	}
 
 	public List<QuestionChoice> getChoicesPerQuestion() {
 		List<QuestionChoice> quesChoiceList = this.getJdbcTemplate().query("SELECT * FROM QUESTION_CHOICE",
-				new BeanPropertyRowMapper(QuestionChoice.class));
+				new BeanPropertyRowMapper<QuestionChoice>(QuestionChoice.class));
 		return quesChoiceList;
 	}
 
 	public List<Choice> getChoices() {
 		List<Choice> choiceList = this.getJdbcTemplate().query("SELECT * FROM CHOICE",
-				new BeanPropertyRowMapper(Choice.class));
+				new BeanPropertyRowMapper<Choice>(Choice.class));
 		return choiceList;
+	}
+
+	/**
+	 * This will display as dropdown on each LifeDomain assessment Step
+	 * 
+	 * @param residentId
+	 * @return
+	 */
+	public List<String> getAssessmentDatesByResidentIdAndLifeDomain(Long residentId, String lifeDomain) {
+		List<String> query = (List<String>)this.getJdbcTemplate().queryForList(
+				"SELECT DISTINCT TO_CHAR(ON_THIS_DATE, 'DD-MON-YYYY') FROM RESIDENT_ASSESSMENT_QUESTIONNAIRE WHERE RESIDENT_ID = ? AND LIFE_DOMAIN = ?", new Object[] { residentId, lifeDomain }, String.class);
+		return query;
+	}
+	
+	
+
+	public List<ResidentAssessmentQuestionnaire> getAllAssessment(Long residentId, String onThisDate) {
+		return this.getJdbcTemplate().query(
+				"SELECT * FROM RESIDENT_ASSESSMENT_QUESTIONNAIRE WHERE ON_THIS_DATE = TO_DATE(?,'DD-MON-YYYY') and RESIDENT_ID = ?",
+				new Object[] { onThisDate, residentId },
+				new BeanPropertyRowMapper<ResidentAssessmentQuestionnaire>(ResidentAssessmentQuestionnaire.class)
+				);
+	}
+	
+	public List<ResidentAssessmentQuestionnaire> getHistoricalAssessmentByResidentIdAndLifeDomain(Long residentId, String onThisDate, String lifeDomain) {
+		return this.getJdbcTemplate().query(
+				"SELECT * FROM RESIDENT_ASSESSMENT_QUESTIONNAIRE WHERE ON_THIS_DATE = TO_DATE(?,'DD-MON-YYYY') and RESIDENT_ID = ? and LIFE_DOMAIN = ?",
+				new Object[] { onThisDate, residentId, lifeDomain },
+				new BeanPropertyRowMapper<ResidentAssessmentQuestionnaire>(ResidentAssessmentQuestionnaire.class)
+				);
 	}
 
 	/**
@@ -207,7 +244,36 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
 
+		// All Historical Dates that are populated on each Assessment Step Dropdown
+		resident.setHousingDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSING"));
+		resident.setMoneymgmtDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "MONEY MANAGEMENT"));
+		resident.setEmploymentDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "EMPLOYMENT"));
+		resident.setEducationDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "EDUCATION"));
+		resident.setNetSupportDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "NETWORK SUPPORT"));
+		resident.setHouseholdDates(
+				this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSEHOLD MANAGEMENT"));
+		
+		//resident.setHousingScoreGoal(this.getLatestScoreGoal(residentId, "HOUSING"));
+		//resident.setMoneyMgmtScoreGoal(this.getLatestScoreGoal(residentId, "MONEY MANAGEMENT"));
+		//resident.setEmploymentScoreGoal(this.getLatestScoreGoal(residentId, "EMPLOYMENT"));
+		//resident.setEducationScoreGoal(this.getLatestScoreGoal(residentId, "EDUCATION"));
+		//resident.setNetSupportScoreGoal(this.getLatestScoreGoal(residentId, "NETWORK SUPPORT"));
+		//resident.setHouseholdScoreGoal(this.getLatestScoreGoal(residentId, "HOUSEHOLD MANAGEMENT"));
+
 		return resident;
+	}
+
+	//This will display on each Thumbnail on AllResidentPage
+	public String getLatestScoreGoal(Long residentId, String lifeDomain) {
+		try {
+			String query = this.getJdbcTemplate().queryForObject(
+				"select score||' / '||goal as scoreGoal from resident_score_goal where resident_id = ? and LIFE_DOMAIN = ? order by on_this_Date desc LIMIT 1"
+				,new Object[] { residentId, lifeDomain }, String.class);
+			return query;
+		}
+		catch(EmptyResultDataAccessException e) {
+			return "-- / --";
+		}
 	}
 
 	/**
@@ -350,9 +416,10 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setString(3, resident.getModifiedBy());
 		ps.setLong(4, resident.getResidentId());
 		return ps;
-	}	
+	}
 
-	public long saveResidentAssessmentQuestionnaire(final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
+	public long saveResidentAssessmentQuestionnaire(
+			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
 
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] { "raq_id" };
@@ -362,13 +429,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 		long raqId = keyHolder.getKey().longValue();
 		return raqId;
 	}
-	
+
 	private PreparedStatement buildInsertResidentAssessmentQuestionnairePS(Connection connection,
 			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String[] pkColumnNames,
 			String lifeDomain) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_RESIDENT_ASSESSMENT_QUES, pkColumnNames);
 		ps.setLong(1, residentAssessmentQuestionnaire.getResidentId());
-		ps.setInt(2, residentAssessmentQuestionnaire.getQuestionNumber());
+		ps.setInt(2, residentAssessmentQuestionnaire.getQuestionId());
 		ps.setInt(3, residentAssessmentQuestionnaire.getChoiceId());
 		ps.setString(4, lifeDomain);
 		ps.setDate(5, Date.valueOf(LocalDate.now()));
@@ -384,7 +451,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		long rsgId = keyHolder.getKey().longValue();
 		return rsgId;
 	}
-	
+
 	private PreparedStatement buildInsertResidentScoreGoalPS(Connection connection, @Valid Resident resident,
 			String[] pkColumnNames, String lifeDomain) throws SQLException {
 
@@ -395,7 +462,66 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setInt(4, resident.getGoal());
 		ps.setDate(5, Date.valueOf(LocalDate.now()));
 		return ps;
-	}	
+	}
 
+	public int updateResidentAssessmentQuestionnaire(String selectedDate,
+			ResidentAssessmentQuestionnaire raqs, String lifeDomain) {
+		return this.getJdbcTemplate().update(conn -> {
+			try {
+				return buildUpateResidentAssessmentQuestionnaire(conn, raqs, lifeDomain, parseMyDate(selectedDate));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		});
+	}
+
+	private PreparedStatement buildUpateResidentAssessmentQuestionnaire(Connection conn, ResidentAssessmentQuestionnaire raqs,
+			String lifeDomain, Date sqlDate) throws SQLException{
+		PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_RESIDENT_ASSESSMENT_QUES);
+		ps.setLong(1, raqs.getResidentId());
+		ps.setInt(2, raqs.getQuestionId());
+		ps.setInt(3,  raqs.getChoiceId());
+		ps.setString(4, lifeDomain);
+		ps.setLong(5, raqs.getResidentId());
+		ps.setString(6, lifeDomain);		
+		ps.setDate(7, sqlDate);
+		ps.setInt(8, raqs.getQuestionId());
+		return ps;
+	}
+
+	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException{			
+		return this.getJdbcTemplate().update(conn -> {
+			try {
+				return buildUpateResidentScoreGoal(conn, resident, lifeDomain);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		});		
+	}
+
+	private PreparedStatement buildUpateResidentScoreGoal(Connection conn, @Valid Resident resident, String lifeDomain) throws SQLException, ParseException{
+		PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_RESIDENT_SCORE_GOAL);
+		ps.setLong(1, resident.getResidentId());
+		ps.setString(2, lifeDomain);
+		ps.setInt(3, resident.getCurrentScore());
+		ps.setInt(4,  resident.getGoal());
+		ps.setLong(5, resident.getResidentId());
+		ps.setString(6, lifeDomain);
+		ps.setDate(7, parseMyDate(resident.getSelectedDate()));		
+		return ps;
+	}
+	
+	private java.sql.Date parseMyDate(String selectedDate) throws ParseException {
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+		java.util.Date parsed = format.parse(selectedDate);
+		return new java.sql.Date(parsed.getTime());
+	}
+
+	
 
 }
