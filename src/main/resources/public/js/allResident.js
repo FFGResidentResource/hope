@@ -128,9 +128,12 @@ jQuery(document)
 																+' <input type="radio" name="residents" value="true" onchange="filterActives(this);"> Active '
 																+' <input type="radio" name="residents" value="false" onchange="filterActives(this);"> Inactive </span>';
 															
+															
+															
 															//This prints all radio Options on AllResident DataTables.
 															var pre = jQuery('.dataTables_length').html();
-															jQuery('.dataTables_length').html(pre + radioHtml);
+															jQuery('.dataTables_length').html(pre + radioHtml);														
+															
 														 }
 													});
 									
@@ -162,14 +165,36 @@ jQuery(document)
 										
 										if ($(this).hasClass('selected') ) {
 								        	$(this).removeClass('selected');
-								        	jQuery("#_loadResident").attr('disabled');
+								        	jQuery("#_loadResident").prop('disabled', true);
 								        }
 								        else {
 								            table.$('tr.selected').removeClass('selected');
 								            $(this).addClass('selected');
 								            
+								            jQuery
+											.ajax({
+												type : "POST",
+												contentType : "application/json",
+												url : "/getAllLatestScoreGoal?residentId="+currentRow.residentId,
+												dataType : 'json',
+												cache : false,
+												timeout : 600000,
+												success : function(data) {
+													
+													jQuery("#_hScoreGoal").text(data.HOUSING);
+													jQuery("#_mmScoreGoal").text(data.MM);	
+													jQuery("#_empScoreGoal").text(data.EMP);
+													jQuery("#_eduScoreGoal").text(data.EDU);
+													jQuery("#_nsScoreGoal").text(data.NETSUPP);
+													jQuery("#_hhScoreGoal").text(data.HH);
+												},
+												error:function(e){
+													console.log("ERROR retrieving Score and Goal: ", e);
+												}
+											});											
+								            
 								            jQuery("#_resId").val(currentRow.residentId);
-								            jQuery("#_loadResident").removeAttr('disabled');
+								            jQuery("#_loadResident").prop('disabled', false);
 								        }									
 																		
 								    });

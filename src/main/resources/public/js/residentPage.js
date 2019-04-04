@@ -127,7 +127,7 @@ function calculateEmploymentScore(){
 };
 function calculateMoneyMgmtScore(){
 	
-	jQuery("#_lifeDomain").val('MONEY MANAGEMENT');
+	jQuery("#_mmlifeDomain").val('MONEY MANAGEMENT');
 	
 	jQuery('#mmst_6_body').text('');
 	jQuery('#mmst_7_body').text('');
@@ -144,7 +144,9 @@ function calculateMoneyMgmtScore(){
 	var qChoice9 = jQuery('input[id^=_moneyMgmtQuestionnaire_17]:radio');
 	var qChoice10 = jQuery('input[id^=_moneyMgmtQuestionnaire_18]:radio');
 	
-	if(qChoice1[1].checked == true){		
+	if(qChoice1[1].checked == true){
+		jQuery('input[id^=_moneyMgmtQuestionnaire_10]').prop('checked', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('checked', false);	
 		jQuery('input[id^=_moneyMgmtQuestionnaire_10]').prop('disabled', true);
 		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('disabled', true);			
 	}
@@ -152,7 +154,10 @@ function calculateMoneyMgmtScore(){
 		jQuery('input[id^=_moneyMgmtQuestionnaire_10]').prop('disabled', false);
 		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('disabled', false);
 		
-		if(qChoice2[0].checked == true){		
+		if(qChoice2[0].checked == true){
+			jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('checked', false);
+			jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('checked', false);
+			jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('checked', false);	
 			jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('disabled', true);
 			jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('disabled', true);
 			jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', true);					
@@ -161,7 +166,9 @@ function calculateMoneyMgmtScore(){
 			jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('disabled', false);
 			jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', false);
 			
-			if(qChoice3[1].checked == true){	
+			if(qChoice3[1].checked == true){
+				jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('checked', false);
+				jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('checked', false);	
 				jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('disabled', true);
 				jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', true);					
 			}else if(qChoice3[1].checked == false){		
@@ -169,6 +176,7 @@ function calculateMoneyMgmtScore(){
 				jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', false);
 				
 				if(qChoice4[0].checked == true){
+					jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('checked', false);	
 					jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', true);					
 				}else if(qChoice4[0].checked == false){
 					jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', false);					
@@ -187,9 +195,11 @@ function calculateMoneyMgmtScore(){
 	}
 	else if(qChoice6[0].checked == true){
 		
+		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('checked', false);
 		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('disabled', true);
 		
 		if(qChoice7[0].checked == true){
+			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('checked', false);
 			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', true);
 		}else if(qChoice7[1].checked == true){
 			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', false);

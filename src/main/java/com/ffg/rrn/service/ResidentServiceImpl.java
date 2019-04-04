@@ -176,6 +176,11 @@ public class ResidentServiceImpl {
 	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException {
 		return residentDao.updateResidentScoreGoal(resident, lifeDomain);
 	}
+
+	public String getLatestScoreGoal(Long residentId, String lifeDomain) {
+		return residentDao.getLatestScoreGoal(residentId, lifeDomain);
+		
+	}
 	
 
 }

@@ -3,7 +3,9 @@
  */
 package com.ffg.rrn.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +61,49 @@ public class RestAPIController {
 		}
 		return ResponseEntity.ok("");
 	}
+	
+	@PostMapping("/getAllLatestScoreGoal")
+	public ResponseEntity<?> getAllLatestScoreGoal(@RequestParam("residentId") String residentId){
+		
+		Map<String, String> scoreGoalPerLifeDomain = new HashMap<String, String>();		
+		
+		if (!StringUtils.isEmpty(residentId)){
+			String latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"HOUSING");
+			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("HOUSING", latestScoreGoal);
+			}
+			
+			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"MONEY MANAGEMENT");			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("MM", latestScoreGoal);
+			}
+			
+			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"EMPLOYMENT");			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("EMP", latestScoreGoal);
+			}
+			
+			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"EDUCATION");			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("EDU", latestScoreGoal);
+			}
+			
+			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"NETWORK SUPPORT");			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("NETSUPP", latestScoreGoal);
+			}
+			
+			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"HOUSEHOLD MANAGEMENT");			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("HH", latestScoreGoal);
+			}
+			
+		}
+		
+		return ResponseEntity.ok(scoreGoalPerLifeDomain);
+	}
+			
+			
 
 }

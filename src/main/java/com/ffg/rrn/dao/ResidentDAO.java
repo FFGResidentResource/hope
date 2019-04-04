@@ -113,6 +113,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 				"SELECT DISTINCT TO_CHAR(ON_THIS_DATE, 'DD-MON-YYYY') FROM RESIDENT_ASSESSMENT_QUESTIONNAIRE WHERE RESIDENT_ID = ? AND LIFE_DOMAIN = ?", new Object[] { residentId, lifeDomain }, String.class);
 		return query;
 	}
+	
+	
 
 	public List<ResidentAssessmentQuestionnaire> getAllAssessment(Long residentId, String onThisDate) {
 		return this.getJdbcTemplate().query(
@@ -250,8 +252,28 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident.setNetSupportDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "NETWORK SUPPORT"));
 		resident.setHouseholdDates(
 				this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSEHOLD MANAGEMENT"));
+		
+		//resident.setHousingScoreGoal(this.getLatestScoreGoal(residentId, "HOUSING"));
+		//resident.setMoneyMgmtScoreGoal(this.getLatestScoreGoal(residentId, "MONEY MANAGEMENT"));
+		//resident.setEmploymentScoreGoal(this.getLatestScoreGoal(residentId, "EMPLOYMENT"));
+		//resident.setEducationScoreGoal(this.getLatestScoreGoal(residentId, "EDUCATION"));
+		//resident.setNetSupportScoreGoal(this.getLatestScoreGoal(residentId, "NETWORK SUPPORT"));
+		//resident.setHouseholdScoreGoal(this.getLatestScoreGoal(residentId, "HOUSEHOLD MANAGEMENT"));
 
 		return resident;
+	}
+
+	//This will display on each Thumbnail on AllResidentPage
+	public String getLatestScoreGoal(Long residentId, String lifeDomain) {
+		try {
+			String query = this.getJdbcTemplate().queryForObject(
+				"select score||' / '||goal as scoreGoal from resident_score_goal where resident_id = ? and LIFE_DOMAIN = ? order by on_this_Date desc LIMIT 1"
+				,new Object[] { residentId, lifeDomain }, String.class);
+			return query;
+		}
+		catch(EmptyResultDataAccessException e) {
+			return "-- / --";
+		}
 	}
 
 	/**
@@ -499,5 +521,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		java.util.Date parsed = format.parse(selectedDate);
 		return new java.sql.Date(parsed.getTime());
 	}
+
+	
 
 }

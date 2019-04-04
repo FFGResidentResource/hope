@@ -3,15 +3,14 @@
  */
 package com.ffg.rrn.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.*;
-
-import org.thymeleaf.util.StringUtils;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -157,6 +156,19 @@ public class Resident {
 	private Integer goal;
 	
 	private String lifeDomain;
+	
+	private String housingScoreGoal;
+	
+	private String moneyMgmtScoreGoal;
+	
+	private String employmentScoreGoal;
+	
+	private String educationScoreGoal;
+		
+	private String netSupportScoreGoal;
+	
+	private String householdScoreGoal;
+	
 	
 	public Resident() {
 
