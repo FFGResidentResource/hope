@@ -22,6 +22,9 @@
     color: #FFF;
 }
 
+.borderleft{
+	border-left: 1px solid gray;
+}
 
 .hideme{
 	display:none;

@@ -1,40 +1,72 @@
 <div id="networkSupport_Form" class="hideme">
-	<form name='_netSupportF' th:action="@{/saveNetworkSupport}"
+
+	<form name='_netSupportF' th:action="@{/saveEachAssessment}"
 		th:object="${resident}" method='POST' class="form-horizontal">
 
 		<div class="col-sm-12 myPanel">
 			<div class="row">
-
 				<div class="col-sm-10">
-					<h3>NETWORK SUPPORT</h3>
+					<h3 style="width: 400px;">NETWORK SUPPORT</h3>
 					<span class="hidden-print" style="color: red; font-size: larger;"
 						th:if="*{firstName == null}" th:text="${message}"></span>
 				</div>
 				<div class="col-sm-2 hideme print-only">
 					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 				</div>
+			</div>
+
+			<div class="row hideme print-only">
+				<div class="col-sm-6">
+					<span>Full Name:&nbsp;</span> <u><span
+						th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+						<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+						<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+				</div>
+				<div class="col-sm-2">
+					<span>Resident Id:&nbsp;</span><u><span
+						th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+				</div>
+				<div class="col-sm-4">
+					<u><span id="_selectedDateEmp">Date:</span></u>
+				</div>
 
 			</div>
-			<hr class="solidline1">
 
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="col-sm-3">
+			<div class="row hidden-print">
+				<div class="col-sm-5">
+					<div class="col-sm-4">
 						<strong>Resident Name:</strong>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
 							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
 							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
 					</div>
 				</div>
 
-				<div class="col-sm-6">
-					<div class="col-sm-3">
+				<div class="col-sm-3">
+					<div class="col-sm-6">
 						<strong>Resident Id:</strong>
 					</div>
-					<div class="col-sm-5">
-						<u><span th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+					<div class="col-sm-2">
+						<u><span th:if="*{firstName != null}" id="_residentIdText"
+							th:text="*{residentId}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="col-sm-3">
+						<strong>Date:</strong>
+					</div>
+					<div class="col-sm-9">
+						<select class="form-control setable" id="_dates"
+							th:field="*{selectedDate}"
+							onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'NETWORK SUPPORT', '_netSupport');"
+							required>
+							<option value="NewAssessment">Start New Assessment</option>
+							<option th:each="assessmentDate : ${resident.netSupportDates}"
+								th:value="${assessmentDate}" th:utext="${assessmentDate}" />
+						</select>
 					</div>
 				</div>
 			</div>
@@ -46,14 +78,15 @@
 				<div class="col-sm-6">
 					<div th:each="netSupport, iStat: *{netSupportQuestionnaire}">
 
-						<div th:if="${iStat.index} &lt; 4">
+						<div th:if="${iStat.index} &lt; 5">
 
 							<strong><span th:text="${netSupport.questionNumber}"></span></strong>
-							<span th:text="${netSupport.question}" />
-							<input type="hidden" th:field="*{netSupportQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<span th:text="${netSupport.question}" /> <input type="hidden"
+								th:field="*{netSupportQuestionnaire[__${iStat.index}__].questionId}" />
 							<ul>
 								<span th:each="radioChoice, stat : ${netSupport.choices}">
 									<input type="radio"
+									th:id="'_netSupportQuestionnaire_'+ ${netSupport.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{netSupportQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
 									onclick="calculatNetworkSupportScore();"> <strong><lable
@@ -68,14 +101,15 @@
 				<div class="col-sm-6">
 					<div th:each="netSupport, iStat: *{netSupportQuestionnaire}">
 
-						<div th:if="${iStat.index} &gt;= 4">
+						<div th:if="${iStat.index} &gt;= 5">
 
 							<strong><span th:text="${netSupport.questionNumber}"></span></strong>
-							<span th:text="${netSupport.question}" />
-							<input type="hidden" th:field="*{netSupportQuestionnaire[__${iStat.index}__].questionNumber}" /> 
+							<span th:text="${netSupport.question}" /> <input type="hidden"
+								th:field="*{netSupportQuestionnaire[__${iStat.index}__].questionId}" />
 							<ul>
 								<span th:each="radioChoice, stat : ${netSupport.choices}">
 									<input type="radio"
+									th:id="'_netSupportQuestionnaire_'+ ${netSupport.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{netSupportQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
 									onclick="calculatNetworkSupportScore();"> <strong><lable
@@ -88,17 +122,18 @@
 			</div>
 
 			<div class="row text-center bs-linebreak hidden-print">
-				<input type="hidden" th:field="*{serviceCoord}" /> 
-				<input type="hidden" th:field="*{residentId}" />
-				<input type="hidden" th:field="*{firstName}" /> 
-				<input type="hidden" th:field="*{lastName}" />
-				<input type="hidden" th:field="*{propertyId}" />
-				<input type="hidden" th:field="*{refId}" />
-				<input type="hidden" id="currentNetSupportGoal" th:field="*{goal}" /> 
-				<input type="hidden" id="currentNetSupportScore" th:field="*{currentScore}" />
-
-				<input type="submit" class="btn btn-primary btn-lg"
-					value="Save Network Support Assessment">
+				<input type="hidden" th:field="*{serviceCoord}" /> <input
+					type="hidden" th:field="*{residentId}" /> <input type="hidden"
+					th:field="*{firstName}" /> <input type="hidden"
+					th:field="*{lastName}" /> <input type="hidden"
+					th:field="*{propertyId}" /> <input type="hidden"
+					th:field="*{refId}" /> <input type="hidden"
+					th:field="*{lifeDomain}" /> <input
+					type="hidden" id="currentNetSupportGoal" th:field="*{goal}" /> <input
+					type="hidden" id="currentNetSupportScore"
+					th:field="*{currentScore}" /> <input type="submit"
+					class="btn btn-primary btn-lg"
+					value="Save NETWORK SUPPORT Assessment">
 			</div>
 		</div>
 	</form>
@@ -117,16 +152,23 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td id="nsst_1_body">Homeless or threatened with eviction.</td>
-					<td id="nsst_2_body">In transitional, temporary, or substandard
-						housing OR current rent/mortgage payment is unaffordable (over 30%
-						of income).</td>
-					<td id="nsst_3_body">In stable housing that is only marginally
-						adequate.</td>
-					<td id="nsst_4_body">Household is in adequate, subsidized
-						housing.</td>
-					<td id="nsst_5_body">Household is in adequate, unsubsidized
-						housing.</td>
+					<td id="nsst_1_body">Extended family or friends are
+						uninvolved, uninterested, or unmotivated to provide support;
+						unaware of community resources/supports.</td>
+					<td id="nsst_2_body">Extended family/ friends lack the ability
+						or resources to help (either financially, emotionally, or
+						materially) or provide negative support, but I know where to go in
+						the community for help.</td>
+					<td id="nsst_3_body">Receives some positive support
+						(financial/ emotional/material) from extended family or friends;
+						may use community resources.</td>
+					<td id="nsst_4_body">Strong support from extended family or
+						friends; have at least one community support network (i.e.,
+						nonprofit, church, support group, etc.).</td>
+					<td id="nsst_5_body">extended family or friends; have at least
+						one community support network (i.e., nonprofit, church, support
+						group, etc.). Has an extensive support system of family, friends
+						and community resources/supports.</td>
 					<td id="nsst_6_body"></td>
 					<td id="nsst_7_body"></td>
 
