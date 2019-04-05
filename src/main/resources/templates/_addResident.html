@@ -217,8 +217,17 @@
 												th:field="*{address}" placeholder="No. and Street">
 										</div>
 									</div>
-								</div>
+									
+									<div class="col-sm-6">
 
+										<label class="col-sm-3 control-label" for="unit">Is Resident?:
+										</label>
+											<div class="radio">
+  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
+  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="FALSE" />No</label>
+    										</div>
+									</div>
+								</div>
 								</p></td>
 						</tr>
 
