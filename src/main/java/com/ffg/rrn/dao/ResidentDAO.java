@@ -54,12 +54,12 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, "
 			+ "VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD,"
-			+ " REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY) VALUES (nextval('RESIDENT_SQ'), "
-			+ " ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			+ " REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY, IS_RESIDENT) VALUES (nextval('RESIDENT_SQ'), "
+			+ " ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	private final static String SQL_UPDATE_RESIDENT = "UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, "
 			+ "VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?,"
-			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=? WHERE RESIDENT_ID=?";
+			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=?,IS_RESIDENT=? WHERE RESIDENT_ID=?";
 
 	private final static String SQL_CHANGE_STATUS_OF_RESIDENT = "UPDATE RESIDENT SET ACTIVE=?, DATE_MODIFIED=?, MODIFIED_BY=? "
 			+ " WHERE RESIDENT_ID=?";
@@ -380,6 +380,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setBoolean(17, resident.getViaEmail());
 		ps.setBoolean(18, resident.getActive());
 		ps.setString(19, resident.getModifiedBy());
+		ps.setBoolean(20, resident.getIsResident());
 		return ps;
 	}
 
@@ -404,7 +405,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setBoolean(17, resident.getViaEmail());
 		ps.setTimestamp(18, Timestamp.valueOf(LocalDateTime.now()));// modify date
 		ps.setString(19, resident.getModifiedBy());
-		ps.setLong(20, resident.getResidentId());
+		ps.setBoolean(20, resident.getIsResident());
+		ps.setLong(21, resident.getResidentId());
 		return ps;
 	}
 

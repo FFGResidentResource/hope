@@ -36,6 +36,7 @@ public class Resident {
 
 	private Long residentId;
 	private Boolean active;
+	private Boolean isResident;
 	@NotEmpty
 	@Size(max = 20)
 	private String firstName;
