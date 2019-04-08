@@ -466,8 +466,8 @@
 							   th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
 							   onclick="saveOrUpdateResident(this.form);"/>
 						<input type="button" id="btnDeactivateResident" class="btn btn-primary btn-lg"
-							   value="Deactivate"
-							   onclick="deactivateResident(this.form);"/>
+							   value="Deactivate" th:title="*{active}"
+							   onclick="deactivateResident(this);"/>
 						<input type="reset" class="btn btn-primary btn-lg" value="Reset"/>
 					</div>
 				</div>
