@@ -171,6 +171,15 @@ jQuery(document)
 								            table.$('tr.selected').removeClass('selected');
 								            $(this).addClass('selected');
 								            
+								            var suffix = '&residentId=' + currentRow.residentId;
+								            var assessmentLinks = jQuery('a[id^="_load"]');								            
+								            
+								            jQuery.each(assessmentLinks, function(idx, obj){
+								            	var prefix = jQuery(obj).attr('href');
+												jQuery(obj).attr('href', prefix + suffix );
+											});							            
+								            
+								            
 								            jQuery
 											.ajax({
 												type : "POST",
@@ -206,6 +215,34 @@ jQuery(document)
 							});					
 				});
 
+
+function loadCurrentAssessment(lifeDomain){
+	
+	debugger;
+	jQuery
+	.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/getCurrentAssessment?residentId="+jQuery("#_resId").val()+"&lifeDomain=lifeDomain",
+		dataType : 'json',
+		cache : false,
+		timeout : 600000,
+		success : function(data) {
+			
+			debugger;
+			/*jQuery("#_hScoreGoal").text(data.HOUSING);
+			jQuery("#_mmScoreGoal").text(data.MM);	
+			jQuery("#_empScoreGoal").text(data.EMP);
+			jQuery("#_eduScoreGoal").text(data.EDU);
+			jQuery("#_nsScoreGoal").text(data.NETSUPP);
+			jQuery("#_hhScoreGoal").text(data.HH);*/
+		},
+		error:function(e){
+			console.log("ERROR retrieving Assessment for: "+lifeDomain, e);
+		}
+	});			
+	
+}
 
 /* Formatting function for row details - modify as you need */
 function format ( d ) {
@@ -291,4 +328,4 @@ function buildPieChartData(data){
 	});
 	
 	
-}
+};
