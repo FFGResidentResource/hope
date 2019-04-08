@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+	var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<!-- <div class="container">
+		<th:block th:include="/_wizard"></th:block>
+	</div> -->
+	<div class="container">
+<div id="networkSupport_Form">
+
+	<form name='_netSupportF' th:action="@{/saveEachAssessment}"
+		th:object="${resident}" method='POST' class="form-horizontal">
+
+		<div class="col-sm-12 myPanel">
+			<div class="row">
+				<div class="col-sm-10">
+					<h3 style="width: 400px;">NETWORK SUPPORT</h3>
+					<span class="hidden-print" style="color: red; font-size: larger;"
+						th:if="*{firstName == null}" th:text="${message}"></span>
+				</div>
+				<div class="col-sm-2 hideme print-only">
+					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+				</div>
+			</div>
+
+			<div class="row hideme print-only">
+				<div class="col-sm-6">
+					<span>Full Name:&nbsp;</span> <u><span
+						th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+						<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+						<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+				</div>
+				<div class="col-sm-2">
+					<span>Resident Id:&nbsp;</span><u><span
+						th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+				</div>
+				<div class="col-sm-4">
+					<u><span id="_selectedDateEmp">Date:</span></u>
+				</div>
+
+			</div>
+
+			<div class="row hidden-print">
+				<div class="col-sm-5">
+					<div class="col-sm-4">
+						<strong>Resident Name:</strong>
+					</div>
+					<div class="col-sm-6">
+						<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+							<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+							<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-3">
+					<div class="col-sm-6">
+						<strong>Resident Id:</strong>
+					</div>
+					<div class="col-sm-2">
+						<u><span th:if="*{firstName != null}" id="_residentIdText"
+							th:text="*{residentId}"></span></u>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="col-sm-3">
+						<strong>Date:</strong>
+					</div>
+					<div class="col-sm-9">
+						<select class="form-control setable" id="_dates"
+							th:field="*{selectedDate}"
+							onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'NETWORK SUPPORT', '_netSupport');"
+							required>
+							<option value="NewAssessment">Start New Assessment</option>
+							<option th:each="assessmentDate : ${resident.netSupportDates}"
+								th:value="${assessmentDate}" th:utext="${assessmentDate}" />
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<hr class="solidline1">
+
+			<div class="row col-sm-12">
+
+				<div class="col-sm-6">
+					<div th:each="netSupport, iStat: *{netSupportQuestionnaire}">
+
+						<div th:if="${iStat.index} &lt; 5">
+
+							<strong><span th:text="${netSupport.questionNumber}"></span></strong>
+							<span th:text="${netSupport.question}" /> <input type="hidden"
+								th:field="*{netSupportQuestionnaire[__${iStat.index}__].questionId}" />
+							<ul>
+								<span th:each="radioChoice, stat : ${netSupport.choices}">
+									<input type="radio"
+									th:id="'_netSupportQuestionnaire_'+ ${netSupport.questionId} + '_' + ${radioChoice.choiceId}"
+									th:field="*{netSupportQuestionnaire[__${iStat.index}__].choiceId}"
+									th:value="${radioChoice.choiceId}"
+									onclick="calculatNetworkSupportScore();"> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
+								</span>
+							</ul>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div th:each="netSupport, iStat: *{netSupportQuestionnaire}">
+
+						<div th:if="${iStat.index} &gt;= 5">
+
+							<strong><span th:text="${netSupport.questionNumber}"></span></strong>
+							<span th:text="${netSupport.question}" /> <input type="hidden"
+								th:field="*{netSupportQuestionnaire[__${iStat.index}__].questionId}" />
+							<ul>
+								<span th:each="radioChoice, stat : ${netSupport.choices}">
+									<input type="radio"
+									th:id="'_netSupportQuestionnaire_'+ ${netSupport.questionId} + '_' + ${radioChoice.choiceId}"
+									th:field="*{netSupportQuestionnaire[__${iStat.index}__].choiceId}"
+									th:value="${radioChoice.choiceId}"
+									onclick="calculatNetworkSupportScore();"> <strong><lable
+											th:text="${radioChoice.choice}"> </label></strong>
+								</span>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row text-center bs-linebreak hidden-print">
+				<input type="hidden" th:field="*{serviceCoord}" /> <input
+					type="hidden" th:field="*{residentId}" /> <input type="hidden"
+					th:field="*{firstName}" /> <input type="hidden"
+					th:field="*{lastName}" /> <input type="hidden"
+					th:field="*{propertyId}" /> <input type="hidden"
+					th:field="*{refId}" /> <input type="hidden"
+					th:field="*{lifeDomain}" /> <input
+					type="hidden" id="currentNetSupportGoal" th:field="*{goal}" /> <input
+					type="hidden" id="currentNetSupportScore"
+					th:field="*{currentScore}" /> <input type="submit"
+					class="btn btn-primary btn-lg"
+					value="Save NETWORK SUPPORT Assessment">
+			</div>
+		</div>
+	</form>
+
+	<div class="col-sm-12">
+
+		<table id="netSupportScoreTable" class="table table-bordered">
+			<thead>
+				<th id="nsst_1_head">In Crisis(1)</th>
+				<th id="nsst_2_head">Vulnerable (2)</th>
+				<th id="nsst_3_head">Safe (3)</th>
+				<th id="nsst_4_head">Building Capacity (4)</th>
+				<th id="nsst_5_head">Empowered (5)</th>
+				<th id="nsst_6_head">Score</th>
+				<th id="nsst_7_head">Goal</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td id="nsst_1_body">Extended family or friends are
+						uninvolved, uninterested, or unmotivated to provide support;
+						unaware of community resources/supports.</td>
+					<td id="nsst_2_body">Extended family/ friends lack the ability
+						or resources to help (either financially, emotionally, or
+						materially) or provide negative support, but I know where to go in
+						the community for help.</td>
+					<td id="nsst_3_body">Receives some positive support
+						(financial/ emotional/material) from extended family or friends;
+						may use community resources.</td>
+					<td id="nsst_4_body">Strong support from extended family or
+						friends; have at least one community support network (i.e.,
+						nonprofit, church, support group, etc.).</td>
+					<td id="nsst_5_body">extended family or friends; have at least
+						one community support network (i.e., nonprofit, church, support
+						group, etc.). Has an extensive support system of family, friends
+						and community resources/supports.</td>
+					<td id="nsst_6_body"></td>
+					<td id="nsst_7_body"></td>
+
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+
+</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+</body>
+
+</html>
+

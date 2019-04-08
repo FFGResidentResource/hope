@@ -6,7 +6,9 @@ package com.ffg.rrn.controller;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -34,6 +36,47 @@ public class ResidentController extends BaseController {
 
 	@Autowired
 	private ResidentServiceImpl residentService;
+	
+	public enum LifeDomainEnum{
+		
+		HOUSING("housing"),
+		MONEY_MANAGEMENT("moneyMgmt"),
+		EMPLOYMENT("employment"),
+		EDUCATION("education"),
+		NETWORK_SUPPORT("networkSupport"),
+		HOUSEHOLD("householdMgmt");
+		
+		private String pageName;
+		
+		LifeDomainEnum(String pageName){
+			this.pageName = pageName;
+		}
+		
+		// We are using this to return dynamic Page to go to Particular Assessment
+		public String getPageName() {
+			return pageName;
+		}
+		
+		//****** Reverse Lookup Implementation************//
+		 
+	    //Lookup table
+	    private static final Map<String, LifeDomainEnum> lookup = new HashMap<>();
+	  
+	    //Populate the lookup table on loading time
+	    static
+	    {
+	        for(LifeDomainEnum lifeDomain : LifeDomainEnum.values())
+	        {
+	            lookup.put(lifeDomain.getPageName(), lifeDomain);
+	        }
+	    }
+	  
+	    //This method can be used for reverse lookup purpose
+	    public static LifeDomainEnum get(String pageName) 
+	    {
+	        return lookup.get(pageName);
+	    }
+	}
 	
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })
@@ -74,6 +117,28 @@ public class ResidentController extends BaseController {
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 
 		return "residentPage";
+
+	}
+	
+	
+	@RequestMapping(value = "/getCurrentAssessment", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getCurrentAssessment(@RequestParam("residentId") Long residentId, @RequestParam("lifeDomain") String lifeDomain,Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		resident = residentService.getAllQuestionnaire(resident);
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		//This is very important in returning respective Page
+		return lifeDomain;
 
 	}
 
