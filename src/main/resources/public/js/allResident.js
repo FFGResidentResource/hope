@@ -16,6 +16,7 @@ jQuery(document)
 						jQuery("a[href='/allResident']").parent().addClass('active');
 					}	
 					
+					jQuery('a[id^="_load"]').attr('disabled', true);
 
 					// $('#residentTable').DataTable();
 
@@ -166,20 +167,36 @@ jQuery(document)
 										if ($(this).hasClass('selected') ) {
 								        	$(this).removeClass('selected');
 								        	jQuery("#_loadResident").prop('disabled', true);
+								        	
+								        	jQuery('a[id^="_load"]').attr('disabled', true);						            						        	
+								        									        	
+								        	jQuery("#_hScoreGoal").text('--/--');
+											jQuery("#_mmScoreGoal").text('--/--');	
+											jQuery("#_empScoreGoal").text('--/--');
+											jQuery("#_eduScoreGoal").text('--/--');
+											jQuery("#_nsScoreGoal").text('--/--');
+											jQuery("#_hhScoreGoal").text('--/--');
 								        }
 								        else {
+								        	jQuery('a[id^="_load"]').attr('disabled',false);
+								        	jQuery("#_resId").val(currentRow.residentId);
+								            jQuery("#_loadResident").prop('disabled', false);
+								        	
 								            table.$('tr.selected').removeClass('selected');
 								            $(this).addClass('selected');
 								            
+								            /* Following code builds hyperlink for each Assessment buttons when a row is clicked in all Resident Table */
 								            var suffix = '&residentId=' + currentRow.residentId;
 								            var assessmentLinks = jQuery('a[id^="_load"]');								            
 								            
 								            jQuery.each(assessmentLinks, function(idx, obj){
-								            	var prefix = jQuery(obj).attr('href');
-												jQuery(obj).attr('href', prefix + suffix );
+								            	var prefix = jQuery(obj).attr('href');						            	
+								            	 	
+								            		jQuery(obj).attr('href', prefix + suffix );
+								            	
 											});							            
 								            
-								            
+								            /* Following code populates score and goal once a row a clicked */
 								            jQuery
 											.ajax({
 												type : "POST",
@@ -200,14 +217,9 @@ jQuery(document)
 												error:function(e){
 													console.log("ERROR retrieving Score and Goal: ", e);
 												}
-											});											
-								            
-								            jQuery("#_resId").val(currentRow.residentId);
-								            jQuery("#_loadResident").prop('disabled', false);
-								        }									
-																		
+											});	
+								        }							
 								    });
-
 								},
 								error : function(e) {
 									console.log("ERROR : ", e);
@@ -215,34 +227,6 @@ jQuery(document)
 							});					
 				});
 
-
-function loadCurrentAssessment(lifeDomain){
-	
-	debugger;
-	jQuery
-	.ajax({
-		type : "POST",
-		contentType : "application/json",
-		url : "/getCurrentAssessment?residentId="+jQuery("#_resId").val()+"&lifeDomain=lifeDomain",
-		dataType : 'json',
-		cache : false,
-		timeout : 600000,
-		success : function(data) {
-			
-			debugger;
-			/*jQuery("#_hScoreGoal").text(data.HOUSING);
-			jQuery("#_mmScoreGoal").text(data.MM);	
-			jQuery("#_empScoreGoal").text(data.EMP);
-			jQuery("#_eduScoreGoal").text(data.EDU);
-			jQuery("#_nsScoreGoal").text(data.NETSUPP);
-			jQuery("#_hhScoreGoal").text(data.HH);*/
-		},
-		error:function(e){
-			console.log("ERROR retrieving Assessment for: "+lifeDomain, e);
-		}
-	});			
-	
-}
 
 /* Formatting function for row details - modify as you need */
 function format ( d ) {
