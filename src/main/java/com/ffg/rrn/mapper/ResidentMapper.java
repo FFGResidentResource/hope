@@ -17,7 +17,7 @@ import com.ffg.rrn.model.Resident;
 public class ResidentMapper implements RowMapper<Resident> {
 
 	public static final String RESIDENT_SQL //
-			= "select r.RESIDENT_ID, r.ACTIVE, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
+			= "select r.RESIDENT_ID, r.ACTIVE, r.IS_RESIDENT, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
 					+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
 					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children "
@@ -32,6 +32,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 
 		r.setResidentId(rs.getLong("RESIDENT_ID"));
 		r.setActive(rs.getBoolean("ACTIVE"));
+		r.setIsResident(rs.getBoolean("IS_RESIDENT"));
 		r.setFirstName(rs.getString("FIRST_NAME"));
 		r.setMiddle(rs.getString("MIDDLE"));
 		r.setLastName(rs.getString("LAST_NAME"));
