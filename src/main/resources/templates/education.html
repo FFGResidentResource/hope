@@ -125,7 +125,7 @@
 						<div class="col-sm-6">
 							<div th:each="education, iStat: *{educationQuestionnaire}">
 
-								<div th:if="${iStat.index} &lt; 4">
+								<div th:if="${iStat.index} &lt; ${iStat.size}/2">
 
 									<strong><span th:text="${education.questionNumber}"></span></strong>
 									<span th:text="${education.question}" /> <input type="hidden"
@@ -148,7 +148,7 @@
 						<div class="col-sm-6">
 							<div th:each="education, iStat: *{educationQuestionnaire}">
 
-								<div th:if="${iStat.index} &gt;= 4">
+								<div th:if="${iStat.index} &gt;= ${iStat.size}/2">
 
 									<strong><span th:text="${education.questionNumber}"></span></strong>
 									<span th:text="${education.question}" /> <input type="hidden"
@@ -235,6 +235,9 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+	<script src="/js/common.js"></script>
+	<script src="/js/education.js"></script>
+	
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script
