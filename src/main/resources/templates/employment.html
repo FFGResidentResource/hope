@@ -125,7 +125,7 @@
 						<div class="col-sm-6">
 							<div th:each="emp, iStat: *{employmentQuestionnaire}">
 
-								<div th:if="${iStat.index} &lt; 5">
+								<div th:if="${iStat.index} &lt; (${iStat.size}-1)/2">
 
 									<strong><span th:text="${emp.questionNumber}"></span></strong>
 									<span th:text="${emp.question}" /> <input type="hidden"
@@ -148,7 +148,7 @@
 						<div class="col-sm-6">
 							<div th:each="emp, iStat: *{employmentQuestionnaire}">
 
-								<div th:if="${iStat.index} &gt;= 5">
+								<div th:if="${iStat.index} &gt;= (${iStat.size}-1)/2">
 
 									<strong><span th:text="${emp.questionNumber}"></span></strong>
 									<span th:text="${emp.question}" /> <input type="hidden"
@@ -230,6 +230,9 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+	<script src="/js/common.js"></script>
+	<script src="/js/employment.js"></script>
+	
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script

@@ -41,9 +41,6 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
 	<div class="container">
 		<div id="household_Form">
 			<form name='_householdF' th:action="@{/saveHouseholdMgmt}"
@@ -125,23 +122,21 @@
 						<div class="col-sm-6">
 							<div th:each="hhMgmt, iStat: *{householdMgmtQuestionnaire}">
 
-								<div th:if="${iStat.index} &lt; 5">
+								<div th:if="${iStat.index} &lt; (${iStat.size}-1)/2">
 
 									<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
-									<span th:text="${hhMgmt.question}"/
-							<input
-										type="hidden"
+									<span th:text="${hhMgmt.question}" /> <input type="hidden"
 										th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
-										<ul>
-											<span th:each="radioChoice, stat : ${hhMgmt.choices}">
-												<input type="radio"
-												th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
-												th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
-												th:value="${radioChoice.choiceId}"
-												onclick="calculateHouseHoldScore();"> <strong><lable
-														th:text="${radioChoice.choice}"> </label></strong>
-											</span>
-										</ul>
+									<ul>
+										<span th:each="radioChoice, stat : ${hhMgmt.choices}">
+											<input type="radio"
+											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											onclick="calculateHouseHoldScore();"> <strong><lable
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -149,7 +144,7 @@
 						<div class="col-sm-6">
 							<div th:each="hhMgmt, iStat: *{householdMgmtQuestionnaire}">
 
-								<div th:if="${iStat.index} &gt;= 5">
+								<div th:if="${iStat.index} &gt;= (${iStat.size}-1)/2">
 
 									<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
 									<span th:text="${hhMgmt.question}" /> <input type="hidden"
@@ -231,6 +226,9 @@
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script src="/js/common.js"></script>
+	<script src="/js/household.js"></script>
 
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
