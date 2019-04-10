@@ -190,10 +190,9 @@ jQuery(document)
 								            var assessmentLinks = jQuery('a[id^="_load"]');								            
 								            
 								            jQuery.each(assessmentLinks, function(idx, obj){
-								            	var prefix = jQuery(obj).attr('href');						            	
-								            	 	
-								            		jQuery(obj).attr('href', prefix + suffix );
-								            	
+								            	var currHref = jQuery(obj).attr('href');						            	
+								            	var prefix = currHref.split('&'); 
+								            	jQuery(obj).attr('href', prefix[0] + suffix );								            	
 											});							            
 								            
 								            /* Following code populates score and goal once a row a clicked */
