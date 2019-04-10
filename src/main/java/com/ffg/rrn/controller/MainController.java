@@ -53,5 +53,15 @@ public class MainController extends BaseController{
 		}
 		return "403Page";
 	}	
+	
+	@RequestMapping(value = { "/actionPlans" }, method = RequestMethod.GET)
+	public String actionsPlansPage(Model model, Principal principal) {
+		
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+		
+		return "actionPlans";
+	}
 
 }

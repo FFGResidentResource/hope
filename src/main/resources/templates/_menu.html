@@ -7,30 +7,21 @@
 				<span class="icon-bar"></span> 
 				<span class="icon-bar"></span>
 			</button>
-
 			<a class="navbar-brand" th:href="@{/allResident}"> <img src="/images/rrnlogo.png" style="margin-left: 15px; padding: 2px;" /></a>
-			
-			 <h4 class="navbar-text">Resident Resource Network</h4>
-
+			<h4 class="navbar-text">Resident Resource Network</h4>
 		</div>
+		
 		<div class="collapse navbar-collapse" id="navbar-brand-centered">
-
 			<ul class="nav navbar-nav navbar-right">
-				<li><span class="glyphicon glyphicon-user" style="color: darkseagreen; font-weight: bold; padding-top: 15px;"
-					th:if="${serviceCordInfo != null}" th:utext="${serviceCordInfo}"></span>
-				</li>
+				<li><span class="glyphicon glyphicon-user" style="color: darkseagreen; font-weight: bold; padding-top: 15px;" th:if="${serviceCordInfo != null}" th:utext="${serviceCordInfo}"></span> </li>
 				<li><a th:href="@{/allResident}">All Residents</a></li>
-				<li class="active"><a th:href="@{/newResident}">New Resident</a></li>
-				<li><a th:href="@{/403}">Action Plans</a></li>
+				<li><a th:href="@{/newResident}">New Resident</a></li>
+				<li><a th:href="@{/actionPlans}">Action Plans</a></li>
 				<li><a th:href="@{/403}">Case Notes</a></li>
 				<li><a th:href="@{/403}">Dashboard</a></li>
-				<li><a th:if="${serviceCordInfo != null and #strings.contains(serviceCordInfo,'ROLE_ADMIN')}"
-					th:href="@{/admin}">Admin</a></li>
-				<li><a th:if="${#request.userPrincipal != null}"
-					th:href="@{/logout}">Logout</a></li>
-
+				<li><a th:if="${serviceCordInfo != null and #strings.contains(serviceCordInfo,'ROLE_ADMIN')}" th:href="@{/admin}">Admin</a></li>
+				<li><a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a></li>
 			</ul>
 		</div>
 	</div>
 </nav>
-
