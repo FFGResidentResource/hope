@@ -27,9 +27,15 @@ public class MainController extends BaseController{
 		return "welcomePage";
 	}
 
-	@RequestMapping(value = { "/", "/login", "/logoutSuccessful" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public String loginPage(Model model) {
 
+		return "loginPage";
+	}
+	
+	@RequestMapping(value = { "/logoutSuccessful" }, method = RequestMethod.GET)
+	public String logoutSuccessful(Model model) {
+		model.addAttribute("message", "Logout Successful. Please log in again or close the window.");
 		return "loginPage";
 	}
 
@@ -53,5 +59,35 @@ public class MainController extends BaseController{
 		}
 		return "403Page";
 	}	
+	
+	@RequestMapping(value = { "/actionPlans" }, method = RequestMethod.GET)
+	public String actionPlansPage(Model model, Principal principal) {
+		
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+		
+		return "actionPlans";
+	}
+	
+	@RequestMapping(value = { "/caseNotes" }, method = RequestMethod.GET)
+	public String caseNotesPage(Model model, Principal principal) {
+		
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+		
+		return "caseNotes";
+	}
+	
+	@RequestMapping(value = { "/dashboard" }, method = RequestMethod.GET)
+	public String dashboardPage(Model model, Principal principal) {
+		
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+		
+		return "dashboard";
+	}
 
 }
