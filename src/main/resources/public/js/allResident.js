@@ -3,18 +3,7 @@ var currentRow;
 
 jQuery(document)
 		.ready(
-				function() {				
-					
-					
-					jQuery('a').parent().removeClass('active');
-					var path = window.location.pathname;
-					if(path == '/newResident' || path == "/getResidentById"){
-						jQuery("a[href='/newResident']").parent().addClass('active');
-					} else if (path == '/admin') {
-						jQuery("a[href='/admin']").parent().addClass('active');
-					}else if (path == '/allResident') {
-						jQuery("a[href='/allResident']").parent().addClass('active');
-					}	
+				function() {
 					
 					jQuery('a[id^="_load"]').attr('disabled', true);
 
@@ -193,7 +182,7 @@ jQuery(document)
 								            	var currHref = jQuery(obj).attr('href');						            	
 								            	var prefix = currHref.split('&'); 
 								            	jQuery(obj).attr('href', prefix[0] + suffix );								            	
-											});							            
+											});							            						            
 								            
 								            /* Following code populates score and goal once a row a clicked */
 								            jQuery

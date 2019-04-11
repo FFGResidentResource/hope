@@ -5,9 +5,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
 
 <style>
@@ -37,35 +35,17 @@
 	<th:block th:include="/_menu"></th:block>
 
 	<div class="container">
-		<h3 th:if="${message != null}" th:utext="${message}"
-			style="color: red;"></h3>
-
+		<h3 th:if="${message != null}" th:utext="${message}" style="color: red;"></h3>
 		<div th:if="${serviceCordInfo != null}" th:utext="${serviceCordInfo}"></div>
 	</div>
 	
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
 	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
-	
-	<script type="text/javascript">	
-	//Code to Style Active Tab
-	jQuery(document).ready(function(){
-		
-		jQuery('a').parent().removeClass('active');
-		var path = window.location.pathname;
-		if(path == '/newResident' || path == "/getResidentById"){		
-			jQuery("a[href='/newResident']").parent().addClass('active');
-		} else if (path == '/admin') {
-			jQuery("a[href='/admin']").parent().addClass('active');
-		}else if (path == '/allResident') {
-			jQuery("a[href='/allResident']").parent().addClass('active');
-		}	
-  	});
-	</script>
+	<script src="/js/menu.js"></script>
 
 </body>
 
