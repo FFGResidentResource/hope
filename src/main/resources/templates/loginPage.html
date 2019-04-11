@@ -38,7 +38,6 @@
 	<!-- Include _menu.html -->
 	<!-- <th:block th:include="/_menu"></th:block> -->
 
-
 	<nav class="navbar navbar-default" role="navigation" id="my-navbar">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -49,7 +48,7 @@
 					<span class="icon-bar"></span>
 				</button>
 
-				<a class="navbar-brand" th:href="@{/welcome}"> <img src="/images/rrnlogo.png" style="margin-left: 15px; padding: 2px;" /></a>
+				<a class="navbar-brand" th:href="@{/login}"> <img src="/images/rrnlogo.png" style="margin-left: 15px; padding: 2px;" /></a>
 			
 				<h4 class="navbar-text">Resident Resource Network</h4>
 
@@ -60,6 +59,12 @@
 	</nav>
 
 
+	<div class="container-fluid">
+		<h2>
+			<span th:utext="${message}"></span>
+		</h2>
+	</div>
+	
 	<div class="container">
 		<div class="row">
 			<div class="Absolute-Center is-Responsive">
@@ -107,8 +112,7 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
 	<script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 

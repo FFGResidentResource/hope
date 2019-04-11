@@ -10,6 +10,10 @@ jQuery(document).ready(function() {
 		jQuery("a[href='/allResident']").parent().addClass('active');
 	} else if (path == '/actionPlans') {
 		jQuery("a[href='/actionPlans']").parent().addClass('active');
+	} else if (path == '/caseNotes') {
+		jQuery("a[href='/caseNotes']").parent().addClass('active');
+	} else if (path == '/dashboard') {
+		jQuery("a[href='/dashboard']").parent().addClass('active');
 	}
 	
 });

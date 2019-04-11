@@ -17,8 +17,8 @@
 				<li><a th:href="@{/allResident}">All Residents</a></li>
 				<li><a th:href="@{/newResident}">New Resident</a></li>
 				<li><a th:href="@{/actionPlans}">Action Plans</a></li>
-				<li><a th:href="@{/403}">Case Notes</a></li>
-				<li><a th:href="@{/403}">Dashboard</a></li>
+				<li><a th:href="@{/caseNotes}">Case Notes</a></li>
+				<li><a th:href="@{/dashboard}">Dashboard</a></li>
 				<li><a th:if="${serviceCordInfo != null and #strings.contains(serviceCordInfo,'ROLE_ADMIN')}" th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a></li>
 			</ul>
