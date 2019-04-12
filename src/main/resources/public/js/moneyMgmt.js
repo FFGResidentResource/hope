@@ -18,14 +18,21 @@ function calculateMoneyMgmtScore(){
 	var qChoice10 = jQuery('input[id^=_moneyMgmtQuestionnaire_18]:radio');
 	
 	if(qChoice1[1].checked == true){
+	    
 		jQuery('input[id^=_moneyMgmtQuestionnaire_10]').prop('checked', false);
 		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('checked', false);	
 		jQuery('input[id^=_moneyMgmtQuestionnaire_10]').prop('disabled', true);
-		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('disabled', true);			
+		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('disabled', true);	
+		jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', false);
 	}
-	else if (qChoice1[1].checked == false){	
+	else {		
+	
 		jQuery('input[id^=_moneyMgmtQuestionnaire_10]').prop('disabled', false);
 		jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_12]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_13]').prop('disabled', false);
+	
 		
 		if(qChoice2[0].checked == true){
 			jQuery('input[id^=_moneyMgmtQuestionnaire_11]').prop('checked', false);
@@ -59,67 +66,99 @@ function calculateMoneyMgmtScore(){
 	}	
 	
 	if(qChoice6[1].checked == true){
-		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('disabled', false);
+		
 		jQuery('[id^=mmst_1_]').removeClass('danger').addClass('danger');
 		jQuery('#currentMoneyMgmtScore').val(1);
 		jQuery('#mmst_6_body').text(1);
 		jQuery('#currentMoneyMgmtGoal').val(2);
-		jQuery('#mmst_7_body').text(2);			
-	}
-	else if(qChoice6[0].checked == true){
+		jQuery('#mmst_7_body').text(2);	
 		
 		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('checked', false);
-		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('disabled', true);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('checked', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_17]').prop('checked', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('checked', false);
 		
-		if(qChoice7[0].checked == true){
-			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('checked', false);
-			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', true);
-		}else if(qChoice7[1].checked == true){
-			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('disabled', true);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', true);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_17]').prop('disabled', true);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('disabled', true);
+		
+	}
+	else {	
+		
+		jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_17]').prop('disabled', false);
+		jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('disabled', false);
+		
+		if(qChoice6[0].checked == true){
+			jQuery('input[id^=_moneyMgmtQuestionnaire_15]').prop('disabled', true);
 		}
 		
-		if(qChoice8[0].checked == true){		
-			jQuery('[id^=mmst_2_]').removeClass('warning').addClass('warning');
-			jQuery('#currentMoneyMgmtScore').val(2);
-			jQuery('#mmst_6_body').text(2);
-			jQuery('#currentMoneyMgmtGoal').val(3);
-			jQuery('#mmst_7_body').text(3);			
-		}else if(qChoice8[1].checked == true){
-			jQuery('input[id^=_moneyMgmtQuestionnaire_17]').prop('disabled', false);
+		if(qChoice7[0].checked == true){
 			
-			if(qChoice9[1].checked == true){
+			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('checked', false);
+			jQuery('input[id^=_moneyMgmtQuestionnaire_16]').prop('disabled', true);
+			
+		}		
+		else{			
+			if(qChoice8[0].checked == true){
+				jQuery('input[id^=_moneyMgmtQuestionnaire_17]').prop('checked', false);
+				jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('checked', false);
+				
+				jQuery('input[id^=_moneyMgmtQuestionnaire_17]').prop('disabled', true);
+				jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('disabled', true);
+				
 				jQuery('[id^=mmst_2_]').removeClass('warning').addClass('warning');
 				jQuery('#currentMoneyMgmtScore').val(2);
 				jQuery('#mmst_6_body').text(2);
 				jQuery('#currentMoneyMgmtGoal').val(3);
-				jQuery('#mmst_7_body').text(3);		
-			}else {
-				
-				if(qChoice10[0].checked == true){
-					
-					jQuery('[id^=mmst_3_]').removeClass('info').addClass('info');
-					jQuery('#currentMoneyMgmtScore').val(3);
-					jQuery('#mmst_6_body').text(3);
-					jQuery('#currentMoneyMgmtGoal').val(4);
-					jQuery('#mmst_7_body').text(4);	
-				} 
-				else if(qChoice10[1].checked == true){
-					
-					jQuery('[id^=mmst_4_]').removeClass('success').addClass('success');
-					jQuery('#currentMoneyMgmtScore').val(4);
-					jQuery('#mmst_6_body').text(4);
-					jQuery('#currentMoneyMgmtGoal').val(5);
-					jQuery('#mmst_7_body').text(5);	
-				} 
-				else if(qChoice10[2].checked == true){
-					
-					jQuery('[id^=mmst_5_]').removeClass('success').addClass('success');
-					jQuery('#currentMoneyMgmtScore').val(5);
-					jQuery('#mmst_6_body').text(5);
-					jQuery('#currentMoneyMgmtGoal').val(5);
-					jQuery('#mmst_7_body').text(5);	
-				}			
+				jQuery('#mmst_7_body').text(3);
 			}			
-		}		
+			else {
+				
+				if(qChoice9[1].checked == true){
+					jQuery('[id^=mmst_2_]').removeClass('warning').addClass('warning');
+					jQuery('#currentMoneyMgmtScore').val(2);
+					jQuery('#mmst_6_body').text(2);
+					jQuery('#currentMoneyMgmtGoal').val(3);
+					jQuery('#mmst_7_body').text(3);	
+					
+					jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('checked', false);					
+					jQuery('input[id^=_moneyMgmtQuestionnaire_18]').prop('disabled', true);
+					
+				}
+				
+				else{					
+					if(qChoice10[0].checked == true){
+						
+						jQuery('[id^=mmst_3_]').removeClass('info').addClass('info');
+						jQuery('#currentMoneyMgmtScore').val(3);
+						jQuery('#mmst_6_body').text(3);
+						jQuery('#currentMoneyMgmtGoal').val(4);
+						jQuery('#mmst_7_body').text(4);	
+					} 
+					else if(qChoice10[1].checked == true){
+						
+						jQuery('[id^=mmst_4_]').removeClass('success').addClass('success');
+						jQuery('#currentMoneyMgmtScore').val(4);
+						jQuery('#mmst_6_body').text(4);
+						jQuery('#currentMoneyMgmtGoal').val(5);
+						jQuery('#mmst_7_body').text(5);	
+					} 
+					else if(qChoice10[2].checked == true){
+						
+						jQuery('[id^=mmst_5_]').removeClass('success').addClass('success');
+						jQuery('#currentMoneyMgmtScore').val(5);
+						jQuery('#mmst_6_body').text(5);
+						jQuery('#currentMoneyMgmtGoal').val(5);
+						jQuery('#mmst_7_body').text(5);	
+					}
+					
+				}
+				
+			}
+			
+		}
 	}	
 }
