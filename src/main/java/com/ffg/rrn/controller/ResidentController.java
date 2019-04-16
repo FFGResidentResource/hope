@@ -142,6 +142,21 @@ public class ResidentController extends BaseController {
 		return "redirect:/allResident";
 	}
 
+	@PostMapping("/reactivateResident")
+	public String reactivateResident(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			setupDropdownList(resident);
+			return "residentPage";
+		}
+
+		resident.setActive(true);
+		resident.setModifiedBy(getSessionUsername());
+		residentService.updateResidentStatus(resident);
+
+		return "redirect:/allResident";
+	}
+
 	private void setupDropdownList(Resident resident) {
 		resident.setPropertyList(residentService.getAllProperty());
 		resident.setRefList(residentService.getAllReferral());
