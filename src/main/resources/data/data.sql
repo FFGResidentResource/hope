@@ -91,7 +91,7 @@ INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 10,'Are you able t
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'How old are you?', 'EMPLOYMENT',19);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Do you have a job?', 'EMPLOYMENT',20);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Do you work full time(32+ hours a week)?', 'EMPLOYMENT',21);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Does the job pay the living wage?', 'EMPLOYMENT',22);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Does the job allow you to pay for all your basic needs (i.e., food, clothing, shelter)?', 'EMPLOYMENT',22);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Does the job offer health insurance options, paid time off, and some type of retirement plan?', 'EMPLOYMENT',23);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Have you been employed at the current workplace for at least three months?', 'EMPLOYMENT',24);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Can you remain at the current job for as long as you like?', 'EMPLOYMENT',25);

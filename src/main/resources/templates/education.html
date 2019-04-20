@@ -73,7 +73,7 @@
 								th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
 						</div>
 						<div class="col-sm-4">
-							<u><span id="_selectedDateEmp">Date:</span></u>
+							<u><span id="_selectedDateEdu">Date:</span></u>
 						</div>
 
 					</div>
@@ -107,7 +107,7 @@
 							<div class="col-sm-9">
 								<select class="form-control setable" id="_dates"
 									th:field="*{selectedDate}"
-									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'EMPLOYMENT', '_employment');"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'EDUCATION', '_education');"
 									required>
 									<option value="NewAssessment">Start New Assessment</option>
 									<option th:each="assessmentDate : ${resident.educationDates}"
@@ -177,7 +177,7 @@
 							th:field="*{firstName}" /> <input type="hidden"
 							th:field="*{lastName}" /> <input type="hidden"
 							th:field="*{propertyId}" /> <input type="hidden"
-							th:field="*{refId}" /> <input type="hidden"
+							th:field="*{refId}" /> <input type="hidden" id="_eduLifeDomain"
 							th:field="*{lifeDomain}" /> <input type="hidden"
 							id="currentEducationGoal" th:field="*{goal}" /> <input
 							type="hidden" id="currentEducationScore"
@@ -203,19 +203,19 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td id="empst_1_body">No HS diploma/GED and is not enrolled
+							<td id="edust_1_body">No HS diploma/GED and is not enrolled
 								in high school or a GED program.</td>
-							<td id="empst_2_body">No HS diploma/ GED, but the resident
+							<td id="edust_2_body">No HS diploma/ GED, but the resident
 								is enrolled in high school or a GED program.</td>
-							<td id="empst_3_body">Resident has HS diploma/GED but is not
+							<td id="edust_3_body">Resident has HS diploma/GED but is not
 								seeking additional education/ training to benefit employment.</td>
-							<td id="empst_4_body">Resident has HS diploma/GED and is
+							<td id="edust_4_body">Resident has HS diploma/GED and is
 								seeking additional education/training to benefit employment.</td>
-							<td id="empst_5_body">Resident has completed additional
+							<td id="edust_5_body">Resident has completed additional
 								education/training beyond HS diploma/ GED (and is in a position
 								where s/he is employable).</td>
-							<td id="empst_6_body"></td>
-							<td id="empst_7_body"></td>
+							<td id="edust_6_body"></td>
+							<td id="edust_7_body"></td>
 
 						</tr>
 					</tbody>
