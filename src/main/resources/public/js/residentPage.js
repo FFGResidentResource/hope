@@ -22,19 +22,32 @@ function saveOrUpdateResident(form){
 
 function deactivateResident(btn){
   var form = btn.form;
-  if(!confirm("Are you sure you want to " + $(btn).val().toLowerCase() + " this resident?"))
+  if(!confirm("Are you sure you want to deactivate this resident?"))
   {
 	  return;
   }
-  var isActive = !$(btn).attr("title") || $(btn).attr("title") == "true";
-  isActive ? $(btn).attr("title", "false") : $(btn).attr("title", "true");
-  isActive ? $(btn).val("Reactivate") : $(btn).val("Deactivate");
 
-  
   if(!isSubmitted){
      form.action="deactivateResident";
      form.submit();
      jQuery("#btnDeactivateResident").attr("disabled", true);
+     isSubmitted = true;
+  } else{
+    alert("System is processing, please be patient.");
+  }
+};
+
+function reactivateResident(btn){
+  var form = btn.form;
+  if(!confirm("Are you sure you want to reactivate this resident?"))
+  {
+	  return;
+  }
+
+  if(!isSubmitted){
+     form.action="reactivateResident";
+     form.submit();
+     jQuery("#btnReactivateResident").attr("disabled", true);
      isSubmitted = true;
   } else{
     alert("System is processing, please be patient.");

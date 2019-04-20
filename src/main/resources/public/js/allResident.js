@@ -212,9 +212,24 @@ jQuery(document)
 								error : function(e) {
 									console.log("ERROR : ", e);
 								}
-							});					
+							});	
+					_defaultActive();
 				});
 
+function _defaultActive(){
+    var rds = $("input[name='residents']");
+	if(rds.length==0)
+		setTimeout(function(){_defaultActive();}, 300);
+	else
+	{
+		$(rds).each(function(){
+			if($(this).val()=="true" && $(this).is(":radio")){
+				$(this).attr("checked","checked");
+				table.columns(2).search("true").draw();
+			}
+		});
+	}
+}
 
 /* Formatting function for row details - modify as you need */
 function format ( d ) {
