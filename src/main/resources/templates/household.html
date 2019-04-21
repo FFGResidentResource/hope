@@ -41,7 +41,7 @@
 
 	<div class="container">
 		<div id="household_Form">
-			<form name='_householdF' th:action="@{/saveHouseholdMgmt}"
+			<form name='_householdF' th:action="@{/saveEachAssessment}"
 				th:object="${resident}" method='POST' class="form-horizontal">
 
 				<div class="col-sm-12 myPanel">
@@ -69,7 +69,7 @@
 								th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
 						</div>
 						<div class="col-sm-4">
-							<u><span id="_selectedDateEmp">Date:</span></u>
+							<u><span id="_selectedDateHouseHold">Date:</span></u>
 						</div>
 
 					</div>
@@ -124,14 +124,14 @@
 
 									<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
 									<span th:text="${hhMgmt.question}" /> <input type="hidden"
-										th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
+										th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].questionId}" />
 									<ul>
 										<span th:each="radioChoice, stat : ${hhMgmt.choices}">
 											<input type="radio"
 											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
 											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateHouseHoldScore();"> <strong><lable
+											onclick="calculateHouseholdScore();"> <strong><lable
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
@@ -146,14 +146,14 @@
 
 									<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
 									<span th:text="${hhMgmt.question}" /> <input type="hidden"
-										th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
+										th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].questionId}" />
 									<ul>
 										<span th:each="radioChoice, stat : ${hhMgmt.choices}">
 											<input type="radio"
 											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
 											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateHouseHoldScore();"> <strong><lable
+											onclick="calculateHouseholdScore();"> <strong><lable
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
@@ -172,10 +172,10 @@
 							th:field="*{firstName}" /> <input type="hidden"
 							th:field="*{lastName}" /> <input type="hidden"
 							th:field="*{propertyId}" /> <input type="hidden"
-							th:field="*{refId}" /> <input type="hidden"
+							th:field="*{refId}" /> <input type="hidden" id="_lifeDomainhh"
 							th:field="*{lifeDomain}" /> <input type="hidden"
 							id="currentHHGoal" th:field="*{goal}" /> <input type="hidden"
-							id="currentHHMgmtScore" th:field="*{currentScore}" /> <input
+							id="currentHHScore" th:field="*{currentScore}" /> <input
 							type="submit" class="btn btn-primary btn-lg"
 							value="Save Household Assessment">
 					</div>
