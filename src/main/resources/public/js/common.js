@@ -41,7 +41,25 @@ function calculateAllScores(lifeDomain){
 	calculateMoneyMgmtScore();    
     }
     
-    //TODO - add code here
+    if(lifeDomain == 'EMPLOYMENT'){
+	calculateEmploymentScore();
+    }
+    
+    if(lifeDomain == 'EDUCATION'){
+	calculateEducationScore();
+    }
+    
+    if(lifeDomain == 'NETWORK SUPPORT'){
+	calculatNetworkSupportScore();
+    }
+    
+    if(lifeDomain == 'HOUSEHOLD MANAGEMENT'){
+	calculateHouseholdScore();
+    }
+    
+    
+    
+    
     
 }
 

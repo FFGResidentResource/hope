@@ -25,6 +25,7 @@ function calculateEducationScore() {
 	jQuery('input[id^=_educationQuestionnaire_28]').prop('disabled', true);
 	jQuery('input[id^=_educationQuestionnaire_29]').prop('disabled', true);
 	jQuery('input[id^=_educationQuestionnaire_30]').prop('disabled', true);
+	jQuery('input[id^=_educationQuestionnaire_31]').prop('disabled', false);
 
 	if (qChoice6[0].checked == true) {
 
@@ -50,6 +51,7 @@ function calculateEducationScore() {
 	jQuery('input[id^=_educationQuestionnaire_28]').prop('disabled', false);
 	jQuery('input[id^=_educationQuestionnaire_29]').prop('disabled', false);
 	jQuery('input[id^=_educationQuestionnaire_30]').prop('disabled', false);
+	
 
 	if (qChoice2[1].checked == true) {
 
