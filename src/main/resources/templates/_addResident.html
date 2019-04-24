@@ -465,10 +465,10 @@
 						<input type="submit" id="btnSubmit" class="btn btn-primary btn-lg"
 							   th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
 							   onclick="saveOrUpdateResident(this.form);"/>
-						<input th:type="${resident.active}?'button':'hidden'" id="btnDeactivateResident" class="btn btn-primary btn-lg"
+						<input th:type="${resident.residentId==null||resident.active}?'button':'hidden'" id="btnDeactivateResident" class="btn btn-primary btn-lg"
 							   value="Deactivate" th:title="*{active}"
 							   onclick="deactivateResident(this);"/>
-						<input th:type="${resident.active}?'hidden':'button'" id="btnReactivateResident" class="btn btn-primary btn-lg"
+						<input th:type="${resident.residentId==null||resident.active}?'hidden':'button'" id="btnReactivateResident" class="btn btn-primary btn-lg"
 							   value="Reactivate" th:title="*{active}"
 							   onclick="reactivateResident(this);"/>
 						<input type="reset" class="btn btn-primary btn-lg" value="Reset"/>
