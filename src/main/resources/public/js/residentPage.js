@@ -1,4 +1,38 @@
+window.onbeforeprint = function() {
+	$('#residentFullName').text($('#firstName').val() + " " + $('#middle').val() + " " + $('#lastname').val());
+	$('#printreferralType').text($('#_referral option:selected').text());
+	$('#printproperty').text($('#_property option:selected').text());
+	$('#printaddress').text($('#address').val());
+	if(!$('#allowcontact').prop("checked") && $('#viaemail').prop("checked")){
+		$('#printEmail').prop('checked', true);
+		$('#printEmailText').text($('#email').val());
+	}
+	if(!$('#allowcontact').prop("checked") && $('#viavoicemail').prop("checked")){
+		$('#printvoicemail').prop('checked', true);
+		$('#printvm').text($('#voicemail').val());
+	}
+	if(!$('#allowcontact').prop("checked") && $('#viatext').prop("checked")){
+		$('#printtext').prop('checked', true);
+		$('#printtxt').text($('#text').val());
+	}
+};
+
 jQuery(document).ready(function() {
+	console.log($('#allowcontact').prop("checked"));
+	if($('#allowcontact').prop("checked")){
+		document.getElementById('viaemail').disabled = true
+		document.getElementById('email').disabled = true;
+		document.getElementById('viavoicemail').disabled = true;
+		document.getElementById('voicemail').disabled = true;
+		document.getElementById('viatext').disabled = true;
+		document.getElementById('text').disabled = true;
+		document.getElementById("viaemail").checked = false;
+		document.getElementById("viavoicemail").checked = false;
+		document.getElementById("viatext").checked = false;
+		document.getElementById('email').value = "";
+		document.getElementById('voicemail').value = "";
+		document.getElementById('text').value = "";
+	};
 	
 	var btn = $("#btnDeactivateResident");
 	var isActive = !$(btn).attr("title") || $(btn).attr("title") == "true";
@@ -60,7 +94,15 @@ document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('viavoicemail').disabled = this.checked;
 	document.getElementById('voicemail').disabled = this.checked;
 	document.getElementById('viatext').disabled = this.checked;
-	document.getElementById('text').disabled = this.checked;	
+	document.getElementById('text').disabled = this.checked;
+	if(this.checked){
+		document.getElementById("viaemail").checked = false;
+		document.getElementById("viavoicemail").checked = false;
+		document.getElementById("viatext").checked = false;
+		document.getElementById('email').value = "";
+		document.getElementById('voicemail').value = "";
+		document.getElementById('text').value = "";
+	}
 };
 
 function reset(chk){
