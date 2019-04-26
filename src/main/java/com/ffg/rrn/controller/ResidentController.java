@@ -99,6 +99,27 @@ public class ResidentController extends BaseController {
 
 	}
 
+	@RequestMapping(value = "/getActionPlan", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getActionPlan(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		resident = residentService.getAllQuestionnaire(resident);
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		// This is very important in returning respective Page
+		return "actionPlan";
+
+	}
+
 	@RequestMapping(value = "/allResident", method = RequestMethod.GET)
 	public String getAllResidents(Model model, Principal principal) throws Exception {
 

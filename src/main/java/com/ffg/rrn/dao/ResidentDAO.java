@@ -277,7 +277,6 @@ public class ResidentDAO extends JdbcDaoSupport {
 			return "-- / --";
 		}
 	}
-	
 
 	/**
 	 * 

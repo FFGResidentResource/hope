@@ -5,16 +5,11 @@ package com.ffg.rrn.dao;
 
 import com.ffg.rrn.model.ActionPlan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
-
 /**
  * @author FFGRRNTeam
  *
