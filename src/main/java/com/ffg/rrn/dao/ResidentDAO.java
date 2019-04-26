@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -34,7 +33,6 @@ import com.ffg.rrn.mapper.ChildrenMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
-import com.ffg.rrn.model.ActionPlan;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Child;
@@ -44,6 +42,7 @@ import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
+import com.ffg.rrn.model.ResidentScoreGoal;
 import com.ffg.rrn.model.WizardStepCounter;
 
 /**
@@ -132,6 +131,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 				new Object[] { onThisDate, residentId, lifeDomain },
 				new BeanPropertyRowMapper<ResidentAssessmentQuestionnaire>(ResidentAssessmentQuestionnaire.class)
 				);
+	}
+
+	public List<ResidentScoreGoal> getResidentScoreGoal(Long residentId) {
+		return this.getJdbcTemplate().query("SELECT * FROM RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ?", new Object[] { residentId },
+				new BeanPropertyRowMapper<ResidentScoreGoal>(ResidentScoreGoal.class));
 	}
 
 	/**
@@ -524,6 +528,17 @@ public class ResidentDAO extends JdbcDaoSupport {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
 		java.util.Date parsed = format.parse(selectedDate);
 		return new java.sql.Date(parsed.getTime());
+	}
+	
+	// This will display date of most recent self sufficiency Assessment Date
+	public String getMostRecentSSMDate(Long residentId) {
+		try {
+			String stringDate = this.getJdbcTemplate().queryForObject("select TO_CHAR(on_this_date, 'YYYY/MM/DD') from resident_score_goal where resident_id = ? order by on_this_date desc Limit 1",
+					new Object[] { residentId }, String.class);
+			return stringDate;
+		} catch (EmptyResultDataAccessException e) {
+			return "--";
+		}
 	}
 
 	

@@ -176,13 +176,13 @@ jQuery(document).ready(
 				cache : false,
 				timeout : 600000,
 				success : function(data) {
-
-				    jQuery("#_hScoreGoal").text(data.HOUSING);
-				    jQuery("#_mmScoreGoal").text(data.MM);
-				    jQuery("#_empScoreGoal").text(data.EMP);
-				    jQuery("#_eduScoreGoal").text(data.EDU);
-				    jQuery("#_nsScoreGoal").text(data.NETSUPP);
-				    jQuery("#_hhScoreGoal").text(data.HH);
+				    debugger;
+				    jQuery("#_hScoreGoal").text(data["HOUSING"]);
+				    jQuery("#_mmScoreGoal").text(data["MONEY MANAGEMENT"]);
+				    jQuery("#_empScoreGoal").text(data["EMPLOYMENT"]);
+				    jQuery("#_eduScoreGoal").text(data["EDUCATION"]);
+				    jQuery("#_nsScoreGoal").text(data["NETWORK SUPPORT"]);
+				    jQuery("#_hhScoreGoal").text(data["HOUSEHOLD MANAGEMENT"]);
 				},
 				error : function(e) {
 				    console.log("ERROR retrieving Score and Goal: ", e);

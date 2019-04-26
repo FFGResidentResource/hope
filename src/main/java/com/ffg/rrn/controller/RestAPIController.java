@@ -76,34 +76,33 @@ public class RestAPIController {
 			
 			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"MONEY MANAGEMENT");			
 			if(!StringUtils.isEmpty(latestScoreGoal)) {
-				scoreGoalPerLifeDomain.put("MM", latestScoreGoal);
+				scoreGoalPerLifeDomain.put("MONEY MANAGEMENT", latestScoreGoal);
 			}
 			
 			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"EMPLOYMENT");			
 			if(!StringUtils.isEmpty(latestScoreGoal)) {
-				scoreGoalPerLifeDomain.put("EMP", latestScoreGoal);
+				scoreGoalPerLifeDomain.put("EMPLOYMENT", latestScoreGoal);
 			}
 			
 			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"EDUCATION");			
 			if(!StringUtils.isEmpty(latestScoreGoal)) {
-				scoreGoalPerLifeDomain.put("EDU", latestScoreGoal);
+				scoreGoalPerLifeDomain.put("EDUCATION", latestScoreGoal);
 			}
 			
 			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"NETWORK SUPPORT");			
 			if(!StringUtils.isEmpty(latestScoreGoal)) {
-				scoreGoalPerLifeDomain.put("NETSUPP", latestScoreGoal);
+				scoreGoalPerLifeDomain.put("NETWORK SUPPORT", latestScoreGoal);
 			}
 			
 			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"HOUSEHOLD MANAGEMENT");			
 			if(!StringUtils.isEmpty(latestScoreGoal)) {
-				scoreGoalPerLifeDomain.put("HH", latestScoreGoal);
+				scoreGoalPerLifeDomain.put("HOUSEHOLD MANAGEMENT", latestScoreGoal);
 			}
 			
 		}
 		
 		return ResponseEntity.ok(scoreGoalPerLifeDomain);
 	}
-			
 			
 
 }
