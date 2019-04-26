@@ -4,22 +4,26 @@
 package com.ffg.rrn.service;
 
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import com.ffg.rrn.dao.ActionPlanDAO;
-import com.ffg.rrn.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.dao.ActionPlanDAO;
 import com.ffg.rrn.dao.ResidentDAO;
+import com.ffg.rrn.model.ActionPlan;
+import com.ffg.rrn.model.AssessmentQuestionnaire;
+import com.ffg.rrn.model.AssessmentType;
+import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.QuestionChoice;
+import com.ffg.rrn.model.Referral;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
+import com.ffg.rrn.model.ResidentScoreGoal;
 
 /**
  * @author FFGRRNTeam
@@ -183,5 +187,13 @@ public class ResidentServiceImpl {
 		return actionPlanDAO.saveActionPlan(actionPlan);
 	}
 	
+	public String getMostRecentSSMDate(Long residentId) {
+		return residentDao.getMostRecentSSMDate(residentId);
+
+	}
+	
+	public List<ResidentScoreGoal> getResidentScoreGoal(Long residentId) {
+		return residentDao.getResidentScoreGoal(residentId);
+	}
 
 }

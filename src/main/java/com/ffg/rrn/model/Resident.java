@@ -138,6 +138,9 @@ public class Resident {
 	private List<ResidentAssessmentQuestionnaire> householdMgmtQuestionnaire;
 
 	@JsonView
+	private List<ResidentScoreGoal> residentScoreGoalList;
+
+	@JsonView
 	private List<String> housingDates;
 	@JsonView
 	private List<String> moneymgmtDates;
@@ -169,6 +172,8 @@ public class Resident {
 	private String netSupportScoreGoal;
 	
 	private String householdScoreGoal;
+	
+	private String mostRecentSSMDate;
 	
 	
 	public Resident() {

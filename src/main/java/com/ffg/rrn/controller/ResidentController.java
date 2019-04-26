@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.ffg.rrn.model.ActionPlan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.model.ActionPlan;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -111,6 +111,7 @@ public class ResidentController extends BaseController {
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
 		resident = residentService.getAllQuestionnaire(resident);
+		resident.setMostRecentSSMDate(residentService.getMostRecentSSMDate(residentId));
 
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");

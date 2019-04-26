@@ -128,4 +128,9 @@ tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th {
+    padding: 3px;
+    font-size: smaller;
+}
+
 
