@@ -54,7 +54,6 @@ import com.ffg.rrn.model.WizardStepCounter;
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
 
-	private final static String SQL_INSERT_ACTION_PLAN= "INSERT ACTION_PLAN (ACTION_PLAN_ID, RESIDENT_ID, RESIDENT_CONCERN, ACTIVE) VALUES (?,?,?,?)";
 	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, "
 			+ "VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD,"
 			+ " REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY, IS_RESIDENT) VALUES (nextval('RESIDENT_SQ'), "
@@ -278,34 +277,6 @@ public class ResidentDAO extends JdbcDaoSupport {
 			return "-- / --";
 		}
 	}
-	
-	/**
-	 * 
-	 * @param Action plan
-	 */
-	public int saveActionPlan(List<ActionPlan> actioPlans) {
-
-		int[] count=this.getJdbcTemplate().batchUpdate(SQL_INSERT_ACTION_PLAN, new BatchPreparedStatementSetter(){
-			  public void setValues(PreparedStatement ps, int i) throws SQLException{
-			     ActionPlan  actionplan =actioPlans.get(i);
-			     ps.setInt(1,actionplan.getActionPlanId());
-			     ps.setInt(2,actionplan.getResidentId());
-			     ps.setString(3,actionplan.getResidentConcern());
-			     ps.setBoolean(4,actionplan.getActive());
-			    }
-
-			@Override
-			public int getBatchSize() {
-				// TODO Auto-generated method stub
-				return actioPlans.size();
-			}
-			   
-			});
-		
-
-		return count.length;
-	}
-	
 
 	/**
 	 * 

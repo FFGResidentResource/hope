@@ -13,19 +13,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.ffg.rrn.dao.ActionPlanDAO;
+import com.ffg.rrn.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import com.ffg.rrn.dao.ResidentDAO;
-import com.ffg.rrn.model.AssessmentQuestionnaire;
-import com.ffg.rrn.model.AssessmentType;
-import com.ffg.rrn.model.Choice;
-import com.ffg.rrn.model.Property;
-import com.ffg.rrn.model.QuestionChoice;
-import com.ffg.rrn.model.Referral;
-import com.ffg.rrn.model.Resident;
-import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 
 /**
  * @author FFGRRNTeam
@@ -36,6 +30,9 @@ public class ResidentServiceImpl {
 
 	@Autowired
 	private ResidentDAO residentDao;
+
+	@Autowired
+	private ActionPlanDAO actionPlanDAO;
 
 	/**
 	 * Get all Assessment Questions as ref data to display on Page for Resident.
@@ -180,6 +177,10 @@ public class ResidentServiceImpl {
 	public String getLatestScoreGoal(Long residentId, String lifeDomain) {
 		return residentDao.getLatestScoreGoal(residentId, lifeDomain);
 		
+	}
+
+	public int saveActionPlan(ActionPlan actionPlan) {
+		return actionPlanDAO.saveActionPlan(actionPlan);
 	}
 	
 
