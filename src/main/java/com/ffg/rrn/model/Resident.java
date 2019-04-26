@@ -175,7 +175,6 @@ public class Resident {
 	
 	private String mostRecentSSMDate;
 	
-	
 	public Resident() {
 
 	}
