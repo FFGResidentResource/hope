@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -34,7 +33,6 @@ import com.ffg.rrn.mapper.ChildrenMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
-import com.ffg.rrn.model.ActionPlan;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Child;
@@ -44,6 +42,7 @@ import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
+import com.ffg.rrn.model.ResidentScoreGoal;
 import com.ffg.rrn.model.WizardStepCounter;
 
 /**
@@ -54,7 +53,6 @@ import com.ffg.rrn.model.WizardStepCounter;
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
 
-	private final static String SQL_INSERT_ACTION_PLAN= "INSERT ACTION_PLAN (ACTION_PLAN_ID, RESIDENT_ID, RESIDENT_CONCERN, ACTIVE) VALUES (?,?,?,?)";
 	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, "
 			+ "VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD,"
 			+ " REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY, IS_RESIDENT) VALUES (nextval('RESIDENT_SQ'), "
@@ -133,6 +131,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 				new Object[] { onThisDate, residentId, lifeDomain },
 				new BeanPropertyRowMapper<ResidentAssessmentQuestionnaire>(ResidentAssessmentQuestionnaire.class)
 				);
+	}
+
+	public List<ResidentScoreGoal> getResidentScoreGoal(Long residentId) {
+		return this.getJdbcTemplate().query("SELECT * FROM RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ?", new Object[] { residentId },
+				new BeanPropertyRowMapper<ResidentScoreGoal>(ResidentScoreGoal.class));
 	}
 
 	/**
@@ -278,34 +281,6 @@ public class ResidentDAO extends JdbcDaoSupport {
 			return "-- / --";
 		}
 	}
-	
-	/**
-	 * 
-	 * @param Action plan
-	 */
-	public int saveActionPlan(List<ActionPlan> actioPlans) {
-
-		int[] count=this.getJdbcTemplate().batchUpdate(SQL_INSERT_ACTION_PLAN, new BatchPreparedStatementSetter(){
-			  public void setValues(PreparedStatement ps, int i) throws SQLException{
-			     ActionPlan  actionplan =actioPlans.get(i);
-			     ps.setInt(1,actionplan.getActionPlanId());
-			     ps.setInt(2,actionplan.getResidentId());
-			     ps.setString(3,actionplan.getResidentConcern());
-			     ps.setBoolean(4,actionplan.getActive());
-			    }
-
-			@Override
-			public int getBatchSize() {
-				// TODO Auto-generated method stub
-				return actioPlans.size();
-			}
-			   
-			});
-		
-
-		return count.length;
-	}
-	
 
 	/**
 	 * 
@@ -553,6 +528,17 @@ public class ResidentDAO extends JdbcDaoSupport {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
 		java.util.Date parsed = format.parse(selectedDate);
 		return new java.sql.Date(parsed.getTime());
+	}
+	
+	// This will display date of most recent self sufficiency Assessment Date
+	public String getMostRecentSSMDate(Long residentId) {
+		try {
+			String stringDate = this.getJdbcTemplate().queryForObject("select TO_CHAR(on_this_date, 'YYYY/MM/DD') from resident_score_goal where resident_id = ? order by on_this_date desc Limit 1",
+					new Object[] { residentId }, String.class);
+			return stringDate;
+		} catch (EmptyResultDataAccessException e) {
+			return "--";
+		}
 	}
 
 	

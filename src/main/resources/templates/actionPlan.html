@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+    var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<!-- <div class="container">
+		<th:block th:include="/_wizard"></th:block>
+	</div> -->
+	<div class="container">
+		<div id="actionPlan_Form">
+
+			<form name='_actionPlanF' th:action="@{/saveActionPlan}"
+				th:object="${resident}" method='POST' class="form-horizontal">
+
+				<div class="col-sm-12 myPanel">
+					<div class="row">
+						<div class="col-sm-10">
+							<h3 style="width: 400px;">ACTION PLAN</h3>
+							<span class="hidden-print" style="color: red; font-size: larger;"
+								th:if="*{firstName == null}" th:text="${message}"></span>
+						</div>
+						<div class="col-sm-2 hideme print-only">
+							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+						</div>
+					</div>
+
+					<h5>This form is to be used to document the plan of action to
+						be taken to address a resident’s needs.</h5>
+
+					<table class="table table-bordered table-condensed text-center" style="background-color:ghostwhite;">
+						<thead>
+							<th class="text-center">ID</th>
+							<th class="text-center">Resident Name</th>
+							<th class="text-center">Property</th>
+							<th class="text-center">Address</th>
+							<th class="text-center">Phone Number</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span th:if="*{firstName != null}" id="_residentIdText"
+									th:text="*{residentId}"></span></td>
+								<td><span th:if="*{firstName != null}"
+									th:text="*{firstName}">&nbsp;</span> <span
+									th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span> <span
+									th:if="*{lastName != null}" th:text="*{lastName}"></span></td>
+								<td><span th:text="*{propertyName}">&nbsp;</span></td>
+								<td><span th:text="*{address}">&nbsp;</span></td>
+								<td><span th:text="*{voiceMail}">&nbsp;</span></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="col-sm-9">
+								<strong><span id="_ssmDate">Date of most recent
+										Self-Sufficiency assessment:</span></strong>
+							</div>
+							<div class="col-sm-3">
+								<span th:text="*{mostRecentSSMDate}">&nbsp;</span>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="col-sm-5">
+								<strong><span id="_todaysDate">Today's Date:</span></strong>
+							</div>
+							<div class="col-sm-3">
+								<span id="_ssmDate">04/04/2019</span>
+							</div>
+						</div>
+					</div>
+
+					</br>
+					<strong><span>Current Self-Sufficiency Levels for
+							Domain(s):</span></strong>
+
+					<table id="_currentSSMTable" class="table table-bordered table-condensed text-center" style="background-color:ghostwhite;">
+						<thead>
+							<th class="text-center">DOMAIN</th>
+							<th class="text-center" colspan="5">SELF-SUFFICIENCY SCORE</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Housing</td>
+								<td>In Crisis (1)</td>
+								<td>Vulnerable (2)</td>
+								<td>Stable (3)</td>
+								<td>Building Capacity (4)</td>
+								<td>Empowered (5)</td>
+							</tr>
+							<tr>
+								<td>Money Management</td>
+								<td>In Crisis (1)</td>
+								<td>Vulnerable (2)</td>
+								<td>Stable (3)</td>
+								<td>Building Capacity (4)</td>
+								<td>Empowered (5)</td>
+							</tr>
+							<tr>
+								<td>Employment</td>
+								<td>In Crisis (1)</td>
+								<td>Vulnerable (2)</td>
+								<td>Stable (3)</td>
+								<td>Building Capacity (4)</td>
+								<td>Empowered (5)</td>
+							</tr>
+							<tr>
+								<td>Education</td>
+								<td>In Crisis (1)</td>
+								<td>Vulnerable (2)</td>
+								<td>Stable (3)</td>
+								<td>Building Capacity (4)</td>
+								<td>Empowered (5)</td>
+							</tr>
+							<tr>
+								<td>Network Support</td>
+								<td>In Crisis (1)</td>
+								<td>Vulnerable (2)</td>
+								<td>Stable (3)</td>
+								<td>Building Capacity (4)</td>
+								<td>Empowered (5)</td>
+							</tr>
+							<tr>
+								<td>Household Management</td>
+								<td>In Crisis (1)</td>
+								<td>Vulnerable (2)</td>
+								<td>Stable (3)</td>
+								<td>Building Capacity (4)</td>
+								<td>Empowered (5)</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" th:field="*{residentId}" /> <input type="submit"
+							id="_actionPlanSubmit" class="btn btn-primary btn-lg"
+							value="Save Action Plan">
+					</div>
+
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="/js/actionPlan.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+	
+</body>
+</html>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.model.ActionPlan;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -98,6 +99,28 @@ public class ResidentController extends BaseController {
 
 	}
 
+	@RequestMapping(value = "/getActionPlan", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getActionPlan(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		resident = residentService.getAllQuestionnaire(resident);
+		resident.setMostRecentSSMDate(residentService.getMostRecentSSMDate(residentId));
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		// This is very important in returning respective Page
+		return "actionPlan";
+
+	}
+
 	@RequestMapping(value = "/allResident", method = RequestMethod.GET)
 	public String getAllResidents(Model model, Principal principal) throws Exception {
 
@@ -161,6 +184,12 @@ public class ResidentController extends BaseController {
 		resident.setPropertyList(residentService.getAllProperty());
 		resident.setRefList(residentService.getAllReferral());
 		resident.setAtList(residentService.getAllAType());
+	}
+
+	@PostMapping(value = "/saveActionPlan")
+	public String saveActionPlan(@Valid @ModelAttribute ActionPlan actionPlan, BindingResult bindingResult) {
+		residentService.saveActionPlan(actionPlan);
+		return "redirect:/allResident";
 	}
 
 	@PostMapping(value = "/saveAssessmentType")
