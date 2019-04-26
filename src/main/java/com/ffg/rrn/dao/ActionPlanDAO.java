@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 @Transactional
 public class ActionPlanDAO extends JdbcDaoSupport {
 
-    private static final String SQL_INSERT_ACTION_PLAN= "INSERT ACTION_PLAN (ACTION_PLAN_ID, RESIDENT_ID, RESIDENT_CONCERN, ACTIVE) VALUES (?,?,?,?)";
+    private static final String SQL_INSERT_ACTION_PLAN= "INSERT ACTION_PLAN (ACTION_PLAN_ID, RESIDENT_ID, RESIDENT_CONCERN, ACTIVE, FOCUS_ON_DOMAIN, OUTCOME_DATE, FOLLOWUP_NOTES, DATE_ADDED, DATE_MODIFIED, SERVICE_COORD) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
     // TODO: need to change to actual update field later 4/24/19
     private static final String SQL_UPDATE_ACTION_PLAN = "UPDATE ACTION_PLAN SET RESIDENT_CONCERN=? WHERE ACTION_PLAN_ID=?";
@@ -37,7 +37,13 @@ public class ActionPlanDAO extends JdbcDaoSupport {
                 SQL_INSERT_ACTION_PLAN, actioPlan.getActionPlanId(),
                 actioPlan.getResidentId(),
                 actioPlan.getResidentConcern(),
-                actioPlan.getActive());
+                actioPlan.getActive(),
+				actioPlan.getFocusOnDomain(),
+				actioPlan.getOutcomeDate(),
+				actioPlan.getFollowupNotes(),
+				actioPlan.getDateAdded(),
+				actioPlan.getDateModified(),
+				actioPlan.getServiceCoord());
         return count;
     }
 
