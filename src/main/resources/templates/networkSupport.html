@@ -134,7 +134,7 @@
 									th:id="'_netSupportQuestionnaire_'+ ${netSupport.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{netSupportQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculatNetworkSupportScore();"> <strong><lable
+									onclick="calculatNetworkSupportScore();"> <strong><label
 											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
 							</ul>
@@ -157,7 +157,7 @@
 									th:id="'_netSupportQuestionnaire_'+ ${netSupport.questionId} + '_' + ${radioChoice.choiceId}"
 									th:field="*{netSupportQuestionnaire[__${iStat.index}__].choiceId}"
 									th:value="${radioChoice.choiceId}"
-									onclick="calculatNetworkSupportScore();"> <strong><lable
+									onclick="calculatNetworkSupportScore();"> <strong><label
 											th:text="${radioChoice.choice}"> </label></strong>
 								</span>
 							</ul>
@@ -172,7 +172,7 @@
 					th:field="*{firstName}" /> <input type="hidden"
 					th:field="*{lastName}" /> <input type="hidden"
 					th:field="*{propertyId}" /> <input type="hidden"
-					th:field="*{refId}" /> <input type="hidden"
+					th:field="*{refId}" /> <input type="hidden" id="_lifeDomain"
 					th:field="*{lifeDomain}" /> <input
 					type="hidden" id="currentNetSupportGoal" th:field="*{goal}" /> <input
 					type="hidden" id="currentNetSupportScore"
