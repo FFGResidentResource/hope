@@ -187,9 +187,15 @@ public class ResidentController extends BaseController {
 	}
 
 	@PostMapping(value = "/saveActionPlan")
-	public String saveActionPlan(@Valid @ModelAttribute ActionPlan actionPlan, BindingResult bindingResult) {
+	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+		ActionPlan actionPlan = constructActionPlan();
 		residentService.saveActionPlan(actionPlan);
 		return "redirect:/allResident";
+	}
+
+	private ActionPlan constructActionPlan() {
+		// TODO
+		return null;
 	}
 
 	@PostMapping(value = "/saveAssessmentType")
