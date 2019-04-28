@@ -6,6 +6,7 @@ package com.ffg.rrn.controller;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -188,14 +189,26 @@ public class ResidentController extends BaseController {
 
 	@PostMapping(value = "/saveActionPlan")
 	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
-		ActionPlan actionPlan = constructActionPlan();
+		ActionPlan actionPlan = constructActionPlan(resident);
 		residentService.saveActionPlan(actionPlan);
 		return "redirect:/allResident";
 	}
 
-	private ActionPlan constructActionPlan() {
-		// TODO
-		return null;
+	private ActionPlan constructActionPlan(Resident resident) {
+		int actionId = 0;
+		String residentConcern = "blah. blah";
+		String focusOnDomain = "";
+		Date outcomeDate = new Date();
+		String followupNotes = "";
+		Date dateAdded = new Date();
+		Date dateModified = new Date();
+		String serviceCoord = "";
+		ActionPlan actionPlan = new ActionPlan(actionId,
+				resident.getResidentId(), residentConcern,
+				resident.getActive(), focusOnDomain,
+				outcomeDate, followupNotes, dateAdded,
+				dateModified, serviceCoord);
+		return actionPlan;
 	}
 
 	@PostMapping(value = "/saveAssessmentType")

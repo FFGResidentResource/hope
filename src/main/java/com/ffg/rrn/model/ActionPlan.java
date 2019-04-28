@@ -9,7 +9,7 @@ public class ActionPlan {
 
 	private int actionPlanId;
 	
-	private int residentId;
+	private long residentId;
 	
 	private String residentConcern;
 	
@@ -33,7 +33,7 @@ public class ActionPlan {
 
     private String serviceCoord;
 
-	public ActionPlan(int actionPlanId, int residentId,
+	public ActionPlan(int actionPlanId, long residentId,
 					  String residentConcern, Boolean active,
 					  String focusOnDomain, Date outcomeDate,
 					  String followupNotes, Date dateAdded,
