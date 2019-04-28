@@ -3,18 +3,18 @@
  */
 package com.ffg.rrn.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ffg.rrn.utils.AppConstants;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.util.CollectionUtils;
+
+import javax.validation.constraints.*;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
-import lombok.Data;
 
 /**
  * @author FFGRRNTeam
@@ -174,7 +174,9 @@ public class Resident {
 	private String householdScoreGoal;
 	
 	private String mostRecentSSMDate;
-	
+
+	private String dateOfLatestHouseAssessment;
+	private boolean newHouseAssessmentAllowed;
 	public Resident() {
 
 	}
@@ -207,4 +209,27 @@ public class Resident {
 		this.serviceCoord = serviceCoord;
 	}
 
+	public String getDateOfLatestHousingAssessment(){
+		if(CollectionUtils.isEmpty(this.getHousingDates())){
+			return StringUtils.EMPTY;
+		}
+		return this.getHousingDates().get(0);
+	}
+	public boolean isNewHousingAssessmentAllowed(){
+		if(CollectionUtils.isEmpty(this.getHousingDates())){
+            return true;
+		}
+		return checkIfLatestAssessmentTakenLessThanSixMonths(this.getHousingDates().get(0));
+	}
+
+	private boolean checkIfLatestAssessmentTakenLessThanSixMonths(String dateOfLatestHouseAssessment) {
+		try {
+			Date lastestAssessDate = DateUtils.parseDate(dateOfLatestHouseAssessment, AppConstants.DATE_PATTERN_JAVA);
+			Date today = new Date();
+			return DateUtils.addMonths(lastestAssessDate,6).before(today);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

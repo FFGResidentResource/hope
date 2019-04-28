@@ -199,3 +199,13 @@ function calculateHousingScore() {
 		}
 	}
 }
+
+function saveAssessment(form){
+   if(document.getElementById('newHousingAssessmentAllowed').value=='false' &&
+      document.getElementById('_dates').value=='NewAssessment'){
+      alert("Only one assessment is allowed in 6 months. Please modify the latest assessment.");
+      return false;
+   }
+
+   form.submit();
+}

@@ -46,8 +46,11 @@
 		<div id="housingStability_Form">
 
 			<form name='_housingF' th:action="@{/saveEachAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal">
-
+				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+				<input name="newHousingAssessmentAllowed" type="hidden" id="newHousingAssessmentAllowed"
+					   th:field="*{newHousingAssessmentAllowed}" />
+				<input name="dateOfLatestHousingAssessment" type="hidden" id="dateOfLatestHousingAssessment"
+					   th:field="*{dateOfLatestHousingAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 						<div class="col-sm-10">
@@ -181,7 +184,7 @@
 							type="hidden" id="currentHousingScore" th:field="*{currentScore}" />
 
 						<input type="submit" id="_housingSubmit"
-							class="btn btn-primary btn-lg" value="Save Housing Assessment">
+							class="btn btn-primary btn-lg" value="Save Housing Assessment" onclick="saveAssessment(this.form);">
 					</div>
 
 
