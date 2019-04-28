@@ -1,17 +1,46 @@
-jQuery(document).ready(function() {
-
-	jQuery('a').parent().removeClass('active');
-	var path = window.location.pathname;
-	if (path == '/newResident' || path == "/getResidentById") {
-		jQuery("a[href='/newResident']").parent().addClass('active');
-	} else if (path == '/admin') {
-		jQuery("a[href='/admin']").parent().addClass('active');
-	} else if (path == '/allResident') {
-		jQuery("a[href='/allResident']").parent().addClass('active');
+window.onbeforeprint = function() {
+	$('#residentFullName').text($('#firstName').val() + " " + $('#middle').val() + " " + $('#lastname').val());
+	$('#printreferralType').text($('#_referral option:selected').text());
+	$('#printproperty').text($('#_property option:selected').text());
+	$('#printaddress').text($('#address').val());
+	if(!$('#allowcontact').prop("checked") && $('#viaemail').prop("checked")){
+		$('#printEmail').prop('checked', true);
+		$('#printEmailText').text($('#email').val());
 	}
+	if(!$('#allowcontact').prop("checked") && $('#viavoicemail').prop("checked")){
+		$('#printvoicemail').prop('checked', true);
+		$('#printvm').text($('#voicemail').val());
+	}
+	if(!$('#allowcontact').prop("checked") && $('#viatext').prop("checked")){
+		$('#printtext').prop('checked', true);
+		$('#printtxt').text($('#text').val());
+	}
+};
 
-	stepCounter();
+jQuery(document).ready(function() {
+	console.log($('#allowcontact').prop("checked"));
+	if($('#allowcontact').prop("checked")){
+		document.getElementById('viaemail').disabled = true
+		document.getElementById('email').disabled = true;
+		document.getElementById('viavoicemail').disabled = true;
+		document.getElementById('voicemail').disabled = true;
+		document.getElementById('viatext').disabled = true;
+		document.getElementById('text').disabled = true;
+		document.getElementById("viaemail").checked = false;
+		document.getElementById("viavoicemail").checked = false;
+		document.getElementById("viatext").checked = false;
+		document.getElementById('email').value = "";
+		document.getElementById('voicemail').value = "";
+		document.getElementById('text').value = "";
+	};
+	
+	var btn = $("#btnDeactivateResident");
+	var isActive = !$(btn).attr("title") || $(btn).attr("title") == "true";
+	isActive ? $(btn).attr("title", "true") : $(btn).attr("title", "false");
+	isActive ? $(btn).val("Deactivate") : $(btn).val("Reactivate");
+	
 });
+
 var isSubmitted = false;
 function saveOrUpdateResident(form){
   if(!isSubmitted){
@@ -24,7 +53,14 @@ function saveOrUpdateResident(form){
   }
 };
 
-function deactivateResident(form){
+
+function deactivateResident(btn){
+  var form = btn.form;
+  if(!confirm("Are you sure you want to deactivate this resident?"))
+  {
+	  return;
+  }
+
   if(!isSubmitted){
      form.action="deactivateResident";
      form.submit();
@@ -35,37 +71,21 @@ function deactivateResident(form){
   }
 };
 
-function stepCounter() {
+function reactivateResident(btn){
+  var form = btn.form;
+  if(!confirm("Are you sure you want to reactivate this resident?"))
+  {
+	  return;
+  }
 
-	if (res != null && res.wsCounter.signUpComplete) {
-		jQuery('#addResident_View').attr('class',
-				'col-xs-1 bs-wizard-step complete');
-	}
-	if (res != null && res.wsCounter.assessmentComplete) {
-		jQuery('#ssm_View').attr('class', 'col-xs-1 bs-wizard-step complete');
-	}
-};
-
-function toggleForm(prefix) {
-
-	var formName = "#" + prefix;
-
-	// Toggle Form
-	jQuery("[id$='_Form']").removeClass('hideme')
-	jQuery("[id$='_Form']").addClass('hideme');
-
-	jQuery(formName + "_Form").removeClass("hideme");
-
-	// Toggle Wizard
-	jQuery("[id$='_View']").removeClass('disabled');
-	jQuery("[id$='_View']").addClass('disabled');
-
-	stepCounter();
-
-	jQuery(formName + "_View").removeClass("disabled");
-	jQuery(formName + "_View").removeClass('active');
-	jQuery(formName + "_View").addClass('active');
-
+  if(!isSubmitted){
+     form.action="reactivateResident";
+     form.submit();
+     jQuery("#btnReactivateResident").attr("disabled", true);
+     isSubmitted = true;
+  } else{
+    alert("System is processing, please be patient.");
+  }
 };
 
 document.getElementById('allowcontact').onchange = function() {
@@ -74,80 +94,18 @@ document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('viavoicemail').disabled = this.checked;
 	document.getElementById('voicemail').disabled = this.checked;
 	document.getElementById('viatext').disabled = this.checked;
-	document.getElementById('text').disabled = this.checked;	
+	document.getElementById('text').disabled = this.checked;
+	if(this.checked){
+		document.getElementById("viaemail").checked = false;
+		document.getElementById("viavoicemail").checked = false;
+		document.getElementById("viatext").checked = false;
+		document.getElementById('email').value = "";
+		document.getElementById('voicemail').value = "";
+		document.getElementById('text').value = "";
+	}
 };
 
 function reset(chk){
 	$('.setable').val(''); $('.setable').prop('checked', false);$(chk).trigger('change');
-};
+}
 
-function calculateHousingScore(){
-
-	jQuery('#hst_6_body').text('');
-	jQuery('[id^=hst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');
-	
-	debugger;
-	var qChoice1 = jQuery('input[id^=housingQuestionnaire0]');
-	var qChoice2 = jQuery('input[id^=housingQuestionnaire1]');
-	var qChoice3 = jQuery('input[id^=housingQuestionnaire2]');
-	var qChoice4 = jQuery('input[id^=housingQuestionnaire3]');
-	var qChoice5 = jQuery('input[id^=housingQuestionnaire4]');
-	var qChoice6 = jQuery('input[id^=housingQuestionnaire5]');
-	var qChoice7 = jQuery('input[id^=housingQuestionnaire6]');
-	var qChoice8 = jQuery('input[id^=housingQuestionnaire7]');
-	
-	if(qChoice1[1].checked == true){		
-		jQuery('[id^=hst_1_]').removeClass('danger').addClass('danger');
-		jQuery('#currentHousingScore').val(1);
-		jQuery('#hst_6_body').text(1);
-		
-	}else if(qChoice2[0].checked == true){		
-		jQuery('[id^=hst_1_]').removeClass('danger').addClass('danger');
-		jQuery('#currentHousingScore').val(1);
-		jQuery('#hst_6_body').text(1);
-						
-	}else if(qChoice4[1].checked == true){		
-		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
-		jQuery('#currentHousingScore').val(2);
-		jQuery('#hst_6_body').text(2);
-				
-	}
-	else if(qChoice5[0].checked == true){		
-		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
-		jQuery('#currentHousingScore').val(2);
-		jQuery('#hst_6_body').text(2);
-					
-	}
-	else if(qChoice6[0].checked == true){		
-		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
-		jQuery('#currentHousingScore').val(2);
-		jQuery('#hst_6_body').text(2);
-					
-	}
-	else if(qChoice7[1].checked == true){		
-		jQuery('[id^=hst_3_]').removeClass('info').addClass('info');
-		jQuery('#currentHousingScore').val(3);
-		jQuery('#hst_6_body').text(3);		
-		
-	}
-	else if(qChoice8[0].checked == true){		
-		jQuery('[id^=hst_4_]').removeClass('success').addClass('success');
-		jQuery('#currentHousingScore').val(4);
-		jQuery('#hst_6_body').text(4);
-		
-	}
-	else if(qChoice8[1].checked == true){		
-		jQuery('[id^=hst_5_]').removeClass('success').addClass('success');
-		jQuery('#currentHousingScore').val(5);
-		jQuery('#hst_6_body').text(5);		
-	}
-	
-	if(qChoice3[0].checked == true){		
-		jQuery('input[id^=housingQuestionnaire3]').attr('disabled', true);
-		jQuery('input[id^=housingQuestionnaire4]').attr('disabled', true);			
-	}else if (qChoice3[0].checked == false){	
-		jQuery('input[id^=housingQuestionnaire3]').attr('disabled', false);
-		jQuery('input[id^=housingQuestionnaire4]').attr('disabled', false);		
-	}
-	
-};

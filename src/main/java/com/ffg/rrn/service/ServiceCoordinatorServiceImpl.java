@@ -5,14 +5,12 @@ package com.ffg.rrn.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
-import com.ffg.rrn.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ServiceCoordinatorDAO;
 import com.ffg.rrn.model.ServiceCoordinator;
+import com.ffg.rrn.utils.PasswordUtils;
 
 /**
  * @author FFGRRNTeam

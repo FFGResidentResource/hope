@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+	var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<div class="container">
+		<div id="household_Form">
+			<form name='_householdF' th:action="@{/saveEachAssessment}"
+				th:object="${resident}" method='POST' class="form-horizontal">
+
+				<div class="col-sm-12 myPanel">
+					<div class="row">
+
+						<div class="col-sm-10">
+							<h3 style="width: 400px;">HOUSEHOLD MANAGEMENT</h3>
+							<span class="hidden-print" style="color: red; font-size: larger;"
+								th:if="*{firstName == null}" th:text="${message}"></span>
+						</div>
+						<div class="col-sm-2 hideme print-only">
+							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+						</div>
+
+					</div>
+					<div class="row hideme print-only">
+						<div class="col-sm-6">
+							<span>Full Name:&nbsp;</span> <u><span
+								th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+								<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+								<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+						</div>
+						<div class="col-sm-2">
+							<span>Resident Id:&nbsp;</span><u><span
+								th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+						</div>
+						<div class="col-sm-4">
+							<u><span id="_selectedDateHouseHold">Date:</span></u>
+						</div>
+
+					</div>
+
+					<div class="row hidden-print">
+						<div class="col-sm-5">
+							<div class="col-sm-4">
+								<strong>Resident Name:</strong>
+							</div>
+							<div class="col-sm-6">
+								<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+									<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+									<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="col-sm-6">
+								<strong>Resident Id:</strong>
+							</div>
+							<div class="col-sm-2">
+								<u><span th:if="*{firstName != null}" id="_residentIdText"
+									th:text="*{residentId}"></span></u>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="col-sm-3">
+								<strong>Date:</strong>
+							</div>
+							<div class="col-sm-9">
+								<select class="form-control setable" id="_dates"
+									th:field="*{selectedDate}"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSEHOLD MANAGEMENT', '_household');"
+									required>
+									<option value="NewAssessment">Start New Assessment</option>
+									<option th:each="assessmentDate : ${resident.householdDates}"
+										th:value="${assessmentDate}" th:utext="${assessmentDate}" />
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<hr class="solidline1">
+
+					<div class="row col-sm-12">
+
+						<div class="col-sm-6">
+							<div th:each="hhMgmt, iStat: *{householdMgmtQuestionnaire}">
+
+								<div th:if="${iStat.index} &lt; (${iStat.size}-1)/2">
+
+									<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
+									<span th:text="${hhMgmt.question}" /> <input type="hidden"
+										th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].questionId}" />
+									<ul>
+										<span th:each="radioChoice, stat : ${hhMgmt.choices}">
+											<input type="radio"
+											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											onclick="calculateHouseholdScore();"> <strong><lable
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div th:each="hhMgmt, iStat: *{householdMgmtQuestionnaire}">
+
+								<div th:if="${iStat.index} &gt;= (${iStat.size}-1)/2">
+
+									<strong><span th:text="${hhMgmt.questionNumber}"></span></strong>
+									<span th:text="${hhMgmt.question}" /> <input type="hidden"
+										th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].questionId}" />
+									<ul>
+										<span th:each="radioChoice, stat : ${hhMgmt.choices}">
+											<input type="radio"
+											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											onclick="calculateHouseholdScore();"> <strong><lable
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" th:field="*{residentId}" /> <input type="hidden"
+							th:field="*{firstName}" /> <input type="hidden"
+							th:field="*{lastName}" /> <input type="hidden"
+							th:field="*{propertyId}" /> <input type="hidden"
+							th:field="*{refId}" /> <input type="hidden" id="_lifeDomainhh"
+							th:field="*{lifeDomain}" /> <input type="hidden"
+							id="currentHHGoal" th:field="*{goal}" /> <input type="hidden"
+							id="currentHHScore" th:field="*{currentScore}" /> <input
+							type="submit" class="btn btn-primary btn-lg"
+							value="Save Household Assessment">
+					</div>
+
+
+				</div>
+			</form>
+
+			<div class="col-sm-12">
+
+				<table id="houseHoldMgmtTable" class="table table-bordered">
+					<thead>
+						<th id="hhmst_1_head">In Crisis(1)</th>
+						<th id="hhmst_2_head">Vulnerable (2)</th>
+						<th id="hhmst_3_head">Safe (3)</th>
+						<th id="hhmst_4_head">Building Capacity (4)</th>
+						<th id="hhmst_5_head">Empowered (5)</th>
+						<th id="hhmst_6_head">Score</th>
+						<th id="hhmst_7_head">Goal</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="hhmst_1_body">Unable to perform basic tasks
+								(hygiene, meals, cleaning, etc.); home is unsafe/ unsanitary.</td>
+							<td id="hhmst_2_body">Unable to perform some basic household
+								tasks; home has areas that are unsafe/ unsanitary.</td>
+							<td id="hhmst_3_body">Able to perform most basic tasks; home
+								is moderately safe and maintained.</td>
+							<td id="hhmst_4_body">Can perform all basic household tasks;
+								home is safe and maintained.</td>
+							<td id="hhmst_5_body">Can perform all basic tasks; home is
+								safe, healthy and well- maintained.</td>
+							<td id="hhmst_6_body"></td>
+							<td id="hhmst_7_body"></td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/household.js"></script>
+	<script	src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script	src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+
+</body>
+
+</html>
+

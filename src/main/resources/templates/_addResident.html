@@ -66,9 +66,9 @@
 					</p>
 
 					<p>
-					<h5>
-						<strong>I. <u>Right to Privacy</u></strong>
-					</h5>
+						<h5>
+							<strong>I. <u>Right to Privacy</u></strong>
+						</h5>
 					</p>
 
 					<p>
@@ -113,8 +113,8 @@
 								<div class="hideme print-only">
 									<p>
 									<div class="row">
-										<div class="col-sm-6">
-											<div class="col-sm-2">
+										<div class="col-sm-12">
+											<div class="col-sm-1">
 												<strong>Name:&nbsp;</strong>
 											</div>
 											<div class="col-sm-10">
@@ -125,8 +125,8 @@
 									</p>
 									<p>
 									<div class="row">
-										<div class="col-sm-6">
-											<div class="col-sm-2">
+										<div class="col-sm-12">
+											<div class="col-sm-1">
 												<strong>Referral:&nbsp;</strong>
 											</div>
 											<div class="col-sm-10">
@@ -137,8 +137,8 @@
 									</p>
 									<p>
 									<div class="row">
-										<div class="col-sm-6">
-											<div class="col-sm-2">
+										<div class="col-sm-12">
+											<div class="col-sm-1">
 												<strong>Property:&nbsp;</strong>
 											</div>
 											<div class="col-sm-10">
@@ -149,8 +149,8 @@
 									</p>
 									<p>
 									<div class="row">
-										<div class="col-sm-6">
-											<div class="col-sm-2">
+										<div class="col-sm-12">
+											<div class="col-sm-1">
 												<strong>Address:&nbsp;</strong>
 											</div>
 											<div class="col-sm-10">
@@ -217,8 +217,17 @@
 												th:field="*{address}" placeholder="No. and Street">
 										</div>
 									</div>
-								</div>
+									
+									<div class="col-sm-6">
 
+										<label class="col-sm-3 control-label" for="unit">Is Resident?:
+										</label>
+											<div class="radio">
+  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
+  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="FALSE" />No</label>
+    										</div>
+									</div>
+								</div>
 								</p></td>
 						</tr>
 
@@ -244,7 +253,7 @@
 
 								<p>
 									<label class="checkbox-inline" for="allowcontact"> <input class="setable"
-										id="allowcontact" type="checkbox" th:field="*{allowContact}">
+										id="allowcontact" type="checkbox" th:field="*{allowContact}" onchange="doNotContact()">
 										I am <strong>NOT interested</strong> in being contacted by a
 										Service Coordinator.
 									</label>
@@ -456,9 +465,12 @@
 						<input type="submit" id="btnSubmit" class="btn btn-primary btn-lg"
 							   th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
 							   onclick="saveOrUpdateResident(this.form);"/>
-						<input type="button" id="btnDeactivateResident" class="btn btn-primary btn-lg"
-							   value="Deactivate"
-							   onclick="deactivateResident(this.form);"/>
+						<input th:type="${resident.active}?'button':'hidden'" id="btnDeactivateResident" class="btn btn-primary btn-lg"
+							   value="Deactivate" th:title="*{active}"
+							   onclick="deactivateResident(this);"/>
+						<input th:type="${resident.residentId==null||resident.active}?'hidden':'button'" id="btnReactivateResident" class="btn btn-primary btn-lg"
+							   value="Reactivate" th:title="*{active}"
+							   onclick="reactivateResident(this);"/>
 						<input type="reset" class="btn btn-primary btn-lg" value="Reset"/>
 					</div>
 				</div>

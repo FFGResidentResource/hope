@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+	var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<!-- <div class="container">
+		<th:block th:include="/_wizard"></th:block>
+	</div> -->
+	<div class="container">
+		<div id="housingStability_Form">
+
+			<form name='_housingF' th:action="@{/saveEachAssessment}"
+				th:object="${resident}" method='POST' class="form-horizontal">
+
+				<div class="col-sm-12 myPanel">
+					<div class="row">
+						<div class="col-sm-10">
+							<h3 style="width: 400px;">HOUSING</h3>
+							<span class="hidden-print" style="color: red; font-size: larger;"
+								th:if="*{firstName == null}" th:text="${message}"></span>
+						</div>
+						<div class="col-sm-2 hideme print-only">
+							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+						</div>
+					</div>
+
+					<div class="row hideme print-only">
+						<div class="col-sm-6">
+							<span>Full Name:&nbsp;</span> <u><span
+								th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+								<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+								<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+						</div>
+						<div class="col-sm-2">
+							<span>Resident Id:&nbsp;</span><u><span
+								th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+						</div>
+						<div class="col-sm-4">
+							<u><span id="_selectedDateHousing">Date:</span></u>
+						</div>
+
+					</div>
+
+					<div class="row hidden-print">
+						<div class="col-sm-5">
+							<div class="col-sm-4">
+								<strong>Resident Name:</strong>
+							</div>
+							<div class="col-sm-6">
+								<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+									<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+									<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="col-sm-6">
+								<strong>Resident Id:</strong>
+							</div>
+							<div class="col-sm-2">
+								<u><span th:if="*{firstName != null}" id="_residentIdText"
+									th:text="*{residentId}"></span></u>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="col-sm-3">
+								<strong>Date:</strong>
+							</div>
+							<div class="col-sm-9">
+								<select class="form-control setable" id="_dates"
+									th:field="*{selectedDate}"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSING', '_housing' );"
+									required>
+									<option value="NewAssessment">Start New Assessment</option>
+									<option th:each="assessmentDate : ${resident.housingDates}"
+										th:value="${assessmentDate}" th:utext="${assessmentDate}" />
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<hr class="solidline1">
+
+					<div class="row col-sm-12">
+
+						<div class="col-sm-6">
+							<div th:each="housing, iStat: *{housingQuestionnaire}">
+
+								<div th:if="${iStat.index} &lt; (${iStat.size}-1)/2">
+
+									<strong><span th:text="${housing.questionNumber}"></span></strong>
+									<span th:text="${housing.question}" /> <input type="hidden"
+										th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
+									<ul>
+										<span th:each="radioChoice, stat : ${housing.choices}">
+											<input type="radio"
+											th:id="'_housingQuestionnaire_'+ ${housing.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											onclick="calculateHousingScore();"> <strong><lable
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div th:each="housing, iStat: *{housingQuestionnaire}">
+
+								<div th:if="${iStat.index} &gt;= (${iStat.size}-1)/2">
+
+									<strong><span th:text="${housing.questionNumber}"></span></strong>
+									<span th:text="${housing.question}" /> <input type="hidden"
+										th:field="*{housingQuestionnaire[__${iStat.index}__].questionId}" />
+									<ul>
+										<span th:each="radioChoice, stat : ${housing.choices}">
+											<input type="radio"
+											th:id="'_housingQuestionnaire_'+ ${housing.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											onclick="calculateHousingScore();"> <strong><lable
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+					<div class="row text-center bs-linebreak hidden-print">
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" th:field="*{residentId}" /> <input type="hidden"
+							th:field="*{firstName}" /> <input type="hidden"
+							th:field="*{lastName}" /> <input type="hidden"
+							th:field="*{propertyId}" /> <input type="hidden"
+							th:field="*{refId}" /> <input type="hidden" id="_lifeDomain"
+							th:field="*{lifeDomain}" /> <input type="hidden"
+							id="currentHousingGoal" th:field="*{goal}" /> <input
+							type="hidden" id="currentHousingScore" th:field="*{currentScore}" />
+
+						<input type="submit" id="_housingSubmit"
+							class="btn btn-primary btn-lg" value="Save Housing Assessment">
+					</div>
+
+
+				</div>
+			</form>
+
+			<div class="col-sm-12">
+				<table id="housingScoreTable"
+					class="table table-condensed table-bordered">
+					<thead>
+						<th id="hst_1_head">In Crisis(1)</th>
+						<th id="hst_2_head">Vulnerable (2)</th>
+						<th id="hst_3_head">Safe (3)</th>
+						<th id="hst_4_head">Building Capacity (4)</th>
+						<th id="hst_5_head">Empowered (5)</th>
+						<th id="hst_6_head">Score</th>
+						<th id="hst_7_head">Goal</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="hst_1_body">Homeless or threatened with eviction.</td>
+							<td id="hst_2_body">In transitional, temporary, or
+								substandard housing OR current rent/mortgage payment is
+								unaffordable (over 30% of income).</td>
+							<td id="hst_3_body">In stable housing that is only
+								marginally adequate.</td>
+							<td id="hst_4_body">Household is in adequate, subsidized
+								housing.</td>
+							<td id="hst_5_body">Household is in adequate, unsubsidized
+								housing.</td>
+							<td id="hst_6_body"></td>
+							<td id="hst_7_body"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/housing.js"></script>
+	<script	src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script	src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+
+</body>
+
+</html>
+
