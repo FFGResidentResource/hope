@@ -10,7 +10,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -187,10 +189,10 @@ public class ResidentController extends BaseController {
 	}
 
 	@PostMapping(value = "/saveActionPlan")
-	public String saveActionPlan(@Valid @ModelAttribute ActionPlan actionPlan, BindingResult bindingResult) {
-		residentService.saveActionPlan(actionPlan);
+	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
+		residentService.saveActionPlan(resident);
 		return "redirect:/allResident";
-	}
+	}	
 
 	@PostMapping(value = "/saveAssessmentType")
 	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {

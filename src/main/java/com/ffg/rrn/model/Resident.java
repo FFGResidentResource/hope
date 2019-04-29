@@ -175,7 +175,29 @@ public class Resident {
 	
 	private String mostRecentSSMDate;
 	
-	
+	// ActionPlan Fields -Begin
+
+	// This is JSON String with selected ActionPlan
+	private String focusOnActionPlan;
+
+	private String residentReportedConcern;
+
+	// This contains JSON String for each Domain
+	private String planOfAction;
+
+	// This contains JSON String for each Domain
+	private String anticipatedOutcome;
+
+	private String followUpNotes;
+	// This contains JSON String for each Domain
+	private String outcomesAchieved;
+
+	private Date outcomeDate;
+
+	private Date actionPlanAddedDate;
+
+	// ActionPlan Fields -End
+
 	public Resident() {
 
 	}
