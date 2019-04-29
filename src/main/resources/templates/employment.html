@@ -46,8 +46,11 @@
 		<div id="employment_Form">
 
 			<form name='_employmentF' th:action="@{/saveEachAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal">
-
+				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
+					   th:field="*{employmentAssessmentAllowed}" />
+				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
+					   th:field="*{dateOfLatestEmploymentAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 						<div class="col-sm-10">
@@ -179,7 +182,7 @@
 							id="currentEmpGoal" th:field="*{goal}" /> <input type="hidden"
 							id="currentEmpScore" th:field="*{currentScore}" /> <input
 							type="submit" class="btn btn-primary btn-lg"
-							value="Save EMPLOYMENT Assessment">
+							value="Save EMPLOYMENT Assessment" onclick="saveAssessment(this.form);">
 					</div>
 
 				</div>

@@ -175,8 +175,6 @@ public class Resident {
 	
 	private String mostRecentSSMDate;
 
-	private String dateOfLatestHouseAssessment;
-	private boolean newHouseAssessmentAllowed;
 	public Resident() {
 
 	}
@@ -209,20 +207,61 @@ public class Resident {
 		this.serviceCoord = serviceCoord;
 	}
 
-	public String getDateOfLatestHousingAssessment(){
-		if(CollectionUtils.isEmpty(this.getHousingDates())){
-			return StringUtils.EMPTY;
-		}
-		return this.getHousingDates().get(0);
-	}
-	public boolean isNewHousingAssessmentAllowed(){
-		if(CollectionUtils.isEmpty(this.getHousingDates())){
-            return true;
-		}
-		return checkIfLatestAssessmentTakenLessThanSixMonths(this.getHousingDates().get(0));
-	}
+    private String getEmptyStrOrLatestDateOfAssessment(List<String> dates) {
+        return CollectionUtils.isEmpty(dates) ? StringUtils.EMPTY:dates.get(0);
+    }
 
-	private boolean checkIfLatestAssessmentTakenLessThanSixMonths(String dateOfLatestHouseAssessment) {
+    private boolean ifLatestAssessmentExistsAndEarlierThanSixMonths(List<String> dates) {
+        if (CollectionUtils.isEmpty(dates)) {
+            return true;
+        }
+        return isDateBeforeSixMonths(dates.get(0));
+    }
+	public String getDateOfLatestHousingAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getHousingDates());
+    }
+
+    public boolean isNewHousingAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHousingDates());
+    }
+
+
+    public String getDateOfLatestMoneymgmtAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getMoneymgmtDates());
+	}
+	public boolean isMoneymgmtAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getMoneymgmtDates());
+    }
+
+    public String getDateOfLatestEmploymentAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getEmploymentDates());
+    }
+    public boolean isEmploymentAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getEmploymentDates());
+    }
+
+    public String getDateOfLatestEducationAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getEducationDates());
+    }
+    public boolean isEducationAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getEducationDates());
+    }
+
+    public String getDateOfLatestNetSupportAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getNetSupportDates());
+    }
+    public boolean isNetSupportAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getNetSupportDates());
+    }
+
+    public String getDateOfLatestHouseholdAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getHouseholdDates());
+    }
+    public boolean isHouseholdAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHouseholdDates());
+    }
+
+	private boolean isDateBeforeSixMonths(String dateOfLatestHouseAssessment) {
 		try {
 			Date lastestAssessDate = DateUtils.parseDate(dateOfLatestHouseAssessment, AppConstants.DATE_PATTERN_JAVA);
 			Date today = new Date();

@@ -47,9 +47,9 @@
 
 			<form name='_housingF' th:action="@{/saveEachAssessment}"
 				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
-				<input name="newHousingAssessmentAllowed" type="hidden" id="newHousingAssessmentAllowed"
+				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
 					   th:field="*{newHousingAssessmentAllowed}" />
-				<input name="dateOfLatestHousingAssessment" type="hidden" id="dateOfLatestHousingAssessment"
+				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
 					   th:field="*{dateOfLatestHousingAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">

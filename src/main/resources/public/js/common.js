@@ -56,10 +56,22 @@ function calculateAllScores(lifeDomain){
     if(lifeDomain == 'HOUSEHOLD MANAGEMENT'){
 	calculateHouseholdScore();
     }
-    
-    
-    
-    
-    
+}
+
+function saveAssessment(form){
+   if($('#isNewAssessmentAllowed').val()=='false' &&
+      $('#_dates').val()=='NewAssessment'){
+      alert("Only ONE assessment is allowed in 6 months. Please modify the latest assessment.");
+      return false;
+   }
+   var dateOfLatestAssessment = $('#dateOfLatestAssessment').val();
+   if(dateOfLatestAssessment!=""&&
+       dateOfLatestAssessment!=$('#_dates').val()){
+       alert("Please modify the latest assessment, "+dateOfLatestAssessment);
+       return false;
+   }
+
+   //other validation logic
+   form.submit();
 }
 

@@ -46,8 +46,11 @@
 		<div id="moneyMgmt_Form" >
 
 			<form name='_moneymgmtF' th:action="@{/saveEachAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal">
-
+				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
+					   th:field="*{moneymgmtAssessmentAllowed}" />
+				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
+					   th:field="*{dateOfLatestMoneymgmtAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 						<div class="col-sm-10">
@@ -181,7 +184,7 @@
 							th:field="*{currentScore}" /> <input type="submit"
 							id="_moneyMgmtSubmit"
 							class="btn btn-primary btn-lg"
-							value="Save Money Management Assessment">
+							value="Save Money Management Assessment" onclick="saveAssessment(this.form);">
 					</div>
 
 
