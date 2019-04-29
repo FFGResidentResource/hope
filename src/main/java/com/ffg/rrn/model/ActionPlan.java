@@ -1,6 +1,7 @@
 package com.ffg.rrn.model;
 
 import lombok.Data;
+import org.postgresql.util.PGobject;
 
 import java.util.Date;
 
@@ -15,13 +16,13 @@ public class ActionPlan {
 	
 	private Boolean active;
 
-	private String focusOnDomain;
+	private PGobject focusOnDomain;
 
-	private String planOfAction;
+	private PGobject planOfAction;
 
-	private String anticipatedOutcomes;
+	private PGobject anticipatedOutcomes;
 
-	private String outcomeAchieved;
+	private PGobject outcomeAchieved;
 
 	private Date outcomeDate;
 
@@ -33,16 +34,15 @@ public class ActionPlan {
 
     private String serviceCoord;
 
-	public ActionPlan(int actionPlanId, long residentId,
-					  String residentConcern, Boolean active,
-					  String focusOnDomain, Date outcomeDate,
-					  String followupNotes, Date dateAdded,
-					  Date dateModified, String serviceCoord) {
+	public ActionPlan(int actionPlanId, long residentId, String residentConcern, Boolean active, PGobject focusOnDomain, PGobject planOfAction, PGobject anticipatedOutcomes, PGobject outcomeAchieved, Date outcomeDate, String followupNotes, Date dateAdded, Date dateModified, String serviceCoord) {
 		this.actionPlanId = actionPlanId;
 		this.residentId = residentId;
 		this.residentConcern = residentConcern;
 		this.active = active;
 		this.focusOnDomain = focusOnDomain;
+		this.planOfAction = planOfAction;
+		this.anticipatedOutcomes = anticipatedOutcomes;
+		this.outcomeAchieved = outcomeAchieved;
 		this.outcomeDate = outcomeDate;
 		this.followupNotes = followupNotes;
 		this.dateAdded = dateAdded;

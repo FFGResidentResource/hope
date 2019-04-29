@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -188,24 +189,27 @@ public class ResidentController extends BaseController {
 	}
 
 	@PostMapping(value = "/saveActionPlan")
-	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws SQLException {
 		ActionPlan actionPlan = constructActionPlan(resident);
 		residentService.saveActionPlan(actionPlan);
 		return "redirect:/allResident";
 	}
 
-	private ActionPlan constructActionPlan(Resident resident) {
+	private ActionPlan constructActionPlan(Resident resident) throws SQLException {
 		int actionId = 0;
 		String residentConcern = "blah. blah";
-		String focusOnDomain = "";
 		Date outcomeDate = new Date();
 		String followupNotes = "";
 		Date dateAdded = new Date();
 		Date dateModified = new Date();
 		String serviceCoord = "";
+		String sampleJSON = "{ \"HOUSING\": \"\", \"MONEY MANAGEMENT\": \"\", \"EMPLOYMENT\": \"\", \"EDUCATION\": \"\", \"NETWORK SUPPORT\": \"\", \"HOUSEHOLD MANAGEMENT\": \"\" }";
+		PGobject jsonObject = new PGobject();
+		jsonObject.setType("json");
+		jsonObject.setValue(sampleJSON);
 		ActionPlan actionPlan = new ActionPlan(actionId,
 				resident.getResidentId(), residentConcern,
-				resident.getActive(), focusOnDomain,
+				resident.getActive()==null?Boolean.TRUE:resident.getActive(), jsonObject, jsonObject, jsonObject, jsonObject,
 				outcomeDate, followupNotes, dateAdded,
 				dateModified, serviceCoord);
 		return actionPlan;
