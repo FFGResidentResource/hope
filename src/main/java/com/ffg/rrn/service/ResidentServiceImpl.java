@@ -9,12 +9,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ActionPlanDAO;
 import com.ffg.rrn.dao.ResidentDAO;
-import com.ffg.rrn.model.ActionPlan;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Choice;
@@ -183,8 +184,8 @@ public class ResidentServiceImpl {
 		
 	}
 
-	public int saveActionPlan(ActionPlan actionPlan) {
-		return actionPlanDAO.saveActionPlan(actionPlan);
+	public long saveActionPlan(Resident resident) throws DataAccessException, ParseException {
+		return actionPlanDAO.saveActionPlan(resident);
 	}
 	
 	public String getMostRecentSSMDate(Long residentId) {
