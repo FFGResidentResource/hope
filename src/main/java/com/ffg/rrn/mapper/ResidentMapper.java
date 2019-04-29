@@ -20,9 +20,11 @@ public class ResidentMapper implements RowMapper<Resident> {
 			= "select r.RESIDENT_ID, r.ACTIVE, r.IS_RESIDENT, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
 					+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
 					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
-					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children "
+					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
+					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , " + " ap.outcome_achieved , ap.outcome_date , ap.date_added "
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
+					+ " join action_plan ap on ap.resident_id = r.resident_id"
 					+ " left join assessment_type a on a.a_id = r.a_type ";
 
 	@Override
@@ -58,6 +60,16 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setRefValue(rs.getString("REF_VALUE"));
 		r.setAValue(rs.getString("A_VALUE"));
 		r.setChildList(rs.getString("children"));
+
+		// ActionPlan
+		r.setResidentReportedConcern(rs.getString("resident_concerns"));
+		r.setFocusOnActionPlan(rs.getString("focus_on_domain"));
+		r.setPlanOfAction(rs.getString("PLAN_OF_ACTION"));
+		r.setAnticipatedOutcome(rs.getString("ANTICIPATED_OUTCOMES"));
+		r.setOutcomesAchieved(rs.getString("OUTCOME_ACHIEVED"));
+		r.setOutcomeDate(rs.getDate("OUTCOME_DATE"));
+		r.setFollowUpNotes(rs.getString("FOLLOWUP_NOTES"));
+		r.setActionPlanAddedDate(rs.getDate("DATE_ADDED"));
 
 		return r;
 
