@@ -59,16 +59,22 @@ function calculateAllScores(lifeDomain){
 }
 
 function saveAssessment(form){
-   if($('#isNewAssessmentAllowed').val()=='false' &&
-      $('#_dates').val()=='NewAssessment'){
-      alert("Only ONE assessment is allowed in 6 months. Please modify the latest assessment.");
-      return false;
-   }
-   var dateOfLatestAssessment = $('#dateOfLatestAssessment').val();
-   if(dateOfLatestAssessment!=""&&
-       dateOfLatestAssessment!=$('#_dates').val()){
-       alert("Please modify the latest assessment, "+dateOfLatestAssessment);
+   if($('#isNewAssessmentAllowed').val()=='false'){
+     if($('#_dates').val()=='NewAssessment'){
+       alert("Only ONE assessment is allowed in 6 months. Please update the latest assessment.");
        return false;
+     } else{
+        var dateOfLatestAssessment = $('#dateOfLatestAssessment').val();
+        if(dateOfLatestAssessment!=$('#_dates').val()){
+           alert("Please update the latest assessment, "+dateOfLatestAssessment);
+           return false;
+        }
+     }
+   }
+
+   if($('#isNewAssessmentAllowed').val()=='true' &&
+     $('#_dates').val()!='NewAssessment'){
+      return false;
    }
 
    //other validation logic
