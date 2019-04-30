@@ -47,8 +47,11 @@
 		<div id="education_Form">
 
 			<form name='_educationF' th:action="@{/saveEachAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal">
-
+				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
+					   th:field="*{educationAssessmentAllowed}" />
+				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
+					   th:field="*{dateOfLatestEducationAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 						<div class="col-sm-10">
@@ -182,7 +185,8 @@
 							id="currentEducationGoal" th:field="*{goal}" /> <input
 							type="hidden" id="currentEducationScore"
 							th:field="*{currentScore}" /> <input type="submit"
-							class="btn btn-primary btn-lg" value="Save EDUCATION Assessment">
+							class="btn btn-primary btn-lg" value="Save EDUCATION Assessment"
+																 onclick="saveAssessment(this.form);">
 					</div>
 
 

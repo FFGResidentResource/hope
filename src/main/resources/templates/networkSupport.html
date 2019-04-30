@@ -46,8 +46,11 @@
 <div id="networkSupport_Form">
 
 	<form name='_netSupportF' th:action="@{/saveEachAssessment}"
-		th:object="${resident}" method='POST' class="form-horizontal">
-
+		th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+		<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
+			   th:field="*{netSupportAssessmentAllowed}" />
+		<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
+			   th:field="*{dateOfLatestNetSupportAssessment}" />
 		<div class="col-sm-12 myPanel">
 			<div class="row">
 				<div class="col-sm-10">
@@ -178,7 +181,7 @@
 					type="hidden" id="currentNetSupportScore"
 					th:field="*{currentScore}" /> <input type="submit"
 					class="btn btn-primary btn-lg"
-					value="Save NETWORK SUPPORT Assessment">
+					value="Save NETWORK SUPPORT Assessment" onclick="saveAssessment(this.form);">
 			</div>
 		</div>
 	</form>

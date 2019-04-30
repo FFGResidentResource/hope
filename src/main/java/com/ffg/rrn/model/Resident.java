@@ -3,18 +3,18 @@
  */
 package com.ffg.rrn.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ffg.rrn.utils.AppConstants;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.util.CollectionUtils;
+
+import javax.validation.constraints.*;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
-import lombok.Data;
 
 /**
  * @author FFGRRNTeam
@@ -174,7 +174,6 @@ public class Resident {
 	private String householdScoreGoal;
 	
 	private String mostRecentSSMDate;
-	
 	// ActionPlan Fields -Begin
 
 	// This is JSON String with selected ActionPlan
@@ -197,6 +196,7 @@ public class Resident {
 	private Date actionPlanAddedDate;
 
 	// ActionPlan Fields -End
+
 
 	public Resident() {
 
@@ -230,4 +230,68 @@ public class Resident {
 		this.serviceCoord = serviceCoord;
 	}
 
+    private String getEmptyStrOrLatestDateOfAssessment(List<String> dates) {
+        return CollectionUtils.isEmpty(dates) ? StringUtils.EMPTY:dates.get(0);
+    }
+
+    private boolean ifLatestAssessmentExistsAndEarlierThanSixMonths(List<String> dates) {
+        if (CollectionUtils.isEmpty(dates)) {
+            return true;
+        }
+        return isDateBeforeSixMonths(dates.get(0));
+    }
+	public String getDateOfLatestHousingAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getHousingDates());
+    }
+
+    public boolean isNewHousingAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHousingDates());
+    }
+
+
+    public String getDateOfLatestMoneymgmtAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getMoneymgmtDates());
+	}
+	public boolean isMoneymgmtAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getMoneymgmtDates());
+    }
+
+    public String getDateOfLatestEmploymentAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getEmploymentDates());
+    }
+    public boolean isEmploymentAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getEmploymentDates());
+    }
+
+    public String getDateOfLatestEducationAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getEducationDates());
+    }
+    public boolean isEducationAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getEducationDates());
+    }
+
+    public String getDateOfLatestNetSupportAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getNetSupportDates());
+    }
+    public boolean isNetSupportAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getNetSupportDates());
+    }
+
+    public String getDateOfLatestHouseholdAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getHouseholdDates());
+    }
+    public boolean isHouseholdAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHouseholdDates());
+    }
+
+	private boolean isDateBeforeSixMonths(String dateOfLatestHouseAssessment) {
+		try {
+			Date lastestAssessDate = DateUtils.parseDate(dateOfLatestHouseAssessment, AppConstants.DATE_PATTERN_JAVA);
+			Date today = new Date();
+			return DateUtils.addMonths(lastestAssessDate,6).before(today);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
