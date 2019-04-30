@@ -74,6 +74,7 @@ function saveAssessment(form){
 
    if($('#isNewAssessmentAllowed').val()=='true' &&
      $('#_dates').val()!='NewAssessment'){
+      alert("Please create a new assessment. Any assessment older than 6 months is not editable.");
       return false;
    }
 
