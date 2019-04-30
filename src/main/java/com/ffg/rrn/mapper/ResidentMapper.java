@@ -24,7 +24,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , " + " ap.outcome_achieved , ap.outcome_date , ap.date_added "
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
-					+ " join action_plan ap on ap.resident_id = r.resident_id"
+					+ " left join action_plan ap on ap.resident_id = r.resident_id"
 					+ " left join assessment_type a on a.a_id = r.a_type ";
 
 	@Override

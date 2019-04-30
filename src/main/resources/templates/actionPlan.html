@@ -208,6 +208,20 @@
 								th:value="*{residentReportedConcern}"></textarea>
 						</div>
 					</div>
+
+					
+						<table class="table table-condensed table-bordered hideme print-only">
+							<thead>
+								<th class="text-center">Resident's Reported Concerns</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td id="_rrcPrint" style="width:90%"></td>
+								</tr>
+							</tbody>
+						</table>
+					
+
 					<br />
 					<div class="row hidden-print">
 						<div class="col-sm-12 text-center">
@@ -238,6 +252,48 @@
 							<textarea class="form-control" rows="1" id="_planOfActionHH"></textarea>
 						</div>
 					</div>
+
+					
+						<table class="table table-condensed table-bordered hideme print-only" >
+							<thead>
+								<th class="text-center" colspan="2">Plan of Action for Each
+									Domain of Focus</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td><strong>Domain</strong></td>
+									<td><strong>Plan of Action</strong></td>
+								</tr>
+								<tr>
+									<td>HOUSING</td>
+									<td id="_housingPOA"></td>
+								</tr>
+								<tr>
+									<td>MONEY MANAGEMENT</td>
+									<td id="_mmPOA"></td>
+								</tr>
+								<tr>
+									<td>EMPLOYMENT</td>
+									<td id="_empPOA"></td>
+								</tr>
+								<tr>
+									<td>EDUCATION</td>
+									<td id="_eduPOA"></td>
+								</tr>
+								<tr>
+									<td>NETWORK SUPPORT</td>
+									<td id="_nsPOA"></td>
+								</tr>
+								<tr>
+									<td style="width:400px">HOUSEHOLD MANAGEMENT</td>
+									<td id="_hhPOA" style="width:700px"></td>
+								</tr>
+
+							</tbody>
+
+						</table>
+		
+
 					<br />
 					<div class="row hidden-print">
 						<div class="col-sm-12 text-center">
@@ -274,6 +330,62 @@
 								id="_anticipatedOutcomeHH"></textarea>
 						</div>
 					</div>
+
+					
+						<table class="table table-condensed print-only table-bordered hideme print-only" >
+							<thead>
+								<th class="text-center" colspan="2">Anticipated Outcome for
+									Each Domain of Focus</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td><strong>Domain</strong></td>
+									<td><strong>Anticipated Outcome</strong></td>
+								</tr>
+								<tr>
+									<td>HOUSING</td>
+									<td id="_housingAnOut"></td>
+								</tr>
+								<tr>
+									<td>MONEY MANAGEMENT</td>
+									<td id="_mmAnOut"></td>
+								</tr>
+								<tr>
+									<td>EMPLOYMENT</td>
+									<td id="_empAnOut"></td>
+								</tr>
+								<tr>
+									<td>EDUCATION</td>
+									<td id="_eduAnOut"></td>
+								</tr>
+								<tr>
+									<td>NETWORK SUPPORT</td>
+									<td id="_nsAnOut"></td>
+								</tr>
+								<tr>
+									<td>HOUSEHOLD MANAGEMENT</td>
+									<td id="_hhAnOut"></td>
+								</tr>
+
+								<tr>
+									<td>Resident’s Signature:</td>
+									<td>Date:</td>
+								</tr>
+
+								<tr>
+									<td>Community Manager’s Signature:</td>
+									<td>Date:</td>
+								</tr>
+
+								<tr>
+									<td style="width:400px">Service Coordinator’s Signature:</td>
+									<td style="width:700px">Date:</td>
+								</tr>
+
+							</tbody>
+
+						</table>
+					
 					<br />
 					<div class="row hidden-print">
 						<div class="col-sm-2  control-label">Follow-Up Notes</div>
@@ -282,6 +394,19 @@
 								th:field="*{followUpNotes}" th:value="*{followUpNotes}"></textarea>
 						</div>
 					</div>
+
+					
+						<table class="table table-condensed hideme print-only">
+							<thead>
+								<th class="text-center">Follow-Up Notes</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td id="_rrcPrint" style="width:1100px"></td>
+								</tr>
+							</tbody>
+						</table>
+					
 					<br />
 					<div class="row hidden-print">
 						<div class="col-sm-12 text-center">
@@ -313,6 +438,51 @@
 							<textarea class="form-control" rows="1" id="_outcomesAchievedHH"></textarea>
 						</div>
 					</div>
+					
+					
+						<table class="table table-condensed print-only table-bordered hideme print-only" >
+							<thead>
+								<th class="text-center" colspan="2">Outcomes Achieved</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td><strong>Domain</strong></td>
+									<td><strong>Outcomes Achieved</strong></td>
+								</tr>
+								<tr>
+									<td>HOUSING</td>
+									<td id="_housingOutAch"></td>
+								</tr>
+								<tr>
+									<td>MONEY MANAGEMENT</td>
+									<td id="_mmOutAch"></td>
+								</tr>
+								<tr>
+									<td>EMPLOYMENT</td>
+									<td id="_empOutAch"></td>
+								</tr>
+								<tr>
+									<td>EDUCATION</td>
+									<td id="_eduOutAch"></td>
+								</tr>
+								<tr>
+									<td>NETWORK SUPPORT</td>
+									<td id="_nsOutAch"></td>
+								</tr>
+								<tr>
+									<td>HOUSEHOLD MANAGEMENT</td>
+									<td id="_hhOutAch"></td>
+								</tr>
+																
+								<tr>
+									<td style="width:400px">Service Coordinator’s Signature:</td>
+									<td style="width:700px">Date:</td>
+								</tr>
+
+							</tbody>
+
+						</table>
+					
 
 					<br /> <br /> <br />
 					<div class="row text-center">
@@ -323,17 +493,21 @@
 
 					<div class="row text-center bs-linebreak hidden-print">
 						<!-- Following all passed to ResidentController upon Submit, please look onclick method of save for building each JSON String-->
-						<input type="hidden" th:field="*{serviceCoord}" /> 
-						<input	type="hidden" th:field="*{residentId}" /> 
-						<input type="hidden" id="_focusString" th:field="*{focusOnActionPlan}" th:value="*{focusOnActionPlan}" /> 
-						<input type="hidden" id="_planOfActionString" th:field="*{planOfAction}" th:value="*{planOfAction}" /> 
-						<input type="hidden" id="_anticipatedOutcomeString" th:field="*{anticipatedOutcome}" th:value="*{anticipatedOutcome}" /> 
-						<input type="hidden" id="_outcomesAchievedString" th:field="*{outcomesAchieved}" th:value="*{outcomesAchieved}" /> 
-						
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" th:field="*{residentId}" /> <input type="hidden"
+							id="_focusString" th:field="*{focusOnActionPlan}"
+							th:value="*{focusOnActionPlan}" /> <input type="hidden"
+							id="_planOfActionString" th:field="*{planOfAction}"
+							th:value="*{planOfAction}" /> <input type="hidden"
+							id="_anticipatedOutcomeString" th:field="*{anticipatedOutcome}"
+							th:value="*{anticipatedOutcome}" /> <input type="hidden"
+							id="_outcomesAchievedString" th:field="*{outcomesAchieved}"
+							th:value="*{outcomesAchieved}" />
+
 						<!-- Submit  -->
-						<input type="submit"
-							id="_actionPlanSubmit" class="btn btn-primary btn-lg"
-							onclick="buildEachJSONString();" value="Save Action Plan">
+						<input type="submit" id="_actionPlanSubmit"
+							class="btn btn-primary btn-lg" onclick="buildEachJSONString();"
+							value="Save Action Plan">
 					</div>
 
 				</div>
