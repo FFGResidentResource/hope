@@ -45,7 +45,7 @@
 	<div class="container">
 		<div id="housingStability_Form">
 
-			<form name='_housingF' th:action="@{/saveEachAssessment}"
+			<form name='_housingF' th:action="@{/saveAssessment}"
 				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
 				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
 					   th:field="*{newHousingAssessmentAllowed}" />
@@ -121,7 +121,7 @@
 
 					<hr class="solidline1">
 
-					<div class="row col-sm-12">
+						<div class="row col-sm-12">
 
 						<div class="col-sm-6">
 							<div th:each="housing, iStat: *{housingQuestionnaire}">
@@ -171,23 +171,25 @@
 						</div>
 					</div>
 
-
-					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> <input
-							type="hidden" th:field="*{residentId}" /> <input type="hidden"
-							th:field="*{firstName}" /> <input type="hidden"
-							th:field="*{lastName}" /> <input type="hidden"
-							th:field="*{propertyId}" /> <input type="hidden"
-							th:field="*{refId}" /> <input type="hidden" id="_lifeDomain"
-							th:field="*{lifeDomain}" /> <input type="hidden"
-							id="currentHousingGoal" th:field="*{goal}" /> <input
-							type="hidden" id="currentHousingScore" th:field="*{currentScore}" />
-
-						<input type="submit" id="_housingSubmit"
-							class="btn btn-primary btn-lg" value="Save Housing Assessment" onclick="saveAssessment(this.form);">
-					</div>
-
-
+					 <div class="row col-sm-12">
+						<div class="col-sm-6">
+							<input type="hidden" th:field="*{serviceCoord}" /> <input
+								type="hidden" th:field="*{residentId}" /> <input type="hidden"
+								th:field="*{firstName}" /> <input type="hidden"
+								th:field="*{lastName}" /> <input type="hidden"
+								th:field="*{propertyId}" /> <input type="hidden"
+								th:field="*{refId}" /> <input type="hidden" id="_lifeDomain"
+								th:field="*{lifeDomain}" /> <input type="hidden"
+								id="currentHousingGoal" th:field="*{goal}" /> <input
+								type="hidden" id="currentHousingScore" th:field="*{currentScore}" />
+							<input type="button" id="_housingSubmit"
+								class="btn btn-primary btn-lg" value="Save Housing Assessment" onclick="saveAssessment(this.form);">
+						</div>
+						<div class="col-sm-6 text-right">
+							<input type="button" id="_housingSubmitAndNext"
+								   class="btn btn-primary btn-lg" value="Save and Next Assessment"
+								   onclick="saveAndNextAssessment(this.form);"></div>
+					 </div>
 				</div>
 			</form>
 

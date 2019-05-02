@@ -41,7 +41,7 @@
 
 	<div class="container">
 		<div id="household_Form">
-			<form name='_householdF' th:action="@{/saveEachAssessment}"
+			<form name='_householdF' th:action="@{/saveAssessment}"
 				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
 				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
 					   th:field="*{householdAssessmentAllowed}" />
