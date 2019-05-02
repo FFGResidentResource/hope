@@ -504,10 +504,11 @@
 							id="_outcomesAchievedString" th:field="*{outcomesAchieved}"
 							th:value="*{outcomesAchieved}" />
 
+						<div><span th:display="${resident.mostRecentSSMDate!='--'}?'block':'none'" style="color:red;font-weight:bold">Please complete Self Sufficiency Matrix first.</span></div>
 						<!-- Submit  -->
 						<input type="submit" id="_actionPlanSubmit"
-							class="btn btn-primary btn-lg" onclick="buildEachJSONString();" th:disabled="${resident.mostRecentSSMDate=='-'}?'disabled':'false'"
-							value="Save Action Plan" th:title="*{mostRecentSSMDate=='-'}?'please complete Self assessment first':''">
+							class="btn btn-primary btn-lg" onclick="buildEachJSONString();" th:disabled="${resident.mostRecentSSMDate!='--'}?'disabled':'false'"
+							value="Save Action Plan" th:title="*{mostRecentSSMDate=='-'}?'Please complete Self Sufficiency Matrix first.':'save'">
 					</div>
 
 				</div>
