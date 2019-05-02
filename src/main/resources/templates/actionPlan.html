@@ -506,8 +506,8 @@
 
 						<!-- Submit  -->
 						<input type="submit" id="_actionPlanSubmit"
-							class="btn btn-primary btn-lg" onclick="buildEachJSONString();"
-							value="Save Action Plan">
+							class="btn btn-primary btn-lg" onclick="buildEachJSONString();" th:disabled="${resident.mostRecentSSMDate=='-'}?'disabled':'false'"
+							value="Save Action Plan" th:title="*{mostRecentSSMDate=='-'}?'please complete Self assessment first':''">
 					</div>
 
 				</div>
