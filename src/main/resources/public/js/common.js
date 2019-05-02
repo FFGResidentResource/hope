@@ -81,4 +81,8 @@ function saveAssessment(form){
    //other validation logic
    form.submit();
 }
+function saveAndNextAssessment(form){
+   form.action="/saveAssessmentAndGoToNext";
+   saveAssessment(form);
+}
 

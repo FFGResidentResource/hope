@@ -45,7 +45,7 @@
 	<div class="container">
 		<div id="employment_Form">
 
-			<form name='_employmentF' th:action="@{/saveEachAssessment}"
+			<form name='_employmentF' th:action="@{/saveAssessment}"
 				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
 				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
 					   th:field="*{employmentAssessmentAllowed}" />
@@ -170,21 +170,25 @@
 
 						</div>
 					</div>
-
-					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> <input
-							type="hidden" th:field="*{residentId}" /> <input type="hidden"
-							th:field="*{firstName}" /> <input type="hidden"
-							th:field="*{lastName}" /> <input type="hidden"
-							th:field="*{propertyId}" /> <input type="hidden"
-							th:field="*{refId}" /> <input type="hidden" id="_empLifeDomain"
-							th:field="*{lifeDomain}" /> <input type="hidden"
-							id="currentEmpGoal" th:field="*{goal}" /> <input type="hidden"
-							id="currentEmpScore" th:field="*{currentScore}" /> <input
-							type="submit" class="btn btn-primary btn-lg"
-							value="Save EMPLOYMENT Assessment" onclick="saveAssessment(this.form);">
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<input type="hidden" th:field="*{serviceCoord}" /> <input
+								type="hidden" th:field="*{residentId}" /> <input type="hidden"
+								th:field="*{firstName}" /> <input type="hidden"
+								th:field="*{lastName}" /> <input type="hidden"
+								th:field="*{propertyId}" /> <input type="hidden"
+								th:field="*{refId}" /> <input type="hidden" id="_empLifeDomain"
+								th:field="*{lifeDomain}" /> <input type="hidden"
+								id="currentEmpGoal" th:field="*{goal}" /> <input type="hidden"
+								id="currentEmpScore" th:field="*{currentScore}" />
+							<input type="button" id="_employmentSubmit" class="btn btn-primary btn-lg"
+								value="Save EMPLOYMENT Assessment" onclick="saveAssessment(this.form);">
+						</div>
+						<div class="col-sm-6 text-right">
+							<input type="button" id="_employmentSubmitAndNext"
+								   class="btn btn-primary btn-lg" value="Save and Next Assessment"
+								   onclick="saveAndNextAssessment(this.form);"></div>
 					</div>
-
 				</div>
 			</form>
 
