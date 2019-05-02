@@ -15,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ActionPlanDAO;
+import com.ffg.rrn.dao.CaseNotesDAO;
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
@@ -37,7 +38,10 @@ public class ResidentServiceImpl {
 	private ResidentDAO residentDao;
 
 	@Autowired
-	private ActionPlanDAO actionPlanDAO;
+	private ActionPlanDAO actionPlanDao;
+
+	@Autowired
+	private CaseNotesDAO caseNotesDao;
 
 	/**
 	 * Get all Assessment Questions as ref data to display on Page for Resident.
@@ -185,7 +189,7 @@ public class ResidentServiceImpl {
 	}
 
 	public long saveActionPlan(Resident resident) throws DataAccessException, ParseException {
-		return actionPlanDAO.saveActionPlan(resident);
+		return actionPlanDao.saveActionPlan(resident);
 	}
 	
 	public String getMostRecentSSMDate(Long residentId) {
@@ -195,6 +199,11 @@ public class ResidentServiceImpl {
 	
 	public List<ResidentScoreGoal> getResidentScoreGoal(Long residentId) {
 		return residentDao.getResidentScoreGoal(residentId);
+	}
+
+	public long saveCaseNotes(@Valid Resident resident) {
+		return caseNotesDao.saveCaseNotes(resident);
+
 	}
 
 }
