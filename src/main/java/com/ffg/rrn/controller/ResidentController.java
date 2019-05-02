@@ -122,7 +122,7 @@ public class ResidentController extends BaseController {
 		return "actionPlan";
 
 	}
-	
+
 	@RequestMapping(value = "/getCaseNotes", method = { RequestMethod.GET, RequestMethod.POST })
 	public String getCaseNotes(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
 
