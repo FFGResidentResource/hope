@@ -139,6 +139,26 @@ public class ResidentController extends BaseController {
 
 	}
 
+	@RequestMapping(value = "/getCaseNotes", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getCaseNotes(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		// This is very important in returning respective Page
+		return "caseNotes";
+
+	}
+
 	@RequestMapping(value = "/allResident", method = RequestMethod.GET)
 	public String getAllResidents(Model model, Principal principal) throws Exception {
 
@@ -208,7 +228,13 @@ public class ResidentController extends BaseController {
 	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveActionPlan(resident);
 		return "redirect:/allResident";
-	}	
+	}
+	
+	@PostMapping(value = "/saveCaseNotes")
+	public String saveCaseNotes(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
+		residentService.saveCaseNotes(resident);
+		return "redirect:/allResident";
+	}
 
 	@PostMapping(value = "/saveAssessmentType")
 	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {

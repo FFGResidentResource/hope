@@ -196,6 +196,12 @@ public class Resident {
 	private Date actionPlanAddedDate;
 
 	// ActionPlan Fields -End
+	
+	// Case Notes Fields - Begin
+	private String description;
+	private String assessment;
+	private String plan;
+	// Case Notes Fields - End
 
 
 	public Resident() {
