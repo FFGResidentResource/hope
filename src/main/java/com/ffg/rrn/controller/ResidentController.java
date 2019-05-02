@@ -6,10 +6,14 @@ package com.ffg.rrn.controller;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
+import com.ffg.rrn.utils.AppConstants;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -37,6 +41,18 @@ public class ResidentController extends BaseController {
 
 	@Autowired
 	private ResidentServiceImpl residentService;	
+
+	private Map<String, String> lifeDomainUriMap = new HashMap<>();
+
+	@PostConstruct
+	public void init(){
+		lifeDomainUriMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSING, AppConstants.LIFE_DOMAIN_URL_HOUSING);
+		lifeDomainUriMap.put(AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT, AppConstants.LIFE_DOMAIN_URL_MONEY_MGMT);
+		lifeDomainUriMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT, AppConstants.LIFE_DOMAIN_URL_EMPLOYMENT);
+		lifeDomainUriMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION, AppConstants.LIFE_DOMAIN_URL_EDUCATION);
+		lifeDomainUriMap.put(AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT, AppConstants.LIFE_DOMAIN_URL_NETWORK_SUPPORT);
+		lifeDomainUriMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT, AppConstants.LIFE_DOMAIN_URL_HOUSEHOLD);
+	}
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })
 	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal)
@@ -207,22 +223,22 @@ public class ResidentController extends BaseController {
 		List<ResidentAssessmentQuestionnaire> raqs = new ArrayList<ResidentAssessmentQuestionnaire>();
 		
 		switch (resident.getLifeDomain()) {
-			case "HOUSING":
+			case AppConstants.LIFE_DOMAIN_SERVICE_HOUSING:
 				raqs = resident.getHousingQuestionnaire();
 				break;
-			case "MONEY MANAGEMENT":
+			case AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT:
 				raqs = resident.getMoneyMgmtQuestionnaire();
 				break;
-			case "EMPLOYMENT":
+			case AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT:
 				raqs = resident.getEmploymentQuestionnaire();
 			break;
-			case "EDUCATION":
+			case AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION:
 				raqs = resident.getEducationQuestionnaire();
 			break;
-			case "NETWORK SUPPORT":
+			case AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT:
 				raqs = resident.getNetSupportQuestionnaire();
 			break;
-			case "HOUSEHOLD MANAGEMENT":
+			case AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT:
 				raqs = resident.getHouseholdMgmtQuestionnaire();
 			break;
 		}		
@@ -232,7 +248,9 @@ public class ResidentController extends BaseController {
 		} else {
 			updateAssessmentAndScore(resident, raqs, resident.getLifeDomain());			
 		}
-		
+
+		getCurrentAssessment
+
 		return "redirect:/allResident";
 	}
 
