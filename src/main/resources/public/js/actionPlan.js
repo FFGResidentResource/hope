@@ -19,6 +19,9 @@ jQuery(document).ready(function() {
 	    console.log("ERROR : ", e);
 	}
     });
+
+    // set current date
+    $("#_currentDate").text(new Date().toJSON().slice(0,10));
 });
 
 /** This method populates action plan fields for existing saved actionPlan
@@ -175,5 +178,18 @@ function buildEachJSONString() {
     jQuery("#_planOfActionString").val(planOfActionString);
     jQuery("#_anticipatedOutcomeString").val(anticipatedOutcomeString);
     jQuery("#_outcomesAchievedString").val(outcomesAchievedString);
+
+}
+
+function validateInput(textArea){
+    var patt = new RegExp('^[a-zA-Z0-9\\-\\.]*$');
+    var isValid = patt.test(textArea.value);
+    if(!isValid){
+       textArea.classList.add('text-danger');
+       document.getElementById("_actionPlanSubmit").disabled=true;
+    } else {
+       textArea.classList.remove('text-danger');
+       document.getElementById("_actionPlanSubmit").disabled=false;
+    }
 
 }
