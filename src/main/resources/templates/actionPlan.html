@@ -28,6 +28,10 @@
 .navbar-brand {
 	padding: 0;
 }
+
+.text-danger {
+    color: #a94442;
+}
 </style>
 
 <script type="text/javascript">
@@ -100,12 +104,12 @@
 							</div>
 						</div>
 
-						<div class="col-sm-4">
+						<div class="col-sm-5">
 							<div class="col-sm-5">
 								<strong><span id="_todaysDate">Today's Date:</span></strong>
 							</div>
 							<div class="col-sm-3">
-								<span id="_ssmDate">04/04/2019</span>
+								<span id="_currentDate"></span>
 							</div>
 						</div>
 					</div>
@@ -205,7 +209,9 @@
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="2"
 								th:field="*{residentReportedConcern}"
-								th:value="*{residentReportedConcern}"></textarea>
+								th:value="*{residentReportedConcern}"
+							    onkeyup="validateInput(this)"
+							></textarea>
 						</div>
 					</div>
 
@@ -504,11 +510,11 @@
 							id="_outcomesAchievedString" th:field="*{outcomesAchieved}"
 							th:value="*{outcomesAchieved}" />
 
-						<div><span th:display="${resident.mostRecentSSMDate!='--'}?'block':'none'" style="color:red;font-weight:bold">Please complete Self Sufficiency Matrix first.</span></div>
+						<div><span th:display="${resident.mostRecentSSMDate=='--'}?'block':'none'" style="color:red;font-weight:bold">Please complete Self Sufficiency Matrix first.</span></div>
 						<!-- Submit  -->
 						<input type="submit" id="_actionPlanSubmit"
 							class="btn btn-primary btn-lg" onclick="buildEachJSONString();" th:disabled="${resident.mostRecentSSMDate!='--'}?'disabled':'false'"
-							value="Save Action Plan" th:title="*{mostRecentSSMDate=='-'}?'Please complete Self Sufficiency Matrix first.':'save'">
+							value="Save Action Plan" th:title="*{mostRecentSSMDate=='--'}?'Please complete Self Sufficiency Matrix first.':'save'">
 					</div>
 
 				</div>

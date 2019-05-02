@@ -509,7 +509,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setDate(7, parseMyDate(resident.getSelectedDate()));		
 		return ps;
 	}
-	
+
 	private java.sql.Date parseMyDate(String selectedDate) throws ParseException {
 		
 		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
@@ -520,7 +520,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	// This will display date of most recent self sufficiency Assessment Date
 	public String getMostRecentSSMDate(Long residentId) {
 		try {
-			String stringDate = this.getJdbcTemplate().queryForObject("select TO_CHAR(on_this_date, 'YYYY/MM/DD') from resident_score_goal where resident_id = ? order by on_this_date desc Limit 1",
+			String stringDate = this.getJdbcTemplate().queryForObject("select TO_CHAR(on_this_date, 'YYYY-MM-DD') from resident_score_goal where resident_id = ? order by on_this_date desc Limit 1",
 					new Object[] { residentId }, String.class);
 			return stringDate;
 		} catch (EmptyResultDataAccessException e) {
