@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
     });
 
     // set current date
-    $("#_currentDate").text(new Date().toJSON().slice(0,10));
+    $("#_currentDate").text(new Date().toLocaleDateString());
 });
 
 /** This method populates action plan fields for existing saved actionPlan
@@ -182,14 +182,5 @@ function buildEachJSONString() {
 }
 
 function validateInput(textArea){
-    var patt = new RegExp('^[a-zA-Z0-9\\-\\.]*$');
-    var isValid = patt.test(textArea.value);
-    if(!isValid){
-       textArea.classList.add('text-danger');
-       document.getElementById("_actionPlanSubmit").disabled=true;
-    } else {
-       textArea.classList.remove('text-danger');
-       document.getElementById("_actionPlanSubmit").disabled=false;
-    }
-
+    textArea.value = textArea.value.replace(/[^a-zA-Z ]/g, "");
 }
