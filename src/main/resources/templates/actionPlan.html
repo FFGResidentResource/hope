@@ -235,27 +235,27 @@
 						</div>
 						<div class="col-sm-2 control-label">Housing</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_planOfActionHousing"></textarea>
+							<textarea class="form-control" rows="1" id="_planOfActionHousing" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Money Management</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_planOfActionMM"></textarea>
+							<textarea class="form-control" rows="1" id="_planOfActionMM" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Employment</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_planOfActionEmp"></textarea>
+							<textarea class="form-control" rows="1" id="_planOfActionEmp" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Education</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_planOfActionEdu"></textarea>
+							<textarea class="form-control" rows="1" id="_planOfActionEdu" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Network Support</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_planOfActionNS"></textarea>
+							<textarea class="form-control" rows="1" id="_planOfActionNS" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Household Management</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_planOfActionHH"></textarea>
+							<textarea class="form-control" rows="1" id="_planOfActionHH" onkeyup="validateInput(this)"></textarea>
 						</div>
 					</div>
 
@@ -308,32 +308,32 @@
 						<div class="col-sm-2 control-label">Housing</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_anticipatedOutcomeHousing"></textarea>
+								id="_anticipatedOutcomeHousing" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Money Management</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_anticipatedOutcomeMM"></textarea>
+								id="_anticipatedOutcomeMM" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Employment</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_anticipatedOutcomeEmp"></textarea>
+								id="_anticipatedOutcomeEmp" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Education</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_anticipatedOutcomeEdu"></textarea>
+								id="_anticipatedOutcomeEdu" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Network Support</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_anticipatedOutcomeNS"></textarea>
+								id="_anticipatedOutcomeNS" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Household Management</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_anticipatedOutcomeHH"></textarea>
+								id="_anticipatedOutcomeHH" onkeyup="validateInput(this)"></textarea>
 						</div>
 					</div>
 
@@ -397,7 +397,7 @@
 						<div class="col-sm-2  control-label">Follow-Up Notes</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="2"
-								th:field="*{followUpNotes}" th:value="*{followUpNotes}"></textarea>
+								th:field="*{followUpNotes}" th:value="*{followUpNotes}" onkeyup="validateInput(this)"></textarea>
 						</div>
 					</div>
 
@@ -418,30 +418,33 @@
 						<div class="col-sm-12 text-center">
 							<strong>Outcomes Achieved</strong>
 						</div>
+						<div class="col-sm-12 text-center">
+							<span th:text="*{outcomeDate}"></span>
+						</div>
 						<div class="col-sm-2 control-label">Housing</div>
 						<div class="col-sm-10">
 							<textarea class="form-control" rows="1"
-								id="_outcomesAchievedHousing"></textarea>
+								id="_outcomesAchievedHousing" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Money Management</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_outcomesAchievedMM"></textarea>
+							<textarea class="form-control" rows="1" id="_outcomesAchievedMM" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Employment</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_outcomesAchievedEmp"></textarea>
+							<textarea class="form-control" rows="1" id="_outcomesAchievedEmp" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Education</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_outcomesAchievedEdu"></textarea>
+							<textarea class="form-control" rows="1" id="_outcomesAchievedEdu" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Network Support</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_outcomesAchievedNS"></textarea>
+							<textarea class="form-control" rows="1" id="_outcomesAchievedNS" onkeyup="validateInput(this)"></textarea>
 						</div>
 						<div class="col-sm-2 control-label">Household Management</div>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows="1" id="_outcomesAchievedHH"></textarea>
+							<textarea class="form-control" rows="1" id="_outcomesAchievedHH" onkeyup="validateInput(this)"></textarea>
 						</div>
 					</div>
 					
@@ -512,10 +515,10 @@
 							<input
 							type="hidden" th:field="*{isResident}" />
 
-						<div><span th:display="${resident.mostRecentSSMDate=='--'}?'block':'none'" style="color:red;font-weight:bold">Please complete Self Sufficiency Matrix first.</span></div>
+						<div class="text-danger"><span th:text="${resident.mostRecentSSMDate=='--'}?'Please complete Self Sufficiency Matrix first.':''"></span></div>
 						<!-- Submit  -->
 						<input type="submit" id="_actionPlanSubmit"
-							class="btn btn-primary btn-lg" onclick="buildEachJSONString();" th:disabled="${resident.mostRecentSSMDate!='--'}?'disabled':'false'"
+							class="btn btn-primary btn-lg" onclick="buildEachJSONString();" th:disabled="${resident.mostRecentSSMDate=='--'}?'true':'false'"
 							value="Save Action Plan" th:title="*{mostRecentSSMDate=='--'}?'Please complete Self Sufficiency Matrix first.':'save'">
 					</div>
 
