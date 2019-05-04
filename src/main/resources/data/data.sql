@@ -13,8 +13,9 @@ DROP SEQUENCE RSG_SQ;
 DROP SEQUENCE AQ_SQ;
 DROP SEQUENCE AP_SQ;
 DROP SEQUENCE CN_SQ;
+DROP SEQUENCE RF_SQ;
 
-
+DROP TABLE REFERRAL_FORM;
 DROP TABLE ACTION_PLAN;
 DROP TABLE CASE_NOTES;
 DROP TABLE RESIDENT_SCORE_GOAL;
@@ -25,7 +26,6 @@ DROP TABLE RESIDENT;
 DROP TABLE ASSESSMENT_TYPE;
 DROP TABLE ASSESSMENT_QUESTIONNAIRE;
 DROP TABLE REFERRAL;
-DROP TABLE PROPERTY;
 
 DROP TABLE SCORE;
 DROP TABLE CHOICE;
@@ -33,6 +33,7 @@ DROP TABLE Persistent_Logins;
 DROP TABLE USER_ROLE;
 DROP TABLE APP_ROLE;
 DROP TABLE SERVICE_COORDINATOR;
+DROP TABLE PROPERTY;
 
 
 CREATE SEQUENCE SC_SQ START 1;
@@ -58,6 +59,8 @@ CREATE SEQUENCE RAQ_SQ START 1;
 CREATE SEQUENCE AP_SQ START 1;
 
 CREATE SEQUENCE CN_SQ START 1;
+
+CREATE SEQUENCE RF_SQ START 1;
 
 
 CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
@@ -414,6 +417,14 @@ INSERT INTO REFERRAL values(nextval('REF_SQ'), 'Service Coordinator');
 INSERT INTO REFERRAL values(nextval('REF_SQ'), 'Other Resident');
 INSERT INTO REFERRAL values(nextval('REF_SQ'), 'Other');
 
+CREATE table PROPERTY (
+	PROP_ID			INT PRIMARY KEY NOT NULL,
+	PROP_NAME		VARCHAR(128) UNIQUE NOT NULL,
+	UNIT			INT,
+	UNIT_FEE		INT,
+	ACTIVE			BOOLEAN DEFAULT TRUE
+);
+
 CREATE table SERVICE_COORDINATOR (
 	SC_ID				INT PRIMARY KEY NOT NULL,
 	PROP_ID             INT REFERENCES PROPERTY(PROP_ID),
@@ -423,14 +434,6 @@ CREATE table SERVICE_COORDINATOR (
 	EMAIL		   	 	VARCHAR (128) UNIQUE,
 	CREATED_ON	    	TIMESTAMP DEFAULT NOW(),
 	LAST_LOGIN	    	TIMESTAMP
-);
-
-CREATE table PROPERTY (
-	PROP_ID			INT PRIMARY KEY NOT NULL,
-	PROP_NAME		VARCHAR(128) UNIQUE NOT NULL,
-	UNIT			INT,
-	UNIT_FEE		INT,
-	ACTIVE			BOOLEAN DEFAULT TRUE
 );
 
 CREATE table RESIDENT (
@@ -469,6 +472,23 @@ CREATE table CHILD (
 	FULL_NAME		VARCHAR(50),
 	PARENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	PVR_FLAG		BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE REFERRAL_FORM (
+	REFERRAL_ID 		BIGINT PRIMARY KEY NOT NULL,
+	RESIDENT_ID			BIGINT REFERENCES RESIDENT(RESIDENT_ID),
+	INTERPRETATION      BOOLEAN DEFAULT FALSE,
+	REFERRED_BY			VARCHAR(100),
+	DATE_ADDED			DATE,
+	DATE_MODIFIED		DATE,
+	REFERRAL_REASON		JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
+	COMMENTS			VARCHAR(1000),
+	PREVIOUS_ATTEMPTS	VARCHAR(1000),
+	SELF_SUFFICIENCY	JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false" }',
+	RF_HOUSING_STABILITY	JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false"}',
+	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false"}',
+	RF_FOLLOWUP_NOTES	VARCHAR(1000),
+	RES_APP_SCHEDULED	JSON DEFAULT '{ "Resident Appointment Scheduled?":""}'	
 );
 
 CREATE TABLE ACTION_PLAN(

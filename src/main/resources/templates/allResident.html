@@ -62,8 +62,9 @@
 								Please select a resident</span>
 						</div>
 
-						<div class="col-sm-8 ">
-							<div class="col-sm-3">
+						<div class="col-sm-8">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-2">
 								<a id="_newResident" class="btn btn-default btn-sm"
 									th:href="@{/newResident}"> <span
 									class=" glyphicon glyphicon-user" style="color: blue;"
@@ -71,7 +72,7 @@
 								</a>
 							</div>
 
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 								<button type="submit" id="_loadResident"
 									class="btn btn-default btn-sm" disabled>
 									<span class=" glyphicon glyphicon-pencil"
@@ -79,26 +80,36 @@
 									Resident
 								</button>
 							</div>
+							
+							
+							<div class="col-sm-2">
+								
+								<div class="caption">
+									<a id="_loadActionPlan" class="btn btn-default btn-sm"
+										th:href="@{/getReferralForm?case=referralForm}"> <span
+										class="glyphicon glyphicon-paperclip" style="color: crimson;"
+										aria-hidden="true"></span> Referral Form
+									</a>
+								</div>							
+							</div>
 
-
-
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 
 								<div class="caption">
 									<a id="_loadActionPlan" class="btn btn-default btn-sm"
 										th:href="@{/getActionPlan?case=actionPlan}"> <span
-										class="glyphicon glyphicon-road" style="color: black;"
+										class="glyphicon glyphicon-road" style="color: green;"
 										aria-hidden="true"></span> Action Plan
 									</a>
 								</div>
 							</div>
 							
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 
 								<div class="caption">
 									<a id="_loadCaseNotes" class="btn btn-default btn-sm"
 										th:href="@{/getCaseNotes?case=caseNotes}"> <span
-										class="glyphicon glyphicon-comment" style="color: black;"
+										class="glyphicon glyphicon-comment" style="color: orange;"
 										aria-hidden="true"></span> Case Notes
 									</a>
 								</div>

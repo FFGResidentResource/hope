@@ -3,17 +3,24 @@
  */
 package com.ffg.rrn.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.ffg.rrn.utils.AppConstants;
-import lombok.Data;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.util.CollectionUtils;
 
-import javax.validation.constraints.*;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ffg.rrn.utils.AppConstants;
+
+import lombok.Data;
 
 
 /**
@@ -187,6 +194,7 @@ public class Resident {
 	// This contains JSON String for each Domain
 	private String anticipatedOutcome;
 
+	// --this variable is used in referral form as well.
 	private String followUpNotes;
 	// This contains JSON String for each Domain
 	private String outcomesAchieved;
@@ -202,6 +210,20 @@ public class Resident {
 	private String assessment;
 	private String plan;
 	// Case Notes Fields - End
+
+	// Referral Form fields - Begin
+	private boolean interpretation;
+	private String referredBy;
+	private String referralReason;
+	private String commentsOrExplanation;
+	private String previousAttempts;
+	private String selfSufficiency;
+	private String housingStability;
+	private String safeSupportiveCommunity;
+	private String rfFollowUpNotes;
+	private String residentAppointmentScheduled;
+
+	// Referral Form fields - End
 
 
 	public Resident() {

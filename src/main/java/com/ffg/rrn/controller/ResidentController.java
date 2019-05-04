@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
-import com.ffg.rrn.utils.AppConstants;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -30,6 +29,7 @@ import org.thymeleaf.util.StringUtils;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
+import com.ffg.rrn.utils.AppConstants;
 
 /**
  * @author FFGRRNTeam
@@ -114,6 +114,26 @@ public class ResidentController extends BaseController {
 
 		//This is very important in returning respective Page
 		return lifeDomain;
+
+	}
+
+	@RequestMapping(value = "/getReferralForm", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getReferralForm(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		// This is very important in returning respective Page
+		return "referralForm";
 
 	}
 

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+    var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<!-- <div class="container">
+		<th:block th:include="/_wizard"></th:block>
+	</div> -->
+	<div class="container">
+		<div id="referralForm_Form">
+
+			<form name='_referralFormF' th:action="@{/saveReferralForm}"
+				th:object="${resident}" method='POST' class="form-horizontal">
+
+				<div class="col-sm-12 myPanel">
+					<div class="row">
+						<div class="col-sm-10">
+							<h3 style="width: 400px;">Referral Form</h3>
+							<span class="hidden-print" style="color: red; font-size: larger;"
+								th:if="*{firstName == null}" th:text="${message}"></span>
+						</div>
+						<div class="col-sm-2 hideme print-only">
+							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+						</div>
+					</div>
+
+					<h5>This form is to be used to make referral on behalf of residents</h5>
+
+					<table
+						class="table table-responsive table-bordered table-condensed text-center"
+						style="background-color: ghostwhite;">
+						<thead>
+							<th class="text-center">ID</th>
+							<th class="text-center">Resident Name</th>
+							<th class="text-center">Property</th>
+							<th class="text-center">Address</th>
+							<th class="text-center">Phone Number</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span th:if="*{firstName != null}" id="_residentIdText"
+									th:text="*{residentId}"></span></td>
+								<td><span th:if="*{firstName != null}"
+									th:text="*{firstName}">&nbsp;</span> <span
+									th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span> <span
+									th:if="*{lastName != null}" th:text="*{lastName}"></span></td>
+								<td><span th:text="*{propertyName}">&nbsp;</span></td>
+								<td><span th:text="*{address}">&nbsp;</span></td>
+								<td><span th:text="*{voiceMail}">&nbsp;</span></td>
+							</tr>
+						</tbody>
+					</table>				
+					
+					<table
+						class="table table-responsive table-bordered table-condensed text-center"
+						style="background-color: ghostwhite;">
+						<thead>
+							<th class="text-center">Interpretation?</th>
+							<th class="text-center">Referred By:</th>
+							<th class="text-center">Today's Date:</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td><div class="radio">
+  											    <label><input th:field="*{interpretation}" type="radio" name="isResident" value="TRUE" />Yes</label>
+  											    <label><input th:field="*{interpretation}" type="radio" name="isResident" value="FALSE" th:checked />No</label>
+    										</div></td>
+								<td><input class="form-control" id="referredBy"	th:field="*{referredBy}" ></td>
+								<td><span> YYYY-MM-DD </span></td>
+								
+							</tr>
+						</tbody>
+					</table>
+				
+					
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="/js/referralForm.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+
+</body>
+</html>
