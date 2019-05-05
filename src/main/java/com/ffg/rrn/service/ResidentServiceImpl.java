@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ActionPlanDAO;
 import com.ffg.rrn.dao.CaseNotesDAO;
+import com.ffg.rrn.dao.ReferralFormDAO;
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
@@ -42,6 +43,9 @@ public class ResidentServiceImpl {
 
 	@Autowired
 	private CaseNotesDAO caseNotesDao;
+
+	@Autowired
+	private ReferralFormDAO referralFormDao;
 
 	/**
 	 * Get all Assessment Questions as ref data to display on Page for Resident.
@@ -203,6 +207,11 @@ public class ResidentServiceImpl {
 
 	public long saveCaseNotes(@Valid Resident resident) {
 		return caseNotesDao.saveCaseNotes(resident);
+
+	}
+
+	public long saveReferralForm(@Valid Resident resident) {
+		return referralFormDao.saveReferralForm(resident);
 
 	}
 

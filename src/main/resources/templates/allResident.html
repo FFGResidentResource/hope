@@ -53,15 +53,11 @@
 		<div class="container-fluid hidden-print">
 			<div class="panel panel-info">
 				<div class="panel-heading">
-
-
 					<div class="row hiddent-print">
-
 						<div class="col-sm-4">
 							<span class="panel-title"><strong>All Residents</strong>-
 								Please select a resident</span>
 						</div>
-
 						<div class="col-sm-8">
 							<div class="col-sm-2"></div>
 							<div class="col-sm-2">
@@ -71,7 +67,6 @@
 									aria-hidden="true"></span> Enter New Resident
 								</a>
 							</div>
-
 							<div class="col-sm-2">
 								<button type="submit" id="_loadResident"
 									class="btn btn-default btn-sm" disabled>
@@ -80,19 +75,16 @@
 									Resident
 								</button>
 							</div>
-							
-							
 							<div class="col-sm-2">
-								
+
 								<div class="caption">
 									<a id="_loadActionPlan" class="btn btn-default btn-sm"
 										th:href="@{/getReferralForm?case=referralForm}"> <span
 										class="glyphicon glyphicon-paperclip" style="color: crimson;"
 										aria-hidden="true"></span> Referral Form
 									</a>
-								</div>							
+								</div>
 							</div>
-
 							<div class="col-sm-2">
 
 								<div class="caption">
@@ -103,7 +95,6 @@
 									</a>
 								</div>
 							</div>
-							
 							<div class="col-sm-2">
 
 								<div class="caption">
@@ -116,10 +107,8 @@
 							</div>
 						</div>
 					</div>
-						</div>
-					</div>
-
 				</div>
+
 				<div class="panel-body">
 					<div class="col-sm-12">
 						<table id="residentTable" class="display compact"
@@ -199,7 +188,8 @@
 									<a id="_loadEmployment" class="btn btn-default"
 										th:href="@{/getCurrentAssessment?lifeDomain=employment}">
 										<span class="glyphicon glyphicon-briefcase"
-										style="color: indianred;" aria-hidden="true"></span> Employment
+										style="color: indianred;" aria-hidden="true"></span>
+										Employment
 									</a>
 								</div>
 							</div>
@@ -213,7 +203,8 @@
 									<a id="_loadEducation" class="btn btn-default"
 										th:href="@{/getCurrentAssessment?lifeDomain=education}"> <span
 										class="glyphicon glyphicon-education"
-										style="color: darkgoldenrod;" aria-hidden="true"></span> Education
+										style="color: darkgoldenrod;" aria-hidden="true"></span>
+										Education
 									</a>
 								</div>
 							</div>
@@ -254,6 +245,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</form>
 
 	<!-- Bootstrap core JavaScript

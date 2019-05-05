@@ -77,7 +77,7 @@ public class ActionPlanDAO extends JdbcDaoSupport {
 		ps.setString(3, resident.getPlanOfAction());
 		ps.setString(4, resident.getAnticipatedOutcome());
 		ps.setString(5, resident.getOutcomesAchieved());
-		ps.setString(6, resident.getFollowUpNotes());
+		ps.setString(6, resident.getFollowUpNotes().trim());
 		ps.setLong(7, resident.getResidentId());
 		return ps;
 	}
@@ -91,7 +91,7 @@ public class ActionPlanDAO extends JdbcDaoSupport {
 		ps.setString(4, resident.getPlanOfAction());
 		ps.setString(5, resident.getAnticipatedOutcome());
 		ps.setString(6, resident.getOutcomesAchieved());
-		ps.setString(7, resident.getFollowUpNotes());
+		ps.setString(7, resident.getFollowUpNotes().trim());
 		ps.setString(8, resident.getServiceCoord());
 		
 		return ps;

@@ -475,20 +475,21 @@ CREATE table CHILD (
 );
 
 CREATE TABLE REFERRAL_FORM (
-	REFERRAL_ID 		BIGINT PRIMARY KEY NOT NULL,
-	RESIDENT_ID			BIGINT REFERENCES RESIDENT(RESIDENT_ID),
-	INTERPRETATION      BOOLEAN DEFAULT FALSE,
-	REFERRED_BY			VARCHAR(100),
-	DATE_ADDED			DATE,
-	DATE_MODIFIED		DATE,
-	REFERRAL_REASON		JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
-	COMMENTS			VARCHAR(1000),
-	PREVIOUS_ATTEMPTS	VARCHAR(1000),
-	SELF_SUFFICIENCY	JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false" }',
-	RF_HOUSING_STABILITY	JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false"}',
+	REFERRAL_FORM_ID			BIGINT PRIMARY KEY NOT NULL,
+	RESIDENT_ID					BIGINT REFERENCES RESIDENT(RESIDENT_ID),
+	INTERPRETATION      		BOOLEAN DEFAULT FALSE,
+	REFERRED_BY					VARCHAR(100),
+	DATE_ADDED					DATE,
+	DATE_MODIFIED				DATE,
+	REFERRAL_REASON				JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
+	COMMENTS					VARCHAR(1000),
+	PREVIOUS_ATTEMPTS			VARCHAR(1000),
+	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false" }',
+	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false"}',
 	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false"}',
-	RF_FOLLOWUP_NOTES	VARCHAR(1000),
-	RES_APP_SCHEDULED	JSON DEFAULT '{ "Resident Appointment Scheduled?":""}'	
+	RF_FOLLOWUP_NOTES			VARCHAR(1000),
+	RES_APP_SCHEDULED			JSON DEFAULT '{ "Resident Appointment Scheduled?":""}',
+	SERVICE_COORD				VARCHAR(50)
 );
 
 CREATE TABLE ACTION_PLAN(

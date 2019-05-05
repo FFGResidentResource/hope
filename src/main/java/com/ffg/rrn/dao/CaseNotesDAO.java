@@ -71,9 +71,9 @@ public class CaseNotesDAO extends JdbcDaoSupport {
 
 		PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_CASE_NOTES, pkColumnNames);
 
-		ps.setString(1, resident.getDescription());
-		ps.setString(2, resident.getAssessment());
-		ps.setString(3, resident.getPlan());
+		ps.setString(1, resident.getDescription().trim());
+		ps.setString(2, resident.getAssessment().trim());
+		ps.setString(3, resident.getPlan().trim());
 		ps.setString(4, resident.getServiceCoord());
 		ps.setLong(5, resident.getResidentId());
 		return ps;
@@ -82,9 +82,9 @@ public class CaseNotesDAO extends JdbcDaoSupport {
 	private PreparedStatement buildInsertCaseNotes(Connection connection, @Valid Resident resident, String[] pkColumnNames) throws SQLException {
 
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_CASE_NOTES, pkColumnNames);
-		ps.setString(1, resident.getDescription());
-		ps.setString(2, resident.getAssessment());
-		ps.setString(3, resident.getPlan());
+		ps.setString(1, resident.getDescription().trim());
+		ps.setString(2, resident.getAssessment().trim());
+		ps.setString(3, resident.getPlan().trim());
 		ps.setLong(4, resident.getResidentId());
 		ps.setString(5, resident.getServiceCoord());
 

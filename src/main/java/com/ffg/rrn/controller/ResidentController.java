@@ -129,6 +129,24 @@ public class ResidentController extends BaseController {
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
 
+		if (StringUtils.isEmpty(resident.getReferralReason())) {
+			resident.setReferralReason(
+					"{\"Non/late payment of rent\": \"false\", \"Utility Shut-off, scheduled for (Date):\":\"\", \"Housekeeping/home management\":\"false\", \"Lease violation for:\": \"\", \"Employment/job readiness\":\"false\", \"Education/job training\":\"false\", \"Noticeable change in:\":\"\", \"Resident-to-resident conflict issues\":\"false\", \"Suspected abuse/domestic violence/exploitation\":\"false\", \"Childcare/afterschool care\":\"false\", \"Transportation\":\"false\", \"Safety\":\"false\", \"Healthcare/medical issues\":\"false\", \"Other:\":\"\" }");
+		}
+		if (StringUtils.isEmpty(resident.getSelfSufficiency())) {
+			resident.setSelfSufficiency(
+					"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
+		}
+		if (StringUtils.isEmpty(resident.getHousingStability())) {
+			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+		}
+		if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
+			resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
+		}
+		if (StringUtils.isEmpty(resident.getResidentAppointmentScheduled())) {
+			resident.setResidentAppointmentScheduled("{\"Resident Appointment Scheduled?\":\"\"}");
+		}
+
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 
@@ -242,6 +260,12 @@ public class ResidentController extends BaseController {
 		resident.setPropertyList(residentService.getAllProperty());
 		resident.setRefList(residentService.getAllReferral());
 		resident.setAtList(residentService.getAllAType());
+	}
+
+	@PostMapping(value = "/saveReferralForm")
+	public String saveReferralForm(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
+		residentService.saveReferralForm(resident);
+		return "redirect:/allResident";
 	}
 
 	@PostMapping(value = "/saveActionPlan")

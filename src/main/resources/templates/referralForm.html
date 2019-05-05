@@ -32,6 +32,11 @@
 
 <script type="text/javascript">
     var res = null;
+    var referralReasons = null;
+    var selfSuff = null;
+    var hs = null;
+    var ssc = null;
+    var resAppSch = null;
 </script>
 
 </head>
@@ -102,14 +107,106 @@
   											    <label><input th:field="*{interpretation}" type="radio" name="isResident" value="TRUE" />Yes</label>
   											    <label><input th:field="*{interpretation}" type="radio" name="isResident" value="FALSE" th:checked />No</label>
     										</div></td>
-								<td><input class="form-control" id="referredBy"	th:field="*{referredBy}" ></td>
-								<td><span> YYYY-MM-DD </span></td>
+								<td><input class="form-control my-input-sm" id="referredBy"	th:field="*{referredBy}" ></td>
+								<td><span id="_currentDate"></span></td>
 								
 							</tr>
 						</tbody>
 					</table>
-				
 					
+					<!-- This Table will populate from javaScript -->
+					<table id="_referralReasonTable" class="table table-responsive table-bordered table-condensed" style="background-color: ghostwhite;">
+						<thead>
+							<th colspan="4" class="text-center">Referral Reason</th>
+						</thead>
+						<tbody>
+							<tr><td id="_refReasons"></td></tr>
+						</tbody>
+					</table>
+					
+					<table class="table table-responsive table-bordered table-condensed hideme print-only">					
+						<thead>
+							<tr><th>Comments/Explanation of Reason for Referral</th><th>Previous Attempts to Resolve the Issue</th><th>Follow-up Notes</th></tr>
+						</thead>
+						<tbody><tr><td id="_commentsPrint"></td><td id="_prevAttemptsPrint"></td><td id="_followupPrint"></td></tr></tbody>
+					</table>					
+					
+					<table id="_comments" class="table table-responsive table-bordered table-condensed hidden-print">
+						<caption><strong>Comments/Explanation of Reason for Referral</strong></caption>
+						<tbody>
+						<tr><td>
+						<textarea class="form-control" rows="2" id="_commentsOrExplanation"
+								th:field="*{commentsOrExplanation}"
+								th:value="*{commentsOrExplanation}"></textarea></td></tr>
+						</tbody>
+					</table>			
+					
+					<table id="_prevAttempts" class="table table-responsive table-bordered table-condensed hidden-print">
+						<caption><strong>Previous Attempts to Resolve the Issue</strong></caption>
+						<tbody>
+						<tr><td>
+						<textarea class="form-control" rows="2" id="_prevAttemps"
+								th:field="*{previousAttempts}"
+								th:value="*{previousAttempts}"></textarea></td></tr>
+						</tbody>
+					</table>
+					
+					<!-- Each Column will be populated by javaScript from referralForm.js -->
+					<table id="_desiredOutcomes" class="table table-responsive table-bordered table-condensed" style="background-color: ghostwhite;">
+						<caption><strong>Desired Outcomes</strong> (check at that reasonably apply)</caption>
+						<thead>
+							<tr><th class="text-center">Self Sufficiency</th><th class="text-center">Housing Stability</th><th class="text-center">Safer, More Supportive Communities</th></tr>
+						</thead>
+						<tbody><tr><td id="_ssColumn"></td><td id="_hsColumn"></td><td id="_safeSuppColumn"></td></tr></tbody>
+					</table>
+					
+					<table id="_comments" class="table table-responsive table-bordered table-condensed hidden-print">
+						<caption><strong>Follow-up Notes</strong></caption>
+						<tbody>
+						<tr><td>
+						<textarea class="form-control" rows="2" id="_rfFollowupNotes"
+								th:field="*{rfFollowUpNotes}"
+								th:value="*{rfFollowUpNotes}"></textarea></td></tr>
+						</tbody>
+					</table>
+					
+					<div class="row text-center">
+					<div class="col-sm-10">
+						<div class="col-sm-6">Resident Appointment Scheduled?</div>
+						<div class="col-sm-6"><input id="_resAppSch" class="form-control" placeholder="If Yes, Enter Date else leave blank" ></div>
+					</div>
+					</div>
+					
+					<div class="row hideme print-only">
+
+						<div class="col-sm-7">
+							<div class="col-sm-8">Service Coordinator's Signature:</div>
+							<div class="col-sm-4" style="width: 100px;">
+								<hr>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div class="col-sm-4">Date:</div>
+							<div class="col-sm-8" style="width: 100px;">
+								<hr>
+							</div>
+						</div>
+					</div>				
+					
+					<div class="row text-center bs-linebreak hidden-print">
+						<!-- Following all passed to ResidentController upon Submit, please look onclick method of save for building each JSON String-->
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" th:field="*{residentId}" /> 
+						<input type="hidden" id="_referralReason" th:field="*{referralReason}" />
+						<input type="hidden" id="_selfSufficiency" th:field="*{selfSufficiency}" />
+						<input type="hidden" id="_housingStability" th:field="*{housingStability}" />
+						<input type="hidden" id="_safeSupportiveCommunity" th:field="*{safeSupportiveCommunity}" />
+						<input type="hidden" id="_residentAppointmentScheduled" th:field="*{residentAppointmentScheduled}" />    
+
+						<!-- Submit  -->
+						<input type="submit" id="_refFormubmit" onclick="buildEachJSONString();"
+							class="btn btn-primary btn-lg" value="Save Referral Form">
+					</div>
 
 				</div>
 			</form>
