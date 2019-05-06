@@ -32,13 +32,17 @@ jQuery(document).ready(function() {
 		document.getElementById('email').value = "";
 		document.getElementById('voicemail').value = "";
 		document.getElementById('text').value = "";
+		
 	};
 	
 	var btn = $("#btnDeactivateResident");
 	var isActive = !$(btn).attr("title") || $(btn).attr("title") == "true";
 	isActive ? $(btn).attr("title", "true") : $(btn).attr("title", "false");
 	isActive ? $(btn).val("Deactivate") : $(btn).val("Reactivate");
-	
+
+	if(!$("#isResident1").is(":checked") && !$("#isResident2").is(":checked")){
+		$("#isResident1").attr("checked","");
+	}
 });
 
 var isSubmitted = false;
