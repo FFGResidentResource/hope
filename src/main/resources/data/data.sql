@@ -588,19 +588,37 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE);
+
 --------------------------------------
  
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbadmin1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE,'dbadmin1@email.com');
 
-insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
-values (nextval('SC_SQ'), 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE, 'dbuser1@email.com');
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  PROP_ID)
+values (nextval('SC_SQ'), 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE, 'dbuser1@email.com', 1);
 
-insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
-values (nextval('SC_SQ'), 'dbuser2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser2@email.com');
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, PROP_ID)
+values (nextval('SC_SQ'), 'dbuser2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser2@email.com', 2);
 
-insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
-values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser3@email.com');
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  PROP_ID)
+values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser3@email.com', 3);
 
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbadmin2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbadmin2@email.com');
@@ -638,23 +656,7 @@ values (7, 5, 2);
 
 ---
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE);
+
 
 --Example for Questionnaire
 --select aq.question_number, aq.question, c.choice from question_choice qc

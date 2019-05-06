@@ -37,30 +37,37 @@ public class ServiceCoordinator {
     @Size(max=10)
     private String password;
     private String encrytedPassword;
-    private String active;
+	private boolean active;
     @Email
     @NotEmpty
     private String email;
     private Timestamp createdOn;
     private Timestamp lastLogin;
+
+	private Integer propId;
+	private Integer roleId;
+
+	private String roleName;
+	private String propName;
  
     public ServiceCoordinator() {
  
     }
  
-    public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, String active, String email, Timestamp createdOn, Timestamp lastLogin) {
+	public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, boolean active, String email, Timestamp createdOn, Timestamp lastLogin, Integer prop_id, String prop_name) {
         this.scId = scId;
         this.userName = userName;
         this.encrytedPassword = encrytedPassword;
         this.active = active;
         this.email = email;
         this.createdOn = createdOn;
-        this.lastLogin = lastLogin;
-       
+		this.lastLogin = lastLogin;
+		this.propId = prop_id;
+		this.propName = prop_name;
     }
     
     @Override
     public String toString() {
-        return this.userName + "/" + this.encrytedPassword;
+		return this.userName + " Logs In";
     }
 }

@@ -42,7 +42,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 	public ServiceCoordinator findUserAccount(String userName) {
 		// Select .. from App_User u Where u.User_Name = ?
-		String sql = ServiceCoordinatorMapper.BASE_SQL + " where u.User_Name = ? ";
+		String sql = ServiceCoordinatorMapper.BASE_SQL + " where u.User_Name = ? and u.active = 'TRUE' LIMIT 1  ";
 
 		Object[] params = new Object[] { userName };
 		ServiceCoordinatorMapper mapper = new ServiceCoordinatorMapper();
