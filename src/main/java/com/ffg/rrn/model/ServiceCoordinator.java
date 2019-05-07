@@ -4,6 +4,7 @@
 package com.ffg.rrn.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -37,18 +38,27 @@ public class ServiceCoordinator {
     @Size(max=10)
     private String password;
     private String encrytedPassword;
-	private boolean active;
+	private Boolean active;
     @Email
     @NotEmpty
     private String email;
     private Timestamp createdOn;
     private Timestamp lastLogin;
 
-	private Integer propId;
+	private Integer propertyId;
 	private Integer roleId;
 
 	private String roleName;
 	private String propName;
+
+	private Boolean admin;
+
+	@JsonView
+	private List<Property> propertyList;
+
+	private List<String> allTakenEmails;
+
+	private List<String> allTakenUserNames;
  
     public ServiceCoordinator() {
  
@@ -62,7 +72,7 @@ public class ServiceCoordinator {
         this.email = email;
         this.createdOn = createdOn;
 		this.lastLogin = lastLogin;
-		this.propId = prop_id;
+		this.propertyId = prop_id;
 		this.propName = prop_name;
     }
     

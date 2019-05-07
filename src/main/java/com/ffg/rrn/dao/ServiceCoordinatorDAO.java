@@ -20,7 +20,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ServiceCoordinatorMapper;
+import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.ServiceCoordinator;
 
 /**
@@ -31,10 +33,9 @@ import com.ffg.rrn.model.ServiceCoordinator;
 @Transactional
 public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
-	private final static String INSERTION_SQL_SERVICECOORDINATOR="INSERT INTO SERVICE_COORDINATOR " +
-			"(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)"
+	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)"
 			+ " VALUES (nextval('SC_SQ'), ?,?,true,?)";
-	
+
 	@Autowired
 	public ServiceCoordinatorDAO(DataSource dataSource) {
 		this.setDataSource(dataSource);
@@ -53,7 +54,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			return null;
 		}
 	}
-	
+
 	public List<ServiceCoordinator> getAllServiceCoordinators() {
 		ServiceCoordinatorMapper rowMapper = new ServiceCoordinatorMapper();
 		return this.getJdbcTemplate().query(ServiceCoordinatorMapper.BASE_SQL, rowMapper);
@@ -62,27 +63,38 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	public Long saveServiceCoordinator(ServiceCoordinator sc) {
 		return insertNewServiceCoordinator(sc);
 	}
-	
+
 	private long insertNewServiceCoordinator(ServiceCoordinator sc) {
-		
+
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		String[] pkColumnNames = new String[] {"sc_id"};
-		this.getJdbcTemplate().update(conn ->buildInsertServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
+		String[] pkColumnNames = new String[] { "sc_id" };
+		this.getJdbcTemplate().update(conn -> buildInsertServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
 
 		long newSCId = keyHolder.getKey().longValue();
 		sc.setScId(toIntExact(newSCId));
 
 		return newSCId;
 	}
-	
-	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection,
-																			 ServiceCoordinator sc,
-																			 String[] pkColumnNames) throws SQLException {
+
+	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR, pkColumnNames);
 		ps.setString(1, sc.getUserName());
 		ps.setString(2, sc.getEncrytedPassword());
 		ps.setString(3, sc.getEmail());
 		return ps;
+	}
+
+	public List<Property> getAllProperty() {
+		PropertyMapper rowMapper = new PropertyMapper();
+		return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+	}
+
+	public List<String> getAllTakenEmails() {
+		return this.getJdbcTemplate().queryForList("SELECT EMAIL FROM SERVICE_COORDINATOR", String.class);
+	}
+
+	public List<String> getAllTakenUserNames() {
+		return this.getJdbcTemplate().queryForList("SELECT USER_NAME FROM SERVICE_COORDINATOR", String.class);
 	}
 
 }

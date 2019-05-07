@@ -15,7 +15,11 @@ jQuery(document).ready(
 			    {
 				"data" : data,
 				"columns" : [
-				    {data : 'active'},
+				    {data : 'active',
+					render : function(t, type, row) {
+					    if (row.active) {return 'ACTIVE'; } else {return 'INACTIVE';}						
+					    }
+				    },
 				    {data : 'userName'},
 				    {data : 'email'},
 				    {data : 'createdOn.time',
@@ -24,7 +28,7 @@ jQuery(document).ready(
 						sort : 'timestamp'
 					    },
 					    render : function(t, type, row) {
-						return moment(row.dateAdded).format("MM/DD/YY hh:mm A");
+						return moment(row.createdOn).format("MM/DD/YY hh:mm A");
 					    }},
 				    {data : 'lastLogin.time',
 					    render : {
@@ -32,10 +36,13 @@ jQuery(document).ready(
 						sort : 'timestamp'
 					    },
 					    render : function(t, type, row) {
-						return moment(row.dateAdded).format("MM/DD/YY hh:mm A");
+						if(row.lastLogin != null){
+						    return moment(row.lastLogin).format("MM/DD/YY hh:mm A");
+						}else{
+						    return '';
+						}
 					    }
-				    },
-				    {data : 'roleName'},
+				    },				   
 				    {data : 'propName'}				    
 				    ],
 				"order" : [ [ 4, "desc" ] ],
@@ -52,6 +59,23 @@ jQuery(document).ready(
 				    jQuery('.dataTables_length').html(pre + radioHtml);
 				}
 			    });
+		    
+		    jQuery('#scTable tbody').on('click', 'tr', function() {
+
+			var tr = $(this);
+			currentRow = table.row(this).data();
+
+			console.log(currentRow);
+
+			if ($(this).hasClass('selected')) {
+			    $(this).removeClass('selected');
+			    
+			} else {
+			    
+			    table.$('tr.selected').removeClass('selected');
+			    $(this).addClass('selected');			    
+			}
+		    });
 		},
 		error : function(e) {
 		    console.log("ERROR : ", e);
