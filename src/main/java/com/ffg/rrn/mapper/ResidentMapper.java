@@ -31,23 +31,6 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " left join referral_form rf on rf.resident_id = r.resident_id"
 					+ " left join assessment_type a on a.a_id = r.a_type ";
 	
-	
-	public static final String RESIDENT_SQL_NON_ADMIN //
-	= "select r.RESIDENT_ID, r.ACTIVE, r.IS_RESIDENT, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
-			+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
-			+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
-			+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
-			+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , ap.outcome_achieved , ap.outcome_date , ap.date_added, "
-			+ " cn.description, cn.assessment, cn.plan, "
-			+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.SELF_SUFFICIENCY, rf.RF_HOUSING_STABILITY, rf.SAFE_SUPPORTIVE_COMMUNITY, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED"
-			+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
-			+ " join property p on p.prop_id = r.prop_id"
-					+ " join service_coordinator sc on sc.prop_id = p.prop_id and sc.user_name = ? "
-			+ " left join action_plan ap on ap.resident_id = r.resident_id"
-			+ " left join case_notes cn on cn.resident_id = r.resident_id"
-			+ " left join referral_form rf on rf.resident_id = r.resident_id"
-			+ " left join assessment_type a on a.a_id = r.a_type ";
-
 	@Override
 	public Resident mapRow(ResultSet rs, int row) throws SQLException {
 
