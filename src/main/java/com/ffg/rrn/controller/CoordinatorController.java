@@ -1,6 +1,7 @@
 package com.ffg.rrn.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.ServiceCoordinator;
 import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
 
@@ -27,6 +29,15 @@ public class CoordinatorController extends BaseController {
         if (principal != null) {
             populateSCinModel(model, principal);
         }
+
+		List<Property> allProperty = serviceCoordinatorService.getAllProperty();
+
+		ServiceCoordinator sc = new ServiceCoordinator();
+		sc.setPropertyList(allProperty);
+		sc.setAllTakenEmails(serviceCoordinatorService.getAllTakenEmails());
+		sc.setAllTakenUserNames(serviceCoordinatorService.getAllTakenUserNames());
+		
+		model.addAttribute("serviceCoordinator", sc);
 
         return "adminPage";
     }

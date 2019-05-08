@@ -6,8 +6,11 @@ package com.ffg.rrn.controller;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.apache.tomcat.util.json.ParseException;
@@ -23,10 +26,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
-import com.ffg.rrn.model.ActionPlan;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
+import com.ffg.rrn.utils.AppConstants;
 
 /**
  * @author FFGRRNTeam
@@ -37,6 +40,18 @@ public class ResidentController extends BaseController {
 
 	@Autowired
 	private ResidentServiceImpl residentService;	
+
+	private Map<String, String> lifeDomainNextUrlMap = new HashMap<>();
+
+	@PostConstruct
+	public void init(){
+		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSING, AppConstants.LIFE_DOMAIN_URL_MONEY_MGMT);
+		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT, AppConstants.LIFE_DOMAIN_URL_EMPLOYMENT);
+		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT, AppConstants.LIFE_DOMAIN_URL_EDUCATION);
+		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION, AppConstants.LIFE_DOMAIN_URL_NETWORK_SUPPORT);
+		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT, AppConstants.LIFE_DOMAIN_URL_HOUSEHOLD);
+		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT, null);
+	}
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })
 	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal)
@@ -81,7 +96,8 @@ public class ResidentController extends BaseController {
 	
 	
 	@RequestMapping(value = "/getCurrentAssessment", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getCurrentAssessment(@RequestParam("residentId") Long residentId, @RequestParam("lifeDomain") String lifeDomain,Model model, Principal principal) throws Exception {
+	public String getCurrentAssessment(@RequestParam("residentId") Long residentId,
+									   @RequestParam("lifeDomain") String lifeDomain,Model model, Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -98,6 +114,44 @@ public class ResidentController extends BaseController {
 
 		//This is very important in returning respective Page
 		return lifeDomain;
+
+	}
+
+	@RequestMapping(value = "/getReferralForm", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getReferralForm(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		if (StringUtils.isEmpty(resident.getReferralReason())) {
+			resident.setReferralReason(
+					"{\"Non/late payment of rent\": \"false\", \"Utility Shut-off, scheduled for (Date):\":\"\", \"Housekeeping/home management\":\"false\", \"Lease violation for:\": \"\", \"Employment/job readiness\":\"false\", \"Education/job training\":\"false\", \"Noticeable change in:\":\"\", \"Resident-to-resident conflict issues\":\"false\", \"Suspected abuse/domestic violence/exploitation\":\"false\", \"Childcare/afterschool care\":\"false\", \"Transportation\":\"false\", \"Safety\":\"false\", \"Healthcare/medical issues\":\"false\", \"Other:\":\"\" }");
+		}
+		if (StringUtils.isEmpty(resident.getSelfSufficiency())) {
+			resident.setSelfSufficiency(
+					"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
+		}
+		if (StringUtils.isEmpty(resident.getHousingStability())) {
+			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+		}
+		if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
+			resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
+		}
+		if (StringUtils.isEmpty(resident.getResidentAppointmentScheduled())) {
+			resident.setResidentAppointmentScheduled("{\"Resident Appointment Scheduled?\":\"\"}");
+		}
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		// This is very important in returning respective Page
+		return "referralForm";
 
 	}
 
@@ -120,6 +174,26 @@ public class ResidentController extends BaseController {
 
 		// This is very important in returning respective Page
 		return "actionPlan";
+
+	}
+
+	@RequestMapping(value = "/getCaseNotes", method = { RequestMethod.GET, RequestMethod.POST })
+	public String getCaseNotes(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		// This is very important in returning respective Page
+		return "caseNotes";
 
 	}
 
@@ -188,11 +262,23 @@ public class ResidentController extends BaseController {
 		resident.setAtList(residentService.getAllAType());
 	}
 
+	@PostMapping(value = "/saveReferralForm")
+	public String saveReferralForm(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
+		residentService.saveReferralForm(resident);
+		return "redirect:/allResident";
+	}
+
 	@PostMapping(value = "/saveActionPlan")
 	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveActionPlan(resident);
 		return "redirect:/allResident";
-	}	
+	}
+	
+	@PostMapping(value = "/saveCaseNotes")
+	public String saveCaseNotes(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
+		residentService.saveCaseNotes(resident);
+		return "redirect:/allResident";
+	}
 
 	@PostMapping(value = "/saveAssessmentType")
 	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
@@ -201,39 +287,65 @@ public class ResidentController extends BaseController {
 		return "redirect:/getResidentById?residentId=" + resident.getResidentId();
 	}
 
-	@PostMapping("/saveEachAssessment")
-	public String saveEachAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws SQLException {
-		
-		List<ResidentAssessmentQuestionnaire> raqs = new ArrayList<ResidentAssessmentQuestionnaire>();
-		
-		switch (resident.getLifeDomain()) {
-			case "HOUSING":
-				raqs = resident.getHousingQuestionnaire();
-				break;
-			case "MONEY MANAGEMENT":
-				raqs = resident.getMoneyMgmtQuestionnaire();
-				break;
-			case "EMPLOYMENT":
-				raqs = resident.getEmploymentQuestionnaire();
-			break;
-			case "EDUCATION":
-				raqs = resident.getEducationQuestionnaire();
-			break;
-			case "NETWORK SUPPORT":
-				raqs = resident.getNetSupportQuestionnaire();
-			break;
-			case "HOUSEHOLD MANAGEMENT":
-				raqs = resident.getHouseholdMgmtQuestionnaire();
-			break;
-		}		
+	@PostMapping("/saveAssessment")
+	public String saveAssessment(@Valid @ModelAttribute Resident resident,
+									 BindingResult bindingResult,
+									 Model model, Principal principal) throws Exception {
+
+		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
 
 		if (StringUtils.equals(resident.getSelectedDate(), "NewAssessment")) {
-			saveAssessmentAndScore(resident, raqs, resident.getLifeDomain());			
+			saveAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		} else {
-			updateAssessmentAndScore(resident, raqs, resident.getLifeDomain());			
+			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		}
-		
+
 		return "redirect:/allResident";
+	}
+
+	@PostMapping("/saveAssessmentAndGoToNext")
+	public String saveAssessmentAndGoToNext(@Valid @ModelAttribute Resident resident,
+									 BindingResult bindingResult,
+									 Model model, Principal principal) throws Exception {
+
+		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
+
+		if (StringUtils.equals(resident.getSelectedDate(), "NewAssessment")) {
+			saveAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
+		} else {
+			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
+		}
+
+		String nextUrl = lifeDomainNextUrlMap.get(resident.getLifeDomain());
+
+		return (nextUrl==null)?"redirect:/allResident":getCurrentAssessment(resident.getResidentId(),
+				nextUrl,model,principal);
+	}
+
+	private List<ResidentAssessmentQuestionnaire> getResidentAssessmentQuestionnaires(Resident resident) {
+		List<ResidentAssessmentQuestionnaire> raqs = new ArrayList<>();
+
+		switch (resident.getLifeDomain()) {
+			case AppConstants.LIFE_DOMAIN_SERVICE_HOUSING:
+				raqs = resident.getHousingQuestionnaire();
+				break;
+			case AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT:
+				raqs = resident.getMoneyMgmtQuestionnaire();
+				break;
+			case AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT:
+				raqs = resident.getEmploymentQuestionnaire();
+			break;
+			case AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION:
+				raqs = resident.getEducationQuestionnaire();
+			break;
+			case AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT:
+				raqs = resident.getNetSupportQuestionnaire();
+			break;
+			case AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT:
+				raqs = resident.getHouseholdMgmtQuestionnaire();
+			break;
+		}
+		return raqs;
 	}
 
 	/**

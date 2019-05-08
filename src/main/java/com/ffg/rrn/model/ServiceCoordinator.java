@@ -4,6 +4,7 @@
 package com.ffg.rrn.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -37,30 +38,46 @@ public class ServiceCoordinator {
     @Size(max=10)
     private String password;
     private String encrytedPassword;
-    private String active;
+	private Boolean active;
     @Email
     @NotEmpty
     private String email;
     private Timestamp createdOn;
     private Timestamp lastLogin;
+
+	private Integer propertyId;
+	private Integer roleId;
+
+	private String roleName;
+	private String propName;
+
+	private Boolean admin;
+
+	@JsonView
+	private List<Property> propertyList;
+
+	private List<String> allTakenEmails;
+
+	private List<String> allTakenUserNames;
  
     public ServiceCoordinator() {
  
     }
  
-    public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, String active, String email, Timestamp createdOn, Timestamp lastLogin) {
+	public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, boolean active, String email, Timestamp createdOn, Timestamp lastLogin, Integer prop_id, String prop_name) {
         this.scId = scId;
         this.userName = userName;
         this.encrytedPassword = encrytedPassword;
         this.active = active;
         this.email = email;
         this.createdOn = createdOn;
-        this.lastLogin = lastLogin;
-       
+		this.lastLogin = lastLogin;
+		this.propertyId = prop_id;
+		this.propName = prop_name;
     }
     
     @Override
     public String toString() {
-        return this.userName + "/" + this.encrytedPassword;
+		return this.userName + " Logs In";
     }
 }
