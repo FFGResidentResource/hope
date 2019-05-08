@@ -8,9 +8,11 @@ import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.ffg.rrn.utils.FieldsValueMatch;
 
 import lombok.Data;
 
@@ -26,17 +28,24 @@ import lombok.Data;
  * LAST_LOGIN			TIMESTAMP 
  *
  */
+
 @Data
 @JsonView
+@FieldsValueMatch(field = "password", fieldMatch = "confirmPassword", message = "The password fields must match!")
 public class ServiceCoordinator {
 	 
     private Integer scId;
-    @NotEmpty
-    @Size(max=36)
+	@NotEmpty
+	@Pattern(regexp = "^[\\p{Alnum}]{1,36}$")
     private String userName;
-    @NotEmpty
-    @Size(max=10)
+	@NotEmpty
+	@Size(max = 10)
     private String password;
+
+	@NotEmpty
+	@Size(max = 10)
+	private String confirmPassword;
+
     private String encrytedPassword;
 	private Boolean active;
     @Email

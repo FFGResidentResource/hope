@@ -257,7 +257,7 @@ public class ResidentController extends BaseController {
 	}
 
 	private void setupDropdownList(Resident resident) {
-		resident.setPropertyList(residentService.getAllProperty());
+		resident.setPropertyList(residentService.getAllProperty(resident.getServiceCoord()));
 		resident.setRefList(residentService.getAllReferral());
 		resident.setAtList(residentService.getAllAType());
 	}

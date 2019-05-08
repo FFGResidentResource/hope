@@ -44,4 +44,8 @@ public class ServiceCoordinatorServiceImpl {
 		return serviceCoordinatorDao.saveServiceCoordinator(sc);
 	}
 
+	public Long inactivateOrActivateSC(String userName, boolean active) {
+		return serviceCoordinatorDao.inactivateOrActivateSC(userName, active);
+	}
+
 }

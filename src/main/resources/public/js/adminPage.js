@@ -3,6 +3,9 @@ var currentRow;
 
 jQuery(document).ready(
 	function() {
+	    
+	    jQuery('a[id^="_load"]').attr('disabled', true);
+	    
 	    jQuery.ajax({
 		type : "POST",
 		contentType : "application/json",
@@ -69,11 +72,23 @@ jQuery(document).ready(
 
 			if ($(this).hasClass('selected')) {
 			    $(this).removeClass('selected');
+			    jQuery('a[id^="_load"]').attr('disabled', true);
 			    
 			} else {
 			    
 			    table.$('tr.selected').removeClass('selected');
-			    $(this).addClass('selected');			    
+			    $(this).addClass('selected');
+			    
+			    jQuery('a[id^="_load"]').attr('disabled', false);
+			    
+			    var suffix = '&scUserName=' + currentRow.userName;
+			    var assessmentLinks = jQuery('a[id^="_load"]');
+
+			    jQuery.each(assessmentLinks, function(idx, obj) {
+				var currHref = jQuery(obj).attr('href');
+				var prefix = currHref.split('&');
+				jQuery(obj).attr('href', prefix[0] + suffix);
+			    });
 			}
 		    });
 		},
@@ -90,4 +105,13 @@ function filterActives(dat) {
     } else {
 	table.columns(2).search('').draw();
     }
+}
+
+/**
+ * 
+ * @returns
+ */
+function validateFields(){
+    
+    debugger;
 }
