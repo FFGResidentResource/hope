@@ -15,10 +15,35 @@ window.onbeforeprint = function() {
 		$('#printtext').prop('checked', true);
 		$('#printtxt').text($('#text').val());
 	}
+	console.log("Child 6's value is |" + $('#child6').val + "|")
+	if($('#child1').val() == ""){
+		$('#child1').removeAttr('placeholder');
+	}
+	if($('#child2').val() == ""){
+		$('#child2').removeAttr('placeholder');
+	}
+	if($('#child3').val() == ""){
+		$('#child3').removeAttr('placeholder');
+	}
+	if($('#child4').val() == ""){
+		$('#child4').removeAttr('placeholder');
+	}
+	if($('#child5').val() == ""){
+		$('#child5').removeAttr('placeholder');
+	}
+	if($('#child6').val() == ""){
+		$('#child6').removeAttr('placeholder');
+	}
+	if($('#child7').val() == ""){
+		$('#child7').removeAttr('placeholder');
+	}
+	if($('#child8').val() == ""){
+		$('#child8').removeAttr('placeholder');
+	}
+	
 };
 
 jQuery(document).ready(function() {
-	console.log($('#allowcontact').prop("checked"));
 	if($('#allowcontact').prop("checked")){
 		document.getElementById('viaemail').disabled = true
 		document.getElementById('email').disabled = true;
