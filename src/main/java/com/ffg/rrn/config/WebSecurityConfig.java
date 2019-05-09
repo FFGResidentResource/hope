@@ -54,7 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// /serviceCordinatorInfo page requires login as ROLE_USER or ROLE_ADMIN.
 		// If no login, it will redirect to /login page.
 		//uncomment before PROD
-		http.authorizeRequests().antMatchers("/getResidentById", "/saveResident", "/newResident", "/saveAssessment", "/allResident", "/getCurrentAssessment", "/getActionPlan").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");		
+		http.authorizeRequests()
+				.antMatchers("/getResidentById", "/saveResident", "/newResident", "/saveAssessment", "/allResident", "/getCurrentAssessment", "/getActionPlan", "/getCaseNotes", "/getReferralForm")
+				.access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 		
 		// For ADMIN only.
 		http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");

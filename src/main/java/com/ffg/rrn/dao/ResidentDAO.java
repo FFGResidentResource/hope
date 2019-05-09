@@ -12,7 +12,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 import javax.validation.Valid;
@@ -44,6 +46,7 @@ import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.model.ResidentScoreGoal;
 import com.ffg.rrn.model.WizardStepCounter;
+import com.ffg.rrn.utils.AppConstants;
 
 /**
  * @author FFGRRNTeam
@@ -110,9 +113,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 	 * @return
 	 */
 	public List<String> getAssessmentDatesByResidentIdAndLifeDomain(Long residentId, String lifeDomain) {
-		List<String> query = (List<String>)this.getJdbcTemplate().queryForList(
-				"SELECT DISTINCT TO_CHAR(ON_THIS_DATE, 'DD-MON-YYYY') FROM RESIDENT_ASSESSMENT_QUESTIONNAIRE WHERE RESIDENT_ID = ? AND LIFE_DOMAIN = ?", new Object[] { residentId, lifeDomain }, String.class);
-		return query;
+		List<String> sortedDatesOfAssessments = (List<String>)this.getJdbcTemplate().queryForList(
+				"select TO_CHAR(ON_THIS_DATE, '"+ AppConstants.DATE_PATTERN_POSTGRE+"') FROM RESIDENT_ASSESSMENT_QUESTIONNAIRE" +
+						" WHERE RESIDENT_ID = ? AND LIFE_DOMAIN = ?  ORDER BY ON_THIS_DATE DESC", new Object[] { residentId, lifeDomain }, String.class);
+		if(CollectionUtils.isEmpty(sortedDatesOfAssessments)){
+			return Collections.emptyList();
+		}
+		return sortedDatesOfAssessments.stream().distinct().collect(Collectors.toList());
 	}
 	
 	
@@ -140,11 +147,24 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	/**
 	 * 
+	 * @param serviceCoord
 	 * @return
 	 */
-	public List<Property> getAllProperty() {
+	public List<Property> getAllProperty(String serviceCoord) {
+
+		try {
+
+			this.getJdbcTemplate().queryForObject("select role_name from service_coordinator sc join user_role ur on ur.user_id = sc.sc_id "
+				+ "join app_role ar on ar.role_id = ur.role_id and sc.user_name = ? and ar.role_name = 'ROLE_ADMIN'", new Object[] { serviceCoord }, String.class);
+		} catch (EmptyResultDataAccessException ex) {
+
+			PropertyMapper rowMapper = new PropertyMapper();
+			return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL_FOR_NON_ADMIN_SC, new Object[] { serviceCoord }, rowMapper);
+		}
+
 		PropertyMapper rowMapper = new PropertyMapper();
 		return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+
 	}
 
 	public List<AssessmentType> getAllAType() {
@@ -158,6 +178,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 
 	public List<Resident> getAllResident() {
+
 		ResidentMapper rowMapper = new ResidentMapper();
 		return this.getJdbcTemplate().query(ResidentMapper.RESIDENT_SQL, rowMapper);
 	}
@@ -170,7 +191,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.email = ? ",
 				new Object[] { email }, rowMapper);
 
-		resident.setPropertyList(this.getAllProperty());
+		resident.setPropertyList(this.getAllProperty(serviceCoord));
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
 
@@ -240,13 +261,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		} catch (EmptyResultDataAccessException ex) {
 			// When No resident found - Page will open for NewResident
-			Resident r = new Resident(this.getAllProperty(), this.getAllAType(), this.getAllReferral(), serviceCoord);
+			Resident r = new Resident(this.getAllProperty(serviceCoord), this.getAllAType(), this.getAllReferral(), serviceCoord);
 			WizardStepCounter wsCounter = new WizardStepCounter();
 			r.setWsCounter(wsCounter);
 			return r;
 		}
 
-		resident.setPropertyList(this.getAllProperty());
+		resident.setPropertyList(this.getAllProperty(serviceCoord));
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
 
@@ -522,7 +543,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setDate(7, parseMyDate(resident.getSelectedDate()));		
 		return ps;
 	}
-	
+
 	private java.sql.Date parseMyDate(String selectedDate) throws ParseException {
 		
 		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
@@ -533,7 +554,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	// This will display date of most recent self sufficiency Assessment Date
 	public String getMostRecentSSMDate(Long residentId) {
 		try {
-			String stringDate = this.getJdbcTemplate().queryForObject("select TO_CHAR(on_this_date, 'YYYY/MM/DD') from resident_score_goal where resident_id = ? order by on_this_date desc Limit 1",
+			String stringDate = this.getJdbcTemplate().queryForObject("select TO_CHAR(on_this_date, 'mm/dd/YYYY') from resident_score_goal where resident_id = ? order by on_this_date desc Limit 1",
 					new Object[] { residentId }, String.class);
 			return stringDate;
 		} catch (EmptyResultDataAccessException e) {

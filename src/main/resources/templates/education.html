@@ -46,9 +46,12 @@
 	<div class="container">
 		<div id="education_Form">
 
-			<form name='_educationF' th:action="@{/saveEachAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal">
-
+			<form name='_educationF' th:action="@{/saveAssessment}"
+				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
+					   th:field="*{educationAssessmentAllowed}" />
+				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
+					   th:field="*{dateOfLatestEducationAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 						<div class="col-sm-10">
@@ -170,21 +173,27 @@
 					</div>
 
 
-
-					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> <input
-							type="hidden" th:field="*{residentId}" /> <input type="hidden"
-							th:field="*{firstName}" /> <input type="hidden"
-							th:field="*{lastName}" /> <input type="hidden"
-							th:field="*{propertyId}" /> <input type="hidden"
-							th:field="*{refId}" /> <input type="hidden" id="_eduLifeDomain"
-							th:field="*{lifeDomain}" /> <input type="hidden"
-							id="currentEducationGoal" th:field="*{goal}" /> <input
-							type="hidden" id="currentEducationScore"
-							th:field="*{currentScore}" /> <input type="submit"
-							class="btn btn-primary btn-lg" value="Save EDUCATION Assessment">
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<input type="hidden" th:field="*{serviceCoord}" /> <input
+								type="hidden" th:field="*{residentId}" /> <input type="hidden"
+								th:field="*{firstName}" /> <input type="hidden"
+								th:field="*{lastName}" /> <input type="hidden"
+								th:field="*{propertyId}" /> <input type="hidden"
+								th:field="*{refId}" /> <input type="hidden" id="_eduLifeDomain"
+								th:field="*{lifeDomain}" /> <input type="hidden"
+								id="currentEducationGoal" th:field="*{goal}" /> <input
+								type="hidden" id="currentEducationScore"
+								th:field="*{currentScore}" />
+							<input type="button" id="_educationSubmit"
+								class="btn btn-primary btn-lg" value="Save EDUCATION Assessment"
+																	 onclick="saveAssessment(this.form);">
+						</div>
+						<div class="col-sm-6 text-right">
+							<input type="button" id="_educationSubmitAndNext"
+								   class="btn btn-primary btn-lg" value="Save and Next Assessment"
+								   onclick="saveAndNextAssessment(this.form);"></div>
 					</div>
-
 
 				</div>
 			</form>

@@ -15,9 +15,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><span class="glyphicon glyphicon-user" style="color: darkseagreen; font-weight: bold; padding-top: 15px;" th:if="${serviceCordInfo != null}" th:utext="${serviceCordInfo}"></span> </li>
 				<li><a th:href="@{/allResident}">All Residents</a></li>
-				<li><a th:href="@{/newResident}">New Resident</a></li>
-				<li><a th:href="@{/actionPlans}">Action Plan</a></li>
-				<li><a th:href="@{/caseNotes}">Case Notes</a></li>
+				<li><a th:href="@{/newResident}">New Resident</a></li>				
 				<li><a th:href="@{/dashboard}">Dashboard</a></li>
 				<li><a th:if="${serviceCordInfo != null and #strings.contains(serviceCordInfo,'ROLE_ADMIN')}" th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a></li>

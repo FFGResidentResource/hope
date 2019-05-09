@@ -1,4 +1,5 @@
 @media print {
+
   [class*="col-sm-"] {
     float: left;
   }
@@ -14,7 +15,7 @@
   .my-text-print{
   	font-family: monospace;
   	font-size: 	larger;
-  }
+  }  
   
 }
 
@@ -131,6 +132,16 @@ tr.shown td.details-control {
 .table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th {
     padding: 3px;
     font-size: smaller;
+}
+
+.my-input-sm{
+height:25px;
+padding:5px 10px;
+font-size:12px;
+line-height:1.5;
+border-radius:3px;
+width:50%;
+border:1px solid #ccc;
 }
 
 

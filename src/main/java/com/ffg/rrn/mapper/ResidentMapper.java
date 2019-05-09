@@ -21,12 +21,16 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
 					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
-					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , " + " ap.outcome_achieved , ap.outcome_date , ap.date_added "
+					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , ap.outcome_achieved , ap.outcome_date , ap.date_added, "
+					+ " cn.description, cn.assessment, cn.plan, "
+					+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.SELF_SUFFICIENCY, rf.RF_HOUSING_STABILITY, rf.SAFE_SUPPORTIVE_COMMUNITY, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED"
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
-					+ " join action_plan ap on ap.resident_id = r.resident_id"
+					+ " left join action_plan ap on ap.resident_id = r.resident_id"
+					+ " left join case_notes cn on cn.resident_id = r.resident_id"
+					+ " left join referral_form rf on rf.resident_id = r.resident_id"
 					+ " left join assessment_type a on a.a_id = r.a_type ";
-
+	
 	@Override
 	public Resident mapRow(ResultSet rs, int row) throws SQLException {
 
@@ -70,6 +74,23 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setOutcomeDate(rs.getDate("OUTCOME_DATE"));
 		r.setFollowUpNotes(rs.getString("FOLLOWUP_NOTES"));
 		r.setActionPlanAddedDate(rs.getDate("DATE_ADDED"));
+
+		// Case Notes
+		r.setDescription(rs.getString("DESCRIPTION"));
+		r.setAssessment(rs.getString("ASSESSMENT"));
+		r.setPlan(rs.getString("PLAN"));
+
+		// Referral Form
+		r.setInterpretation(rs.getBoolean("INTERPRETATION"));
+		r.setReferredBy(rs.getString("REFERRED_BY"));
+		r.setReferralReason(rs.getString("REFERRAL_REASON"));
+		r.setCommentsOrExplanation(rs.getString("COMMENTS"));
+		r.setPreviousAttempts(rs.getString("PREVIOUS_ATTEMPTS"));
+		r.setSelfSufficiency(rs.getString("SELF_SUFFICIENCY"));
+		r.setHousingStability(rs.getString("RF_HOUSING_STABILITY"));
+		r.setSafeSupportiveCommunity(rs.getString("SAFE_SUPPORTIVE_COMMUNITY"));
+		r.setRfFollowUpNotes(rs.getString("RF_FOLLOWUP_NOTES"));
+		r.setResidentAppointmentScheduled(rs.getString("RES_APP_SCHEDULED"));
 
 		return r;
 

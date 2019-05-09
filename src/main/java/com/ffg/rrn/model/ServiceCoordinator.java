@@ -4,12 +4,15 @@
 package com.ffg.rrn.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.ffg.rrn.utils.FieldsValueMatch;
 
 import lombok.Data;
 
@@ -25,42 +28,65 @@ import lombok.Data;
  * LAST_LOGIN			TIMESTAMP 
  *
  */
+
 @Data
 @JsonView
+@FieldsValueMatch(field = "password", fieldMatch = "confirmPassword", message = "The password fields must match!")
 public class ServiceCoordinator {
 	 
     private Integer scId;
-    @NotEmpty
-    @Size(max=36)
+	@NotEmpty
+	@Pattern(regexp = "^[\\p{Alnum}]{1,36}$")
     private String userName;
-    @NotEmpty
-    @Size(max=10)
+	@NotEmpty
+	@Size(max = 10)
     private String password;
+
+	@NotEmpty
+	@Size(max = 10)
+	private String confirmPassword;
+
     private String encrytedPassword;
-    private String active;
+	private Boolean active;
     @Email
     @NotEmpty
     private String email;
     private Timestamp createdOn;
     private Timestamp lastLogin;
+
+	private Integer propertyId;
+	private Integer roleId;
+
+	private String roleName;
+	private String propName;
+
+	private Boolean admin;
+
+	@JsonView
+	private List<Property> propertyList;
+
+	private List<String> allTakenEmails;
+
+	private List<String> allTakenUserNames;
  
     public ServiceCoordinator() {
  
     }
  
-    public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, String active, String email, Timestamp createdOn, Timestamp lastLogin) {
+	public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, boolean active, String email, Timestamp createdOn, Timestamp lastLogin, Integer prop_id, String prop_name) {
         this.scId = scId;
         this.userName = userName;
         this.encrytedPassword = encrytedPassword;
         this.active = active;
         this.email = email;
         this.createdOn = createdOn;
-        this.lastLogin = lastLogin;
-       
+		this.lastLogin = lastLogin;
+		this.propertyId = prop_id;
+		this.propName = prop_name;
     }
     
     @Override
     public String toString() {
-        return this.userName + "/" + this.encrytedPassword;
+		return this.userName + " Logs In";
     }
 }
