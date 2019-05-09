@@ -96,6 +96,8 @@ jQuery(document).ready(
 				    var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="residents" value="all" onchange="filterActives(this);"> All '
 					    + ' <input type="radio" name="residents" value="true" onchange="filterActives(this);"> Active '
 					    + ' <input type="radio" name="residents" value="false" onchange="filterActives(this);"> Inactive </span>';
+				    
+				   
 
 				    // This prints all radio Options on
 				    // AllResident DataTables.
@@ -104,6 +106,10 @@ jQuery(document).ready(
 
 				}
 			    });
+		    
+		    if(jQuery("#_propertyGrant").text() != 'All'){
+			table.columns(4).search(jQuery("#_propertyGrant").text()).draw();
+		    }
 
 		    jQuery('#residentTable tbody').on('click', 'td.details-control', function(e) {
 			var tr = jQuery(this).closest('tr');
