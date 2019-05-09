@@ -145,7 +145,7 @@
 						<div class="col-sm-offset-4 col-sm-8">
 							<div class="checkbox">
 								<label> <input type="checkbox" th:field="*{admin}"
-									onclick="jQuery('#_property').prop('disabled', jQuery(this).prop('checked'));">
+									onclick="jQuery('#_property').prop('disabled', jQuery(this).prop('checked')); jQuery('select').prop('selectedIndex', 0);">
 									Is Admin? (Admins have access to all Property)
 								</label>
 							</div>

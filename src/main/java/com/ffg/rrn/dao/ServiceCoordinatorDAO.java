@@ -36,6 +36,9 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON, PROP_ID)"
 			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW(), ?)";
 	
+	private final static String INSERTION_SQL_SERVICECOORDINATOR_ADMINS = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON)"
+			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW())";
+
 	private final static String UPDATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , PROP_ID = ?, MODIFIED_DATE = NOW() where USER_NAME = ? ";
 
 	private final static String INACTIVATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET ACTIVE = ?, MODIFIED_DATE = NOW() where USER_NAME = ? ";
@@ -112,18 +115,28 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		
 		ps.setString(1, sc.getEmail());
 		ps.setString(2, sc.getEncrytedPassword());
-		ps.setInt(3, sc.getPropertyId());
+		ps.setInt(3, (sc.getPropertyId() == 0) ? null : sc.getPropertyId());
 		ps.setString(4, sc.getUserName());
 		return ps;
 	}
 
 	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR, pkColumnNames);
-		ps.setString(1, sc.getUserName());
-		ps.setString(2, sc.getEncrytedPassword());
-		ps.setString(3, sc.getEmail());
-		ps.setInt(4, sc.getPropertyId());
-		return ps;
+
+		if (sc.getPropertyId() == 0) {
+			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR, pkColumnNames);
+			ps.setString(1, sc.getUserName());
+			ps.setString(2, sc.getEncrytedPassword());
+			ps.setString(3, sc.getEmail());
+			return ps;
+		} else {
+			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR_ADMINS, pkColumnNames);
+			ps.setString(1, sc.getUserName());
+			ps.setString(2, sc.getEncrytedPassword());
+			ps.setString(3, sc.getEmail());
+			ps.setInt(4, sc.getPropertyId());
+			return ps;
+		}
+
 	}
 
 	public List<Property> getAllProperty() {

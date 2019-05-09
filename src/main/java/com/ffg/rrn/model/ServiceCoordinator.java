@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ffg.rrn.utils.FieldsValueMatch;
+import com.ffg.rrn.utils.PropertyCheck;
 
 import lombok.Data;
 
@@ -32,6 +33,7 @@ import lombok.Data;
 @Data
 @JsonView
 @FieldsValueMatch(field = "password", fieldMatch = "confirmPassword", message = "The password fields must match!")
+@PropertyCheck(field = "admin", fieldCheck = "propertyId", message = "Property is Mandatory for non Admins!")
 public class ServiceCoordinator {
 	 
     private Integer scId;
