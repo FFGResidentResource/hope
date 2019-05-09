@@ -131,8 +131,8 @@ public class ResidentServiceImpl {
 		return resident;
 	}
 
-	public List<Property> getAllProperty() {
-		return this.residentDao.getAllProperty();
+	public List<Property> getAllProperty(String serviceCoord) {
+		return this.residentDao.getAllProperty(serviceCoord);
 	}
 
 	public void updateResidentStatus(final Resident resident) {

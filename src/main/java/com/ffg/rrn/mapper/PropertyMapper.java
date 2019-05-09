@@ -16,8 +16,11 @@ import com.ffg.rrn.model.Property;
  */
 public class PropertyMapper implements RowMapper<Property> {
 	
+	public static final String PROPERTY_SQL_FOR_NON_ADMIN_SC //
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE FROM  PROPERTY P JOIN SERVICE_COORDINATOR SC on P.ACTIVE = 'TRUE' and SC.PROP_ID = P.PROP_ID and SC.USER_NAME = ?";
+
 	public static final String PROPERTY_SQL //
-    = "SELECT PROP_ID, PROP_NAME, UNIT, UNIT_FEE, ACTIVE FROM PROPERTY where ACTIVE = 'TRUE'";
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";
 
 	@Override
 	public Property mapRow(ResultSet rs, int row) throws SQLException {

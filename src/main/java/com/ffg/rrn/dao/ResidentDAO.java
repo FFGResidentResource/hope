@@ -3,9 +3,22 @@
  */
 package com.ffg.rrn.dao;
 
-import com.ffg.rrn.mapper.*;
-import com.ffg.rrn.model.*;
-import com.ffg.rrn.utils.AppConstants;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.sql.DataSource;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -17,16 +30,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import javax.validation.Valid;
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.ffg.rrn.mapper.AssessmentMapper;
+import com.ffg.rrn.mapper.ChildrenMapper;
+import com.ffg.rrn.mapper.PropertyMapper;
+import com.ffg.rrn.mapper.ReferralMapper;
+import com.ffg.rrn.mapper.ResidentMapper;
+import com.ffg.rrn.model.AssessmentQuestionnaire;
+import com.ffg.rrn.model.AssessmentType;
+import com.ffg.rrn.model.Child;
+import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.QuestionChoice;
+import com.ffg.rrn.model.Referral;
+import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
+import com.ffg.rrn.model.ResidentScoreGoal;
+import com.ffg.rrn.model.WizardStepCounter;
+import com.ffg.rrn.utils.AppConstants;
 
 /**
  * @author FFGRRNTeam
@@ -127,11 +147,24 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	/**
 	 * 
+	 * @param serviceCoord
 	 * @return
 	 */
-	public List<Property> getAllProperty() {
+	public List<Property> getAllProperty(String serviceCoord) {
+
+		try {
+
+			this.getJdbcTemplate().queryForObject("select role_name from service_coordinator sc join user_role ur on ur.user_id = sc.sc_id "
+				+ "join app_role ar on ar.role_id = ur.role_id and sc.user_name = ? and ar.role_name = 'ROLE_ADMIN'", new Object[] { serviceCoord }, String.class);
+		} catch (EmptyResultDataAccessException ex) {
+
+			PropertyMapper rowMapper = new PropertyMapper();
+			return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL_FOR_NON_ADMIN_SC, new Object[] { serviceCoord }, rowMapper);
+		}
+
 		PropertyMapper rowMapper = new PropertyMapper();
 		return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+
 	}
 
 	public List<AssessmentType> getAllAType() {
@@ -145,6 +178,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 
 	public List<Resident> getAllResident() {
+
 		ResidentMapper rowMapper = new ResidentMapper();
 		return this.getJdbcTemplate().query(ResidentMapper.RESIDENT_SQL, rowMapper);
 	}
@@ -157,7 +191,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.email = ? ",
 				new Object[] { email }, rowMapper);
 
-		resident.setPropertyList(this.getAllProperty());
+		resident.setPropertyList(this.getAllProperty(serviceCoord));
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
 
@@ -227,13 +261,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		} catch (EmptyResultDataAccessException ex) {
 			// When No resident found - Page will open for NewResident
-			Resident r = new Resident(this.getAllProperty(), this.getAllAType(), this.getAllReferral(), serviceCoord);
+			Resident r = new Resident(this.getAllProperty(serviceCoord), this.getAllAType(), this.getAllReferral(), serviceCoord);
 			WizardStepCounter wsCounter = new WizardStepCounter();
 			r.setWsCounter(wsCounter);
 			return r;
 		}
 
-		resident.setPropertyList(this.getAllProperty());
+		resident.setPropertyList(this.getAllProperty(serviceCoord));
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
 

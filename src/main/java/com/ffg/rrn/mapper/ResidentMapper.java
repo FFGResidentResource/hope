@@ -30,7 +30,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " left join case_notes cn on cn.resident_id = r.resident_id"
 					+ " left join referral_form rf on rf.resident_id = r.resident_id"
 					+ " left join assessment_type a on a.a_id = r.a_type ";
-
+	
 	@Override
 	public Resident mapRow(ResultSet rs, int row) throws SQLException {
 
