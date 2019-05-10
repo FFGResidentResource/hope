@@ -1,3 +1,27 @@
+window.onbeforeprint = function() {
+	$('#_rrcPrint').text($('#_rrc').val());
+	$('#_housingPOA').text($('#_planOfActionHousing').val());
+	$('#_mmPOA').text($('#_planOfActionMM').val());
+	$('#_empPOA').text($('#_planOfActionEmp').val());
+	$('#_eduPOA').text($('#_planOfActionEdu').val());
+	$('#_nsPOA').text($('#_planOfActionNS').val());
+	$('#_hhPOA').text($('#_planOfActionHH').val());
+	$('#_housingAnOut').text($('#_anticipatedOutcomeHousing').val());
+	$('#_mmAnOut').text($('#_anticipatedOutcomeMM').val());
+	$('#_empAnOut').text($('#_anticipatedOutcomeEmp').val());
+	$('#_eduAnOut').text($('#_anticipatedOutcomeEdu').val());
+	$('#_nsAnOut').text($('#_anticipatedOutcomeNS').val());
+	$('#_hhAnOut').text($('#_anticipatedOutcomeHH').val());
+	$('#_followUpNotesPrint').text($('#_followUpNotes').val());
+	$('#_housingOutAch').text($('#_outcomesAchievedHousing').val());
+	$('#_mmOutAch').text($('#_outcomesAchievedMM').val());
+	$('#_empOutAch').text($('#_outcomesAchievedEmp').val());
+	$('#_eduOutAch').text($('#_outcomesAchievedEdu').val());
+	$('#_nsOutAch').text($('#_outcomesAchievedNS').val());
+	$('#_hhOutAch').text($('#_outcomesAchievedHH').val());
+};
+
+
 jQuery(document).ready(function() {
 
     jQuery.ajax({

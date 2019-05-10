@@ -1,3 +1,9 @@
+window.onbeforeprint = function() {
+	$('#_commentsPrint').text($('#_commentsOrExplanation').val());
+	$('#_prevAttemptsPrint').text($('#_prevAttemps').val());
+	$('#_followupPrint').text($('#_rfFollowupNotes').val());
+};
+
 jQuery(document).ready(function() {
     
     populateReferralReasonsWithValues();
