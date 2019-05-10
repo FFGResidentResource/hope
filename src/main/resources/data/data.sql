@@ -14,6 +14,8 @@ DROP SEQUENCE AQ_SQ;
 DROP SEQUENCE AP_SQ;
 DROP SEQUENCE CN_SQ;
 DROP SEQUENCE RF_SQ;
+DROP SEQUENCE UR_SQ;
+
 
 DROP TABLE REFERRAL_FORM;
 DROP TABLE ACTION_PLAN;
@@ -61,6 +63,8 @@ CREATE SEQUENCE AP_SQ START 1;
 CREATE SEQUENCE CN_SQ START 1;
 
 CREATE SEQUENCE RF_SQ START 1;
+
+CREATE SEQUENCE UR_SQ START 1;
 
 
 CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
@@ -637,25 +641,25 @@ values (2, 'ROLE_USER');
 --- 
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (1, 1, 1);
+values (nextval('UR_SQ'), 1, 1);
  
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (2, 1, 2);
+values (nextval('UR_SQ'), 1, 2);
  
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (3, 2, 2);
+values (nextval('UR_SQ'), 2, 2);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (4, 3, 2);
+values (nextval('UR_SQ'), 3, 2);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (5, 4, 2);
+values (nextval('UR_SQ'), 4, 2);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (6, 5, 1);
+values (nextval('UR_SQ'), 5, 1);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (7, 5, 2);
+values (nextval('UR_SQ'), 5, 2);
 
 ---
 

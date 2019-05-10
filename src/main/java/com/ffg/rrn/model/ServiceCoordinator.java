@@ -73,7 +73,7 @@ public class ServiceCoordinator {
  
     public ServiceCoordinator() {
  
-    }
+	}
  
 	public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, boolean active, String email, Timestamp createdOn, Timestamp lastLogin, Integer prop_id, String prop_name) {
         this.scId = scId;

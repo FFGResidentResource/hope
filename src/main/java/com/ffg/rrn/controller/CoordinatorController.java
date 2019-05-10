@@ -72,26 +72,17 @@ public class CoordinatorController extends BaseController {
 		return "redirect:/admin";
     }
 
-	@RequestMapping(value = "/inactivateSC", method = { RequestMethod.GET, RequestMethod.POST })
-	public String inactivateSC(@RequestParam("userName") String userName, Model model, Principal principal) throws Exception {
+	@RequestMapping(value = { "/inactivateSC", "/activateSC" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public String inactivateSC(@RequestParam("userName") String userName, @RequestParam("active") Boolean active, Model model, Principal principal) throws Exception {
 
 		if (principal != null) {
 			populateSCinModel(model, principal);
 		}
 
-		serviceCoordinatorService.inactivateOrActivateSC(userName, false);
+		serviceCoordinatorService.inactivateOrActivateSC(userName, active);
 		return "redirect:/admin";
 	}
 
-	@RequestMapping(value = "/activateSC", method = { RequestMethod.GET, RequestMethod.POST })
-	public String activateSC(@RequestParam("userName") String userName, Model model, Principal principal) throws Exception {
 
-		if (principal != null) {
-			populateSCinModel(model, principal);
-		}
-
-		serviceCoordinatorService.inactivateOrActivateSC(userName, true);
-		return "redirect:/admin";
-	}
 
 }

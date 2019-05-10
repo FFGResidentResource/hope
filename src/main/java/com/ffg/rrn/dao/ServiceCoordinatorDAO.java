@@ -36,12 +36,18 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON, PROP_ID)"
 			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW(), ?)";
 	
+	private final static String INSERT_ADMIN_ROLE = "INSERT INTO USER_ROLE (ID, USER_ID, ROLE_ID) VALUES (nextval('UR_SQ'), ? , 1)";
+
+	private final static String INSERT_USER_ROLE = "INSERT INTO USER_ROLE (ID, USER_ID, ROLE_ID) VALUES (nextval('UR_SQ'), ? , 2)";
+
+	private final static String DELETE_ROLE = "DELETE FROM USER_ROLE WHERE USER_ID = ?";
+
 	private final static String INSERTION_SQL_SERVICECOORDINATOR_ADMINS = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON)"
 			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW())";
 
-	private final static String UPDATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , PROP_ID = ?, MODIFIED_DATE = NOW() where USER_NAME = ? ";
+	private final static String UPDATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , PROP_ID = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
-	private final static String INACTIVATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET ACTIVE = ?, MODIFIED_DATE = NOW() where USER_NAME = ? ";
+	private final static String INACTIVATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET ACTIVE = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
 	@Autowired
 	public ServiceCoordinatorDAO(DataSource dataSource) {
@@ -64,7 +70,12 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 	public List<ServiceCoordinator> getAllServiceCoordinators() {
 		ServiceCoordinatorMapper rowMapper = new ServiceCoordinatorMapper();
-		return this.getJdbcTemplate().query(ServiceCoordinatorMapper.BASE_SQL, rowMapper);
+		List<ServiceCoordinator> scList = this.getJdbcTemplate().query(ServiceCoordinatorMapper.BASE_SQL, rowMapper);
+
+		for (ServiceCoordinator serviceCoordinator : scList) {
+			serviceCoordinator.setAdmin((serviceCoordinator.getPropertyId() > 0) ? false : true);
+		}
+		return scList;
 	}
 
 	public Long inactivateOrActivateSC(String userName, boolean active) {
@@ -72,12 +83,12 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] { "sc_id" };
 
-		this.getJdbcTemplate().update(conn -> buildInactivatePS(conn, userName, active, pkColumnNames), keyHolder);
+		this.getJdbcTemplate().update(conn -> buildinactivateOrActivatePS(conn, userName, active, pkColumnNames), keyHolder);
 
 		return keyHolder.getKey().longValue();
 	}
 
-	private PreparedStatement buildInactivatePS(Connection conn, String userName, boolean active, String[] pkColumnNames) throws SQLException {
+	private PreparedStatement buildinactivateOrActivatePS(Connection conn, String userName, boolean active, String[] pkColumnNames) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(INACTIVATE_SQL_SERVICECOORDINATOR, pkColumnNames);
 
 		ps.setBoolean(1, active);
@@ -92,16 +103,32 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		String[] pkColumnNames = new String[] { "sc_id" };
 
 		try {
-			String userName = this.getJdbcTemplate().queryForObject("select user_name from service_coordinator where user_name = ? ", new Object[] { sc.getUserName() }, String.class);
+			// If no records found, it will go in Catch Exception else next line
+			this.getJdbcTemplate().queryForObject("select 1 from service_coordinator where user_name = ? and email = ? ", new Object[] { sc.getUserName(), sc.getEmail() }, String.class);
+			this.getJdbcTemplate().update(conn -> buildUpdateServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
 
-			if (userName != null) {
+			// Delete and build fresh User_ROLE
+			this.getJdbcTemplate().update(conn -> buildDeleteUserRolePS(conn, sc));
+			this.getJdbcTemplate().update(conn -> buildInsertUserRolePS(conn, sc));
 
-				this.getJdbcTemplate().update(conn -> buildUpdateServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
+			// for admins - default USER_ROLE needs to be inserted as well
+			if (sc.getPropertyId() == null) {
+				this.getJdbcTemplate().update(conn -> buildInsertDefaultUserRolePS(conn, sc));
 			}
+
 		}
 		// When no resident found in action_plan we do fresh insert
 		catch (EmptyResultDataAccessException e) {
 			this.getJdbcTemplate().update(conn -> buildInsertServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
+			sc.setScId(toIntExact(keyHolder.getKey().longValue()));
+
+			this.getJdbcTemplate().update(conn -> buildInsertUserRolePS(conn, sc));
+
+			// for admins - default USER_ROLE needs to be inserted as well
+			if (sc.getPropertyId() == null) {
+				this.getJdbcTemplate().update(conn -> buildInsertDefaultUserRolePS(conn, sc));
+			}
+
 		}
 
 		long scId = keyHolder.getKey().longValue();
@@ -110,26 +137,53 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		return scId;
 	}
 	
+	private PreparedStatement buildInsertDefaultUserRolePS(Connection conn, ServiceCoordinator sc) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(INSERT_USER_ROLE);
+		ps.setInt(1, sc.getScId());
+		return ps;
+	}
+
+	private PreparedStatement buildDeleteUserRolePS(Connection conn, ServiceCoordinator sc) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(DELETE_ROLE);
+		ps.setInt(1, sc.getScId());
+		return ps;
+	}
+
+	private PreparedStatement buildInsertUserRolePS(Connection conn, ServiceCoordinator sc) throws SQLException {
+
+		if (sc.getPropertyId() == null) {
+			PreparedStatement ps = conn.prepareStatement(INSERT_ADMIN_ROLE);
+			ps.setInt(1, sc.getScId());
+			return ps;
+		} else {
+
+			PreparedStatement ps = conn.prepareStatement(INSERT_USER_ROLE);
+			ps.setInt(1, sc.getScId());
+			return ps;
+
+		}
+	}
+
 	private PreparedStatement buildUpdateServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(UPDATE_SQL_SERVICECOORDINATOR, pkColumnNames);
 		
 		ps.setString(1, sc.getEmail());
 		ps.setString(2, sc.getEncrytedPassword());
-		ps.setInt(3, (sc.getPropertyId() == 0) ? null : sc.getPropertyId());
+		ps.setInt(3, (sc.getPropertyId() == null) ? null : sc.getPropertyId());
 		ps.setString(4, sc.getUserName());
 		return ps;
 	}
 
 	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
 
-		if (sc.getPropertyId() == 0) {
-			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR, pkColumnNames);
+		if (sc.getPropertyId() == null) {
+			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR_ADMINS, pkColumnNames);
 			ps.setString(1, sc.getUserName());
 			ps.setString(2, sc.getEncrytedPassword());
 			ps.setString(3, sc.getEmail());
 			return ps;
 		} else {
-			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR_ADMINS, pkColumnNames);
+			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR, pkColumnNames);
 			ps.setString(1, sc.getUserName());
 			ps.setString(2, sc.getEncrytedPassword());
 			ps.setString(3, sc.getEmail());

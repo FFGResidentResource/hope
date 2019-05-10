@@ -48,18 +48,14 @@ jQuery(document).ready(
 				    },				   
 				    {data : 'propName'}				    
 				    ],
-				"order" : [ [ 4, "desc" ] ],
-				pageLength : 15,
+				"order" : [ [ 3, "desc" ] ],
+				pageLength : 8,
 				pagingType : "full_numbers",
 				"initComplete" : function(settings, json) {
-				    var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="serviceCoordinators" value="all" onchange="filterActives(this);"> All '
-					    + ' <input type="radio" name="serviceCoordinators" value="t" onchange="filterActives(this);"> Active '
-					    + ' <input type="radio" name="serviceCoordinators" value="f" onchange="filterActives(this);"> Inactive </span>';
-
+				    
 				    // This prints all radio Options on
 				    // AllResident DataTables.
-				    var pre = jQuery('.dataTables_length').html();
-				    jQuery('.dataTables_length').html(pre + radioHtml);
+				    jQuery('.dataTables_length').addClass('hideme');				   
 				}
 			    });
 		    
@@ -74,14 +70,27 @@ jQuery(document).ready(
 			    $(this).removeClass('selected');
 			    jQuery('a[id^="_load"]').attr('disabled', true);
 			    
+			    jQuery('select').prop('selectedIndex', 0);
+			    jQuery('input:text').val('');
+			    jQuery('#inputEmail1').val('');
+			    jQuery('#inputPassword1').val('');
+			    jQuery('#inputPassword2').val('');
+			    jQuery('#_isAdmin').prop('checked', false);
+			    jQuery('#_property').prop('disabled', false);
+			    
 			} else {
 			    
 			    table.$('tr.selected').removeClass('selected');
 			    $(this).addClass('selected');
 			    
+			    jQuery("#inputEmail1").val(currentRow.email);
+			    jQuery("#userName1").val(currentRow.userName);		    
+			    jQuery('select').val(currentRow.propertyId);
+			    jQuery('#_isAdmin').prop('checked', currentRow.admin);
+			    
 			    jQuery('a[id^="_load"]').attr('disabled', false);
 			    
-			    var suffix = '&scUserName=' + currentRow.userName;
+			    var suffix = '&userName=' + currentRow.userName;
 			    var assessmentLinks = jQuery('a[id^="_load"]');
 
 			    jQuery.each(assessmentLinks, function(idx, obj) {
@@ -98,14 +107,7 @@ jQuery(document).ready(
 	    });
 	});
 
-function filterActives(dat) {
-    // Toggles Active
-    if (dat.value != "all") {
-	table.columns(2).search(dat.value).draw();
-    } else {
-	table.columns(2).search('').draw();
-    }
-}
+
 
 /**
  * 

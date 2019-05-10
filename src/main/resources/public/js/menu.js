@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
 	var path = window.location.pathname;
 	if (path == '/newResident' || path == "/getResidentById") {
 		jQuery("a[href='/newResident']").parent().addClass('active');
-	} else if (path == '/admin') {
+	} else if (path == '/admin' || path == "/saveServiceCoordinator" ) {
 		jQuery("a[href='/admin']").parent().addClass('active');
 	} else if (path == '/allResident') {
 		jQuery("a[href='/allResident']").parent().addClass('active');
