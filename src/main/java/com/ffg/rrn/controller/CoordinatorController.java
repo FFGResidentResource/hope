@@ -49,31 +49,40 @@ public class CoordinatorController extends BaseController {
     }
 
     @PostMapping("/saveServiceCoordinator")
-	public String saveServiceCoordinator(Model model, @ModelAttribute("serviceCoordinator") @Valid ServiceCoordinator sc,
+	public String saveServiceCoordinator(Model model, Principal principal, @ModelAttribute("serviceCoordinator") @Valid ServiceCoordinator sc,
 			BindingResult bindingResult) {
 
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+
         if (bindingResult.hasErrors()) {
-            return "adminPage";
+
+			List<Property> allProperty = serviceCoordinatorService.getAllProperty();
+			sc.setPropertyList(allProperty);
+
+			model.addAttribute("serviceCoordinator", sc);
+
+			return "adminPage";
         }
         //This will be new scID always
         Long scID = serviceCoordinatorService.saveServiceCoordinator(sc);
 
         model.addAttribute("serviceCoordinator", new ServiceCoordinator());
-		return "redirect:/adminPage";
+		return "redirect:/admin";
     }
 
-	@RequestMapping(value = "/inactivateSC", method = { RequestMethod.GET, RequestMethod.POST })
-	public String inactivateSC(@RequestParam("userName") String userName, Model model, Principal principal) throws Exception {
+	@RequestMapping(value = { "/inactivateSC", "/activateSC" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public String inactivateSC(@RequestParam("userName") String userName, @RequestParam("active") Boolean active, Model model, Principal principal) throws Exception {
 
-		serviceCoordinatorService.inactivateOrActivateSC(userName, false);
-		return "redirect:/adminPage";
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+
+		serviceCoordinatorService.inactivateOrActivateSC(userName, active);
+		return "redirect:/admin";
 	}
 
-	@RequestMapping(value = "/activateSC", method = { RequestMethod.GET, RequestMethod.POST })
-	public String activateSC(@RequestParam("userName") String userName, Model model, Principal principal) throws Exception {
 
-		serviceCoordinatorService.inactivateOrActivateSC(userName, true);
-		return "redirect:/adminPage";
-	}
 
 }
