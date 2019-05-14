@@ -222,6 +222,9 @@ public class Resident {
 	private String safeSupportiveCommunity;
 	private String rfFollowUpNotes;
 	private String residentAppointmentScheduled;
+	private Date referralFormDateAdded;
+	private Date referralFormDateModified;
+	
 
 	// Referral Form fields - End
 
