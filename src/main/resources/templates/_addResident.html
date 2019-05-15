@@ -5,7 +5,7 @@
 		<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
 			<ul>
 				<li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
-					<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> |
+					<span th:text="${e.global}? '*' : ''">The field name</span>
 					<span th:text="${e.message}">The error message</span>
 				</li>
 			</ul>
@@ -188,7 +188,7 @@
 										<div class="col-sm-10">
 											<select class="form-control setable" id="_referral"
 												th:field="*{refId}" required>
-												<option value="0">Select</option>
+												<option value="">Select</option>
 												<option th:each="referral : ${resident.refList}"
 													th:value="${referral.refId}"
 													th:utext="${referral.refValue}" />
@@ -201,7 +201,7 @@
 										<div class="col-sm-10">
 											<select class="form-control setable" id="_property"
 												th:field="*{propertyId}" required>
-												<option value="0">Select</option>
+												<option value="">Select</option>
 												<option th:each="property : ${resident.propertyList}"
 													th:value="${property.propertyId}"
 													th:utext="${property.propertyName}" />
@@ -462,13 +462,14 @@
 					<div class="row text-center bs-linebreak hidden-print">
 						<input type="hidden" th:field="*{serviceCoord}" /> 
 						<input type="hidden" id="propertyString" th:value="${resident.propertyList}" />
+						<input type="hidden" th:field="*{active}" />
 						<input type="submit" id="btnSubmit" class="btn btn-primary btn-lg"
 							   th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
 							   onclick="saveOrUpdateResident(this.form);"/>
 						<input th:type="${resident.active}?'button':'hidden'" id="btnDeactivateResident" class="btn btn-primary btn-lg"
 							   value="Deactivate" th:title="*{active}"
 							   onclick="deactivateResident(this);"/>
-						<input th:type="${resident.residentId==null||resident.active}?'hidden':'button'" id="btnReactivateResident" class="btn btn-primary btn-lg"
+						<input th:type="${resident.residentId==null||resident.active==true}?'hidden':'button'" id="btnReactivateResident" class="btn btn-primary btn-lg"
 							   value="Reactivate" th:title="*{active}"
 							   onclick="reactivateResident(this);"/>
 						<input type="reset" class="btn btn-primary btn-lg" value="Reset"/>
