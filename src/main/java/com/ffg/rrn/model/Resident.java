@@ -43,20 +43,21 @@ public class Resident {
 
 	private Long residentId;
 	private Boolean active;
+	@NotNull(message = "Is Resident can not be null.")
 	private Boolean isResident;
-	@NotEmpty
-	@Size(max = 20)
+	@NotEmpty(message = "First Name can not be empty.")
+	@Size(max = 20,message = "The length of First Name can not be more than 20.")
 	private String firstName;
 	private String middle;
-	@NotEmpty
-	@Size(max = 20)
+	@NotEmpty(message = "Last Name can not be empty.")
+	@Size(max = 20,message = "The length of Last Name can not be more than 20.")
 	private String lastName;
 
-	@NotNull
+	@NotNull(message = "Property can not be empty.")
 	private Integer propertyId;
 	private String propertyName;
 
-	@NotNull
+	@NotNull(message = "Referral can not be empty.")
 	private Integer refId;
 	private String refValue;
 
@@ -66,12 +67,12 @@ public class Resident {
 	private String voiceMail;
 	private String text;
 
-	@Email
-	@Size(max = 128)
+	@Email(message = "email must be a valid format.")
+	@Size(max = 128,message = "The length of Last Name can not be more than 128.")
 	private String email;
 	private String address;
 
-	@AssertTrue
+	@AssertTrue(message = "Must check \"I acknowledge that I was informed of my right to privacy\".")
 	private Boolean ackRightToPrivacy;
 
 	private Boolean viaVoicemail;
@@ -89,21 +90,21 @@ public class Resident {
 
 	private String childList;
 
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child1 full name can not be more than 50.")
 	private String child1;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child2 full name can not be more than 50.")
 	private String child2;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child3 full name can not be more than 50.")
 	private String child3;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child4 full name can not be more than 50.")
 	private String child4;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child5 full name can not be more than 50.")
 	private String child5;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child6 full name can not be more than 50.")
 	private String child6;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child7 full name can not be more than 50.")
 	private String child7;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child8 full name can not be more than 50.")
 	private String child8;
 
 	private Boolean pvrChild1;
@@ -222,6 +223,9 @@ public class Resident {
 	private String safeSupportiveCommunity;
 	private String rfFollowUpNotes;
 	private String residentAppointmentScheduled;
+	private Date referralFormDateAdded;
+	private Date referralFormDateModified;
+	
 
 	// Referral Form fields - End
 

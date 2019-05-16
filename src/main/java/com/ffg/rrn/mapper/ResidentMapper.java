@@ -23,7 +23,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
 					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , ap.outcome_achieved , ap.outcome_date , ap.date_added, "
 					+ " cn.description, cn.assessment, cn.plan, "
-					+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.SELF_SUFFICIENCY, rf.RF_HOUSING_STABILITY, rf.SAFE_SUPPORTIVE_COMMUNITY, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED"
+					+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.SELF_SUFFICIENCY, rf.RF_HOUSING_STABILITY, rf.SAFE_SUPPORTIVE_COMMUNITY, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED, rf.date_added as rfDateAdded, rf.date_modified as rfDateModified"
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
 					+ " left join action_plan ap on ap.resident_id = r.resident_id"
@@ -91,6 +91,8 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setSafeSupportiveCommunity(rs.getString("SAFE_SUPPORTIVE_COMMUNITY"));
 		r.setRfFollowUpNotes(rs.getString("RF_FOLLOWUP_NOTES"));
 		r.setResidentAppointmentScheduled(rs.getString("RES_APP_SCHEDULED"));
+		r.setReferralFormDateAdded(rs.getDate("rfDateAdded"));
+		r.setReferralFormDateModified(rs.getDate("rfDateModified"));
 
 		return r;
 
