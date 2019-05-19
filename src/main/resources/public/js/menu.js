@@ -15,3 +15,7 @@ jQuery(document).ready(function() {
 	}
 	
 });
+
+function validateInput(textArea) {
+    textArea.value = textArea.value.replace(/[^-.?_(),+= 0-9a-zA-Z\r\n]/g, "");
+}

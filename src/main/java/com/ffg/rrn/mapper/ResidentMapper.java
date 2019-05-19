@@ -21,8 +21,8 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
 					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
-					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.anticipated_outcomes , ap.followup_notes , ap.outcome_achieved , ap.outcome_date , ap.date_added, "
-					+ " cn.description, cn.assessment, cn.plan, "
+					+ " ap.resident_concerns , ap.focus_on_domain , ap.plan_of_action, ap.plan_details, ap.anticipated_outcomes,  ap.followup_notes, ap.outcome_achieved, ap.achieved_ssm, ap.completion_date, ap.date_added as apDateAdded, ap.date_modified as apDateModified, "
+					+ " cn.description, cn.assessment, cn.plan, cn.date_added as cnDateAdded, cn.date_modified as cnDateModified,"
 					+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.SELF_SUFFICIENCY, rf.RF_HOUSING_STABILITY, rf.SAFE_SUPPORTIVE_COMMUNITY, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED, rf.date_added as rfDateAdded, rf.date_modified as rfDateModified"
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
@@ -71,14 +71,19 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setPlanOfAction(rs.getString("PLAN_OF_ACTION"));
 		r.setAnticipatedOutcome(rs.getString("ANTICIPATED_OUTCOMES"));
 		r.setOutcomesAchieved(rs.getString("OUTCOME_ACHIEVED"));
-		r.setOutcomeDate(rs.getDate("OUTCOME_DATE"));
+		r.setCompletionDates(rs.getString("COMPLETION_DATE"));
+		r.setAchievedGoals(rs.getString("ACHIEVED_SSM"));
+		r.setPlanDetails(rs.getString("PLAN_DETAILS"));
 		r.setFollowUpNotes(rs.getString("FOLLOWUP_NOTES"));
-		r.setActionPlanAddedDate(rs.getDate("DATE_ADDED"));
+		r.setActionPlanDateAdded(rs.getDate("apDateAdded"));
+		r.setActionPlanDateModified(rs.getDate("apDateModified"));
 
 		// Case Notes
 		r.setDescription(rs.getString("DESCRIPTION"));
 		r.setAssessment(rs.getString("ASSESSMENT"));
 		r.setPlan(rs.getString("PLAN"));
+		r.setCnDateAdded(rs.getDate("cnDateAdded"));
+		r.setCnDateModified(rs.getDate("cnDateModified"));
 
 		// Referral Form
 		r.setInterpretation(rs.getBoolean("INTERPRETATION"));

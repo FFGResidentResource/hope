@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -30,6 +31,8 @@ import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
 import com.ffg.rrn.utils.AppConstants;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * @author FFGRRNTeam
@@ -39,12 +42,12 @@ import com.ffg.rrn.utils.AppConstants;
 public class ResidentController extends BaseController {
 
 	@Autowired
-	private ResidentServiceImpl residentService;	
+	private ResidentServiceImpl residentService;
 
 	private Map<String, String> lifeDomainNextUrlMap = new HashMap<>();
 
 	@PostConstruct
-	public void init(){
+	public void init() {
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSING, AppConstants.LIFE_DOMAIN_URL_MONEY_MGMT);
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT, AppConstants.LIFE_DOMAIN_URL_EMPLOYMENT);
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT, AppConstants.LIFE_DOMAIN_URL_EDUCATION);
@@ -54,8 +57,7 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })
-	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal)
-			throws Exception {
+	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -93,11 +95,9 @@ public class ResidentController extends BaseController {
 		return "residentPage";
 
 	}
-	
-	
+
 	@RequestMapping(value = "/getCurrentAssessment", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getCurrentAssessment(@RequestParam("residentId") Long residentId,
-									   @RequestParam("lifeDomain") String lifeDomain,Model model, Principal principal) throws Exception {
+	public String getCurrentAssessment(@RequestParam("residentId") Long residentId, @RequestParam("lifeDomain") String lifeDomain, Model model, Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -112,7 +112,7 @@ public class ResidentController extends BaseController {
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 
-		//This is very important in returning respective Page
+		// This is very important in returning respective Page
 		return lifeDomain;
 
 	}
@@ -168,6 +168,53 @@ public class ResidentController extends BaseController {
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
 		resident = residentService.getAllQuestionnaire(resident);
 		resident.setMostRecentSSMDate(residentService.getMostRecentSSMDate(residentId));
+
+		List<String> anticipatedOutcomes = new ArrayList<String>();
+
+		JsonObject jsonObject = (new JsonParser()).parse(resident.getSelfSufficiency()).getAsJsonObject();
+
+		Set<String> keySet = jsonObject.keySet();
+
+		for (String key : keySet) {
+
+			if (key.equals("Other")) {
+				anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+			} else {
+				if (jsonObject.get(key).getAsBoolean() == true) {
+					anticipatedOutcomes.add(key);
+				}
+			}
+		}
+
+		jsonObject = (new JsonParser()).parse(resident.getHousingStability()).getAsJsonObject();
+		keySet = jsonObject.keySet();
+
+		for (String key : keySet) {
+
+			if (key.equals("Other")) {
+				anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+			} else {
+				if (jsonObject.get(key).getAsBoolean() == true) {
+					anticipatedOutcomes.add(key);
+				}
+			}
+		}
+
+		jsonObject = (new JsonParser()).parse(resident.getSafeSupportiveCommunity()).getAsJsonObject();
+		keySet = jsonObject.keySet();
+
+		for (String key : keySet) {
+
+			if (key.equals("Other")) {
+				anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+			} else {
+				if (jsonObject.get(key).getAsBoolean() == true) {
+					anticipatedOutcomes.add(key);
+				}
+			}
+		}
+
+		resident.setAnticipatedOutcomesList(anticipatedOutcomes);
 
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
@@ -273,7 +320,7 @@ public class ResidentController extends BaseController {
 		residentService.saveActionPlan(resident);
 		return "redirect:/allResident";
 	}
-	
+
 	@PostMapping(value = "/saveCaseNotes")
 	public String saveCaseNotes(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveCaseNotes(resident);
@@ -288,9 +335,7 @@ public class ResidentController extends BaseController {
 	}
 
 	@PostMapping("/saveAssessment")
-	public String saveAssessment(@Valid @ModelAttribute Resident resident,
-									 BindingResult bindingResult,
-									 Model model, Principal principal) throws Exception {
+	public String saveAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult, Model model, Principal principal) throws Exception {
 
 		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
 
@@ -304,9 +349,7 @@ public class ResidentController extends BaseController {
 	}
 
 	@PostMapping("/saveAssessmentAndGoToNext")
-	public String saveAssessmentAndGoToNext(@Valid @ModelAttribute Resident resident,
-									 BindingResult bindingResult,
-									 Model model, Principal principal) throws Exception {
+	public String saveAssessmentAndGoToNext(@Valid @ModelAttribute Resident resident, BindingResult bindingResult, Model model, Principal principal) throws Exception {
 
 		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
 
@@ -318,31 +361,30 @@ public class ResidentController extends BaseController {
 
 		String nextUrl = lifeDomainNextUrlMap.get(resident.getLifeDomain());
 
-		return (nextUrl==null)?"redirect:/allResident":getCurrentAssessment(resident.getResidentId(),
-				nextUrl,model,principal);
+		return (nextUrl == null) ? "redirect:/allResident" : getCurrentAssessment(resident.getResidentId(), nextUrl, model, principal);
 	}
 
 	private List<ResidentAssessmentQuestionnaire> getResidentAssessmentQuestionnaires(Resident resident) {
 		List<ResidentAssessmentQuestionnaire> raqs = new ArrayList<>();
 
 		switch (resident.getLifeDomain()) {
-			case AppConstants.LIFE_DOMAIN_SERVICE_HOUSING:
-				raqs = resident.getHousingQuestionnaire();
-				break;
-			case AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT:
-				raqs = resident.getMoneyMgmtQuestionnaire();
-				break;
-			case AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT:
-				raqs = resident.getEmploymentQuestionnaire();
+		case AppConstants.LIFE_DOMAIN_SERVICE_HOUSING:
+			raqs = resident.getHousingQuestionnaire();
 			break;
-			case AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION:
-				raqs = resident.getEducationQuestionnaire();
+		case AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT:
+			raqs = resident.getMoneyMgmtQuestionnaire();
 			break;
-			case AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT:
-				raqs = resident.getNetSupportQuestionnaire();
+		case AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT:
+			raqs = resident.getEmploymentQuestionnaire();
 			break;
-			case AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT:
-				raqs = resident.getHouseholdMgmtQuestionnaire();
+		case AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION:
+			raqs = resident.getEducationQuestionnaire();
+			break;
+		case AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT:
+			raqs = resident.getNetSupportQuestionnaire();
+			break;
+		case AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT:
+			raqs = resident.getHouseholdMgmtQuestionnaire();
 			break;
 		}
 		return raqs;
@@ -355,10 +397,9 @@ public class ResidentController extends BaseController {
 	 * @param questionnaireList
 	 * @param lifeDomain
 	 */
-	private void saveAssessmentAndScore(Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList,
-			String lifeDomain) {
+	private void saveAssessmentAndScore(Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) {
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
-			if (residentAssessmentQuestionnaire.getQuestionId() != null	&& residentAssessmentQuestionnaire.getChoiceId() != null) {
+			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
 				residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
 			}
@@ -372,10 +413,9 @@ public class ResidentController extends BaseController {
 	 * @param resident
 	 * @param questionnaireList
 	 * @param lifeDomain
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	private void updateAssessmentAndScore(@Valid Resident resident,
-			List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) throws SQLException {
+	private void updateAssessmentAndScore(@Valid Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) throws SQLException {
 
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {

@@ -182,27 +182,27 @@ public class Resident {
 	private String householdScoreGoal;
 	
 	private String mostRecentSSMDate;
+
 	// ActionPlan Fields -Begin
 
 	// This is JSON String with selected ActionPlan
 	private String focusOnActionPlan;
-
 	private String residentReportedConcern;
-
 	// This contains JSON String for each Domain
 	private String planOfAction;
-
 	// This contains JSON String for each Domain
 	private String anticipatedOutcome;
-
+	@JsonView
+	private List<String> anticipatedOutcomesList;
 	// --this variable is used in referral form as well.
 	private String followUpNotes;
 	// This contains JSON String for each Domain
 	private String outcomesAchieved;
-
-	private Date outcomeDate;
-
-	private Date actionPlanAddedDate;
+	private String completionDates;
+	private String planDetails;
+	private String achievedGoals;
+	private Date actionPlanDateAdded;
+	private Date actionPlanDateModified;
 
 	// ActionPlan Fields -End
 	
@@ -210,6 +210,8 @@ public class Resident {
 	private String description;
 	private String assessment;
 	private String plan;
+	private Date cnDateAdded;
+	private Date cnDateModified;
 	// Case Notes Fields - End
 
 	// Referral Form fields - Begin
