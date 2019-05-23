@@ -76,6 +76,26 @@ public class ResidentController extends BaseController {
 
 	}
 
+	@RequestMapping(value = "/onboarding", method = RequestMethod.GET)
+	public String onboarding(Model model, Principal principal) throws Exception {
+
+		// (1) (en)
+		// After user login successfully.
+		String serviceCoord = null;
+		if (principal != null) {
+			serviceCoord = populateSCinModel(model, principal);
+		}
+
+		Resident resident = residentService.getResidentById(0l, serviceCoord);
+		resident = residentService.getAllQuestionnaire(resident);
+
+		model.addAttribute("resident", resident);
+		model.addAttribute("message", "Please select resident from All Resident Table first");
+
+		return "onboarding";
+
+	}
+
 	@RequestMapping(value = "/newResident", method = RequestMethod.GET)
 	public String createResident(Model model, Principal principal) throws Exception {
 
@@ -118,39 +138,39 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getReferralForm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getReferralForm(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+	public String getReferralForm(@RequestParam("residentId") Long residentId, @RequestParam("entryPoint") String entryPoint, Model model, Principal principal) throws Exception {
 
-		// (1) (en)
-		// After user login successfully.
-		String serviceCoord = null;
-		if (principal != null) {
-			serviceCoord = populateSCinModel(model, principal);
-		}
+			// (1) (en)
+			// After user login successfully.
+			String serviceCoord = null;
+			if (principal != null) {
+				serviceCoord = populateSCinModel(model, principal);
+			}
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
 
-		if (StringUtils.isEmpty(resident.getReferralReason())) {
-			resident.setReferralReason(
-					"{\"Non/late payment of rent\": \"false\", \"Utility Shut-off, scheduled for (Date):\":\"\", \"Housekeeping/home management\":\"false\", \"Lease violation for:\": \"\", \"Employment/job readiness\":\"false\", \"Education/job training\":\"false\", \"Noticeable change in:\":\"\", \"Resident-to-resident conflict issues\":\"false\", \"Suspected abuse/domestic violence/exploitation\":\"false\", \"Childcare/afterschool care\":\"false\", \"Transportation\":\"false\", \"Safety\":\"false\", \"Healthcare/medical issues\":\"false\", \"Other:\":\"\" }");
-		}
-		if (StringUtils.isEmpty(resident.getSelfSufficiency())) {
-			resident.setSelfSufficiency(
-					"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
-		}
-		if (StringUtils.isEmpty(resident.getHousingStability())) {
-			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
-		}
-		if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
-			resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
-		}
-		if (StringUtils.isEmpty(resident.getResidentAppointmentScheduled())) {
-			resident.setResidentAppointmentScheduled("{\"Resident Appointment Scheduled?\":\"\"}");
-		}
+			if (StringUtils.isEmpty(resident.getReferralReason())) {
+				resident.setReferralReason(
+						"{\"Non/late payment of rent\": \"false\", \"Utility Shut-off, scheduled for (Date):\":\"\", \"Housekeeping/home management\":\"false\", \"Lease violation for:\": \"\", \"Employment/job readiness\":\"false\", \"Education/job training\":\"false\", \"Noticeable change in:\":\"\", \"Resident-to-resident conflict issues\":\"false\", \"Suspected abuse/domestic violence/exploitation\":\"false\", \"Childcare/afterschool care\":\"false\", \"Transportation\":\"false\", \"Safety\":\"false\", \"Healthcare/medical issues\":\"false\", \"Other:\":\"\" }");
+			}
+			if (StringUtils.isEmpty(resident.getSelfSufficiency())) {
+				resident.setSelfSufficiency(
+						"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
+			}
+			if (StringUtils.isEmpty(resident.getHousingStability())) {
+				resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+			}
+			if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
+				resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
+			}
+			if (StringUtils.isEmpty(resident.getResidentAppointmentScheduled())) {
+				resident.setResidentAppointmentScheduled("{\"Resident Appointment Scheduled?\":\"\"}");
+			}
 
-		model.addAttribute("resident", resident);
-		model.addAttribute("message", "Please select resident from All Resident Table first");
+			model.addAttribute("resident", resident);
+			model.addAttribute("message", "Please select resident from All Resident Table first");
 
-		// This is very important in returning respective Page
+			// This is very important in returning respective Page
 		return "referralForm";
 
 	}
@@ -258,19 +278,22 @@ public class ResidentController extends BaseController {
 	}
 
 	@PostMapping("/saveResident")
-	public String saveOrUpdate(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
+	public String saveOrUpdate(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			setupDropdownList(resident);
-			return "residentPage";
+			return "onboarding";
 		}
 		// This will be new ResidentId always
 		// by default this new resident is active
 		resident.setActive(true);
 		resident.setModifiedBy(getSessionUsername());
+		resident.setServiceCoord(getSessionUsername());
 		residentService.saveResident(resident);
 
-		return "redirect:/allResident";
+		setupDropdownList(resident);
+
+		return "onboarding";
 	}
 
 	@PostMapping("/deactivateResident")
@@ -285,7 +308,7 @@ public class ResidentController extends BaseController {
 		resident.setModifiedBy(getSessionUsername());
 		residentService.updateResidentStatus(resident);
 
-		return "redirect:/allResident";
+		return "onboarding";
 	}
 
 	@PostMapping("/reactivateResident")
@@ -293,14 +316,14 @@ public class ResidentController extends BaseController {
 
 		if (bindingResult.hasErrors()) {
 			setupDropdownList(resident);
-			return "residentPage";
+			return "onboarding";
 		}
 
 		resident.setActive(true);
 		resident.setModifiedBy(getSessionUsername());
 		residentService.updateResidentStatus(resident);
 
-		return "redirect:/allResident";
+		return "onboarding";
 	}
 
 	private void setupDropdownList(Resident resident) {
@@ -312,19 +335,19 @@ public class ResidentController extends BaseController {
 	@PostMapping(value = "/saveReferralForm")
 	public String saveReferralForm(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveReferralForm(resident);
-		return "redirect:/allResident";
+		return "onboarding";
 	}
 
 	@PostMapping(value = "/saveActionPlan")
 	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveActionPlan(resident);
-		return "redirect:/allResident";
+		return "onboarding";
 	}
 
 	@PostMapping(value = "/saveCaseNotes")
 	public String saveCaseNotes(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveCaseNotes(resident);
-		return "redirect:/allResident";
+		return "onboarding";
 	}
 
 	@PostMapping(value = "/saveAssessmentType")
@@ -345,7 +368,7 @@ public class ResidentController extends BaseController {
 			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		}
 
-		return "redirect:/allResident";
+		return "onboarding";
 	}
 
 	@PostMapping("/saveAssessmentAndGoToNext")

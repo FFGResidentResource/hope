@@ -112,7 +112,7 @@
 								<span th:text="*{actionPlanDateAdded}">&nbsp;</span>
 							</div>
 						</div>
-						
+
 						<div class="col-sm-3">
 							<div class="col-sm-7">
 								<strong><span id="_todaysDate">Date Modified:</span></strong>
@@ -122,15 +122,14 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<hr class="solidline1">
-					
+
 					<table id="_currentSSMTable"
 						class="table table-responsive table-bordered table-condensed text-center"
 						style="background-color: ghostwhite;">
 						<caption>
-							<strong>Current Self-Sufficiency Levels for
-							Domain(s):</strong>
+							<strong>Current Self-Sufficiency Levels for Domain(s):</strong>
 						</caption>
 						<thead>
 							<th class="text-center">DOMAIN</th>
@@ -188,72 +187,24 @@
 						</tbody>
 					</table>
 
-					<table id="_focusOnDomain"
-						class="table table-responsive table-condensed text-center hidden-print">
-						<caption>
-							<strong>Focus of the Action Plan (mark all
-										that apply):</strong>
-						</caption>
-						<tbody
-							<tr>								
-								<td><input type="checkbox" name="_housingCheck"
-									id="_housingCheck"><label for="_housingCheck">&nbsp;Housing&nbsp;</label></td>
-								<td><input type="checkbox" name="_mmCheck" id="_mmCheck"><label
-									for="_mmCheck">&nbsp;Money Management&nbsp;</label></td>
-								<td><input type="checkbox" name="_empCheck" id="_empCheck"><label
-									for="_empCheck">&nbsp;Employment&nbsp;</label></td>
-								<td><input type="checkbox" name="_eduCheck" id="_eduCheck"><label
-									for="_eduCheck">&nbsp;Education&nbsp;</label></td>
-								<td><input type="checkbox" name="_nsCheck" id="_nsCheck"><label
-									for="_nsCheck">&nbsp;Network Support&nbsp;</label></td>
-								<td><input type="checkbox" name="_hhCheck" id="_hhCheck"><label
-									for="_hhCheck">&nbsp;Household Management</label></td>
-							</tr>
-						</tbody>
-					</table>
-
-					<!-- <div class="input-group">
-						<div class="input-group-addon">Resident's Reported Concerns</div>
-						<textarea class="form-control" rows="3"></textarea>
-					</div> -->
-
-					<div class="row hidden-print">
-						<div class="col-sm-3  control-label">Resident's Reported
-							Concerns</div>
-						<div class="col-sm-9">
-							<textarea class="form-control" rows="2" id="_rrc"
-								th:field="*{residentReportedConcern}"
-								th:value="*{residentReportedConcern}"
-								onkeyup="validateInput(this)"></textarea>
-						</div>
-					</div>
-
-
-					<table
-						class="table table-condensed table-bordered hideme print-only">
-						<thead>
-							<th class="text-center">Resident's Reported Concerns</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td id="_rrcPrint" style="width: 90%"></td>
-							</tr>
-						</tbody>
-					</table>
 
 					<br />
-					
+
 					<table id="_poa"
 						class="table table-responsive table-bordered table-condensed">
 						<caption>
-							<strong>Referral Source/ Partner AND Referral Reasons from Referral Form:</strong>
+							<strong>Referral Source AND Referral Reasons from
+								Referral Form:</strong>
 						</caption>
 						<thead>
-							<th class="text-center">Referral Source/Partner</th>
-							<th class="text-center">Referral Reasons from Referral Form</th>						
+							<th class="text-center">Referral Source</th>
+							<th class="text-center">Referral Reasons from Referral Form</th>
 						</thead>
 						<tbody>
-							<tr><td> <span th:text=*{refValue}></span></td><td id="_refReasons"></td></tr>
+							<tr>
+								<td><span th:text=*{refValue}></span></td>
+								<td id="_refReasons"></td>
+							</tr>
 						</tbody>
 					</table>
 					<br />
@@ -268,106 +219,379 @@
 							<th class="text-center">DOMAIN</th>
 							<th class="text-center">Plan Of Action</th>
 							<th class="text-center">Plan Details</th>
-							<th class="text-center">Anticipated Outcomes</th>							
+							<th class="text-center">Referral Partner</th>
+							<th class="text-center">Anticipated Outcomes</th>
+							<th class="text-center">Anticipated Date</th>
 						</thead>
 						<tbody>
 							<tr>
 								<td>HOUSING</td>
-								<td><textarea class="form-control  input-sm" rows="1" id="_planOfActionHousing"
-								style="resize:none;"
-								onkeyup="validateInput(this)"draggable="false"  ></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planDetailsHousing"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false" ></textarea></td>
-								<td><select class="form-control input-sm setable" id="_aoHousing">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" />
-											</select></td>
-								
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionHousing">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocaitonal training">Vocaitonal
+											training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
+
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsHousing" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_referralPartnerHousing" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoHousing">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedHousing" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>MONEY MANAGEMENT</td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planOfActionMM"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planDetailsMM"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><select class="form-control input-sm setable" id="_aoMM">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" />
-											</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionMM">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocaitonal training">Vocaitonal
+											training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
+
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsMM" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_referralPartnerMM" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoMM">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedMM" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>EMPLOYMENT</td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planOfActionEmp"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planDetailsEmp"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><select class="form-control input-sm setable" id="_aoEmp">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" />
-											</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionEmp">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocaitonal training">Vocaitonal
+											training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
+
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsEmp" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_referralPartnerEmp" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoEmp">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedEmp" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>EDUCATION</td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planOfActionEdu"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planDetailsEdu"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><select class="form-control input-sm setable" id="_aoEdu">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" />
-											</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionEdu">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocaitonal training">Vocaitonal
+											training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
+
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsEdu" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_referralPartnerEdu" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoEdu">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedEdu" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>NETWORK SUPPORT</td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planOfActionNS"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planDetailsNS"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><select class="form-control input-sm setable" id="_aoNS">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" />
-											</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionNS">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocaitonal training">Vocaitonal
+											training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
+
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsNS" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_referralPartnerNS" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoNS">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedNS" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>HOUSEHOLD</td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planOfActionHH"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1" id="_planDetailsHH"
-								style="resize:none;"
-								onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><select class="form-control input-sm setable" id="_aoHH">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" />
-											</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionHH">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocaitonal training">Vocaitonal
+											training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
+
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsHH" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_referralPartnerHH" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoHH">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedHH" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 						</tbody>
 					</table>
-					
-					
-
-					
 
 					<br />
 					<div class="row hidden-print">
@@ -400,116 +624,114 @@
 							<th class="text-center">DOMAIN</th>
 							<th class="text-center">Outcomes Achieved</th>
 							<th class="text-center">Achieved Self-Sufficiency Goal</th>
-							<th class="text-center">Completion Date</th>							
+							<th class="text-center">Completion Date</th>
 						</thead>
 						<tbody>
 							<tr>
 								<td>HOUSING</td>
-								<td><select class="form-control input-sm setable" id="_outAchHousing">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" /></select></td>
-								<td><select class="form-control input-sm setable" id="_achGoalHousing">
-												<option value="">Select</option>
-												<option value="1">1 ("In Crisis")</option>
-												<option value="2">2 ("Vulnerable")</option>
-												<option value="3">3 ("Stable")</option>
-												<option value="4">4 ("Building Capacity")</option>
-												<option value="5">5 ("Empowered")</option>
-												
-												</select></td>
-								<td><input class="form-control input-sm" type="text" id="_completionDateHousing" value="" placeholder="MM/DD/YYYY"/></td>											
+								<td><select class="form-control input-sm setable"
+									id="_outAchHousing">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_achGoalHousing">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextHousing" value="" placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>MONEY MANAGEMENT</td>
-								<td><select class="form-control input-sm setable" id="_outAchMM">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" /></select></td>
-								<td><select class="form-control input-sm setable" id="_achGoalMM">
-												<option value="">Select</option>
-												<option value="1">1 ("In Crisis")</option>
-												<option value="2">2 ("Vulnerable")</option>
-												<option value="3">3 ("Stable")</option>
-												<option value="4">4 ("Building Capacity")</option>
-												<option value="5">5 ("Empowered")</option>
-												
-												</select></td>
-								<td><input class="form-control input-sm" type="text" id="_completionDateMM" value="" placeholder="MM/DD/YYYY"/></td>										
+								<td><select class="form-control input-sm setable"
+									id="_outAchMM">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_achGoalMM">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextMM" value="" placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>EMPLOYMENT</td>
-								<td><select class="form-control input-sm setable" id="_outAchEmp">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" /></select></td>
-								<td><select class="form-control input-sm setable" id="_achGoalEmp">
-												<option value="">Select</option>
-												<option value="1">1 ("In Crisis")</option>
-												<option value="2">2 ("Vulnerable")</option>
-												<option value="3">3 ("Stable")</option>
-												<option value="4">4 ("Building Capacity")</option>
-												<option value="5">5 ("Empowered")</option>
-												
-												</select></td>
-								<td><input class="form-control input-sm" type="text" id="_completionDateEmp" value="" placeholder="MM/DD/YYYY"/></td>											
+								<td><select class="form-control input-sm setable"
+									id="_outAchEmp">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_achGoalEmp">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextEmp" value="" placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>EDUCATION</td>
-								<td><select class="form-control input-sm setable" id="_outAchEdu">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" /></select></td>
-								<td><select class="form-control input-sm setable" id="_achGoalEdu">
-												<option value="">Select</option>
-												<option value="1">1 ("In Crisis")</option>
-												<option value="2">2 ("Vulnerable")</option>
-												<option value="3">3 ("Stable")</option>
-												<option value="4">4 ("Building Capacity")</option>
-												<option value="5">5 ("Empowered")</option>
-												
-												</select></td>
-								<td><input class="form-control input-sm" type="text" id="_completionDateEdu" value="" placeholder="MM/DD/YYYY"/></td>											
+								<td><select class="form-control input-sm setable"
+									id="_outAchEdu">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_achGoalEdu">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextEdu" value="" placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>NETWORK SUPPORT</td>
-								<td><select class="form-control input-sm setable" id="_outAchNS">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" /></select></td>
+								<td><select class="form-control input-sm setable"
+									id="_outAchNS">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
 								<td><select class="form-control setable" id="_achGoalNS">
-												<option value="">Select</option>
-												<option value="1">1 ("In Crisis")</option>
-												<option value="2">2 ("Vulnerable")</option>
-												<option value="3">3 ("Stable")</option>
-												<option value="4">4 ("Building Capacity")</option>
-												<option value="5">5 ("Empowered")</option>
-												
-												</select></td>
-								<td><input class="form-control input-sm" type="text" id="_completionDateNS" value="" placeholder="MM/DD/YYYY"/></td>											
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextNS" value="" placeholder="MM/DD/YYYY" /></td>
 							</tr>
 							<tr>
 								<td>HOUSEHOLD</td>
-								<td><select class="form-control input-sm setable" id="_outAchHH">
-												<option value="">Select</option>
-												<option th:each="ao : ${resident.anticipatedOutcomesList}"
-													th:value="${ao}"
-													th:utext="${ao}" /></select></td>
-								<td><select class="form-control input-sm setable" id="_achGoalHH">
-												<option value="">Select</option>
-												<option value="1">1 ("In Crisis")</option>
-												<option value="2">2 ("Vulnerable")</option>
-												<option value="3">3 ("Stable")</option>
-												<option value="4">4 ("Building Capacity")</option>
-												<option value="5">5 ("Empowered")</option>
-												
-												</select></td>
-								<td><input class="form-control input-sm" type="text" id="_completionDateHH" maxlength="10" value="" placeholder="MM/DD/YYYY"/></td>								
+								<td><select class="form-control input-sm setable"
+									id="_outAchHH">
+										<option value="">Select</option>
+										<option th:each="ao : ${resident.anticipatedOutcomesList}"
+											th:value="${ao}" th:utext="${ao}" />
+								</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_achGoalHH">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextHH" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -523,18 +745,26 @@
 
 					<div class="row text-center bs-linebreak hidden-print">
 						<!-- Following all passed to ResidentController upon Submit, please look onclick method of save for building each JSON String-->
-						<input type="hidden" th:field="*{serviceCoord}" />
-						 <input
-							type="hidden" th:field="*{residentId}" /> 
-							<input type="hidden" id="_focusString" th:field="*{focusOnActionPlan}"	th:value="*{focusOnActionPlan}" /> 
-							<input type="hidden" id="_planOfActionString" th:field="*{planOfAction}" th:value="*{planOfAction}" />
-							<input type="hidden" id="_planDetailsString" th:field="*{planDetails}" th:value="*{planDetails}" />  
-							<input type="hidden" id="_anticipatedOutcomeString" th:field="*{anticipatedOutcome}" th:value="*{anticipatedOutcome}" /> 
-							<input type="hidden" id="_outcomesAchievedString" th:field="*{outcomesAchieved}" th:value="*{outcomesAchieved}" />
-							<input type="hidden" id="_achievedGoalString" th:field="*{achievedGoals}" th:value="*{achievedGoals}" /> 
-							<input type="hidden" id="_completionDateString" th:field="*{completionDates}" th:value="*{completionDates}" />  
-							<input type="hidden" th:field="*{isResident}" />
-							<input type="hidden" id="_rr" th:field="*{referralReason}" />
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" th:field="*{residentId}" />  <input type="hidden"
+							id="_planOfActionString" th:field="*{planOfAction}"
+							th:value="*{planOfAction}" /> <input type="hidden"
+							id="_planDetailsString" th:field="*{planDetails}"
+							th:value="*{planDetails}" /> <input type="hidden"
+							id="_referralPartnerString" th:field="*{referralPartner}"
+							th:value="*{referralPartner}" /> <input type="hidden"
+							id="_anticipatedOutcomeString" th:field="*{anticipatedOutcome}"
+							th:value="*{anticipatedOutcome}" /> <input type="hidden"
+							id="_anticipatedDateString" th:field="*{anticipatedDates}"
+							th:value="*{anticipatedDates}" /> <input type="hidden"
+							id="_outcomesAchievedString" th:field="*{outcomesAchieved}"
+							th:value="*{outcomesAchieved}" /> <input type="hidden"
+							id="_achievedGoalString" th:field="*{achievedGoals}"
+							th:value="*{achievedGoals}" /> <input type="hidden"
+							id="_completionDateString" th:field="*{completionDates}"
+							th:value="*{completionDates}" /> <input type="hidden"
+							th:field="*{isResident}" /> <input type="hidden" id="_rr"
+							th:field="*{referralReason}" />
 
 						<div class="text-danger">
 							<span

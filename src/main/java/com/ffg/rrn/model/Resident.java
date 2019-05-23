@@ -186,8 +186,7 @@ public class Resident {
 	// ActionPlan Fields -Begin
 
 	// This is JSON String with selected ActionPlan
-	private String focusOnActionPlan;
-	private String residentReportedConcern;
+
 	// This contains JSON String for each Domain
 	private String planOfAction;
 	// This contains JSON String for each Domain
@@ -198,8 +197,10 @@ public class Resident {
 	private String followUpNotes;
 	// This contains JSON String for each Domain
 	private String outcomesAchieved;
+	private String anticipatedDates;
 	private String completionDates;
 	private String planDetails;
+	private String referralPartner;
 	private String achievedGoals;
 	private Date actionPlanDateAdded;
 	private Date actionPlanDateModified;

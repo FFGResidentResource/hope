@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/datatables.min.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+    var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<form name='_onboardingF' th:action="@{/saveResident}"
+		th:object="${resident}" method="POST" class="form-horizontal">
+		<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+			<ul>
+				<li th:each="e : ${#fields.detailedErrors()}"
+					th:class="${e.global}? globalerr : fielderr"><span
+					th:text="${e.global}? '*' : ''">The field name</span> <span
+					th:text="${e.message}">The error message</span></li>
+			</ul>
+		</div>
+
+		<input id="_resID" type="hidden" th:field="*{residentId}" />
+
+		<div id="onboarding_Form" class="container">
+
+			<div class="col-sm-6 myPanel">
+
+				<table id="_onboardingTable"
+					class="table table-responsive table-bordered table-condensed">
+					<caption>
+						
+						<a id="_enterNew" 								
+								th:href="@{/onboarding}"> <span
+								class="glyphicon glyphicon-user" style="color: blue;"
+								aria-hidden="true"></span> Click Here for New
+							</a>
+						 <strong> <u>OR</u> Choose row from Right Table </strong>
+						
+					</caption>
+
+					<tbody>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="firstName">Name:
+							</label></td>
+							<td><div class="col-sm-4">
+									<input class="form-control input-sm" id="firstName"
+										th:field="*{firstName}" placeholder="Enter first name"
+										required>
+								</div>
+								<div class="col-sm-3">
+									<input class="form-control input-sm" id="middle"
+										th:field="*{middle}" placeholder="middle">
+								</div>
+								<div class="col-sm-5">
+									<input class="form-control input-sm" id="lastname"
+										th:field="*{lastName}" placeholder="Enter last name" required>
+								</div></td>
+						</tr>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="_referral">Referral:</label></td>
+							<td><div class="col-sm-10">
+									<select class="form-control input-sm" id="_referral"
+										th:field="*{refId}" required>
+										<option value="">Select</option>
+										<option th:each="referral : ${resident.refList}"
+											th:value="${referral.refId}" th:utext="${referral.refValue}" />
+									</select>
+								</div></td>
+						</tr>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="_property">Property:</label></td>
+							<td><div class="col-sm-10">
+									<select class="form-control  input-sm" id="_property"
+										th:field="*{propertyId}" required>
+										<option value="">Select</option>
+										<option th:each="property : ${resident.propertyList}"
+											th:value="${property.propertyId}"
+											th:utext="${property.propertyName}" />
+									</select>
+								</div></td>
+						</tr>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="unit">Address:
+							</label></td>
+							<td><div class="col-sm-10">
+									<input class="form-control  input-sm" id="address"
+										th:field="*{address}" placeholder="No. and Street" required>
+								</div></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><label class="col-sm-5 control-label">Is
+									Resident?: </label>
+								<div class="radio">
+									<label class="col-sm-2"><input th:field="*{isResident}"
+										type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
+									<label class="col-sm-2"><input th:field="*{isResident}"
+										type="radio" name="isResident" value="FALSE" />No</label>
+								</div></td>
+						</tr>
+
+					</tbody>
+				</table>
+
+
+
+				<div class="row text-center hidden-print">
+
+					<input type="submit" id="btnSubmit" class="btn btn-default btn-lg"
+						th:value="${resident.residentId==null}?'Save':'Update'" />
+				</div>
+
+
+
+
+			</div>
+
+			<div class="col-sm-6">
+
+
+				<table id="onboardingAllResidentTable" class="display compact"
+					style="width: 100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Full Name</th>
+							<th>Property Name</th>
+							<th>Added On</th>
+							<th>SC</th>
+						</tr>
+					</thead>
+				</table>
+
+
+			</div>
+
+		</div>
+
+		<div class="container">
+
+			<div class="col-sm-12">
+				<div class="page-header">
+					<h3>
+						On-boarding Flow for: <small><span th:text=*{firstName}></span>&nbsp;<span
+							th:text=*{middle}></span>&nbsp;<span th:text=*{lastName}>&nbsp;</span></small>
+					</h3>
+				</div>
+				<div class="row text-center hidden-print">
+
+
+					</ <br />
+					<div class="col-sm-2">
+
+						<div class="caption">
+							<p>Step 1</p>
+							<p></p>
+							<a id="_loadActionPlan" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getReferralForm?entryPoint=onboarding}"> <span
+								class="glyphicon glyphicon-paperclip" style="color: crimson;"
+								aria-hidden="true"></span> Referral Form
+							</a>
+
+						</div>
+
+					</div>
+					<div class="col-sm-2">
+						<div class="caption">
+							<p>Step 2</p>
+							<p></p>
+							<a id="_loadResident" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/newResident?entryPoint=onboarding}"> <span
+								class=" glyphicon glyphicon-user" style="color: blue;"
+								aria-hidden="true"></span> Start Intake
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+
+
+
+
+
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/onboarding.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="/js/datatables.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+
+
+</body>
+
+</html>
