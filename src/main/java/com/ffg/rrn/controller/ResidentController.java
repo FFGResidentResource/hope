@@ -191,6 +191,17 @@ public class ResidentController extends BaseController {
 
 		List<String> anticipatedOutcomes = new ArrayList<String>();
 
+		if (StringUtils.isEmpty(resident.getSelfSufficiency())) {
+			resident.setSelfSufficiency(
+					"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
+		}
+		if (StringUtils.isEmpty(resident.getHousingStability())) {
+			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+		}
+		if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
+			resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
+		}
+
 		JsonObject jsonObject = (new JsonParser()).parse(resident.getSelfSufficiency()).getAsJsonObject();
 
 		Set<String> keySet = jsonObject.keySet();
