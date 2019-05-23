@@ -27,7 +27,42 @@
   padding: 0;
 }
 </style>
+<script>
 
+
+function set5Years(){
+	var now = new Date();
+	var year = now.getFullYear();
+	var ddl = document.getElementById("ddlYear");
+	for(var y=0; y<5; y++){
+		var opt = document.createElement("option");
+		opt.value = (year - y).toString();
+		opt.innerText = (year - y).toString();
+		ddl.appendChild(opt);
+	}
+}
+
+
+function setProperties(){
+	var prpts = new Array("via email", "email", "via voice mail", "voice mail", "via text", "text");
+	var pnl = document.getElementById("pnlProperties");
+
+	for(var i=0; i < prpts.length; i++){
+		var lbl =  document.createElement("label");
+		var inpt =  document.createElement("input");
+    	inpt.type = "checkbox";
+    	inpt.id = prpts[i];
+    	lbl.appendChild(inpt);
+    	lbl.innerHTML += " " + prpts[i] + "&nbsp;&nbsp;";
+    	pnl.appendChild(lbl);
+    }
+}
+
+window.onload = function(){
+	set5Years();
+	setProperties();
+}
+</script>
 </head>
 <body>
 
@@ -36,7 +71,40 @@
 		
 	<div class="container-fluid">
 		<h2>Dashboard</h2>
-		<b>This webpage is currently under construction.</b>
+		<hr>
+		<center>
+		<table>
+			<tr>
+				<td>Year</td>
+				<td>Quarter</td>
+			</tr>
+			<tr>
+				<td>
+					<select id="ddlYear">
+					</select>
+				</td>
+				<td>
+					<select id="ddlQuarter">
+						<option value="Quarter 1: Jan 1 - Mar 31">Quarter 1: Jan 1 - Mar 31</option>
+						<option value="Quarter 2: Apr 1 - Jun 30">Quarter 2: Apr 1 - Jun 30</option>
+						<option value="Quarter 3: Jul 1 - Sep 30">Quarter 3: Jul 1 - Sep 30</option>
+						<option value="Quarter 4: Oct 1 - Dec 31">Quarter 4: Oct 1 - Dec 31</option>
+					
+					</select>
+				</td>
+			</tr>
+		<tr>
+		<td colspan="2">
+			<span id="pnlProperties">
+			
+			<hr>
+			
+			</span>
+		</td>
+		</tr>
+		</table>
+		</center>
+		<!--  b>This webpage is currently under construction.</b -->
 	</div>
 	
 	<!-- Bootstrap core JavaScript
