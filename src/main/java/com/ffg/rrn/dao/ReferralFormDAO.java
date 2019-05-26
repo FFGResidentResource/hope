@@ -34,6 +34,12 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 
 	private static final String SQL_UPDATE_REFERRAL_FORM = "UPDATE REFERRAL_FORM SET INTERPRETATION =?, REFERRED_BY = ?, DATE_MODIFIED = NOW(), REFERRAL_REASON= to_json(?::json), COMMENTS= ?, PREVIOUS_ATTEMPTS= ?, SELF_SUFFICIENCY = to_json(?::json), RF_HOUSING_STABILITY = to_json(?::json), SAFE_SUPPORTIVE_COMMUNITY = to_json(?::json), RF_FOLLOWUP_NOTES= ?, RES_APP_SCHEDULED = to_json(?::json) WHERE RESIDENT_ID = ?";
 
+	private static final String SQL_REF_FORM_COMPLETE = "select 1 from REFERRAL_FORM WHERE RESIDENT_ID = ?";
+	private static final String SQL_SIGNUP_COMPLETE = "select 1 from RESIDENT WHERE RESIDENT_ID = ? and ACK_PR = 'TRUE'";
+	private static final String SQL_SELF_SUFF_COMPLETE = "select 1 from RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ?";
+	private static final String SQL_ACTION_PLAN_COMPLETE = "select 1 from ACTION_PLAN WHERE RESIDENT_ID = ?";
+	private static final String SQL_CONTACT_NOTES_COMPLETE = "select 1 from CASE_NOTES WHERE RESIDENT_ID = ?";
+
 	@Autowired
 	public ReferralFormDAO(DataSource dataSource) {
 		this.setDataSource(dataSource);
@@ -103,6 +109,51 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 		ps.setString(12, resident.getServiceCoord());
 		
 		return ps;
+	}
+
+	public Boolean isReferralFormComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_REF_FORM_COMPLETE, new Object[] { residentId }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isIntakeComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SIGNUP_COMPLETE, new Object[] { residentId }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isSelfSuffComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isActionPlanComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_ACTION_PLAN_COMPLETE, new Object[] { residentId }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isContactNotesComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_CONTACT_NOTES_COMPLETE, new Object[] { residentId }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
 	}
 
 }

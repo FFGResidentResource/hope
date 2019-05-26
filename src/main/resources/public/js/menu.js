@@ -21,3 +21,11 @@ jQuery(document).ready(function() {
 function validateInput(textArea) {
     textArea.value = textArea.value.replace(/[^-.?_(),+= 0-9a-zA-Z\r\n]/g, "");
 }
+
+jQuery.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null) {
+       return null;
+    }
+    return decodeURI(results[1]) || 0;
+}

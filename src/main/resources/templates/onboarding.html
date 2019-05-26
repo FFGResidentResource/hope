@@ -9,6 +9,7 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
 <link href="/css/datatables.min.css" rel="stylesheet">
+<link href="/css/select.datatables.min.css" rel="stylesheet">
 
 <style>
 .bd-placeholder-img {
@@ -62,11 +63,14 @@
 					class="table table-responsive table-bordered table-condensed">
 					<caption>
 
-						<a id="_enterNew" th:href="@{/onboarding}"> <span
+						<!-- <a id="_enterNew" th:href="@{/onboarding}"> <span
 							class="glyphicon glyphicon-user" style="color: blue;"
 							aria-hidden="true"></span> Click Here for New
 						</a> <strong> <u>OR</u> Choose row from Right Table
-						</strong>
+						</strong> -->
+						
+						<strong>New Resident On-boarding Only:</strong>
+						
 					</caption>
 
 
@@ -133,24 +137,16 @@
 						</tr>
 
 					</tbody>
-				</table>
-
-
+				</table>			
 
 				<div class="row text-center hidden-print">
-
 					<input type="submit" id="btnSubmit" class="btn btn-default btn-lg"
-						th:value="${resident.residentId==null}?'Save':'Update'" />
+						th:value="Save" />
 				</div>
-
-
-
-
 			</div>
 
 			<div class="col-sm-6">
-
-
+			
 				<table id="onboardingAllResidentTable" class="display compact"
 					style="width: 100%">
 					<thead>
@@ -163,10 +159,7 @@
 						</tr>
 					</thead>
 				</table>
-
-
 			</div>
-
 		</div>
 
 		<div class="container">
@@ -178,11 +171,11 @@
 							th:text=*{middle}></span>&nbsp;<span th:text=*{lastName}>&nbsp;</span></small>
 					</h4>
 				</div>
-				<div class="row well text-center hidden-print">				
+				<div class="row text-center hidden-print">				
 					<div class="col-sm-2">
 
 						<div class="caption">
-							<p><u>Step 1</u></p>
+							<p><u><strong>Step 1</strong></u> <Span id="_refFormComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
 							<p></p>
 							<a id="_loadReferralForm" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -196,7 +189,7 @@
 					</div>
 					<div class="col-sm-2">
 						<div class="caption">
-							<p><u>Step 2</u></p>
+							<p><u><strong>Step 2</strong></u><Span id="_signUpComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
 							<p></p>
 							<a id="_loadResident" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -205,16 +198,45 @@
 								aria-hidden="true"></span> Start Intake
 							</a>
 						</div>
+					</div>	
+					
+					
+					<div class="col-sm-2 col-md-offset-4">
+						<div class="caption">
+							<p><u><strong>Step 4</strong></u><Span id="_actionPlanComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p></p>
+							<a id="_loadActionPlan" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getActionPlan?entryPoint=onboarding}"> <span
+								class="glyphicon glyphicon-road" style="color: green;"
+								aria-hidden="true"></span> Action Plan
+							</a>
+						</div>
+					</div>
+
+					<div class="col-sm-2">
+						<div class="caption">
+							<p><u><strong>Step 5</strong></u><Span id="_contactNotesComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p></p>
+							<a id="_loadCaseNotes" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getCaseNotes?entryPoint=allResident}"> <span
+								class="glyphicon glyphicon-comment" style="color: orange;"
+								aria-hidden="true"></span> Contact Notes
+							</a>
+						</div>
 					</div>
 
 				</div>
+				
+				<br/>
 
-				<div class="row well text-center hidden-print">
+				<div class="row text-center hidden-print">
 
-					<div class="caption">
-						<p><u>Step 3</u></p>
-						<p></p>
-					</div>
+					<p>
+					<caption><strong>Self Sufficiency Matrix - Step 3</strong></caption>
+					<Span id="_selfSuffComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+					</p>				
 
 					<div class="col-sm-2">
 						<div class="caption">
@@ -222,7 +244,7 @@
 								<span id="_hScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadHousing" class="btn btn-default btn-lg"
+							<a id="_loadHousing" class="btn btn-default"
 								th:disabled="${resident.residentId==null}"
 								th:href="@{/getCurrentAssessment?lifeDomain=housing}"> <span
 								class="glyphicon glyphicon-home" style="color: darkturquoise;"
@@ -237,7 +259,7 @@
 								<span id="_mmScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadMoneyMgmt" class="btn btn-default btn-lg"
+							<a id="_loadMoneyMgmt" class="btn btn-default"
 								th:disabled="${resident.residentId==null}"
 								th:href="@{/getCurrentAssessment?lifeDomain=moneyMgmt}"> <span
 								class="glyphicon glyphicon-usd" style="color: green;"
@@ -252,7 +274,7 @@
 								<span id="_empScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadEmployment" class="btn btn-default btn-lg"
+							<a id="_loadEmployment" class="btn btn-default"
 								th:disabled="${resident.residentId==null}"
 								th:href="@{/getCurrentAssessment?lifeDomain=employment}"> <span
 								class="glyphicon glyphicon-briefcase" style="color: indianred;"
@@ -267,7 +289,7 @@
 								<span id="_eduScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadEducation" class="btn btn-default btn-lg"
+							<a id="_loadEducation" class="btn btn-default"
 								th:disabled="${resident.residentId==null}"
 								th:href="@{/getCurrentAssessment?lifeDomain=education}"> <span
 								class="glyphicon glyphicon-education"
@@ -283,7 +305,7 @@
 								<span id="_nsScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadNetSupport" class="btn btn-default btn-lg"
+							<a id="_loadNetSupport" class="btn btn-default"
 								th:disabled="${resident.residentId==null}"
 								th:href="@{/getCurrentAssessment?lifeDomain=networkSupport}">
 								<span class="glyphicon glyphicon-link" style="color: red;"
@@ -298,7 +320,7 @@
 								<span id="_hhScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadHousehold" class="btn btn-default btn-lg"
+							<a id="_loadHousehold" class="btn btn-default"
 								th:disabled="${resident.residentId==null}"
 								th:href="@{/getCurrentAssessment?lifeDomain=household}"> <span
 								class="glyphicon glyphicon-leaf" style="color: darkgreen;"
@@ -308,33 +330,7 @@
 					</div>
 				</div>
 
-				<div class="row well text-center hidden-print">
-					<div class="col-sm-2">
-						<div class="caption">
-							<p><u>Step 4</u></p>
-							<p></p>
-							<a id="_loadActionPlan" class="btn btn-default btn-lg"
-								th:disabled="${resident.residentId==null}"
-								th:href="@{/getActionPlan?entryPoint=onboarding}"> <span
-								class="glyphicon glyphicon-road" style="color: green;"
-								aria-hidden="true"></span> Action Plan
-							</a>
-						</div>
-					</div>
-
-					<div class="col-sm-2">
-						<div class="caption">
-							<p><u>Step 5</u></p>
-							<p></p>
-							<a id="_loadCaseNotes" class="btn btn-default btn-lg"
-								th:disabled="${resident.residentId==null}"
-								th:href="@{/getCaseNotes?entryPoint=allResident}"> <span
-								class="glyphicon glyphicon-comment" style="color: orange;"
-								aria-hidden="true"></span> Contact Notes
-							</a>
-						</div>
-					</div>
-				</div>
+				
 
 			</div>
 	</form>
@@ -359,6 +355,7 @@
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>
+	<script src="/js/datatables.select.min.js"></script>
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	<script src="/js/menu.js"></script>

@@ -129,7 +129,7 @@ jQuery(document).ready(
 			return false;
 		    });
 
-		    jQuery('#residentTable tbody').on('click', 'tr', function() {
+		    /*jQuery('#residentTable tbody').on('click', 'tr', function() {
 
 			var tr = $(this);
 			currentRow = table.row(this).data();
@@ -161,7 +161,8 @@ jQuery(document).ready(
 			     * Assessment buttons when a row is clicked in all
 			     * Resident Table
 			     */
-			    var suffix = '&residentId=' + currentRow.residentId;
+			   
+		    /*var suffix = '&residentId=' + currentRow.residentId;
 			    var assessmentLinks = jQuery('a[id^="_load"]');
 
 			    jQuery.each(assessmentLinks, function(idx, obj) {
@@ -174,7 +175,8 @@ jQuery(document).ready(
 			     * Following code populates score and goal once a
 			     * row a clicked
 			     */
-			    jQuery.ajax({
+			   
+		    /*jQuery.ajax({
 				type : "POST",
 				contentType : "application/json",
 				url : "/getAllLatestScoreGoal?residentId=" + currentRow.residentId,
@@ -195,7 +197,7 @@ jQuery(document).ready(
 				}
 			    });
 			}
-		    });
+		    });*/
 		},
 		error : function(e) {
 		    console.log("ERROR : ", e);

@@ -215,4 +215,24 @@ public class ResidentServiceImpl {
 
 	}
 
+	public Boolean isReferralFormComplete(Long residentId) {
+		return referralFormDao.isReferralFormComplete(residentId);
+	}
+
+	public Boolean isIntakeComplete(Long residentId) {
+		return referralFormDao.isIntakeComplete(residentId);
+	}
+
+	public Boolean isSelfSuffComplete(Long residentId) {
+		return referralFormDao.isSelfSuffComplete(residentId);
+	}
+
+	public Boolean isActionPlanComplete(Long residentId) {
+		return referralFormDao.isActionPlanComplete(residentId);
+	}
+
+	public Boolean isContactNotesComplete(Long residentId) {
+		return referralFormDao.isContactNotesComplete(residentId);
+	}
+
 }

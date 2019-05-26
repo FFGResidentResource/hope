@@ -77,7 +77,7 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/onboarding", method = RequestMethod.GET)
-	public String onboarding(Model model, Principal principal) throws Exception {
+	public String onboarding(@RequestParam(name = "residentId", required = false, defaultValue = "0") Long residentId, Model model, Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -304,7 +304,7 @@ public class ResidentController extends BaseController {
 
 		setupDropdownList(resident);
 
-		return "onboarding";
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping("/deactivateResident")
@@ -319,7 +319,7 @@ public class ResidentController extends BaseController {
 		resident.setModifiedBy(getSessionUsername());
 		residentService.updateResidentStatus(resident);
 
-		return "onboarding";
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping("/reactivateResident")
@@ -334,7 +334,7 @@ public class ResidentController extends BaseController {
 		resident.setModifiedBy(getSessionUsername());
 		residentService.updateResidentStatus(resident);
 
-		return "onboarding";
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	private void setupDropdownList(Resident resident) {
@@ -346,26 +346,28 @@ public class ResidentController extends BaseController {
 	@PostMapping(value = "/saveReferralForm")
 	public String saveReferralForm(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveReferralForm(resident);
-		return "onboarding";
+
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping(value = "/saveActionPlan")
 	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveActionPlan(resident);
-		return "onboarding";
+
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping(value = "/saveCaseNotes")
 	public String saveCaseNotes(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveCaseNotes(resident);
-		return "onboarding";
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping(value = "/saveAssessmentType")
 	public String ssmAssessment(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) {
 
 		residentService.saveAssessment(resident);
-		return "redirect:/getResidentById?residentId=" + resident.getResidentId();
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping("/saveAssessment")
@@ -379,7 +381,7 @@ public class ResidentController extends BaseController {
 			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		}
 
-		return "onboarding";
+		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 
 	@PostMapping("/saveAssessmentAndGoToNext")

@@ -32,7 +32,12 @@ function populateReferralReasonsWithValues() {
 	chkBox = '';
 
 	if (!(obj == 'true' || obj == 'false')) {
-	    inputBox = '<input class="my-input-sm" value="'+obj+'">';
+	
+	    if(idx == 'Utility Shut-off, scheduled for (Date):'){	    
+	    	inputBox = '<input id="_inputDateTextUtilityShutOff" class="my-input-sm" value="'+obj+'">';
+	    }else{
+		    inputBox = '<input class="my-input-sm" value="'+obj+'">';
+		}
 	}
 	    
 	if(obj != '' && obj != 'false'){
@@ -119,7 +124,7 @@ function populateSafeSupportiveCommunitiesWithValues(){
 function populateResidentAppScheduledDate(){
     
     resAppSch = JSON.parse(jQuery("#_residentAppointmentScheduled").val());     
-    jQuery("#_resAppSch").val(resAppSch["Resident Appointment Scheduled?"]);
+    jQuery("#_inputDateTextResAppSch").val(resAppSch["Resident Appointment Scheduled?"]);
 }
 
 /**
@@ -191,7 +196,28 @@ function buildEachJSONString(){
     
     //Read Textbox value for resident Appointment Scheduled?
     
-    jQuery("#_residentAppointmentScheduled").val('{"Resident Appointment Scheduled?":"'+jQuery("#_resAppSch").val().trim()+'"}')
+    jQuery("#_residentAppointmentScheduled").val('{"Resident Appointment Scheduled?":"'+jQuery("#_inputDateTextResAppSch").val().trim()+'"}')
     
 }
+
+
+var format = "MM/DD/YYYY";
+var match = new RegExp(format
+    .replace(/(\w+)\W(\w+)\W(\w+)/, "^\\s*($1)\\W*($2)?\\W*($3)?([0-9]*).*")
+    .replace(/M|D|Y/g, "\\d"));
+var replace = "$1/$2/$3$4"
+    .replace(/\//g, format.match(/\W/));
+
+function doFormat(target)
+{
+    target.value = target.value
+        .replace(/(^|\W)(?=\d\W)/g, "$10")   // padding
+        .replace(match, replace)             // fields
+        .replace(/(\W)+/g, "$1");            // remove repeats
+}
+
+jQuery("input[id^='_inputDateText']").keyup(function(e) {
+   if(!e.ctrlKey && !e.metaKey && (e.keyCode == 32 || e.keyCode > 46))
+      doFormat(e.target)
+});
 

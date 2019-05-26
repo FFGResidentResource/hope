@@ -17,6 +17,7 @@ import org.thymeleaf.util.StringUtils;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.model.ServiceCoordinator;
+import com.ffg.rrn.model.WizardStepCounter;
 import com.ffg.rrn.service.ResidentServiceImpl;
 import com.ffg.rrn.service.ServiceCoordinatorServiceImpl;
 
@@ -62,6 +63,20 @@ public class RestAPIController {
 		return ResponseEntity.ok("");
 	}
 	
+	@PostMapping("/getOnboardingStepStatus")
+	public ResponseEntity<?> getOnboardingStepStatus(@RequestParam("residentId") Long residentId) {
+
+		WizardStepCounter wsc = new WizardStepCounter();
+		
+		wsc.setReferralFormComplete(residentService.isReferralFormComplete(residentId));
+		wsc.setSignUpComplete(residentService.isIntakeComplete(residentId));
+		wsc.setSelfSufficiencyComplete(residentService.isSelfSuffComplete(residentId));
+		wsc.setActionPlanComplete(residentService.isActionPlanComplete(residentId));
+		wsc.setContactNotesComplete(residentService.isContactNotesComplete(residentId));
+
+		return ResponseEntity.ok(wsc);
+	}
+
 	@PostMapping("/getAllLatestScoreGoal")
 	public ResponseEntity<?> getAllLatestScoreGoal(@RequestParam("residentId") String residentId){
 		

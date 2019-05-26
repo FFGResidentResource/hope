@@ -43,21 +43,21 @@ public class Resident {
 
 	private Long residentId;
 	private Boolean active;
-	@NotNull(message = "Is Resident can not be null.")
+	@NotNull(message = "'Is Resident' is Required!")
 	private Boolean isResident;
-	@NotEmpty(message = "First Name can not be empty.")
+	@NotEmpty(message = "First Name is Required!")
 	@Size(max = 20,message = "The length of First Name can not be more than 20.")
 	private String firstName;
 	private String middle;
-	@NotEmpty(message = "Last Name can not be empty.")
+	@NotEmpty(message = "Last Name is Required!")
 	@Size(max = 20,message = "The length of Last Name can not be more than 20.")
 	private String lastName;
 
-	@NotNull(message = "Property can not be empty.")
+	@NotNull(message = "Property is Required!")
 	private Integer propertyId;
 	private String propertyName;
 
-	@NotNull(message = "Referral can not be empty.")
+	@NotNull(message = "Referral is Required!")
 	private Integer refId;
 	private String refValue;
 
@@ -67,9 +67,11 @@ public class Resident {
 	private String voiceMail;
 	private String text;
 
-	@Email(message = "email must be a valid format.")
+	@Email(message = "Email must be a valid format.")
 	@Size(max = 128,message = "The length of Last Name can not be more than 128.")
 	private String email;
+
+	@NotEmpty(message = "Address is Required!")
 	private String address;
 
 	@AssertTrue(message = "Must check \"I acknowledge that I was informed of my right to privacy\".")
