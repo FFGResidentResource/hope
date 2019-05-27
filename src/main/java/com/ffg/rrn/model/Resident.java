@@ -26,17 +26,7 @@ import lombok.Data;
 /**
  * @author FFGRRNTeam
  * 
- *         RESIDENT_ID BIGINT PRIMARY KEY NOT NULL, ACTIVE BOOLEAN DEFAULT
- *         FALSE, FIRST_NAME VARCHAR(20), MIDDLE VARCHAR(20), LAST_NAME
- *         VARCHAR(20), PROP_ID INT REFERENCES PROERTY(PROP_ID), VOICEMAIL_NO
- *         VARCHAR(20), TEXT_NO VARCHAR(20), EMAIL VARCHAR(128), ALLOW_CONTACT
- *         BOOLEAN DEFAULT FALSE, WANTS_SURVEY BOOLEAN DEFAULT FALSE,
- *         PHOTO_RELEASE BOOLEAN DEFAULT FALSE, DATE_ADDED TIMESTAMP DEFAULT
- *         NOW(), DATE_MODIFIED TIMESTAMP, MODIFIED_BY INT REFERENCES
- *         SERVICE_COORDINATOR(SC_ID), SERVICE_COORD INT REFERENCES
- *         SERVICE_COORDINATOR(SC_ID)
- **/
-
+ */
 @Data
 @JsonView
 public class Resident {
@@ -321,6 +311,14 @@ public class Resident {
         return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHouseholdDates());
     }
 
+	/**
+	 * This method was written as per Requirement but later that requirement got
+	 * changed SC do wants to fill another Assessment ASAP (doesn't matter if it is
+	 * within 6 month or next day)
+	 * 
+	 * @param dateOfLatestHouseAssessment
+	 * @return
+	 */
 	private boolean isDateBeforeSixMonths(String dateOfLatestHouseAssessment) {
 		try {
 			Date lastestAssessDate = DateUtils.parseDate(dateOfLatestHouseAssessment, AppConstants.DATE_PATTERN_JAVA);

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ffg.rrn.model.Resident;
+import com.ffg.rrn.utils.AppConstants;
 
 /**
  * @author FFGRRNTeam
@@ -36,7 +37,7 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 
 	private static final String SQL_REF_FORM_COMPLETE = "select 1 from REFERRAL_FORM WHERE RESIDENT_ID = ?";
 	private static final String SQL_SIGNUP_COMPLETE = "select 1 from RESIDENT WHERE RESIDENT_ID = ? and ACK_PR = 'TRUE'";
-	private static final String SQL_SELF_SUFF_COMPLETE = "select 1 from RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ?";
+	private static final String SQL_SELF_SUFF_COMPLETE = "select 1 from RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ?";
 	private static final String SQL_ACTION_PLAN_COMPLETE = "select 1 from ACTION_PLAN WHERE RESIDENT_ID = ?";
 	private static final String SQL_CONTACT_NOTES_COMPLETE = "select 1 from CASE_NOTES WHERE RESIDENT_ID = ?";
 
@@ -150,6 +151,60 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 	public Boolean isContactNotesComplete(Long residentId) {
 		try {
 			this.getJdbcTemplate().queryForObject(SQL_CONTACT_NOTES_COMPLETE, new Object[] { residentId }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isHousingComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_HOUSING }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isMoneyMgmtComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_MONEY_MANAGEMENT }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isEmploymentComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_EMPLOYMENT }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isEducationComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isNetSuppComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean isHouseholdComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT }, Long.class);
 		} catch (EmptyResultDataAccessException emp) {
 			return false;
 		}

@@ -1,17 +1,20 @@
 jQuery(document).ready(function() {
 
     debugger;
+    var resId = jQuery.urlParam('residentId');   
     
-    var suffix = '&residentId=' + jQuery.urlParam('residentId');
-
-    var assessmentLinks = jQuery('a[id^="_load"]');
-
-    jQuery.each(assessmentLinks, function(idx, obj) {
-	var currHref = jQuery(obj).attr('href');
-	var prefix = currHref.split('&');
-	jQuery(obj).attr('href', prefix[0] + suffix);
-    });
-    
+    if(resId != null){	
+	 suffixResidentIdOnEachStep(resId);
+	 onboadingStepsStatus(resId);
+	 getAllLatestScoreGoal(resId);	 
+	 jQuery('a[id^="_load"]').attr('disabled', false);
+	 jQuery('a[id^="_load"]').attr('onclick', 'return true;');
+    }else{
+	
+	jQuery("#_currentSelectedResident").text('');
+	jQuery('a[id^="_load"]').attr('disabled', true);
+	 jQuery('a[id^="_load"]').attr('onclick', 'return false;');
+    }
        
     jQuery.ajax({
 	type : "POST",
@@ -24,9 +27,17 @@ jQuery(document).ready(function() {
 
 	    table = jQuery('#onboardingAllResidentTable').DataTable({
 		"data" : data,
-		"columns" : [ {
-		    data : 'residentId'
-		}, {
+		"columns" : [{		    	
+		    	data : 'residentId',
+		    	render : function(t, type, row) {
+				return '_'+row.residentId+'_';
+			},
+			visible:false
+		    },
+		    {
+			type: 'num',
+			data : 'residentId'		    
+		    }, {
 		    data : 'firstName',
 		    render : function(t, type, row) {
 			return row.firstName + ' ' + row.middle + ' ' + row.lastName;
@@ -51,7 +62,7 @@ jQuery(document).ready(function() {
 	    });
 
 	    if (jQuery("#_propertyGrant").text() != 'All') {
-		table.columns(2).search(jQuery("#_propertyGrant").text()).draw();
+		table.columns(3).search(jQuery("#_propertyGrant").text()).draw();
 	    }
 	    
 	    jQuery("#onboardingAllResidentTable_length").addClass("hideme");
@@ -61,8 +72,11 @@ jQuery(document).ready(function() {
 	    var selectedResidentId = jQuery.urlParam('residentId');
 	    
 	    if(selectedResidentId != null){
-		table.columns(0).search(selectedResidentId).draw();
-		table.row(':eq(0)', { page: 'current' }).select();		
+		table.columns(0).search('_'+selectedResidentId+'_').draw();
+		table.row(':eq(0)', { page: 'current' }).select();	
+		
+		var currentRow = table.row(':eq(0)').data();		
+		jQuery("#_selectedResident").text(' '+ currentRow.firstName + ' ' + currentRow.middle + ' ' + currentRow.lastName);
 	    }
 	    
 	    
@@ -74,10 +88,7 @@ jQuery(document).ready(function() {
 		console.log(currentRow);
 
 		if ($(this).hasClass('selected')) {
-		    $(this).removeClass('selected');
-		    jQuery("#_loadResident").prop('disabled', true);
-
-		    jQuery('a[id^="_load"]').attr('disabled', true);
+		    $(this).removeClass('selected');	    
 
 		    jQuery("#_hScoreGoal").text('--/--');
 		    jQuery("#_mmScoreGoal").text('--/--');
@@ -86,95 +97,23 @@ jQuery(document).ready(function() {
 		    jQuery("#_nsScoreGoal").text('--/--');
 		    jQuery("#_hhScoreGoal").text('--/--');
 		    
+		    jQuery('a[id^="_load"]').attr('disabled', true);
+		    jQuery('a[id^="_load"]').attr('onclick', 'return false;');
 		    
+		    jQuery("#_selectedResident").text('');
 		    
 		} else {
-		    jQuery('a[id^="_load"]').attr('disabled', false);
-		    jQuery("#_resId").val(currentRow.residentId);
-		    jQuery("#_loadResident").prop('disabled', false);
+		    jQuery('a[id^="_load"]').attr('disabled', false);		    		   
+		    jQuery('a[id^="_load"]').attr('onclick', 'return true;');
 
 		    table.$('tr.selected').removeClass('selected');
-		    $(this).addClass('selected');		   
-
-		    /*
-		     * Following code builds hyperlink for each
-		     * Assessment buttons when a row is clicked in all
-		     * Resident Table
-		     */
-		    var suffix = '&residentId=' + currentRow.residentId;
-		    var assessmentLinks = jQuery('a[id^="_load"]');
-
-		    jQuery.each(assessmentLinks, function(idx, obj) {
-			var currHref = jQuery(obj).attr('href');
-			var prefix = currHref.split('&');
-			jQuery(obj).attr('href', prefix[0] + suffix);
-		    });
+		    $(this).addClass('selected');	
 		    
+		    jQuery("#_selectedResident").text(' '+ currentRow.firstName + ' ' + currentRow.middle + ' ' + currentRow.lastName);
 		    
-		    /*
-		     * Following code populates score and goal once a
-		     * row a clicked
-		     */
-		    jQuery.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : "/getOnboardingStepStatus?residentId=" + currentRow.residentId,
-			dataType : 'json',
-			cache : false,
-			timeout : 600000,
-			success : function(data) {
-			   
-			    if(data.referralFormComplete == true){
-				jQuery("#_refFormComplete").removeClass('hideme');
-				jQuery("#_loadReferralForm").removeClass('btn-default').addClass('btn-success');
-			    }
-			    if(data.signUpCompleteComplete == true){
-				jQuery("#_signUpComplete").removeClass('hideme');
-				jQuery("#_loadResident").removeClass('btn-default').addClass('btn-success');
-			    }
-			    if(data.actionPlanComplete == true){
-				jQuery("#_actionPlanComplete").removeClass('hideme');
-				jQuery("#_loadActionPlan").removeClass('btn-default').addClass('btn-success');
-			    }
-			    if(data.contactNotesComplete == true){
-				jQuery("#_contactNotesComplete").removeClass('hideme');
-				jQuery("#_loadCaseNotes").removeClass('btn-default').addClass('btn-success');
-			    }
-			    if(data.selfSufficiencyComplete == true){
-				jQuery("#_selfSuffComplete").removeClass('hideme');
-			    }
-			    
-			    
-			},
-			error : function(e) {
-			    console.log("ERROR retrieving Completed Steps: ", e);
-			}
-		    });
-
-		    /*
-		     * Following code populates score and goal once a
-		     * row a clicked
-		     */
-		    jQuery.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : "/getAllLatestScoreGoal?residentId=" + currentRow.residentId,
-			dataType : 'json',
-			cache : false,
-			timeout : 600000,
-			success : function(data) {
-			    debugger;
-			    jQuery("#_hScoreGoal").text(data["HOUSING"]);
-			    jQuery("#_mmScoreGoal").text(data["MONEY MANAGEMENT"]);
-			    jQuery("#_empScoreGoal").text(data["EMPLOYMENT"]);
-			    jQuery("#_eduScoreGoal").text(data["EDUCATION"]);
-			    jQuery("#_nsScoreGoal").text(data["NETWORK SUPPORT"]);
-			    jQuery("#_hhScoreGoal").text(data["HOUSEHOLD MANAGEMENT"]);
-			},
-			error : function(e) {
-			    console.log("ERROR retrieving Score and Goal: ", e);
-			}
-		    });
+		    suffixResidentIdOnEachStep(currentRow.residentId);		    
+		    onboadingStepsStatus(currentRow.residentId);
+		    getAllLatestScoreGoal(currentRow.residentId);
 		}
 	    });
 
@@ -185,4 +124,132 @@ jQuery(document).ready(function() {
     });
 
 });
+
+function getAllLatestScoreGoal(residentId){
+    
+    /*
+     * Following code populates score and goal once a
+     * row a clicked
+     */
+    jQuery.ajax({
+	type : "POST",
+	contentType : "application/json",
+	url : "/getAllLatestScoreGoal?residentId=" + residentId,
+	dataType : 'json',
+	cache : false,
+	timeout : 600000,
+	success : function(data) {
+	    debugger;
+	    jQuery("#_hScoreGoal").text(data["HOUSING"]);
+	    jQuery("#_mmScoreGoal").text(data["MONEY MANAGEMENT"]);
+	    jQuery("#_empScoreGoal").text(data["EMPLOYMENT"]);
+	    jQuery("#_eduScoreGoal").text(data["EDUCATION"]);
+	    jQuery("#_nsScoreGoal").text(data["NETWORK SUPPORT"]);
+	    jQuery("#_hhScoreGoal").text(data["HOUSEHOLD MANAGEMENT"]);
+	},
+	error : function(e) {
+	    console.log("ERROR retrieving Score and Goal: ", e);
+	}
+    });
+}
+
+function onboadingStepsStatus(residentId) {
+    
+    /*
+     * Following code put Green CheckBox and Green Color on each Step
+     */
+    jQuery.ajax({
+	type : "POST",
+	contentType : "application/json",
+	url : "/getOnboardingStepStatus?residentId="+residentId,
+	dataType : 'json',
+	cache : false,
+	timeout : 600000,
+	success : function(data) {
+	   
+	    if(data.referralFormComplete == true){
+		jQuery("#_refFormComplete").removeClass('hideme');
+		jQuery("#_loadReferralForm").removeClass('btn-default').removeClass('btn-success').addClass('btn-success');
+	    }else{
+		jQuery("#_refFormComplete").removeClass('hideme').addClass('hideme');
+		jQuery("#_loadReferralForm").removeClass('btn-default').removeClass('btn-success').addClass('btn-default');
+	    }
+	    if(data.signUpComplete == true){
+		jQuery("#_signUpComplete").removeClass('hideme')
+		jQuery("#_loadResident").removeClass('btn-default').removeClass('btn-success').addClass('btn-success');
+	    }else{
+		jQuery("#_signUpComplete").removeClass('hideme').addClass('hideme');
+		jQuery("#_loadResident").removeClass('btn-default').removeClass('btn-success').addClass('btn-default');
+	    }
+	    if(data.actionPlanComplete == true){
+		jQuery("#_actionPlanComplete").removeClass('hideme')
+		jQuery("#_loadActionPlan").removeClass('btn-default').removeClass('btn-success').addClass('btn-success');
+	    }else{
+		jQuery("#_actionPlanComplete").removeClass('hideme').addClass('hideme');
+		jQuery("#_loadActionPlan").removeClass('btn-default').removeClass('btn-success').addClass('btn-default');
+	    }
+	    if(data.contactNotesComplete == true){
+		jQuery("#_contactNotesComplete").removeClass('hideme')
+		jQuery("#_loadCaseNotes").removeClass('btn-default').removeClass('btn-success').addClass('btn-success');
+	    }else{
+		jQuery("#_contactNotesComplete").removeClass('hideme').addClass('hideme');
+		jQuery("#_loadCaseNotes").removeClass('btn-default').removeClass('btn-success').addClass('btn-default');
+	    }
+	    if(data.housingComplete == true){
+		jQuery("#_housingComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_housingComplete").removeClass('hideme').addClass('hideme');		
+	    }
+	    if(data.moneyMgmtComplete == true){
+		jQuery("#_moneyMgmtComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_moneyMgmtComplete").removeClass('hideme').addClass('hideme');		
+	    }
+	    if(data.employmentComplete == true){
+		jQuery("#_empComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_empComplete").removeClass('hideme').addClass('hideme');		
+	    }
+	    if(data.educationComplete == true){
+		jQuery("#_eduComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_eduComplete").removeClass('hideme').addClass('hideme');		
+	    }
+	    if(data.netSuppComplete == true){
+		jQuery("#_netSuppComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_netSuppComplete").removeClass('hideme').addClass('hideme');		
+	    }
+	    if(data.householdComplete == true){
+		jQuery("#_hhComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_hhComplete").removeClass('hideme').addClass('hideme');		
+	    }
+	    
+	    
+	},
+	error : function(e) {
+	    console.log("ERROR retrieving Completed Steps: ", e);
+	}
+    });
+    
+}
+
+function suffixResidentIdOnEachStep(residentId){
+    
+    /*
+     * Following code builds hyperlink for each
+     * Assessment buttons when a row is clicked in all
+     * Resident Table
+     */
+    var suffix = '&residentId=' + residentId;
+    var assessmentLinks = jQuery('a[id^="_load"]');
+
+    jQuery.each(assessmentLinks, function(idx, obj) {
+	var currHref = jQuery(obj).attr('href');
+	var prefix = currHref.split('&');
+	jQuery(obj).attr('href', prefix[0] + suffix);
+    });
+    
+}
 

@@ -57,7 +57,7 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })
-	public String residents(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+	public String residents(@RequestParam("residentId") Long residentId, @RequestParam("entryPoint") String entryPoint, Model model, Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -209,7 +209,9 @@ public class ResidentController extends BaseController {
 		for (String key : keySet) {
 
 			if (key.equals("Other")) {
-				anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+				if (!StringUtils.isEmpty(jsonObject.get(key).getAsString())) {
+					anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+				}
 			} else {
 				if (jsonObject.get(key).getAsBoolean() == true) {
 					anticipatedOutcomes.add(key);
@@ -223,7 +225,9 @@ public class ResidentController extends BaseController {
 		for (String key : keySet) {
 
 			if (key.equals("Other")) {
-				anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+				if (!StringUtils.isEmpty(jsonObject.get(key).getAsString())) {
+					anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+				}
 			} else {
 				if (jsonObject.get(key).getAsBoolean() == true) {
 					anticipatedOutcomes.add(key);
@@ -237,7 +241,9 @@ public class ResidentController extends BaseController {
 		for (String key : keySet) {
 
 			if (key.equals("Other")) {
-				anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+				if (!StringUtils.isEmpty(jsonObject.get(key).getAsString())) {
+					anticipatedOutcomes.add(jsonObject.get(key).getAsString());
+				}
 			} else {
 				if (jsonObject.get(key).getAsBoolean() == true) {
 					anticipatedOutcomes.add(key);
@@ -376,6 +382,9 @@ public class ResidentController extends BaseController {
 		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
 
 		if (StringUtils.equals(resident.getSelectedDate(), "NewAssessment")) {
+			// If SC comes back today and select "New Assessment" on top of existing today's
+			// date assessment. then Today's "New Assessment" should be merged to existing
+			// today's saved assessment.
 			saveAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		} else {
 			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
@@ -434,6 +443,7 @@ public class ResidentController extends BaseController {
 	 * @param lifeDomain
 	 */
 	private void saveAssessmentAndScore(Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) {
+
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());

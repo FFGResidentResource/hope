@@ -223,16 +223,36 @@ public class ResidentServiceImpl {
 		return referralFormDao.isIntakeComplete(residentId);
 	}
 
-	public Boolean isSelfSuffComplete(Long residentId) {
-		return referralFormDao.isSelfSuffComplete(residentId);
-	}
-
 	public Boolean isActionPlanComplete(Long residentId) {
 		return referralFormDao.isActionPlanComplete(residentId);
 	}
 
 	public Boolean isContactNotesComplete(Long residentId) {
 		return referralFormDao.isContactNotesComplete(residentId);
+	}
+
+	public Boolean isHousingComplete(Long residentId) {
+		return referralFormDao.isHousingComplete(residentId);
+	}
+
+	public Boolean isMoneyMgmtComplete(Long residentId) {
+		return referralFormDao.isMoneyMgmtComplete(residentId);
+	}
+
+	public Boolean isEmploymentComplete(Long residentId) {
+		return referralFormDao.isEmploymentComplete(residentId);
+	}
+
+	public Boolean isEducationComplete(Long residentId) {
+		return referralFormDao.isEducationComplete(residentId);
+	}
+
+	public Boolean isNetSuppComplete(Long residentId) {
+		return referralFormDao.isNetSuppComplete(residentId);
+	}
+
+	public Boolean isHouseholdComplete(Long residentId) {
+		return referralFormDao.isHouseholdComplete(residentId);
 	}
 
 }

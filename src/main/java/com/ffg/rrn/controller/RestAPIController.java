@@ -70,7 +70,12 @@ public class RestAPIController {
 		
 		wsc.setReferralFormComplete(residentService.isReferralFormComplete(residentId));
 		wsc.setSignUpComplete(residentService.isIntakeComplete(residentId));
-		wsc.setSelfSufficiencyComplete(residentService.isSelfSuffComplete(residentId));
+		wsc.setHousingComplete(residentService.isHousingComplete(residentId));
+		wsc.setMoneyMgmtComplete(residentService.isMoneyMgmtComplete(residentId));
+		wsc.setEmploymentComplete(residentService.isEmploymentComplete(residentId));
+		wsc.setEducationComplete(residentService.isEducationComplete(residentId));
+		wsc.setNetSuppComplete(residentService.isNetSuppComplete(residentId));
+		wsc.setHouseholdComplete(residentService.isHouseholdComplete(residentId));
 		wsc.setActionPlanComplete(residentService.isActionPlanComplete(residentId));
 		wsc.setContactNotesComplete(residentService.isContactNotesComplete(residentId));
 

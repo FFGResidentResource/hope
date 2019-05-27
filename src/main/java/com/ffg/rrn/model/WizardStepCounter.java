@@ -28,7 +28,7 @@ public class WizardStepCounter {
 	
 	private Boolean moneyMgmtComplete;
 	
-	private Boolean NetSupportComplete;
+	private Boolean netSuppComplete;
 	
 	private Boolean householdComplete;
 	

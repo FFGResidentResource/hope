@@ -86,3 +86,26 @@ function saveAndNextAssessment(form){
    saveAssessment(form);
 }
 
+function validateAndShowMessage(){
+    
+    var todaysDate = moment().format('DD-MMM-YYYY').toUpperCase();
+    
+    //check for Today's Date
+    var todaysAssessmentExists = false;
+    jQuery("#_dates option").each(function(){
+	
+	if(jQuery(this).val() == todaysDate){
+	    todaysAssessmentExists = true;
+	}	
+    });
+    
+    if(todaysAssessmentExists == true &&  jQuery("#_dates option:selected").val() == 'NewAssessment'){
+	jQuery(".text-danger").removeClass('hideme');
+	jQuery("input[type='submit']").prop('disabled', true);
+    }else{
+	jQuery(".text-danger").removeClass('hideme').addClass('hideme');
+	jQuery("input[type='submit']").prop('disabled', false);
+    }
+}
+
+

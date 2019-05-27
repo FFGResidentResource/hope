@@ -34,7 +34,7 @@ function populateReferralReasonsWithValues() {
 	if (!(obj == 'true' || obj == 'false')) {
 	
 	    if(idx == 'Utility Shut-off, scheduled for (Date):'){	    
-	    	inputBox = '<input id="_inputDateTextUtilityShutOff" class="my-input-sm" value="'+obj+'">';
+	    	inputBox = '<input id="_inputDateTextUtilityShutOff" placeholer="MM/DD/YYYY" class="my-input-sm" value="'+obj+'">';
 	    }else{
 		    inputBox = '<input class="my-input-sm" value="'+obj+'">';
 		}
