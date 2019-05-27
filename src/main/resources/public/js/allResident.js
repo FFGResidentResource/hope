@@ -286,6 +286,11 @@ function buildPieChartData(data) {
 	    },
 	    y : {
 		min : 0,
+		tick: {
+	                format: function (d) {
+	                    return (parseInt(d) == d) ? d : null;
+	                }
+	            }
 	    // Range includes padding, set 0 if no padding needed
 	    // padding: {top:0, bottom:0}
 	    }
