@@ -90,7 +90,7 @@ jQuery(document).ready(
 				    visible : false
 				} ],
 				"order" : [ [ 9, "desc" ] ],
-				pageLength : 15,
+				pageLength : 10,
 				pagingType : "full_numbers",
 				"initComplete" : function(settings, json) {
 				    var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="residents" value="all" onchange="filterActives(this);"> All '
