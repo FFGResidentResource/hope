@@ -67,12 +67,26 @@ public class ResidentController extends BaseController {
 		}
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		// Grants will never be null - either "All" or some Property
+		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+
 		resident = residentService.getAllQuestionnaire(resident);
 
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Save new resident first or load existing Resident from All Resident Tab.");
 
 		return "residentPage";
+		} else {
+
+			if (null != resident && null != resident.getResidentId()) {
+				model.addAttribute("message", "You do not have Grants to view resident on This Property: " + resident.getPropertyName());
+			} else {
+				model.addAttribute("message", "There is no resident found with this Id: " + residentId);
+			}
+			return "403Page";
+		}
 
 	}
 
@@ -127,6 +141,11 @@ public class ResidentController extends BaseController {
 		}
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		// Grants will never be null - either "All" or some Property
+		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+
 		resident = residentService.getAllQuestionnaire(resident);
 
 		model.addAttribute("resident", resident);
@@ -134,6 +153,15 @@ public class ResidentController extends BaseController {
 
 		// This is very important in returning respective Page
 		return lifeDomain;
+		} else {
+
+			if (null != resident && null != resident.getResidentId()) {
+				model.addAttribute("message", "You do not have Grants to view resident on This Property: " + resident.getPropertyName());
+			} else {
+				model.addAttribute("message", "There is no resident found with this Id: " + residentId);
+			}
+			return "403Page";
+		}
 
 	}
 
@@ -147,7 +175,11 @@ public class ResidentController extends BaseController {
 				serviceCoord = populateSCinModel(model, principal);
 			}
 
+		// Grants will never be null - either "All" or some Property
+		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
 
 			if (StringUtils.isEmpty(resident.getReferralReason())) {
 				resident.setReferralReason(
@@ -172,6 +204,15 @@ public class ResidentController extends BaseController {
 
 			// This is very important in returning respective Page
 		return "referralForm";
+		} else {
+
+			if (null != resident && null != resident.getResidentId()) {
+				model.addAttribute("message", "You do not have Grants to view resident on This Property: " + resident.getPropertyName());
+			} else {
+				model.addAttribute("message", "There is no resident found with this Id: " + residentId);
+			}
+			return "403Page";
+		}
 
 	}
 
@@ -186,6 +227,11 @@ public class ResidentController extends BaseController {
 		}
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+
+		// Grants will never be null - either "All" or some Property
+		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+
 		resident = residentService.getAllQuestionnaire(resident);
 		resident.setMostRecentSSMDate(residentService.getMostRecentSSMDate(residentId));
 
@@ -259,6 +305,17 @@ public class ResidentController extends BaseController {
 		// This is very important in returning respective Page
 		return "actionPlan";
 
+		}
+		else {
+
+			if (null != resident && null != resident.getResidentId()) {
+				model.addAttribute("message", "You do not have Grants to view resident on This Property: " + resident.getPropertyName());
+			} else {
+				model.addAttribute("message", "There is no resident found with this Id: " + residentId);
+			}
+			return "403Page";
+		}
+
 	}
 
 	@RequestMapping(value = "/getCaseNotes", method = { RequestMethod.GET, RequestMethod.POST })
@@ -273,11 +330,24 @@ public class ResidentController extends BaseController {
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord);
 
+		// Grants will never be null - either "All" or some Property
+		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 
 		// This is very important in returning respective Page
 		return "caseNotes";
+		} else {
+
+			if (null != resident && null != resident.getResidentId()) {
+				model.addAttribute("message", "You do not have Grants to view resident on This Property: " + resident.getPropertyName());
+			} else {
+				model.addAttribute("message", "There is no resident found with this Id: " + residentId);
+			}
+			return "403Page";
+		}
 
 	}
 
@@ -297,18 +367,12 @@ public class ResidentController extends BaseController {
 	@PostMapping("/saveResident")
 	public String saveOrUpdate(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws Exception {
 
-		if (bindingResult.hasErrors()) {
-			setupDropdownList(resident);
-			return "onboarding";
-		}
 		// This will be new ResidentId always
 		// by default this new resident is active
 		resident.setActive(true);
 		resident.setModifiedBy(getSessionUsername());
 		resident.setServiceCoord(getSessionUsername());
 		residentService.saveResident(resident);
-
-		setupDropdownList(resident);
 
 		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}

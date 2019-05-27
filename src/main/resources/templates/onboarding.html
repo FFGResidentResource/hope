@@ -130,9 +130,9 @@
 									Resident?: </label>
 								<div class="radio">
 									<label class="col-sm-2"><input th:field="*{isResident}"
-										type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
+										type="radio" name="isResident" value="TRUE" th:checked required/>Yes</label>
 									<label class="col-sm-2"><input th:field="*{isResident}"
-										type="radio" name="isResident" value="FALSE" />No</label>
+										type="radio" name="isResident" value="FALSE" required/>No</label>
 								</div></td>
 						</tr>
 
@@ -156,7 +156,7 @@
 							<th>Full Name</th>
 							<th>Property Name</th>
 							<th>Added On</th>
-							<th>SC</th>
+							<th>Added By</th>
 						</tr>
 					</thead>
 				</table>
@@ -169,7 +169,7 @@
 				<div class="page-header text-center">
 					<h4>
 						<caption>
-						 You are viewing: [<span id="_selectedResident" class="text-danger"></span> ]
+						 You are viewing: [ <span id="_selectedResident" class="text-danger"></span> ]
 						</caption>
 					</h4>
 				</div>

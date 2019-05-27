@@ -1,20 +1,7 @@
 jQuery(document).ready(function() {
 
     debugger;
-    var resId = jQuery.urlParam('residentId');   
-    
-    if(resId != null){	
-	 suffixResidentIdOnEachStep(resId);
-	 onboadingStepsStatus(resId);
-	 getAllLatestScoreGoal(resId);	 
-	 jQuery('a[id^="_load"]').attr('disabled', false);
-	 jQuery('a[id^="_load"]').attr('onclick', 'return true;');
-    }else{
-	
-	jQuery("#_currentSelectedResident").text('');
-	jQuery('a[id^="_load"]').attr('disabled', true);
-	 jQuery('a[id^="_load"]').attr('onclick', 'return false;');
-    }
+    var selectedResidentId = jQuery.urlParam('residentId');
        
     jQuery.ajax({
 	type : "POST",
@@ -25,6 +12,7 @@ jQuery(document).ready(function() {
 	timeout : 600000,
 	success : function(data) {
 
+	    /* Building DataTable for All Resident on Onboarding Tab */
 	    table = jQuery('#onboardingAllResidentTable').DataTable({
 		"data" : data,
 		"columns" : [{		    	
@@ -56,27 +44,46 @@ jQuery(document).ready(function() {
 		}, {
 		    data : 'serviceCoord'
 		} ],
-		"order" : [ [ 3, "desc" ] ],
-		pageLength : 6,
+		"order" : [ [ 1, "desc" ] ],
+		pageLength : 8,
 		pagingType : "full_numbers"
-	    });
-
+	    });  
+	    
+	    //Step - CheckGrants	    
 	    if (jQuery("#_propertyGrant").text() != 'All') {
 		table.columns(3).search(jQuery("#_propertyGrant").text()).draw();
 	    }
 	    
-	    jQuery("#onboardingAllResidentTable_length").addClass("hideme");
-	    jQuery("#onboardingAllResidentTable_filter input").addClass("input-sm");	   
-	    jQuery("#onboardingAllResidentTable_filter input").attr("placeholder", 'Wild Search');
-	    
-	    var selectedResidentId = jQuery.urlParam('residentId');
-	    
+	    //Filter on resident_id after Grant Filter
 	    if(selectedResidentId != null){
+		
 		table.columns(0).search('_'+selectedResidentId+'_').draw();
 		table.row(':eq(0)', { page: 'current' }).select();	
 		
-		var currentRow = table.row(':eq(0)').data();		
-		jQuery("#_selectedResident").text(' '+ currentRow.firstName + ' ' + currentRow.middle + ' ' + currentRow.lastName);
+		var fullName = jQuery("#onboardingAllResidentTable tbody tr td:eq(1)").text();
+		jQuery("#_selectedResident").text(fullName);
+	    }   
+	    
+	    //If table goes empty read its value - "No matching records found"
+	    var emptyString = jQuery('.dataTables_empty').text(); 
+	    
+	    jQuery("#onboardingAllResidentTable_length").addClass("hideme");
+	    jQuery("#onboardingAllResidentTable_filter input").addClass("input-sm");	   
+	    jQuery("#onboardingAllResidentTable_filter input").attr("placeholder", 'Wild Search');   
+	    
+	    if(selectedResidentId != null && emptyString != 'No matching records found'){
+		
+		 suffixResidentIdOnEachStep(selectedResidentId);
+		 onboadingStepsStatus(selectedResidentId);
+		 getAllLatestScoreGoal(selectedResidentId);	 
+		 
+		 jQuery('a[id^="_load"]').attr('disabled', false);
+		 jQuery('a[id^="_load"]').attr('onclick', 'return true;');
+	    }else{
+		
+		jQuery("#_currentSelectedResident").text('');
+		jQuery('a[id^="_load"]').attr('disabled', true);
+		 jQuery('a[id^="_load"]').attr('onclick', 'return false;');
 	    }
 	    
 	    
