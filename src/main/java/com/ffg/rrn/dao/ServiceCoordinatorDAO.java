@@ -104,8 +104,9 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 		try {
 			// If no records found, it will go in Catch Exception else next line
-			this.getJdbcTemplate().queryForObject("select 1 from service_coordinator where user_name = ? and email = ? ", new Object[] { sc.getUserName(), sc.getEmail() }, String.class);
-			this.getJdbcTemplate().update(conn -> buildUpdateServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
+			Integer scId = this.getJdbcTemplate().queryForObject("select sc_id from service_coordinator where user_name = ? and email = ? ", new Object[] { sc.getUserName(), sc.getEmail() }, Integer.class);
+			sc.setScId(scId);
+		    this.getJdbcTemplate().update(conn -> buildUpdateServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
 
 			// Delete and build fresh User_ROLE
 			this.getJdbcTemplate().update(conn -> buildDeleteUserRolePS(conn, sc));
