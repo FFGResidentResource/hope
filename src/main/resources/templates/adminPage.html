@@ -156,8 +156,8 @@
 							<label for="_property" class="col-sm-4 control-label">Property</label>
 							<div class="col-sm-8">
 								<select class="form-control setable" id="_property"
-									th:field="*{propertyId}" required>
-									<option value="0">Select</option>
+									th:field="*{propertyId}">
+									<option value="">Select</option>
 									<option th:each="property : ${serviceCoordinator.propertyList}"
 										th:value="${property.propertyId}"
 										th:utext="${property.propertyName}" />
