@@ -255,4 +255,4 @@ public class ResidentServiceImpl {
 		return referralFormDao.isHouseholdComplete(residentId);
 	}
 
-}
+	}

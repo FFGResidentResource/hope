@@ -549,6 +549,6 @@ public class ResidentDAO extends JdbcDaoSupport {
 		}
 	}
 
-	
+
 
 }

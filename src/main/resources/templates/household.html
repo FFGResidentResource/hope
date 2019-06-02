@@ -137,7 +137,7 @@
 											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
 											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateHouseholdScore();"> <strong><lable
+											onclick="calculateHouseholdScore();"> <strong><label
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>

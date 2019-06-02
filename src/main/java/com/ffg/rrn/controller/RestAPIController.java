@@ -8,12 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.model.Dashboard;
+import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.model.ServiceCoordinator;
@@ -40,6 +45,14 @@ public class RestAPIController {
 		List<Resident> allResident = residentService.getAllResident();
 
 		return ResponseEntity.ok(allResident);
+	}
+
+	@PostMapping("/getAllProperty")
+	public ResponseEntity<?> getAllProperty(@RequestParam("serviceCoordinator") String srvcCoord) {
+
+		List<Property> allProperty = residentService.getAllProperty(srvcCoord);
+
+		return ResponseEntity.ok(allProperty);
 	}
 
 	@PostMapping("/getAllServiceCoordinators")
@@ -122,6 +135,15 @@ public class RestAPIController {
 		}
 		
 		return ResponseEntity.ok(scoreGoalPerLifeDomain);
+	}
+
+	@RequestMapping(value = "/pullDashboard", method = RequestMethod.POST)
+	public ResponseEntity<?> handleUserRequest(RequestEntity<Dashboard> requestEntity) {
+
+		Dashboard dashboard = requestEntity.getBody();
+
+		return ResponseEntity.ok(dashboard);
+
 	}
 			
 

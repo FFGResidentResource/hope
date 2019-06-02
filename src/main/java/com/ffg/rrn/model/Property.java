@@ -22,4 +22,6 @@ public class Property {
 	private int unitFee;
 	private Boolean active;
 
+	private Boolean checked;
+
 }
