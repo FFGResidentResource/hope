@@ -13,32 +13,7 @@ jQuery(document).ready(function() {
     var quarter = Math.floor((now.getMonth() + 3) / 3);
     jQuery("#ddlQuarter").val(quarter);
     
-/*   jQuery.ajax({
-	type : "POST",
-	contentType : "application/json",
-	url : "/getAllProperty?serviceCoordinator=" + jQuery('#_userName').text(),
-	dataType : 'json',
-	cache : false,
-	timeout : 600000,
-	success : function(data) {
-	    debugger;
-	    var row = '';
-
-	    jQuery.each(data, function(idx, obj) {
-
-		row = row + '<input class="form-input" type="checkbox" checked>&nbsp;&nbsp;' + obj.propertyName + '&nbsp;&nbsp; <br\>';
-	    });
-
-	    jQuery("#_properties").html(row);
-	},
-	error : function(e) {
-	    console.log("ERROR : ", e);
-	}
-    });*/
-    
-    
-    
-    
+    jQuery("#_yearHeading").text(jQuery("#ddlYear").val());   
 
 });
 
@@ -49,6 +24,8 @@ function pullDashboard(){
     $(':checkbox').each(function() {
 	checkString = checkString + '{"propertyId":"' +this.value +'","checked":"' + this.checked + '"},';
     });
+    
+    jQuery("#_yearHeading").text(jQuery("#ddlYear").val());
     
     checkString = checkString.substring(0, checkString.length - 1);    
     var dash = '{"year":"'+jQuery("#ddlYear").val()+ '",' +'"quarter":"' +jQuery("#ddlQuarter").val()+ '",' +'"properties": [ '+checkString+' ]}';
@@ -62,7 +39,21 @@ function pullDashboard(){
 	cache : false,
 	timeout : 600000,
 	success : function(data) {
-	    debugger;
+	    
+	    jQuery("#_unitsTotalQ1").text(data.q1Units);
+	    jQuery("#_unitsTotalQ2").text(data.q2Units);
+	    jQuery("#_unitsTotalQ3").text(data.q3Units);
+	    jQuery("#_unitsTotalQ4").text(data.q4Units);
+	    
+	    jQuery("#_resTotalQ1").text(data.q1Residents);
+	    jQuery("#_resTotalQ2").text(data.q2Residents);
+	    jQuery("#_resTotalQ3").text(data.q3Residents);
+	    jQuery("#_resTotalQ4").text(data.q4Residents);
+	    
+	    jQuery("#_signupQ1").text(data.q1SignUpComplete);
+	    jQuery("#_signupQ2").text(data.q2SignUpComplete);
+	    jQuery("#_signupQ3").text(data.q3SignUpComplete);
+	    jQuery("#_signupQ4").text(data.q4SignUpComplete);
 	    
 	    
 	},

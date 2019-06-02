@@ -36,8 +36,7 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid">
-		<h2>Dashboard</h2>
+	<div class="container-fluid">		
 
 		<form name='_dashoardF' th:action="@{/saveDashboard}"
 			th:object="${dashboard}" method='POST' class="form-horizontal">
@@ -45,7 +44,7 @@
 
 			<div class="row">
 
-				<div class="col-sm-2">
+				<div class="col-sm-2 myPanel">
 
 					<div class="col-sm-12 form-group">
 						<select id="ddlYear" class="form-control input-sm"
@@ -77,13 +76,15 @@
 						</div>
 					</div>
 
-					<div class="col-sm-12 text-center">
-						<input type="hidden" id="_dashboardObj" value="" />
-						<button type="button" id="_pullReport" class="btn btn-default"
-							value="Pull Report" onclick="pullDashboard();">
-							<span class="glyphicon glyphicon-stats" style="color: green;"
-								aria-hidden="true"> Pull Report</span>
-						</button>
+					<div class="col-sm-12">
+
+
+						<a id="_loadReport" class="btn btn-default btn-lg"
+							onclick="pullDashboard(); return false;"> <span
+							class="glyphicon glyphicon-stats" style="color: goldenrod;"
+							aria-hidden="true"></span> Generate Report
+						</a>
+
 					</div>
 				</div>
 
@@ -93,7 +94,7 @@
 						style="background-color: ghostwhite;">
 
 						<thead>
-							<th class="text-center"></th>
+							<th class="text-center" id="_yearHeading" style="color: blue;"></th>
 							<th class="text-center">Q1</th>
 							<th class="text-center">Q2</th>
 							<th class="text-center">Q3</th>
@@ -124,6 +125,15 @@
 								<td id="_resServedQ3"></td>
 								<td id="_resServedQ4"></td>
 								<td id="_resServedYTD"></td>
+							</tr>
+
+							<tr>
+								<td># of Signup Completed</td>
+								<td id="_signupQ1"></td>
+								<td id="_signupQ2"></td>
+								<td id="_signupQ3"></td>
+								<td id="_signupQ4"></td>
+								<td id="_signupYTD"></td>
 							</tr>
 						</tbody>
 

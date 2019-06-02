@@ -16,11 +16,13 @@ import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ActionPlanDAO;
 import com.ffg.rrn.dao.CaseNotesDAO;
+import com.ffg.rrn.dao.DashboardDao;
 import com.ffg.rrn.dao.ReferralFormDAO;
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.Dashboard;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
@@ -46,6 +48,9 @@ public class ResidentServiceImpl {
 
 	@Autowired
 	private ReferralFormDAO referralFormDao;
+
+	@Autowired
+	private DashboardDao dashboardDao;
 
 	/**
 	 * Get all Assessment Questions as ref data to display on Page for Resident.
@@ -253,6 +258,10 @@ public class ResidentServiceImpl {
 
 	public Boolean isHouseholdComplete(Long residentId) {
 		return referralFormDao.isHouseholdComplete(residentId);
+	}
+
+	public Dashboard pullDashboard(Dashboard dashboard) {
+		return dashboardDao.pullDashboard(dashboard);
 	}
 
 	}

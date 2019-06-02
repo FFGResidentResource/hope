@@ -43,5 +43,11 @@ public class Dashboard {
 	private Integer q3ResServed;
 	private Integer q4ResServed;
 
+	private Integer q1SignUpComplete;
+	private Integer q2SignUpComplete;
+	private Integer q3SignUpComplete;
+	private Integer q4SignUpComplete;
+
+	private Integer totalActiveResident;
 
 }

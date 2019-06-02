@@ -142,6 +142,8 @@ public class RestAPIController {
 
 		Dashboard dashboard = requestEntity.getBody();
 
+		dashboard = residentService.pullDashboard(dashboard);
+
 		return ResponseEntity.ok(dashboard);
 
 	}
