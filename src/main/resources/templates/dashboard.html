@@ -36,7 +36,7 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid">		
+	<div class="container-fluid">
 
 		<form name='_dashoardF' th:action="@{/saveDashboard}"
 			th:object="${dashboard}" method='POST' class="form-horizontal">
@@ -76,15 +76,30 @@
 						</div>
 					</div>
 
-					<div class="col-sm-12">
-
-
+					<div class="col-sm-12 form-group">
+					
 						<a id="_loadReport" class="btn btn-default btn-lg"
 							onclick="pullDashboard(); return false;"> <span
 							class="glyphicon glyphicon-stats" style="color: goldenrod;"
 							aria-hidden="true"></span> Generate Report
 						</a>
 
+					</div>
+
+					<div class="col-sm-12 form-group">
+						
+						<label class="control-label" for="_totalResidents">Total Active Residents:</label>
+						<span id="_totalResidents"></span>
+					
+					</div>
+					<div class="col-sm-12 form-group">
+						<label class="control-label" for="_newResidents">New Residents:</label>
+						<span id="_newResidents"></span>
+						
+					</div>
+					<div class="col-sm-12 form-group">
+						<label class="control-label" for="_ongoingResidents">Ongoing Residents:</label>
+						<span id="_ongoingResidents"></span>
 					</div>
 				</div>
 
@@ -135,10 +150,156 @@
 								<td id="_signupQ4"></td>
 								<td id="_signupYTD"></td>
 							</tr>
+							
+							<tr>
+								<td># of Assessment Completed</td>
+								<td id="_ssmQ1"></td>
+								<td id="_ssmQ2"></td>
+								<td id="_ssmQ3"></td>
+								<td id="_ssmQ4"></td>
+								<td id="_ssmYTD"></td>
+							</tr>
+							
+							<tr>
+								<td colspan="6"></td>
+							</tr>
+							
+							<tr>
+								<td colspan="6"><label> Referral Reasons: </label></td>
+							</tr>
+							
+							<tr>
+								<td>Childcare/afterschool care</td>
+								<td id="_rr1Q1"></td>
+								<td id="_rr1Q2"></td>
+								<td id="_rr1Q3"></td>
+								<td id="_rr1Q4"></td>
+								<td id="_rr1YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Education/job training</td>
+								<td id="_rr2Q1"></td>
+								<td id="_rr2Q2"></td>
+								<td id="_rr2Q3"></td>
+								<td id="_rr2Q4"></td>
+								<td id="_rr2YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Employment/job readiness</td>
+								<td id="_rr3Q1"></td>
+								<td id="_rr3Q2"></td>
+								<td id="_rr3Q3"></td>
+								<td id="_rr3Q4"></td>
+								<td id="_rr3YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Healthcare/medical issues</td>
+								<td id="_rr4Q1"></td>
+								<td id="_rr4Q2"></td>
+								<td id="_rr4Q3"></td>
+								<td id="_rr4Q4"></td>
+								<td id="_rr4YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Housekeeping/home management</td>
+								<td id="_rr5Q1"></td>
+								<td id="_rr5Q2"></td>
+								<td id="_rr5Q3"></td>
+								<td id="_rr5Q4"></td>
+								<td id="_rr5YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Lease violation for:</td>
+								<td id="_rr6Q1"></td>
+								<td id="_rr6Q2"></td>
+								<td id="_rr6Q3"></td>
+								<td id="_rr6Q4"></td>
+								<td id="_rr6YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Non/late payment of rent</td>
+								<td id="_rr7Q1"></td>
+								<td id="_rr7Q2"></td>
+								<td id="_rr7Q3"></td>
+								<td id="_rr7Q4"></td>
+								<td id="_rr7YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Noticeable change in:</td>
+								<td id="_rr8Q1"></td>
+								<td id="_rr8Q2"></td>
+								<td id="_rr8Q3"></td>
+								<td id="_rr8Q4"></td>
+								<td id="_rr8YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Other:</td>
+								<td id="_rr9Q1"></td>
+								<td id="_rr9Q2"></td>
+								<td id="_rr9Q3"></td>
+								<td id="_rr9Q4"></td>
+								<td id="_rr9YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Resident-to-resident conflict issues</td>
+								<td id="_rr10Q1"></td>
+								<td id="_rr10Q2"></td>
+								<td id="_rr10Q3"></td>
+								<td id="_rr10Q4"></td>
+								<td id="_rr10YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Safety</td>
+								<td id="_rr11Q1"></td>
+								<td id="_rr11Q2"></td>
+								<td id="_rr11Q3"></td>
+								<td id="_rr11Q4"></td>
+								<td id="_rr11YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Suspected abuse/domestic violence/exploitation</td>
+								<td id="_rr12Q1"></td>
+								<td id="_rr12Q2"></td>
+								<td id="_rr12Q3"></td>
+								<td id="_rr12Q4"></td>
+								<td id="_rr12YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Transportation</td>
+								<td id="_rr13Q1"></td>
+								<td id="_rr13Q2"></td>
+								<td id="_rr13Q3"></td>
+								<td id="_rr13Q4"></td>
+								<td id="_rr13YTD"></td>
+							</tr>
+							
+							<tr>
+								<td>Utility Shut-off, scheduled for (Date):</td>
+								<td id="_rr14Q1"></td>
+								<td id="_rr14Q2"></td>
+								<td id="_rr14Q3"></td>
+								<td id="_rr14Q4"></td>
+								<td id="_rr14YTD"></td>
+							</tr>
+							
 						</tbody>
 
 					</table>
 				</div>
+
+
 			</div>
 
 
