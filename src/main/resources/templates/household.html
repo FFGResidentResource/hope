@@ -5,7 +5,8 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
 
 <style>
@@ -30,7 +31,7 @@
 </style>
 
 <script type="text/javascript">
-	var res = null;
+    var res = null;
 </script>
 
 </head>
@@ -42,11 +43,13 @@
 	<div class="container">
 		<div id="household_Form">
 			<form name='_householdF' th:action="@{/saveAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
-				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
-					   th:field="*{householdAssessmentAllowed}" />
-				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
-					   th:field="*{dateOfLatestHouseholdAssessment}" />
+				th:object="${resident}" method='POST' class="form-horizontal">
+				<input name="isNewAssessmentAllowed" type="hidden"
+					id="isNewAssessmentAllowed"
+					th:field="*{householdAssessmentAllowed}" /> <input
+					name="dateOfLatestAssessment" type="hidden"
+					id="dateOfLatestAssessment"
+					th:field="*{dateOfLatestHouseholdAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 
@@ -134,7 +137,7 @@
 											th:id="'_householdQuestionnaire_'+ ${hhMgmt.questionId} + '_' + ${radioChoice.choiceId}"
 											th:field="*{householdMgmtQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateHouseholdScore();"> <strong><lable
+											onclick="calculateHouseholdScore();"> <strong><label
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
@@ -167,20 +170,25 @@
 						</div>
 					</div>
 
-
+					<input type="hidden" th:field="*{serviceCoord}" /> <input
+						type="hidden" th:field="*{residentId}" /> <input type="hidden"
+						th:field="*{firstName}" /> <input type="hidden"
+						th:field="*{lastName}" /> <input type="hidden"
+						th:field="*{propertyId}" /> <input type="hidden"
+						th:field="*{refId}" /> <input type="hidden" id="_lifeDomainhh"
+						th:field="*{lifeDomain}" /> <input type="hidden"
+						id="currentHHGoal" th:field="*{goal}" /> <input type="hidden"
+						id="currentHHScore" th:field="*{currentScore}" />
 
 					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> <input
-							type="hidden" th:field="*{residentId}" /> <input type="hidden"
-							th:field="*{firstName}" /> <input type="hidden"
-							th:field="*{lastName}" /> <input type="hidden"
-							th:field="*{propertyId}" /> <input type="hidden"
-							th:field="*{refId}" /> <input type="hidden" id="_lifeDomainhh"
-							th:field="*{lifeDomain}" /> <input type="hidden"
-							id="currentHHGoal" th:field="*{goal}" /> <input type="hidden"
-							id="currentHHScore" th:field="*{currentScore}" /> <input
-							type="submit" class="btn btn-primary btn-lg"
-							value="Save Household Assessment" onclick="saveAssessment(this.form);">
+					
+						<div class="text-danger hidden-print hideme">
+							<span>There is already an assessment from today's Date, retrieve today's Assessment from dropdown above to view/modify. 
+								</span>
+						</div>
+					
+						<input type="submit" class="btn btn-primary btn-lg"
+							value="Save Household Assessment">
 					</div>
 
 
@@ -225,11 +233,16 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
 	<script src="/js/common.js"></script>
 	<script src="/js/household.js"></script>
-	<script	src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
-	<script	src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	<script src="/js/menu.js"></script>
 
 </body>

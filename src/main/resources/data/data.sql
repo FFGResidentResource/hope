@@ -14,6 +14,8 @@ DROP SEQUENCE AQ_SQ;
 DROP SEQUENCE AP_SQ;
 DROP SEQUENCE CN_SQ;
 DROP SEQUENCE RF_SQ;
+DROP SEQUENCE UR_SQ;
+
 
 DROP TABLE REFERRAL_FORM;
 DROP TABLE ACTION_PLAN;
@@ -61,6 +63,8 @@ CREATE SEQUENCE AP_SQ START 1;
 CREATE SEQUENCE CN_SQ START 1;
 
 CREATE SEQUENCE RF_SQ START 1;
+
+CREATE SEQUENCE UR_SQ START 1;
 
 
 CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
@@ -441,7 +445,7 @@ CREATE table SERVICE_COORDINATOR (
 
 CREATE table RESIDENT (
 	RESIDENT_ID		BIGINT PRIMARY KEY NOT NULL,
-	ACTIVE			BOOLEAN DEFAULT FALSE,
+	ACTIVE			BOOLEAN DEFAULT TRUE,
 	IS_RESIDENT 	BOOLEAN DEFAULT TRUE,
 	REF_TYPE		INT REFERENCES REFERRAL(REF_ID) NOT NULL,
 	FIRST_NAME		VARCHAR(128),
@@ -455,7 +459,7 @@ CREATE table RESIDENT (
 	TEXT_NO			VARCHAR(20),
 	EMAIL			VARCHAR(256) UNIQUE,
 	ADDRESS			VARCHAR(256),
-	ACK_PR			BOOLEAN DEFAULT TRUE,
+	ACK_PR			BOOLEAN DEFAULT FALSE,
 	ALLOW_CONTACT	BOOLEAN DEFAULT FALSE,
 	WANTS_SURVEY	BOOLEAN DEFAULT FALSE,
 	PHOTO_RELEASE	BOOLEAN DEFAULT FALSE,
@@ -487,9 +491,9 @@ CREATE TABLE REFERRAL_FORM (
 	REFERRAL_REASON				JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
 	COMMENTS					VARCHAR(1000),
 	PREVIOUS_ATTEMPTS			VARCHAR(1000),
-	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false" }',
-	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false"}',
-	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false"}',
+	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false", "Other":"" }',
+	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false", "Other":""}',
+	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false", "Other":""}',
 	RF_FOLLOWUP_NOTES			VARCHAR(1000),
 	RES_APP_SCHEDULED			JSON DEFAULT '{ "Resident Appointment Scheduled?":""}',
 	SERVICE_COORD				VARCHAR(50)
@@ -497,14 +501,16 @@ CREATE TABLE REFERRAL_FORM (
 
 CREATE TABLE ACTION_PLAN(
     ACTION_PLAN_ID			BIGINT PRIMARY KEY NOT NULL,
-	RESIDENT_ID				BIGINT REFERENCES RESIDENT(RESIDENT_ID),
-	RESIDENT_CONCERNS    	VARCHAR(500),
-    ACTIVE              	BOOLEAN DEFAULT TRUE,
-    FOCUS_ON_DOMAIN 		JSON DEFAULT '{ "HOUSING": "false", "MONEY MANAGEMENT": "false", "EMPLOYMENT": "false", "EDUCATION": "false", "NETWORK SUPPORT": "false", "HOUSEHOLD MANAGEMENT": "false" }',
+	RESIDENT_ID				BIGINT REFERENCES RESIDENT(RESIDENT_ID),	
+    ACTIVE              	BOOLEAN DEFAULT TRUE,   
 	PLAN_OF_ACTION			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	PLAN_DETAILS			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	REFERRAL_PARTNER		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	ANTICIPATED_OUTCOMES	JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	ANTICIPATED_DATE		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	OUTCOME_ACHIEVED		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	OUTCOME_DATE			DATE,
+	COMPLETION_DATE			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	ACHIEVED_SSM			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	FOLLOWUP_NOTES			VARCHAR(2000),
 	DATE_ADDED				DATE DEFAULT NOW(),
 	DATE_MODIFIED			DATE,
@@ -637,25 +643,25 @@ values (2, 'ROLE_USER');
 --- 
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (1, 1, 1);
+values (nextval('UR_SQ'), 1, 1);
  
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (2, 1, 2);
+values (nextval('UR_SQ'), 1, 2);
  
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (3, 2, 2);
+values (nextval('UR_SQ'), 2, 2);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (4, 3, 2);
+values (nextval('UR_SQ'), 3, 2);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (5, 4, 2);
+values (nextval('UR_SQ'), 4, 2);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (6, 5, 1);
+values (nextval('UR_SQ'), 5, 1);
 
 insert into user_role (ID, USER_ID, ROLE_ID)
-values (7, 5, 2);
+values (nextval('UR_SQ'), 5, 2);
 
 ---
 

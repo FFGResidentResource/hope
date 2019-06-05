@@ -46,7 +46,7 @@
 		<div id="housingStability_Form">
 
 			<form name='_housingF' th:action="@{/saveAssessment}"
-				th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+				th:object="${resident}" method='POST' class="form-horizontal">
 				<input name="isNewAssessmentAllowed" type="hidden" id="isNewAssessmentAllowed"
 					   th:field="*{newHousingAssessmentAllowed}" />
 				<input name="dateOfLatestAssessment" type="hidden" id="dateOfLatestAssessment"
@@ -109,7 +109,7 @@
 							<div class="col-sm-9">
 								<select class="form-control setable" id="_dates"
 									th:field="*{selectedDate}"
-									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSING', '_housing' );"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'HOUSING', '_housing' ); validateAndShowMessage();"
 									required>
 									<option value="NewAssessment">Start New Assessment</option>
 									<option th:each="assessmentDate : ${resident.housingDates}"
@@ -137,7 +137,7 @@
 											th:id="'_housingQuestionnaire_'+ ${housing.questionId} + '_' + ${radioChoice.choiceId}"
 											th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateHousingScore();"> <strong><lable
+											onclick="calculateHousingScore();"> <strong><label
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
@@ -160,7 +160,7 @@
 											th:id="'_housingQuestionnaire_'+ ${housing.questionId} + '_' + ${radioChoice.choiceId}"
 											th:field="*{housingQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateHousingScore();"> <strong><lable
+											onclick="calculateHousingScore();"> <strong><label
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
@@ -171,8 +171,8 @@
 						</div>
 					</div>
 
-					 <div class="row col-sm-12">
-						<div class="col-sm-6">
+					 <div class="row text-center col-sm-12">
+						
 							<input type="hidden" th:field="*{serviceCoord}" /> <input
 								type="hidden" th:field="*{residentId}" /> <input type="hidden"
 								th:field="*{firstName}" /> <input type="hidden"
@@ -182,10 +182,16 @@
 								th:field="*{lifeDomain}" /> <input type="hidden"
 								id="currentHousingGoal" th:field="*{goal}" /> <input
 								type="hidden" id="currentHousingScore" th:field="*{currentScore}" />
-							<input type="button" id="_housingSubmit"
-								class="btn btn-primary btn-lg" value="Save Housing Assessment" onclick="saveAssessment(this.form);">
+						
+						<div class="text-danger hidden-print hideme">
+							<span>There is already an assessment from today's Date, retrieve today's Assessment from dropdown above to view/modify. 
+								</span>
 						</div>
-						<div class="col-sm-6 text-right">
+						
+						<input type="submit" id="_housingSubmit"
+								class="btn btn-primary btn-lg" value="Save Housing Assessment">
+						<!-- Hiding - out of scope -->
+						<div class="col-sm-6 text-right hideme">
 							<input type="button" id="_housingSubmitAndNext"
 								   class="btn btn-primary btn-lg" value="Save and Next Assessment"
 								   onclick="saveAndNextAssessment(this.form);"></div>
@@ -231,11 +237,15 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="/js/common.js"></script>
-	<script src="/js/housing.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
+	
 	<script	src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script	src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	<script src="/js/menu.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/housing.js"></script>
+	
 
 </body>
 

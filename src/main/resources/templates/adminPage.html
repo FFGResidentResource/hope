@@ -57,20 +57,20 @@
 								</div>
 								<div class="col-sm-offset-4 col-sm-2">
 									<a id="_loadInactivate" class="btn btn-default btn-sm"
-									th:href="@{/inactivateSC?case=Inactivate}"> <span
-									class="glyphicon glyphicon-ban-circle" style="color: red;"
-									aria-hidden="true"></span>Inactivate [SC]
-								</a>
+										th:href="@{/inactivateSC?active=false}"> <span
+										class="glyphicon glyphicon-ban-circle" style="color: red;"
+										aria-hidden="true"></span>&nbsp;Inactivate [SC]
+									</a>
 								</div>
-								
+
 								<div class="col-sm-2">
 									<a id="_loadActivate" class="btn btn-default btn-sm"
-									th:href="@{/activaeSC?case=activate}"> <span
-									class="glyphicon glyphicon-flash" style="color: goldenrod;"
-									aria-hidden="true"></span>Activate [SC]
-								</a>
+										th:href="@{/activateSC?active=true}"> <span
+										class="glyphicon glyphicon-flash" style="color: goldenrod;"
+										aria-hidden="true"></span>&nbsp;Activate [SC]
+									</a>
 								</div>
-								
+
 							</div>
 						</div>
 						<div class="panel-body">
@@ -100,7 +100,7 @@
 
 			</div>
 
-			<div class="col-sm-12">
+			<div class="col-sm-12 myPanel">
 				<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
 					<ul>
 						<li th:each="e : ${#fields.detailedErrors()}"
@@ -109,75 +109,77 @@
 							| <span th:text="${e.message}">The error message</span></li>
 					</ul>
 				</div>
-			</div>
 
-			<div class="col-sm-10">
 
-				<div class="row">
+				<div class="col-sm-10">
 
-					<div class="form-group">
-						<label for="inputEmail1" class="col-sm-4 control-label">Email
-							& User Name</label>
-						<div class="col-sm-4">
-							<input type="email" class="form-control" id="inputEmail1"
-								placeholder="Email" th:field="*{email}">
-						</div>
-						<div class="col-sm-4">
-							<input class="form-control" id="userName1"
-								placeholder="User Name" th:field="*{userName}">
-						</div>
-					</div>
+					<div class="row">
 
-					<div class="form-group">
-						<label for="inputPassword1" class="col-sm-4 control-label">Password
-							& Confirm</label>
-						<div class="col-sm-4">
-							<input type="password" class="form-control" id="inputPassword1"
-								placeholder="Password" th:field="*{password}">
-						</div>
-						<div class="col-sm-4">
-							<input type="password" class="form-control" id="inputPassword2"
-								placeholder="Confirm Password" th:field="*{confirmPassword}">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-sm-offset-4 col-sm-8">
-							<div class="checkbox">
-								<label> <input type="checkbox" th:field="*{admin}"
-									onclick="jQuery('#_property').prop('disabled', jQuery(this).prop('checked'));">
-									Is Admin? (Admins have access to all Property)
-								</label>
+						<div class="form-group">
+							<label for="inputEmail1" class="col-sm-4 control-label">Email
+								& User Name</label>
+							<div class="col-sm-4">
+								<input type="email" class="form-control" id="inputEmail1"
+									placeholder="Email" th:field="*{email}">
+							</div>
+							<div class="col-sm-4">
+								<input class="form-control" id="userName1"
+									placeholder="User Name" th:field="*{userName}">
 							</div>
 						</div>
+
+						<div class="form-group">
+							<label for="inputPassword1" class="col-sm-4 control-label">Password
+								& Confirm</label>
+							<div class="col-sm-4">
+								<input type="password" class="form-control" id="inputPassword1"
+									placeholder="Password" th:field="*{password}">
+							</div>
+							<div class="col-sm-4">
+								<input type="password" class="form-control" id="inputPassword2"
+									placeholder="Confirm Password" th:field="*{confirmPassword}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<div class="checkbox">
+									<label> <input type="checkbox" th:field="*{admin}" id="_isAdmin"
+										onclick="jQuery('#_property').prop('disabled', jQuery(this).prop('checked')); jQuery('select').prop('selectedIndex', 0);">
+										Is Admin? (Admins have access to all Property)
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="_property" class="col-sm-4 control-label">Property</label>
+							<div class="col-sm-8">
+								<select class="form-control setable" id="_property"
+									th:field="*{propertyId}">
+									<option value="">Select</option>
+									<option th:each="property : ${serviceCoordinator.propertyList}"
+										th:value="${property.propertyId}"
+										th:utext="${property.propertyName}" />
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<input type="submit" id="_serviceCoordForm"
+									class="btn btn-primary btn-lg" value="Save Service Coordinator"
+									onclick="debugger; validateFields();">
+							</div>
+						</div>
+
+
 					</div>
 
-					<div class="form-group">
-						<label for="_property" class="col-sm-4 control-label">Property</label>
-						<div class="col-sm-8">
-							<select class="form-control setable" id="_property"
-								th:field="*{propertyId}" required>
-								<option value="0">Select</option>
-								<option th:each="property : ${serviceCoordinator.propertyList}"
-									th:value="${property.propertyId}"
-									th:utext="${property.propertyName}" />
-							</select>
-						</div>
-					</div>
 
-					<div class="form-group">
-						<div class="col-sm-offset-4 col-sm-8">
-							<input type="submit" id="_serviceCoordForm"
-								class="btn btn-primary btn-lg" value="Save Service Coordinator" onclick="debugger; validateFields();">
-						</div>
-					</div>
 
 
 				</div>
-
-
-
-
 			</div>
 		</form>
 	</div>

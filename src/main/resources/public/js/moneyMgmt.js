@@ -1,3 +1,10 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
+
 function calculateMoneyMgmtScore(){
 	
 	jQuery("#_mmlifeDomain").val('MONEY MANAGEMENT');

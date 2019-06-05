@@ -1,3 +1,10 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
+
 function calculateHouseholdScore() {
 
     jQuery("#_lifeDomainhh").val('HOUSEHOLD MANAGEMENT');

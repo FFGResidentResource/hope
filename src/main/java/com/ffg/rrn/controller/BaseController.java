@@ -17,6 +17,12 @@ public class BaseController {
         User loggedinUser = (User) ((Authentication) principal).getPrincipal();
         String serviceCordInfo = WebUtils.toString(loggedinUser);
         model.addAttribute("serviceCordInfo", serviceCordInfo);
+
+		String grantOnProperty = WebUtils.grantOnProperty(loggedinUser).replaceAll("ROLE_", "");
+
+		model.addAttribute("grantOnProperty", grantOnProperty.equals("null") ? "All" : grantOnProperty);
+		model.addAttribute("isAdmin", WebUtils.isAdmin(loggedinUser));
+		model.addAttribute("userName", loggedinUser.getUsername());
         return loggedinUser.getUsername();
     }
 

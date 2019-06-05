@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/datatables.min.css" rel="stylesheet">
+<link href="/css/select.datatables.min.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+    var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<form name='_onboardingF' th:action="@{/saveResident}"
+		th:object="${resident}" method="POST" class="form-horizontal">
+		<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+			<ul>
+				<li th:each="e : ${#fields.detailedErrors()}"
+					th:class="${e.global}? globalerr : fielderr"><span
+					th:text="${e.global}? '*' : ''">The field name</span> <span
+					th:text="${e.message}">The error message</span></li>
+			</ul>
+		</div>
+
+		<input id="_resID" type="hidden" th:field="*{residentId}" />
+
+		<div id="onboarding_Form" class="container">
+
+			<div class="col-sm-6 myPanel">
+
+				<table id="_onboardingTable"
+					class="table table-responsive table-bordered table-condensed">
+					<caption>
+
+						<!-- <a id="_enterNew" th:href="@{/onboarding}"> <span
+							class="glyphicon glyphicon-user" style="color: blue;"
+							aria-hidden="true"></span> Click Here for New
+						</a> <strong> <u>OR</u> Choose row from Right Table
+						</strong> -->
+						
+						<strong>New Resident On-boarding Only:</strong>
+						
+					</caption>
+
+
+
+					<tbody>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="firstName">Name:
+							</label></td>
+							<td><div class="col-sm-4">
+									<input class="form-control input-sm" id="firstName"
+										th:field="*{firstName}" placeholder="Enter first name"
+										required>
+								</div>
+								<div class="col-sm-3">
+									<input class="form-control input-sm" id="middle"
+										th:field="*{middle}" placeholder="middle">
+								</div>
+								<div class="col-sm-5">
+									<input class="form-control input-sm" id="lastname"
+										th:field="*{lastName}" placeholder="Enter last name" required>
+								</div></td>
+						</tr>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="_referral">Referral:</label></td>
+							<td><div class="col-sm-10">
+									<select class="form-control input-sm" id="_referral"
+										th:field="*{refId}" required>
+										<option value="">Select</option>
+										<option th:each="referral : ${resident.refList}"
+											th:value="${referral.refId}" th:utext="${referral.refValue}" />
+									</select>
+								</div></td>
+						</tr>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="_property">Property:</label></td>
+							<td><div class="col-sm-10">
+									<select class="form-control  input-sm" id="_property"
+										th:field="*{propertyId}" required>
+										<option value="">Select</option>
+										<option th:each="property : ${resident.propertyList}"
+											th:value="${property.propertyId}"
+											th:utext="${property.propertyName}" />
+									</select>
+								</div></td>
+						</tr>
+						<tr>
+							<td><label class="col-sm-2 control-label" for="unit">Address:
+							</label></td>
+							<td><div class="col-sm-10">
+									<input class="form-control  input-sm" id="address"
+										th:field="*{address}" placeholder="No. and Street" required>
+								</div></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><label class="col-sm-5 control-label">Is
+									Resident?: </label>
+								<div class="radio">
+									<label class="col-sm-2"><input th:field="*{isResident}"
+										type="radio" name="isResident" value="TRUE" th:checked required/>Yes</label>
+									<label class="col-sm-2"><input th:field="*{isResident}"
+										type="radio" name="isResident" value="FALSE" required/>No</label>
+								</div></td>
+						</tr>
+
+					</tbody>
+				</table>			
+
+				<div class="row text-center hidden-print">
+					<input type="submit" id="btnSubmit" class="btn btn-default btn-lg"
+						th:value="Save" />
+				</div>
+			</div>
+
+			<div class="col-sm-6">
+			
+				<table id="onboardingAllResidentTable" class="display compact"
+					style="width: 100%">
+					<thead>
+						<tr>
+							<th>ID1</th>
+							<th>ID</th>
+							<th>Full Name</th>
+							<th>Property Name</th>
+							<th>Added On</th>
+							<th>Added By</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+
+		<div class="container">
+
+			<div class="col-sm-12">
+				<div class="page-header text-center">
+					<h4>
+						<caption>
+						 You are viewing: [ <span id="_selectedResident" class="text-danger"></span> ]
+						</caption>
+					</h4>
+				</div>
+				<div class="row text-center hidden-print">				
+					<div class="col-sm-2">
+
+						<div class="caption">
+							<p><u><strong>Step 1</strong></u> <Span id="_refFormComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p></p>
+							<a id="_loadReferralForm" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getReferralForm?entryPoint=onboarding}"> <span
+								class="glyphicon glyphicon-paperclip" style="color: crimson;"
+								aria-hidden="true"></span> Referral Form
+							</a>
+
+						</div>
+
+					</div>
+					<div class="col-sm-2">
+						<div class="caption">
+							<p><u><strong>Step 2</strong></u><Span id="_signUpComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p></p>
+							<a id="_loadResident" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getResidentById?entryPoint=onboarding}"> <span
+								class=" glyphicon glyphicon-user" style="color: blue;"
+								aria-hidden="true"></span> Start Intake
+							</a>
+						</div>
+					</div>	
+					
+					
+					<div class="col-sm-2 col-md-offset-4">
+						<div class="caption">
+							<p><u><strong>Step 4</strong></u><Span id="_actionPlanComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p></p>
+							<a id="_loadActionPlan" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getActionPlan?entryPoint=onboarding}"> <span
+								class="glyphicon glyphicon-road" style="color: green;"
+								aria-hidden="true"></span> Action Plan
+							</a>
+						</div>
+					</div>
+
+					<div class="col-sm-2">
+						<div class="caption">
+							<p><u><strong>Step 5</strong></u><Span id="_contactNotesComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p></p>
+							<a id="_loadCaseNotes" class="btn btn-default btn-lg"
+								th:disabled="${resident.residentId==null}"
+								th:href="@{/getCaseNotes?entryPoint=allResident}"> <span
+								class="glyphicon glyphicon-comment" style="color: orange;"
+								aria-hidden="true"></span> Contact Notes
+							</a>
+						</div>
+					</div>
+
+				</div>
+				
+				<br/>
+
+				<div class="row text-center hidden-print">
+
+					<p>
+					<caption><h4><strong>Self Sufficiency Matrix - Step 3</strong></h4></caption>					
+					</p>				
+
+					<div class="col-sm-2">
+						<div class="caption">							
+							<p>
+								<span id="_hScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadHousing" class="btn btn-default"								
+								th:href="@{/getCurrentAssessment?lifeDomain=housing}"> <span
+								class="glyphicon glyphicon-home" style="color: darkturquoise;"
+								aria-hidden="true"></span> Housing
+							</a>
+							<p>
+								<Span id="_housingComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-sm-2 borderleft">
+						<div class="caption">							
+							<p>
+								<span id="_mmScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadMoneyMgmt" class="btn btn-default"								
+								th:href="@{/getCurrentAssessment?lifeDomain=moneyMgmt}"> <span
+								class="glyphicon glyphicon-usd" style="color: green;"
+								aria-hidden="true"></span> Money Mgmt
+							</a>
+							<p>
+								<Span id="_moneyMgmtComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-sm-2 borderleft">
+						<div class="caption">							
+							<p>
+								<span id="_empScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadEmployment" class="btn btn-default"								
+								th:href="@{/getCurrentAssessment?lifeDomain=employment}"> <span
+								class="glyphicon glyphicon-briefcase" style="color: indianred;"
+								aria-hidden="true"></span> Employment
+							</a>
+							<p>
+								<Span id="_empComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-sm-2 borderleft">
+						<div class="caption">							
+							<p>
+								<span id="_eduScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadEducation" class="btn btn-default"								
+								th:href="@{/getCurrentAssessment?lifeDomain=education}"> <span
+								class="glyphicon glyphicon-education"
+								style="color: darkgoldenrod;" aria-hidden="true"></span>
+								Education
+							</a>
+							<p>
+								<Span id="_eduComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-sm-2 borderleft">
+						<div class="caption">							
+							<p>
+								<span id="_nsScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadNetSupport" class="btn btn-default"								
+								th:href="@{/getCurrentAssessment?lifeDomain=networkSupport}">
+								<span class="glyphicon glyphicon-link" style="color: red;"
+								aria-hidden="true"></span> Network Supp
+							</a>
+							<p>
+								<Span id="_netSuppComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-sm-2 borderleft">
+						<div class="caption">							
+							<p>
+								<span id="_hhScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadHousehold" class="btn btn-default"								
+								th:href="@{/getCurrentAssessment?lifeDomain=household}"> <span
+								class="glyphicon glyphicon-leaf" style="color: darkgreen;"
+								aria-hidden="true"></span> Household
+							</a>
+							<p>
+								<Span id="_hhComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				
+
+			</div>
+	</form>
+
+
+
+
+
+
+
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/onboarding.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script src="/js/datatables.min.js"></script>
+	<script src="/js/datatables.select.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+
+
+</body>
+
+</html>

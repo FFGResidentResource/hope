@@ -13,7 +13,9 @@ jQuery(document).ready(function() {
     populateResidentAppScheduledDate();
     
     // set current date
-    $("#_currentDate").text(new Date().toLocaleDateString());
+    if( jQuery("#_currentDate").text()==''){
+	jQuery("#_currentDate").text(new Date().toLocaleDateString());
+    }
 });
 
 
@@ -30,7 +32,12 @@ function populateReferralReasonsWithValues() {
 	chkBox = '';
 
 	if (!(obj == 'true' || obj == 'false')) {
-	    inputBox = '<input class="my-input-sm" value="'+obj+'">';
+	
+	    if(idx == 'Utility Shut-off, scheduled for (Date):'){	    
+	    	inputBox = '<input id="_inputDateTextUtilityShutOff" placeholer="MM/DD/YYYY" class="my-input-sm" value="'+obj+'">';
+	    }else{
+		    inputBox = '<input class="my-input-sm" value="'+obj+'">';
+		}
 	}
 	    
 	if(obj != '' && obj != 'false'){
@@ -56,11 +63,16 @@ function populateSelfSufficiencyWithValues(){
 	if(obj == 'true'){
 	    chkBox = 'checked';
 	}
-	ssChkBoxes = ssChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
+	
+	if(idx!='Other') {	
+	    ssChkBoxes = ssChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
+	}
 	
     });
 
     jQuery("#_ssColumn").html(ssChkBoxes);
+    jQuery("#_ssOther").val(selfSuff["Other"]);
+    
 }
 
 function populateHousingStabilityWithValues(){
@@ -76,11 +88,14 @@ function populateHousingStabilityWithValues(){
 	if(obj == 'true'){
 	    chkBox = 'checked';
 	}
-	hsChkBoxes = hsChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
+	if(idx!='Other') {
+	    hsChkBoxes = hsChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
+	}
 	
     });
 
     jQuery("#_hsColumn").html(hsChkBoxes);
+    jQuery("#_hsOther").val(hs["Other"]);
 }
 
 function populateSafeSupportiveCommunitiesWithValues(){
@@ -96,17 +111,20 @@ function populateSafeSupportiveCommunitiesWithValues(){
 	if(obj == 'true'){
 	    chkBox = 'checked';
 	}
-	ssCommChkBoxes = ssCommChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
+	if(idx!='Other') {
+	    ssCommChkBoxes = ssCommChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
+	}
 	
-    });
-
+    });   
+    
     jQuery("#_safeSuppColumn").html(ssCommChkBoxes);
+    jQuery("#_safeSuppOther").val(ssc["Other"]);
 }
 
 function populateResidentAppScheduledDate(){
     
     resAppSch = JSON.parse(jQuery("#_residentAppointmentScheduled").val());     
-    jQuery("#_resAppSch").val(resAppSch["Resident Appointment Scheduled?"]);
+    jQuery("#_inputDateTextResAppSch").val(resAppSch["Resident Appointment Scheduled?"]);
 }
 
 /**
@@ -145,7 +163,8 @@ function buildEachJSONString(){
 	jsonString = jsonString + '"' +obj.innerText.trim() + '":"' + currentValue + '",';	
     });
     
-    jsonString = jsonString.substring(0, jsonString.length - 1);
+    jsonString = jsonString + '"Other":' +'"' + jQuery("#_ssOther").val().trim() + '"';
+    
     jQuery("#_selfSufficiency").val('{'+jsonString+'}'); 
     jsonString = '';
     
@@ -158,7 +177,7 @@ function buildEachJSONString(){
 	jsonString = jsonString + '"' +obj.innerText.trim() + '":"' + currentValue + '",';	
     });
     
-    jsonString = jsonString.substring(0, jsonString.length - 1);
+    jsonString = jsonString + '"Other":' +'"' + jQuery("#_hsOther").val().trim() + '"';
     jQuery("#_housingStability").val('{'+jsonString+'}'); 
     jsonString = '';
     
@@ -171,13 +190,34 @@ function buildEachJSONString(){
 	jsonString = jsonString + '"' +obj.innerText.trim() + '":"' + currentValue + '",';	
     });
     
-    jsonString = jsonString.substring(0, jsonString.length - 1);
+    jsonString = jsonString + '"Other":' +'"' + jQuery("#_safeSuppOther").val().trim() + '"';
     jQuery("#_safeSupportiveCommunity").val('{'+jsonString+'}'); 
     jsonString = '';
     
     //Read Textbox value for resident Appointment Scheduled?
     
-    jQuery("#_residentAppointmentScheduled").val('{"Resident Appointment Scheduled?":"'+jQuery("#_resAppSch").val().trim()+'"}')
+    jQuery("#_residentAppointmentScheduled").val('{"Resident Appointment Scheduled?":"'+jQuery("#_inputDateTextResAppSch").val().trim()+'"}')
     
 }
+
+
+var format = "MM/DD/YYYY";
+var match = new RegExp(format
+    .replace(/(\w+)\W(\w+)\W(\w+)/, "^\\s*($1)\\W*($2)?\\W*($3)?([0-9]*).*")
+    .replace(/M|D|Y/g, "\\d"));
+var replace = "$1/$2/$3$4"
+    .replace(/\//g, format.match(/\W/));
+
+function doFormat(target)
+{
+    target.value = target.value
+        .replace(/(^|\W)(?=\d\W)/g, "$10")   // padding
+        .replace(match, replace)             // fields
+        .replace(/(\W)+/g, "$1");            // remove repeats
+}
+
+jQuery("input[id^='_inputDateText']").keyup(function(e) {
+   if(!e.ctrlKey && !e.metaKey && (e.keyCode == 32 || e.keyCode > 46))
+      doFormat(e.target)
+});
 

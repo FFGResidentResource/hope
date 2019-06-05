@@ -97,9 +97,10 @@
 						class="table table-responsive table-bordered table-condensed text-center"
 						style="background-color: ghostwhite;">
 						<thead>
-							<th class="text-center">Interpretation?</th>
-							<th class="text-center">Referred By:</th>
-							<th class="text-center">Today's Date:</th>
+							<th class="text-center">Interpretation Needed?</th>
+							<th class="text-center">Referral Source</th>
+							<th class="text-center">Date Added:</th>
+							<th class="text-center">Date Modified:</th>
 						</thead>
 						<tbody>
 							<tr>
@@ -107,8 +108,9 @@
   											    <label><input th:field="*{interpretation}" type="radio" name="isResident" value="TRUE" />Yes</label>
   											    <label><input th:field="*{interpretation}" type="radio" name="isResident" value="FALSE" th:checked />No</label>
     										</div></td>
-								<td><input class="form-control my-input-sm" id="referredBy"	th:field="*{referredBy}" ></td>
-								<td><span id="_currentDate"></span></td>
+								<td><span id="referredBy" th:text="*{refValue}"></span></td>
+								<td><span id="_currentDate" th:text="*{referralFormDateAdded}"></span></td>
+								<td><span id="_dateModified" th:text="*{referralFormDateModified}"></span></td>
 								
 							</tr>
 						</tbody>
@@ -157,7 +159,12 @@
 						<thead>
 							<tr><th class="text-center">Self Sufficiency</th><th class="text-center">Housing Stability</th><th class="text-center">Safer, More Supportive Communities</th></tr>
 						</thead>
-						<tbody><tr><td id="_ssColumn"></td><td id="_hsColumn"></td><td id="_safeSuppColumn"></td></tr></tbody>
+						<tbody><tr><td id="_ssColumn"></td><td id="_hsColumn"></td><td id="_safeSuppColumn"></td></tr>
+						<tr>
+						<td><textarea class="form-control" rows="2" id="_ssOther" placeholder="Any Other type here:"></textarea></td>
+						<td><textarea class="form-control" rows="2" id="_hsOther" placeholder="Any Other type here:"></textarea></td>
+						<td><textarea class="form-control" rows="2" id="_safeSuppOther" placeholder="Any Other type here:"></textarea></td></tr>
+						</tbody>
 					</table>
 					
 					<table id="_comments" class="table table-responsive table-bordered table-condensed hidden-print">
@@ -173,7 +180,7 @@
 					<div class="row text-center">
 					<div class="col-sm-10">
 						<div class="col-sm-6">Resident Appointment Scheduled?</div>
-						<div class="col-sm-6"><input id="_resAppSch" class="form-control" placeholder="If Yes, Enter Date else leave blank" ></div>
+						<div class="col-sm-6"><input id="_inputDateTextResAppSch" class="form-control" placeholder="If Yes, Enter Date else leave blank" ></div>
 					</div>
 					</div>
 					

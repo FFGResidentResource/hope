@@ -47,13 +47,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<String> roleNames = this.appRoleDAO.getRoleNames(sc.getScId());
  
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+
+		GrantedAuthority authority = null;
+
         if (roleNames != null) {
             for (String role : roleNames) {
                 // ROLE_USER, ROLE_ADMIN,..
-                GrantedAuthority authority = new SimpleGrantedAuthority(role);
+				authority = new SimpleGrantedAuthority(role);
                 grantList.add(authority);
             }
         }
+
+		authority = new SimpleGrantedAuthority("ROLE_" + sc.getPropName());
+		grantList.add(authority);
  
         UserDetails userDetails = (UserDetails) new User(sc.getUserName(), //
         		sc.getEncrytedPassword(), grantList);

@@ -1,3 +1,9 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
 function calculateEducationScore() {
 
     jQuery("#_eduLifeDomain").val('EDUCATION');

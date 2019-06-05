@@ -26,37 +26,28 @@ import lombok.Data;
 /**
  * @author FFGRRNTeam
  * 
- *         RESIDENT_ID BIGINT PRIMARY KEY NOT NULL, ACTIVE BOOLEAN DEFAULT
- *         FALSE, FIRST_NAME VARCHAR(20), MIDDLE VARCHAR(20), LAST_NAME
- *         VARCHAR(20), PROP_ID INT REFERENCES PROERTY(PROP_ID), VOICEMAIL_NO
- *         VARCHAR(20), TEXT_NO VARCHAR(20), EMAIL VARCHAR(128), ALLOW_CONTACT
- *         BOOLEAN DEFAULT FALSE, WANTS_SURVEY BOOLEAN DEFAULT FALSE,
- *         PHOTO_RELEASE BOOLEAN DEFAULT FALSE, DATE_ADDED TIMESTAMP DEFAULT
- *         NOW(), DATE_MODIFIED TIMESTAMP, MODIFIED_BY INT REFERENCES
- *         SERVICE_COORDINATOR(SC_ID), SERVICE_COORD INT REFERENCES
- *         SERVICE_COORDINATOR(SC_ID)
- **/
-
+ */
 @Data
 @JsonView
 public class Resident {
 
 	private Long residentId;
 	private Boolean active;
+	@NotNull(message = "'Is Resident' is Required!")
 	private Boolean isResident;
-	@NotEmpty
-	@Size(max = 20)
+	@NotEmpty(message = "First Name is Required!")
+	@Size(max = 20,message = "The length of First Name can not be more than 20.")
 	private String firstName;
 	private String middle;
-	@NotEmpty
-	@Size(max = 20)
+	@NotEmpty(message = "Last Name is Required!")
+	@Size(max = 20,message = "The length of Last Name can not be more than 20.")
 	private String lastName;
 
-	@NotNull
+	@NotNull(message = "Property is Required!")
 	private Integer propertyId;
 	private String propertyName;
 
-	@NotNull
+	@NotNull(message = "Referral is Required!")
 	private Integer refId;
 	private String refValue;
 
@@ -66,12 +57,14 @@ public class Resident {
 	private String voiceMail;
 	private String text;
 
-	@Email
-	@Size(max = 128)
+	@Email(message = "Email must be a valid format.")
+	@Size(max = 128,message = "The length of Last Name can not be more than 128.")
 	private String email;
+
+	@NotEmpty(message = "Address is Required!")
 	private String address;
 
-	@AssertTrue
+	@AssertTrue(message = "Must check \"I acknowledge that I was informed of my right to privacy\".")
 	private Boolean ackRightToPrivacy;
 
 	private Boolean viaVoicemail;
@@ -89,21 +82,21 @@ public class Resident {
 
 	private String childList;
 
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child1 full name can not be more than 50.")
 	private String child1;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child2 full name can not be more than 50.")
 	private String child2;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child3 full name can not be more than 50.")
 	private String child3;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child4 full name can not be more than 50.")
 	private String child4;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child5 full name can not be more than 50.")
 	private String child5;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child6 full name can not be more than 50.")
 	private String child6;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child7 full name can not be more than 50.")
 	private String child7;
-	@Size(max = 50)
+	@Size(max = 50,message = "The length of child8 full name can not be more than 50.")
 	private String child8;
 
 	private Boolean pvrChild1;
@@ -181,27 +174,28 @@ public class Resident {
 	private String householdScoreGoal;
 	
 	private String mostRecentSSMDate;
+
 	// ActionPlan Fields -Begin
 
 	// This is JSON String with selected ActionPlan
-	private String focusOnActionPlan;
-
-	private String residentReportedConcern;
 
 	// This contains JSON String for each Domain
 	private String planOfAction;
-
 	// This contains JSON String for each Domain
 	private String anticipatedOutcome;
-
+	@JsonView
+	private List<String> anticipatedOutcomesList;
 	// --this variable is used in referral form as well.
 	private String followUpNotes;
 	// This contains JSON String for each Domain
 	private String outcomesAchieved;
-
-	private Date outcomeDate;
-
-	private Date actionPlanAddedDate;
+	private String anticipatedDates;
+	private String completionDates;
+	private String planDetails;
+	private String referralPartner;
+	private String achievedGoals;
+	private Date actionPlanDateAdded;
+	private Date actionPlanDateModified;
 
 	// ActionPlan Fields -End
 	
@@ -209,6 +203,8 @@ public class Resident {
 	private String description;
 	private String assessment;
 	private String plan;
+	private Date cnDateAdded;
+	private Date cnDateModified;
 	// Case Notes Fields - End
 
 	// Referral Form fields - Begin
@@ -222,6 +218,9 @@ public class Resident {
 	private String safeSupportiveCommunity;
 	private String rfFollowUpNotes;
 	private String residentAppointmentScheduled;
+	private Date referralFormDateAdded;
+	private Date referralFormDateModified;
+	
 
 	// Referral Form fields - End
 
@@ -312,6 +311,14 @@ public class Resident {
         return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHouseholdDates());
     }
 
+	/**
+	 * This method was written as per Requirement but later that requirement got
+	 * changed SC do wants to fill another Assessment ASAP (doesn't matter if it is
+	 * within 6 month or next day)
+	 * 
+	 * @param dateOfLatestHouseAssessment
+	 * @return
+	 */
 	private boolean isDateBeforeSixMonths(String dateOfLatestHouseAssessment) {
 		try {
 			Date lastestAssessDate = DateUtils.parseDate(dateOfLatestHouseAssessment, AppConstants.DATE_PATTERN_JAVA);

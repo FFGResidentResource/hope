@@ -1,3 +1,9 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
 function calculateHousingScore() {
 
 	jQuery("#_lifeDomain").val('HOUSING');

@@ -1,3 +1,10 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
+
 function calculatNetworkSupportScore() {
 
     jQuery("#_lifeDomain").val('NETWORK SUPPORT');

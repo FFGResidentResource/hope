@@ -16,11 +16,13 @@ import org.springframework.stereotype.Service;
 
 import com.ffg.rrn.dao.ActionPlanDAO;
 import com.ffg.rrn.dao.CaseNotesDAO;
+import com.ffg.rrn.dao.DashboardDao;
 import com.ffg.rrn.dao.ReferralFormDAO;
 import com.ffg.rrn.dao.ResidentDAO;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.Dashboard;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
@@ -46,6 +48,9 @@ public class ResidentServiceImpl {
 
 	@Autowired
 	private ReferralFormDAO referralFormDao;
+
+	@Autowired
+	private DashboardDao dashboardDao;
 
 	/**
 	 * Get all Assessment Questions as ref data to display on Page for Resident.
@@ -215,4 +220,48 @@ public class ResidentServiceImpl {
 
 	}
 
-}
+	public Boolean isReferralFormComplete(Long residentId) {
+		return referralFormDao.isReferralFormComplete(residentId);
+	}
+
+	public Boolean isIntakeComplete(Long residentId) {
+		return referralFormDao.isIntakeComplete(residentId);
+	}
+
+	public Boolean isActionPlanComplete(Long residentId) {
+		return referralFormDao.isActionPlanComplete(residentId);
+	}
+
+	public Boolean isContactNotesComplete(Long residentId) {
+		return referralFormDao.isContactNotesComplete(residentId);
+	}
+
+	public Boolean isHousingComplete(Long residentId) {
+		return referralFormDao.isHousingComplete(residentId);
+	}
+
+	public Boolean isMoneyMgmtComplete(Long residentId) {
+		return referralFormDao.isMoneyMgmtComplete(residentId);
+	}
+
+	public Boolean isEmploymentComplete(Long residentId) {
+		return referralFormDao.isEmploymentComplete(residentId);
+	}
+
+	public Boolean isEducationComplete(Long residentId) {
+		return referralFormDao.isEducationComplete(residentId);
+	}
+
+	public Boolean isNetSuppComplete(Long residentId) {
+		return referralFormDao.isNetSuppComplete(residentId);
+	}
+
+	public Boolean isHouseholdComplete(Long residentId) {
+		return referralFormDao.isHouseholdComplete(residentId);
+	}
+
+	public Dashboard pullDashboard(Dashboard dashboard) {
+		return dashboardDao.pullDashboard(dashboard);
+	}
+
+	}

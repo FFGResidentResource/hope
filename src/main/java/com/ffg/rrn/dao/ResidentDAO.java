@@ -56,10 +56,8 @@ import com.ffg.rrn.utils.AppConstants;
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
 
-	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, "
-			+ "VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD,"
-			+ " REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY, IS_RESIDENT) VALUES (nextval('RESIDENT_SQ'), "
-			+ " ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, ADDRESS, "
+			+ "REF_TYPE, IS_RESIDENT, SERVICE_COORD) VALUES (nextval('RESIDENT_SQ'),  ?,?,?,?,?,?,?,?)";
 
 	private final static String SQL_UPDATE_RESIDENT = "UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, "
 			+ "VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?,"
@@ -392,22 +390,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setString(2, resident.getMiddle());
 		ps.setString(3, resident.getLastName());
 		ps.setInt(4, resident.getPropertyId());
-		ps.setString(5, resident.getVoiceMail());
-		ps.setString(6, resident.getText());
-		ps.setString(7, resident.getEmail());
-		ps.setString(8, resident.getAddress());
-		ps.setBoolean(9, resident.getAckRightToPrivacy());
-		ps.setBoolean(10, resident.getAllowContact());
-		ps.setBoolean(11, resident.getWantSurvey());
-		ps.setBoolean(12, resident.getPhotoRelease());
-		ps.setString(13, resident.getServiceCoord());
-		ps.setInt(14, resident.getRefId());
-		ps.setBoolean(15, resident.getViaVoicemail());
-		ps.setBoolean(16, resident.getViaText());
-		ps.setBoolean(17, resident.getViaEmail());
-		ps.setBoolean(18, resident.getActive());
-		ps.setString(19, resident.getModifiedBy());
-		ps.setBoolean(20, resident.getIsResident());
+		ps.setString(5, resident.getAddress());
+		ps.setInt(6, resident.getRefId());
+		ps.setBoolean(7, resident.getIsResident());
+		ps.setString(8, resident.getServiceCoord());
+
 		return ps;
 	}
 
@@ -562,6 +549,6 @@ public class ResidentDAO extends JdbcDaoSupport {
 		}
 	}
 
-	
+
 
 }

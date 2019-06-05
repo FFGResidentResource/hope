@@ -1,3 +1,10 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
+
 function calculateEmploymentScore() {
 
     jQuery("#_empLifeDomain").val('EMPLOYMENT');

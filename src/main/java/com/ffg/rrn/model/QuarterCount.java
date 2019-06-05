@@ -11,17 +11,11 @@ import lombok.Data;
  * @author FFGRRNTeam
  *
  */
-
 @Data
 @JsonView
-public class Property {
-	
-	private int propertyId;
-	private String propertyName;
-	private int unit;
-	private int unitFee;
-	private Boolean active;
+public class QuarterCount {
 
-	private Boolean checked;
+	private Integer quarter;
 
+	private Integer count;
 }
