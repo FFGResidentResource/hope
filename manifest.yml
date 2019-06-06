@@ -1,5 +1,6 @@
 applications:
 - name: RRNHope
+  stack: cflinuxfs3
   buildpack: java_buildpack
   memory: 1024M
   instances: 1
