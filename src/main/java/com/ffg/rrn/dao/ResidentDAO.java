@@ -121,6 +121,22 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 	
 	/**
+	 * This will display as dropdown on Contact Notes Form
+	 * 
+	 * @param residentId
+	 * @return
+	 */
+	public List<String> getContactNoteDates(Long residentId) {
+		List<String> sortedDatesOfContactNotes = (List<String>) this.getJdbcTemplate().queryForList(
+				"select TO_CHAR(DATE_ADDED, '" + AppConstants.DATE_PATTERN_POSTGRE + "') FROM CASE_NOTES " + " WHERE RESIDENT_ID = ?  ORDER BY DATE_ADDED DESC", new Object[] { residentId },
+				String.class);
+		if (CollectionUtils.isEmpty(sortedDatesOfContactNotes)) {
+			return Collections.emptyList();
+		}
+		return sortedDatesOfContactNotes.stream().distinct().collect(Collectors.toList());
+	}
+
+	/**
 	 * This will display as dropdown on Action Plan Form
 	 * 
 	 * @param residentId
@@ -219,8 +235,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		try {
 
-			String dateSuffix = (StringUtils.equals("new", onThisDate) ? "" : " and ap.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ");
-
+			String dateSuffix = (StringUtils.equals("new", onThisDate) ? ""
+					: " and ( ap.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') OR cn.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ) ");
 
 			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? " + dateSuffix + " LIMIT 1",
 					new Object[] { residentId }, rowMapper);
@@ -299,6 +315,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 				this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSEHOLD MANAGEMENT"));
 		
 		resident.setActionPlanDates(this.getActionPlanDates(residentId));
+		resident.setContactNoteDates(this.getContactNoteDates(residentId));
 
 		//resident.setHousingScoreGoal(this.getLatestScoreGoal(residentId, "HOUSING"));
 		//resident.setMoneyMgmtScoreGoal(this.getLatestScoreGoal(residentId, "MONEY MANAGEMENT"));

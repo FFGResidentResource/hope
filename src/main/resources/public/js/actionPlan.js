@@ -52,7 +52,7 @@ jQuery(document).ready(function() {
 function buildAchorTagForSelectedDate(that, residentId){
     var suffix = '&residentId='+residentId+'&onThisDate='+that.value;
     
-    if(that.value != 'NewActionPlan'){
+    if(that.value != 'new'){
 	jQuery("#_loadActionPlan").attr('disabled', false);
         var currHref = jQuery("#_loadActionPlan").attr('href');
         var prefix = currHref.split('&');
@@ -333,17 +333,17 @@ function validateAndShowMessage(){
     var todaysDate = moment().format('DD-MMM-YYYY').toUpperCase();
     
     //check for Today's Date
-    var todaysAssessmentExists = false;
+    var todaysActionPlanExists = false;
     jQuery("#_dates option").each(function(){
 	
 	if(jQuery(this).val() == todaysDate){
-	    todaysAssessmentExists = true;
+	    todaysActionPlanExists = true;
 	}	
     });
     
     var selOption = jQuery("#_dates option:selected").val();
     
-    if(todaysAssessmentExists == true &&  selOption.indexOf('new') > -1){
+    if(todaysActionPlanExists == true &&  selOption.indexOf('new') > -1){
 	jQuery("#_actionPlanErrorMessage").removeClass('hideme');
 	jQuery("input[type='submit']").prop('disabled', true);
     }else{

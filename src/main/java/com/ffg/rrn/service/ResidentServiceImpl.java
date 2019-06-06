@@ -268,4 +268,9 @@ public class ResidentServiceImpl {
 		return dashboardDao.pullDashboard(dashboard);
 	}
 
+	public long updateCaseNotes(@Valid Resident resident) {
+		return caseNotesDao.updateCaseNotes(resident);
+
+	}
+
 	}

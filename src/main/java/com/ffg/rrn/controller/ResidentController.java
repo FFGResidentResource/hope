@@ -349,6 +349,13 @@ public class ResidentController extends BaseController {
 		}
 
 		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
+		resident.setSelectedDate(onThisDate);
+
+		if (StringUtils.equals("new", onThisDate)) {
+			resident.setPlan(null);
+			resident.setDescription(null);
+			resident.setAssessment(null);
+		}
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -455,7 +462,14 @@ public class ResidentController extends BaseController {
 
 	@PostMapping(value = "/saveCaseNotes")
 	public String saveCaseNotes(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
-		residentService.saveCaseNotes(resident);
+
+		if (StringUtils.equals(resident.getSelectedDate(), "new")) {
+
+			residentService.saveCaseNotes(resident);
+		} else {
+			residentService.updateCaseNotes(resident);
+		}
+
 		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
 

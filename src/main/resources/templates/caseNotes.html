@@ -51,10 +51,26 @@
 
 				<div class="col-sm-12 myPanel">
 					<div class="row">
-						<div class="col-sm-10">
+						<div class="col-sm-7">
 							<h3 style="width: 400px;">CASE NOTES</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>
+						</div>
+						
+						<div class="col-sm-2 hidden-print">
+						<select class="form-control setable" id="_dates"
+									th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
+									<option value="new">New Contact Notes</option>
+									<option th:each="contactNotes : ${resident.contactNoteDates}"
+										th:value="${contactNotes}" th:utext="${contactNotes}" />
+							</select>
+						</div>
+						<div class="col-sm-1 hidden-print">
+							<a id="_loadCaseNotes" class="btn btn-default btn-sm"								
+								th:href="@{/getCaseNotes?entryPoint=allResident}"> <span
+								class="glyphicon glyphicon-cloud-download" style="color: goldenrod;"
+								aria-hidden="true"></span> Contact Notes
+							</a>
 						</div>
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
@@ -147,7 +163,10 @@
 							type="hidden" th:field="*{residentId}" /> 
 							<input
 							type="hidden" th:field="*{isResident}" /> 
-							
+						
+						<div class="text-danger hidden-print hideme">
+							<span>There is already Contact Notes from today's Date, retrieve today's Contact Notes from dropdown above to view/modify.</span>
+						</div>
 
 						<!-- Submit  -->
 						<input type="submit" id="_caseNotesSubmit"
@@ -165,6 +184,8 @@
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
 
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>

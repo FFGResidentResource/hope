@@ -156,6 +156,9 @@ public class Resident {
 	@JsonView
 	private List<String> actionPlanDates;
 
+	@JsonView
+	private List<String> contactNoteDates;
+
 	private String selectedDate;
 
 	private Integer currentScore;

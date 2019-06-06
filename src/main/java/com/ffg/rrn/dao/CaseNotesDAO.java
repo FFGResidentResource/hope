@@ -6,6 +6,7 @@ package com.ffg.rrn.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import javax.sql.DataSource;
 import javax.validation.Valid;
@@ -13,7 +14,6 @@ import javax.validation.Valid;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -31,7 +31,7 @@ import com.ffg.rrn.model.Resident;
 public class CaseNotesDAO extends JdbcDaoSupport {
 
 	private static final String SQL_INSERT_CASE_NOTES = "INSERT INTO CASE_NOTES (CASE_NOTES_ID, DESCRIPTION, ASSESSMENT, PLAN, RESIDENT_ID, SERVICE_COORD) VALUES (nextval('CN_SQ'),?,?,?,?,?)";
-	private static final String SQL_UPDATE_CASE_NOTES = "UPDATE CASE_NOTES SET DESCRIPTION =?, ASSESSMENT = ?, PLAN = ?, SERVICE_COORD = ?,  DATE_MODIFIED = NOW() WHERE RESIDENT_ID = ?";
+	private static final String SQL_UPDATE_CASE_NOTES = "UPDATE CASE_NOTES SET DESCRIPTION =?, ASSESSMENT = ?, PLAN = ?, SERVICE_COORD = ?,  DATE_MODIFIED = NOW() WHERE RESIDENT_ID = ? and DATE_ADDED = ? ";
 
 
     @Autowired
@@ -50,24 +50,34 @@ public class CaseNotesDAO extends JdbcDaoSupport {
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] { "case_notes_id" };
 
-		try {
-			Long residentIdInActionPlan = this.getJdbcTemplate().queryForObject("select resident_id from case_notes where resident_id = ?", new Object[] { resident.getResidentId() }, Long.class);
-
-			if (residentIdInActionPlan != null) {
-				this.getJdbcTemplate().update(conn -> buildUpdateCaseNotes(conn, resident, pkColumnNames), keyHolder);
-			}
-		}
-		// When no resident found in action_plan we do fresh insert
-		catch (EmptyResultDataAccessException e) {
-			this.getJdbcTemplate().update(conn -> buildInsertCaseNotes(conn, resident, pkColumnNames), keyHolder);
-		}
+		this.getJdbcTemplate().update(conn -> buildInsertCaseNotes(conn, resident, pkColumnNames), keyHolder);
 
 		long actionPlanId = keyHolder.getKey().longValue();
 		return actionPlanId;
 
 	}
 
-	private PreparedStatement buildUpdateCaseNotes(Connection connection, @Valid Resident resident, String[] pkColumnNames) throws SQLException {
+	public long updateCaseNotes(@Valid Resident resident) {
+
+		final KeyHolder keyHolder = new GeneratedKeyHolder();
+		String[] pkColumnNames = new String[] { "case_notes_id" };
+
+		this.getJdbcTemplate().update(conn -> {
+			try {
+				return buildUpdateCaseNotes(conn, resident, pkColumnNames);
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}, keyHolder);
+
+		long actionPlanId = keyHolder.getKey().longValue();
+		return actionPlanId;
+
+	}
+
+	private PreparedStatement buildUpdateCaseNotes(Connection connection, @Valid Resident resident, String[] pkColumnNames) throws SQLException, java.text.ParseException {
 
 		PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_CASE_NOTES, pkColumnNames);
 
@@ -76,7 +86,15 @@ public class CaseNotesDAO extends JdbcDaoSupport {
 		ps.setString(3, resident.getPlan().trim());
 		ps.setString(4, resident.getServiceCoord());
 		ps.setLong(5, resident.getResidentId());
+		ps.setDate(6, parseMyDate(resident.getSelectedDate()));
 		return ps;
+	}
+
+	private java.sql.Date parseMyDate(String selectedDate) throws java.text.ParseException {
+
+		SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+		java.util.Date parsed = format.parse(selectedDate);
+		return new java.sql.Date(parsed.getTime());
 	}
 
 	private PreparedStatement buildInsertCaseNotes(Connection connection, @Valid Resident resident, String[] pkColumnNames) throws SQLException {
@@ -90,4 +108,5 @@ public class CaseNotesDAO extends JdbcDaoSupport {
 
 		return ps;
 	}
+
 }

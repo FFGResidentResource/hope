@@ -99,7 +99,7 @@ function validateAndShowMessage(){
 	}	
     });
     
-    if(todaysAssessmentExists == true &&  jQuery("#_dates option:selected").val().inlcudes('new'){
+    if(todaysAssessmentExists == true &&  jQuery("#_dates option:selected").val().inlcudes('new')){
 	jQuery(".text-danger").removeClass('hideme');
 	jQuery("input[type='submit']").prop('disabled', true);
     }else{
