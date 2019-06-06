@@ -3,7 +3,7 @@ applications:
   buildpack: java_buildpack
   memory: 1024M
   instances: 1
-  path: target/ResidentResourceHope-0.0.1.jar
+  path: target/RRNHope-0.0.1.jar
   env:
     JAVA_VERSION: 1.8
-    SPRING_PROFILES_ACTIVE: gaia,dev
+    SPRING_PROFILES_ACTIVE: dev

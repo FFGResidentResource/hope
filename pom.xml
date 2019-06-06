@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ffg</groupId>
-	<artifactId>ResidentResourceHope</artifactId>
+	<artifactId>RRNHope</artifactId>
 	<version>0.0.1</version>
 	<name>ResidentResourceNetwork</name>
 	<description>Non Profit Project for Service Coordinators</description>

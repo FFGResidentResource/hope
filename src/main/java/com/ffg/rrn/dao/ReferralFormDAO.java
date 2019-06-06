@@ -37,9 +37,9 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 
 	private static final String SQL_REF_FORM_COMPLETE = "select 1 from REFERRAL_FORM WHERE RESIDENT_ID = ?";
 	private static final String SQL_SIGNUP_COMPLETE = "select 1 from RESIDENT WHERE RESIDENT_ID = ? and ACK_PR = 'TRUE'";
-	private static final String SQL_SELF_SUFF_COMPLETE = "select 1 from RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ?";
-	private static final String SQL_ACTION_PLAN_COMPLETE = "select 1 from ACTION_PLAN WHERE RESIDENT_ID = ?";
-	private static final String SQL_CONTACT_NOTES_COMPLETE = "select 1 from CASE_NOTES WHERE RESIDENT_ID = ?";
+	private static final String SQL_SELF_SUFF_COMPLETE = "select 1 from RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ? LIMIT 1";
+	private static final String SQL_ACTION_PLAN_COMPLETE = "select 1 from ACTION_PLAN WHERE RESIDENT_ID = ? LIMIT 1";
+	private static final String SQL_CONTACT_NOTES_COMPLETE = "select 1 from CASE_NOTES WHERE RESIDENT_ID = ? LIMIT 1";
 
 	@Autowired
 	public ReferralFormDAO(DataSource dataSource) {

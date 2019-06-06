@@ -4,12 +4,12 @@
 package com.ffg.rrn.service;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -164,8 +164,8 @@ public class ResidentServiceImpl {
 		return this.residentDao.getAllResident();
 	}
 
-	public Resident getResidentById(Long residentId, String serviceCoord) throws Exception {
-		return this.residentDao.getResidentById(residentId, serviceCoord);
+	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate) throws Exception {
+		return this.residentDao.getResidentById(residentId, serviceCoord, onThisDate);
 	}
 
 	public long saveResidentAssessmentQuestionnaire(
@@ -201,6 +201,10 @@ public class ResidentServiceImpl {
 		return actionPlanDao.saveActionPlan(resident);
 	}
 	
+	public long updateActionPlan(Resident resident) throws DataAccessException, ParseException {
+		return actionPlanDao.updateActionPlan(resident);
+	}
+
 	public String getMostRecentSSMDate(Long residentId) {
 		return residentDao.getMostRecentSSMDate(residentId);
 

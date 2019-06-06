@@ -153,6 +153,9 @@ public class Resident {
 	@JsonView
 	private List<String> householdDates;
 
+	@JsonView
+	private List<String> actionPlanDates;
+
 	private String selectedDate;
 
 	private Integer currentScore;
@@ -328,5 +331,15 @@ public class Resident {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Resident other = (Resident) obj;
+
+		if (this.residentId == other.residentId)
+			return true;
+
+		return false;
 	}
 }

@@ -155,6 +155,41 @@ function pullDashboard(){
 	    jQuery("#_rr14Q4").text(data.rr14q4Count);	    
 	    jQuery('#_rr14YTD').text(data.rr14q1Count + data.rr14q2Count + data.rr14q3Count + data.rr14q4Count);
 	    
+	    jQuery("#_housingQ1").text(data.housingQ1Count);
+	    jQuery("#_housingQ2").text(data.housingQ2Count);
+	    jQuery("#_housingQ3").text(data.housingQ3Count);
+	    jQuery("#_housingQ4").text(data.housingQ4Count);
+	    jQuery('#_housingYTD').text(data.housingQ1Count + data.housingQ2Count + data.housingQ3Count + data.housingQ4Count);
+	    
+	    jQuery("#_mmQ1").text(data.mmQ1Count);
+	    jQuery("#_mmQ2").text(data.mmQ2Count);
+	    jQuery("#_mmQ3").text(data.mmQ3Count);
+	    jQuery("#_mmQ4").text(data.mmQ4Count);
+	    jQuery('#_mmYTD').text(data.mmQ1Count + data.mmQ2Count + data.mmQ3Count + data.mmQ4Count);
+	    
+	    jQuery("#_empQ1").text(data.empQ1Count);
+	    jQuery("#_empQ2").text(data.empQ2Count);
+	    jQuery("#_empQ3").text(data.empQ3Count);
+	    jQuery("#_empQ4").text(data.empQ4Count);
+	    jQuery('#_empYTD').text(data.empQ1Count + data.empQ2Count + data.empQ3Count + data.empQ4Count);
+	    
+	    jQuery("#_eduQ1").text(data.eduQ1Count);
+	    jQuery("#_eduQ2").text(data.eduQ2Count);
+	    jQuery("#_eduQ3").text(data.eduQ3Count);
+	    jQuery("#_eduQ4").text(data.eduQ4Count);
+	    jQuery('#_eduYTD').text(data.eduQ1Count + data.eduQ2Count + data.eduQ3Count + data.eduQ4Count);
+	    
+	    jQuery("#_nsQ1").text(data.nsQ1Count);
+	    jQuery("#_nsQ2").text(data.nsQ2Count);
+	    jQuery("#_nsQ3").text(data.nsQ3Count);
+	    jQuery("#_nsQ4").text(data.nsQ4Count);
+	    jQuery('#_nsYTD').text(data.nsQ1Count + data.nsQ2Count + data.nsQ3Count + data.nsQ4Count);
+	    
+	    jQuery("#_hhQ1").text(data.hhQ1Count);
+	    jQuery("#_hhQ2").text(data.hhQ2Count);
+	    jQuery("#_hhQ3").text(data.hhQ3Count);
+	    jQuery("#_hhQ4").text(data.hhQ4Count);
+	    jQuery('#_hhYTD').text(data.hhQ1Count + data.hhQ2Count + data.hhQ3Count + data.hhQ4Count);
 	    
 	    
 	    jQuery('#_totalResidents').text(data.totalActiveResident)

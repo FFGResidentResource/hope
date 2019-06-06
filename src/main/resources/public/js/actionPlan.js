@@ -22,6 +22,8 @@
 };*/
 
 jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
 
     jQuery.ajax({
 	type : "POST",
@@ -46,6 +48,20 @@ jQuery(document).ready(function() {
     // set current date
     $("#_currentDate").text(new Date().toLocaleDateString());
 });
+
+function buildAchorTagForSelectedDate(that, residentId){
+    var suffix = '&residentId='+residentId+'&onThisDate='+that.value;
+    
+    if(that.value != 'NewActionPlan'){
+	jQuery("#_loadActionPlan").attr('disabled', false);
+        var currHref = jQuery("#_loadActionPlan").attr('href');
+        var prefix = currHref.split('&');
+        jQuery('#_loadActionPlan').attr('href', prefix[0] + suffix);
+    }else{
+	jQuery("#_loadActionPlan").attr('disabled', true);
+    }
+    
+}
 
 /**
  * This method helps in populates action plan fields for existing saved actionPlan. Get Values from database and put it in each Box
@@ -311,3 +327,27 @@ jQuery("input[id^='_inputDateText']").keyup(function(e) {
    if(!e.ctrlKey && !e.metaKey && (e.keyCode == 32 || e.keyCode > 46))
       doFormat(e.target)
 });
+
+function validateAndShowMessage(){
+    
+    var todaysDate = moment().format('DD-MMM-YYYY').toUpperCase();
+    
+    //check for Today's Date
+    var todaysAssessmentExists = false;
+    jQuery("#_dates option").each(function(){
+	
+	if(jQuery(this).val() == todaysDate){
+	    todaysAssessmentExists = true;
+	}	
+    });
+    
+    var selOption = jQuery("#_dates option:selected").val();
+    
+    if(todaysAssessmentExists == true &&  selOption.indexOf('new') > -1){
+	jQuery("#_actionPlanErrorMessage").removeClass('hideme');
+	jQuery("input[type='submit']").prop('disabled', true);
+    }else{
+	jQuery("#_actionPlanErrorMessage").removeClass('hideme').addClass('hideme');
+	jQuery("input[type='submit']").prop('disabled', false);
+    }
+}

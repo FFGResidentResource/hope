@@ -5,6 +5,7 @@ package com.ffg.rrn.controller;
 
 import java.security.Principal;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -66,7 +66,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, "new");
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -100,7 +100,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(0l, serviceCoord);
+		Resident resident = residentService.getResidentById(0l, serviceCoord, "new");
 		resident = residentService.getAllQuestionnaire(resident);
 
 		model.addAttribute("resident", resident);
@@ -120,7 +120,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(0l, serviceCoord);
+		Resident resident = residentService.getResidentById(0l, serviceCoord, "new");
 		resident = residentService.getAllQuestionnaire(resident);
 
 		model.addAttribute("resident", resident);
@@ -131,7 +131,8 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getCurrentAssessment", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getCurrentAssessment(@RequestParam("residentId") Long residentId, @RequestParam("lifeDomain") String lifeDomain, Model model, Principal principal) throws Exception {
+	public String getCurrentAssessment(@RequestParam("residentId") Long residentId, @RequestParam("lifeDomain") String lifeDomain,
+			@RequestParam(name = "onThisDate", required = false, defaultValue = "new") String onThisDate, Model model, Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -140,7 +141,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -166,7 +167,8 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getReferralForm", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getReferralForm(@RequestParam("residentId") Long residentId, @RequestParam("entryPoint") String entryPoint, Model model, Principal principal) throws Exception {
+	public String getReferralForm(@RequestParam("residentId") Long residentId, @RequestParam("entryPoint") String entryPoint,
+			@RequestParam(name = "onThisDate", required = false, defaultValue = "new") String onThisDate, Model model, Principal principal) throws Exception {
 
 			// (1) (en)
 			// After user login successfully.
@@ -177,7 +179,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
 
 		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
 
@@ -217,7 +219,8 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getActionPlan", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getActionPlan(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+	public String getActionPlan(@RequestParam("residentId") Long residentId, @RequestParam(name = "onThisDate", required = false, defaultValue = "new") String onThisDate, Model model,
+			Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -226,7 +229,23 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
+
+		resident.setSelectedDate(onThisDate);
+
+		if (StringUtils.equals("new", onThisDate)) {
+
+			resident.setPlanOfAction(null);
+			resident.setPlanDetails(null);
+			resident.setReferralPartner(null);
+			resident.setAnticipatedDates(null);
+			resident.setAnticipatedOutcome(null);
+			resident.setFollowUpNotes(null);
+			resident.setOutcomesAchieved(null);
+			resident.setCompletionDates(null);
+			resident.setAchievedGoals(null);
+
+		}
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -319,7 +338,8 @@ public class ResidentController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getCaseNotes", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getCaseNotes(@RequestParam("residentId") Long residentId, Model model, Principal principal) throws Exception {
+	public String getCaseNotes(@RequestParam("residentId") Long residentId, @RequestParam(name = "onThisDate", required = false, defaultValue = "new") String onThisDate, Model model,
+			Principal principal) throws Exception {
 
 		// (1) (en)
 		// After user login successfully.
@@ -328,7 +348,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -422,7 +442,13 @@ public class ResidentController extends BaseController {
 
 	@PostMapping(value = "/saveActionPlan")
 	public String saveActionPlan(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
-		residentService.saveActionPlan(resident);
+
+		if (StringUtils.equals(resident.getSelectedDate(), "new")) {
+
+			residentService.saveActionPlan(resident);
+		} else {
+			residentService.updateActionPlan(resident);
+		}
 
 		return "redirect:/onboarding?residentId=" + resident.getResidentId();
 	}
@@ -446,31 +472,13 @@ public class ResidentController extends BaseController {
 		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
 
 		if (StringUtils.equals(resident.getSelectedDate(), "NewAssessment")) {
-			// If SC comes back today and select "New Assessment" on top of existing today's
-			// date assessment. then Today's "New Assessment" should be merged to existing
-			// today's saved assessment.
+
 			saveAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		} else {
 			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
 		}
 
 		return "redirect:/onboarding?residentId=" + resident.getResidentId();
-	}
-
-	@PostMapping("/saveAssessmentAndGoToNext")
-	public String saveAssessmentAndGoToNext(@Valid @ModelAttribute Resident resident, BindingResult bindingResult, Model model, Principal principal) throws Exception {
-
-		List<ResidentAssessmentQuestionnaire> questionnaires = getResidentAssessmentQuestionnaires(resident);
-
-		if (StringUtils.equals(resident.getSelectedDate(), "NewAssessment")) {
-			saveAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
-		} else {
-			updateAssessmentAndScore(resident, questionnaires, resident.getLifeDomain());
-		}
-
-		String nextUrl = lifeDomainNextUrlMap.get(resident.getLifeDomain());
-
-		return (nextUrl == null) ? "redirect:/allResident" : getCurrentAssessment(resident.getResidentId(), nextUrl, model, principal);
 	}
 
 	private List<ResidentAssessmentQuestionnaire> getResidentAssessmentQuestionnaires(Resident resident) {

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,7 +29,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import com.ffg.rrn.mapper.AssessmentMapper;
 import com.ffg.rrn.mapper.ChildrenMapper;
@@ -120,6 +120,21 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return sortedDatesOfAssessments.stream().distinct().collect(Collectors.toList());
 	}
 	
+	/**
+	 * This will display as dropdown on Action Plan Form
+	 * 
+	 * @param residentId
+	 * @return
+	 */
+	public List<String> getActionPlanDates(Long residentId) {
+		List<String> sortedDatesOfActionPlan = (List<String>) this.getJdbcTemplate().queryForList(
+				"select TO_CHAR(DATE_ADDED, '" + AppConstants.DATE_PATTERN_POSTGRE + "') FROM ACTION_PLAN " + " WHERE RESIDENT_ID = ?  ORDER BY DATE_ADDED DESC", new Object[] { residentId },
+				String.class);
+		if (CollectionUtils.isEmpty(sortedDatesOfActionPlan)) {
+			return Collections.emptyList();
+		}
+		return sortedDatesOfActionPlan.stream().distinct().collect(Collectors.toList());
+	}
 	
 
 	public List<ResidentAssessmentQuestionnaire> getAllAssessment(Long residentId, String onThisDate) {
@@ -196,15 +211,20 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return resident;
 	}
 
-	public Resident getResidentById(Long residentId, String serviceCoord) throws Exception {
+	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate) throws Exception {
 
 		ResidentMapper rowMapper = new ResidentMapper();
 		ChildrenMapper childMapper = new ChildrenMapper();
 		Resident resident = new Resident();
 
 		try {
-			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? ",
+
+			String dateSuffix = (StringUtils.equals("new", onThisDate) ? "" : " and ap.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ");
+
+
+			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? " + dateSuffix + " LIMIT 1",
 					new Object[] { residentId }, rowMapper);
+
 
 			WizardStepCounter wsCounter = new WizardStepCounter();
 
@@ -278,6 +298,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident.setHouseholdDates(
 				this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSEHOLD MANAGEMENT"));
 		
+		resident.setActionPlanDates(this.getActionPlanDates(residentId));
+
 		//resident.setHousingScoreGoal(this.getLatestScoreGoal(residentId, "HOUSING"));
 		//resident.setMoneyMgmtScoreGoal(this.getLatestScoreGoal(residentId, "MONEY MANAGEMENT"));
 		//resident.setEmploymentScoreGoal(this.getLatestScoreGoal(residentId, "EMPLOYMENT"));

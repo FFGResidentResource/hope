@@ -124,6 +124,36 @@ public class Dashboard {
 	private Integer rr14q3Count;
 	private Integer rr14q4Count;
 
+	private Integer housingQ1Count;
+	private Integer housingQ2Count;
+	private Integer housingQ3Count;
+	private Integer housingQ4Count;
+
+	private Integer mmQ1Count;
+	private Integer mmQ2Count;
+	private Integer mmQ3Count;
+	private Integer mmQ4Count;
+
+	private Integer empQ1Count;
+	private Integer empQ2Count;
+	private Integer empQ3Count;
+	private Integer empQ4Count;
+
+	private Integer eduQ1Count;
+	private Integer eduQ2Count;
+	private Integer eduQ3Count;
+	private Integer eduQ4Count;
+
+	private Integer nsQ1Count;
+	private Integer nsQ2Count;
+	private Integer nsQ3Count;
+	private Integer nsQ4Count;
+
+	private Integer hhQ1Count;
+	private Integer hhQ2Count;
+	private Integer hhQ3Count;
+	private Integer hhQ4Count;
+
 	private Integer totalActiveResident;
 
 }

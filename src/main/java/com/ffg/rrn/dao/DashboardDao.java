@@ -75,6 +75,24 @@ public class DashboardDao extends JdbcDaoSupport {
 	private static final String SQL_REFERRAL_REASON_14 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
 			+ " where (referral_reason ->> 'Utility Shut-off, scheduled for (Date):') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
 
+	private static final String SQL_HOUSING_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
+			+ " where  plan_of_action->>'HOUSING' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
+
+	private static final String SQL_MM_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
+			+ " where  plan_of_action->>'MONEY MANAGEMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
+
+	private static final String SQL_EMP_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
+			+ " where  plan_of_action->>'EMPLOYMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
+
+	private static final String SQL_EDU_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
+			+ " where  plan_of_action->>'EDUCATION' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
+
+	private static final String SQL_NS_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
+			+ " where  plan_of_action->>'NETWORK SUPPORT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
+
+	private static final String SQL_HH_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
+			+ " where  plan_of_action->>'HOUSEHOLD MANAGEMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
+
 	@Autowired
 	public DashboardDao(DataSource dataSource) {
 		this.setDataSource(dataSource);
@@ -640,6 +658,180 @@ public class DashboardDao extends JdbcDaoSupport {
 			}
 			if (quarterCount.getQuarter() == 4) {
 				dashboard.setRr14q4Count(quarterCount.getCount());
+			}
+		}
+
+		qcList = new ArrayList<QuarterCount>();
+		qcList = this.getJdbcTemplate().query(SQL_HOUSING_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
+			try {
+				QuarterCount qc = new QuarterCount();
+				qc.setQuarter(rs.getInt("quarter"));
+				qc.setCount(rs.getInt("count"));
+
+				return qc;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+
+		for (QuarterCount quarterCount : qcList) {
+
+			if (quarterCount.getQuarter() == 1) {
+				dashboard.setHousingQ1Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 2) {
+				dashboard.setHousingQ2Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 3) {
+				dashboard.setHousingQ3Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 4) {
+				dashboard.setHousingQ4Count(quarterCount.getCount());
+			}
+		}
+
+		qcList = new ArrayList<QuarterCount>();
+		qcList = this.getJdbcTemplate().query(SQL_MM_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
+			try {
+				QuarterCount qc = new QuarterCount();
+				qc.setQuarter(rs.getInt("quarter"));
+				qc.setCount(rs.getInt("count"));
+
+				return qc;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+
+		for (QuarterCount quarterCount : qcList) {
+
+			if (quarterCount.getQuarter() == 1) {
+				dashboard.setMmQ1Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 2) {
+				dashboard.setMmQ2Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 3) {
+				dashboard.setMmQ3Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 4) {
+				dashboard.setMmQ4Count(quarterCount.getCount());
+			}
+		}
+
+		qcList = new ArrayList<QuarterCount>();
+		qcList = this.getJdbcTemplate().query(SQL_EMP_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
+			try {
+				QuarterCount qc = new QuarterCount();
+				qc.setQuarter(rs.getInt("quarter"));
+				qc.setCount(rs.getInt("count"));
+
+				return qc;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+
+		for (QuarterCount quarterCount : qcList) {
+
+			if (quarterCount.getQuarter() == 1) {
+				dashboard.setEmpQ1Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 2) {
+				dashboard.setEmpQ2Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 3) {
+				dashboard.setEmpQ3Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 4) {
+				dashboard.setEmpQ4Count(quarterCount.getCount());
+			}
+		}
+
+		qcList = new ArrayList<QuarterCount>();
+		qcList = this.getJdbcTemplate().query(SQL_EDU_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
+			try {
+				QuarterCount qc = new QuarterCount();
+				qc.setQuarter(rs.getInt("quarter"));
+				qc.setCount(rs.getInt("count"));
+
+				return qc;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+
+		for (QuarterCount quarterCount : qcList) {
+
+			if (quarterCount.getQuarter() == 1) {
+				dashboard.setEduQ1Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 2) {
+				dashboard.setEduQ2Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 3) {
+				dashboard.setEduQ3Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 4) {
+				dashboard.setEduQ4Count(quarterCount.getCount());
+			}
+		}
+
+		qcList = new ArrayList<QuarterCount>();
+		qcList = this.getJdbcTemplate().query(SQL_NS_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
+			try {
+				QuarterCount qc = new QuarterCount();
+				qc.setQuarter(rs.getInt("quarter"));
+				qc.setCount(rs.getInt("count"));
+
+				return qc;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+
+		for (QuarterCount quarterCount : qcList) {
+
+			if (quarterCount.getQuarter() == 1) {
+				dashboard.setNsQ1Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 2) {
+				dashboard.setNsQ2Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 3) {
+				dashboard.setNsQ3Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 4) {
+				dashboard.setNsQ4Count(quarterCount.getCount());
+			}
+		}
+
+		qcList = new ArrayList<QuarterCount>();
+		qcList = this.getJdbcTemplate().query(SQL_HH_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
+			try {
+				QuarterCount qc = new QuarterCount();
+				qc.setQuarter(rs.getInt("quarter"));
+				qc.setCount(rs.getInt("count"));
+
+				return qc;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+
+		for (QuarterCount quarterCount : qcList) {
+
+			if (quarterCount.getQuarter() == 1) {
+				dashboard.setHhQ1Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 2) {
+				dashboard.setHhQ2Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 3) {
+				dashboard.setHhQ3Count(quarterCount.getCount());
+			}
+			if (quarterCount.getQuarter() == 4) {
+				dashboard.setHhQ4Count(quarterCount.getCount());
 			}
 		}
 

@@ -3,6 +3,7 @@
  */
 package com.ffg.rrn.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,20 @@ public class RestAPIController {
 
 		List<Resident> allResident = residentService.getAllResident();
 
-		return ResponseEntity.ok(allResident);
+		// Create a new ArrayList
+		ArrayList<Resident> newList = new ArrayList<Resident>();
+
+		// Traverse through the first list
+		for (Resident element : allResident) {
+
+			// If this element is not present in newList
+			// then add it
+			if (!newList.contains(element)) {
+				newList.add(element);
+			}
+		}
+
+		return ResponseEntity.ok(newList);
 	}
 
 	@PostMapping("/getAllProperty")
