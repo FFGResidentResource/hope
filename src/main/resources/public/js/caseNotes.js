@@ -1,6 +1,17 @@
 jQuery(document).ready(function() {
     
     validateAndShowMessage();
+    
+    var resId = jQuery.urlParam('residentId');
+    var onThisDate = jQuery.urlParam('onThisDate');
+    
+    var currHref = jQuery("#_loadCaseNotes").attr('href');
+    var prefix = currHref.split('&');
+    
+    if(jQuery("#_dates").val() != 'new') {
+	jQuery('#_loadCaseNotes').attr('href', prefix[0] + '&residentId='+resId + '&onThisDate='+onThisDate );
+    }
+    
 });
 
 function validateAndShowMessage(){

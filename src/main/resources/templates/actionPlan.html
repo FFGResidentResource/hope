@@ -55,27 +55,31 @@
 
 				<div class="col-sm-12 myPanel">
 					<div class="row">
-						<div class="col-sm-7">
+						<div class="col-sm-8">
 							<h3 style="width: 400px;">ACTION PLAN</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>							
 						</div>
 						
-						<div class="col-sm-2 hidden-print">
-						<select class="form-control setable" id="_dates"
-									th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
-									<option value="new">New Action Plan</option>
-									<option th:each="actionPlanDate : ${resident.actionPlanDates}"
-										th:value="${actionPlanDate}" th:utext="${actionPlanDate}" />
-							</select>
-						</div>
-						<div class="col-sm-1 hidden-print">
-							<a id="_loadActionPlan" class="btn btn-default btn-sm"								
-								th:href="@{/getActionPlan?entryPoint=onboarding}"> <span
-								class="glyphicon glyphicon-cloud-download" style="color: goldenrod;"
-								aria-hidden="true"></span> Retrieve
-							</a>
-						</div>
+						<div class="col-sm-4">
+							<table class="table-responsive table-condensed">
+								<tr><td><select class="form-control input-sm" id="_dates"
+										th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
+										<option value="new">New Action Plan</option>
+										<option th:each="actionPlanDate : ${resident.actionPlanDates}"
+											th:value="${actionPlanDate}" th:utext="${actionPlanDate}" />
+								</select></td>
+								<td style="vertical-align: middle;"><span class="glyphicon glyphicon-arrow-right" style="color:crimson;"></span></td>
+								<td><a id="_loadActionPlan" class="btn btn-default btn-sm"								
+									th:href="@{/getActionPlan?entryPoint=onboarding}"> <span
+									class="glyphicon glyphicon-cloud-download" style="color: goldenrod;"
+									aria-hidden="true"></span> Retrieve
+								</a></td>
+								
+								</tr>
+							</table>
+						</div>						
+						
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 						</div>

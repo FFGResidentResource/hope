@@ -24,6 +24,16 @@
 jQuery(document).ready(function() {
     
     validateAndShowMessage();
+    
+    var resId = jQuery.urlParam('residentId');
+    var onThisDate = jQuery.urlParam('onThisDate');
+    
+    var currHref = jQuery("#_loadActionPlan").attr('href');
+    var prefix = currHref.split('&');
+    
+    if(jQuery("#_dates").val() != 'new') {
+	jQuery('#_loadActionPlan').attr('href', prefix[0] + '&residentId='+resId + '&onThisDate='+onThisDate );
+    }
 
     jQuery.ajax({
 	type : "POST",
@@ -47,6 +57,9 @@ jQuery(document).ready(function() {
 
     // set current date
     $("#_currentDate").text(new Date().toLocaleDateString());
+    
+    
+    
 });
 
 function buildAchorTagForSelectedDate(that, residentId){

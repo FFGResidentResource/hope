@@ -227,7 +227,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return resident;
 	}
 
-	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate) throws Exception {
+	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate, String stepName) throws Exception {
 
 		ResidentMapper rowMapper = new ResidentMapper();
 		ChildrenMapper childMapper = new ChildrenMapper();
@@ -235,8 +235,20 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		try {
 
-			String dateSuffix = (StringUtils.equals("new", onThisDate) ? ""
-					: " and ( ap.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') OR cn.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ) ");
+			String dateSuffix = "";
+
+			switch (stepName) {
+			case "ActionPlan":
+
+				dateSuffix = (StringUtils.equals("new", onThisDate) ? "" : " and ap.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ");
+
+				break;
+			case "ContactNotes":
+
+				dateSuffix = (StringUtils.equals("new", onThisDate) ? "" : " and cn.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ");
+
+				break;
+			}
 
 			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? " + dateSuffix + " LIMIT 1",
 					new Object[] { residentId }, rowMapper);

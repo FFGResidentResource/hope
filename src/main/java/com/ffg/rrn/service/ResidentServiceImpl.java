@@ -164,8 +164,8 @@ public class ResidentServiceImpl {
 		return this.residentDao.getAllResident();
 	}
 
-	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate) throws Exception {
-		return this.residentDao.getResidentById(residentId, serviceCoord, onThisDate);
+	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate, String stepName) throws Exception {
+		return this.residentDao.getResidentById(residentId, serviceCoord, onThisDate, stepName);
 	}
 
 	public long saveResidentAssessmentQuestionnaire(

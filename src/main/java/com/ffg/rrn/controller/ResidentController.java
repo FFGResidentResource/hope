@@ -66,7 +66,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord, "new");
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, "new", "getResident");
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -100,7 +100,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(0l, serviceCoord, "new");
+		Resident resident = residentService.getResidentById(0l, serviceCoord, "new", "onboarding");
 		resident = residentService.getAllQuestionnaire(resident);
 
 		model.addAttribute("resident", resident);
@@ -120,7 +120,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(0l, serviceCoord, "new");
+		Resident resident = residentService.getResidentById(0l, serviceCoord, "new", "newResident");
 		resident = residentService.getAllQuestionnaire(resident);
 
 		model.addAttribute("resident", resident);
@@ -141,7 +141,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "currentAssessment");
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
@@ -179,7 +179,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "referralForm");
 
 		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
 
@@ -229,7 +229,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "ActionPlan");
 
 		resident.setSelectedDate(onThisDate);
 
@@ -348,7 +348,7 @@ public class ResidentController extends BaseController {
 			serviceCoord = populateSCinModel(model, principal);
 		}
 
-		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate);
+		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "ContactNotes");
 		resident.setSelectedDate(onThisDate);
 
 		if (StringUtils.equals("new", onThisDate)) {
