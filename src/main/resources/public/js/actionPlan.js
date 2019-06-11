@@ -20,19 +20,20 @@
     $('#_nsOutAch').text($('#_outcomesAchievedNS').val());
     $('#_hhOutAch').text($('#_outcomesAchievedHH').val());
 };*/
-
+    
 jQuery(document).ready(function() {
+
     
-    validateAndShowMessage();
-    
+    validateAndShowMessage();  
     var resId = jQuery.urlParam('residentId');
     var onThisDate = jQuery.urlParam('onThisDate');
-    
     var currHref = jQuery("#_loadActionPlan").attr('href');
     var prefix = currHref.split('&');
     
     if(jQuery("#_dates").val() != 'new') {
 	jQuery('#_loadActionPlan').attr('href', prefix[0] + '&residentId='+resId + '&onThisDate='+onThisDate );
+    }else{	
+	jQuery('#_loadActionPlan').attr('href', prefix[0] + '&residentId='+resId);
     }
 
     jQuery.ajax({
@@ -63,15 +64,16 @@ jQuery(document).ready(function() {
 });
 
 function buildAchorTagForSelectedDate(that, residentId){
-    var suffix = '&residentId='+residentId+'&onThisDate='+that.value;
     
-    if(that.value != 'new'){
-	jQuery("#_loadActionPlan").attr('disabled', false);
-        var currHref = jQuery("#_loadActionPlan").attr('href');
-        var prefix = currHref.split('&');
+    var resId = jQuery.urlParam('residentId');    
+    var suffix = '&residentId='+residentId+'&onThisDate='+that.value;
+    var currHref = jQuery("#_loadActionPlan").attr('href');
+    var prefix = currHref.split('&');
+    
+    if(that.value != 'new'){      
         jQuery('#_loadActionPlan').attr('href', prefix[0] + suffix);
     }else{
-	jQuery("#_loadActionPlan").attr('disabled', true);
+	jQuery('#_loadActionPlan').attr('href', prefix[0] + '&residentId='+resId);
     }
     
 }

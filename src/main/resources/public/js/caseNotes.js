@@ -10,6 +10,8 @@ jQuery(document).ready(function() {
     
     if(jQuery("#_dates").val() != 'new') {
 	jQuery('#_loadCaseNotes').attr('href', prefix[0] + '&residentId='+resId + '&onThisDate='+onThisDate );
+    }else{
+	jQuery('#_loadCaseNotes').attr('href', prefix[0] + '&residentId='+resId);
     }
     
 });
@@ -39,15 +41,16 @@ function validateAndShowMessage(){
 }
 
 function buildAchorTagForSelectedDate(that, residentId){
+    
+    var resId = jQuery.urlParam('residentId');
+    var currHref = jQuery("#_loadCaseNotes").attr('href');
+    var prefix = currHref.split('&');
     var suffix = '&residentId='+residentId+'&onThisDate='+that.value;
     
-    if(that.value != 'new'){
-	jQuery("#_loadCaseNotes").attr('disabled', false);
-        var currHref = jQuery("#_loadCaseNotes").attr('href');
-        var prefix = currHref.split('&');
+    if(that.value != 'new'){	   
         jQuery('#_loadCaseNotes').attr('href', prefix[0] + suffix);
-    }else{
-	jQuery("#_loadCaseNotes").attr('disabled', true);
+    }else{	
+	jQuery('#_loadCaseNotes').attr('href', prefix[0] + '&residentId='+resId);
     }
     
 }
