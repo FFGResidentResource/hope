@@ -125,13 +125,50 @@ function populateEachActionPlanFromJsonData() {
 
     if (jQuery("#_anticipatedOutcomeString").val() != '') {
 	var anticipatedOutcomeJson = JSON.parse(jQuery("#_anticipatedOutcomeString").val());
-
-	jQuery("#_aoHousing").val(anticipatedOutcomeJson["HOUSING"]);
-	jQuery("#_aoMM").val(anticipatedOutcomeJson["MONEY MANAGEMENT"]);
-	jQuery("#_aoEmp").val(anticipatedOutcomeJson["EMPLOYMENT"]);
-	jQuery("#_aoEdu").val(anticipatedOutcomeJson["EDUCATION"]);
-	jQuery("#_aoNS").val(anticipatedOutcomeJson["NETWORK SUPPORT"]);
-	jQuery("#_aoHH").val(anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]);
+	
+	//Following If else logic is because even though SC deletes values from referral form for anticipated Outcomes, existing historical values should popup again in this dropdown
+	if(jQuery("#_aoHousing:has(option[value='"+anticipatedOutcomeJson["HOUSING"]+"'])").length > 0 || anticipatedOutcomeJson["HOUSING"] == ''){
+	    jQuery("#_aoHousing").val(anticipatedOutcomeJson["HOUSING"]);
+	}else{
+	    jQuery("#_aoHousing").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["HOUSING"]).text(anticipatedOutcomeJson["HOUSING"]));
+	    jQuery("#_aoHousing").val(anticipatedOutcomeJson["HOUSING"]);
+	}
+	
+	if(jQuery("#_aoMM:has(option[value='"+anticipatedOutcomeJson["MONEY MANAGEMENT"]+"'])").length > 0 || anticipatedOutcomeJson["MONEY MANAGEMENT"] == ''){
+	    jQuery("#_aoMM").val(anticipatedOutcomeJson["MONEY MANAGEMENT"]);
+	}else{
+	    jQuery("#_aoMM").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["MONEY MANAGEMENT"]).text(anticipatedOutcomeJson["MONEY MANAGEMENT"]));
+	    jQuery("#_aoMM").val(anticipatedOutcomeJson["MONEY MANAGEMENT"]);
+	}
+	
+	if(jQuery("#_aoEmp:has(option[value='"+anticipatedOutcomeJson["EMPLOYMENT"]+"'])").length > 0 || anticipatedOutcomeJson["EMPLOYMENT"] == ''){
+	    jQuery("#_aoEmp").val(anticipatedOutcomeJson["EMPLOYMENT"]);
+	}else{
+	    jQuery("#_aoEmp").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["EMPLOYMENT"]).text(anticipatedOutcomeJson["EMPLOYMENT"]));
+	    jQuery("#_aoEmp").val(anticipatedOutcomeJson["EMPLOYMENT"]);
+	}
+	
+	if(jQuery("#_aoEdu:has(option[value='"+anticipatedOutcomeJson["EDUCATION"]+"'])").length > 0 || anticipatedOutcomeJson["EDUCATION"] == ''){
+	    jQuery("#_aoEdu").val(anticipatedOutcomeJson["EDUCATION"]);
+	}else{
+	    jQuery("#_aoEdu").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["EDUCATION"]).text(anticipatedOutcomeJson["EDUCATION"]));
+	    jQuery("#_aoEdu").val(anticipatedOutcomeJson["EDUCATION"]);
+	}
+	
+	if(jQuery("#_aoNS:has(option[value='"+anticipatedOutcomeJson["NETWORK SUPPORT"]+"'])").length > 0 || anticipatedOutcomeJson["NETWORK SUPPORT"] == ''){
+	    jQuery("#_aoNS").val(anticipatedOutcomeJson["NETWORK SUPPORT"]);
+	}else{
+	    jQuery("#_aoNS").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["NETWORK SUPPORT"]).text(anticipatedOutcomeJson["NETWORK SUPPORT"]));
+	    jQuery("#_aoNS").val(anticipatedOutcomeJson["NETWORK SUPPORT"]);
+	}
+	
+	if(jQuery("#_aoHH:has(option[value='"+anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]+"'])").length > 0 || anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"] == ''){
+	    jQuery("#_aoHH").val(anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]);
+	}else{
+	    jQuery("#_aoHH").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]).text(anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]));
+	    jQuery("#_aoHH").val(anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]);
+	}
+	
     }
     
     if (jQuery("#_anticipatedDateString").val() != '') {
