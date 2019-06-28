@@ -227,6 +227,7 @@ public class Resident {
 	private Date referralFormDateAdded;
 	private Date referralFormDateModified;
 	
+	private List<String> refPartners;
 
 	// Referral Form fields - End
 

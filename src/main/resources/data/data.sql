@@ -28,6 +28,7 @@ DROP TABLE RESIDENT;
 DROP TABLE ASSESSMENT_TYPE;
 DROP TABLE ASSESSMENT_QUESTIONNAIRE;
 DROP TABLE REFERRAL;
+DROP TABLE REFERRAL_PARTNER;
 
 DROP TABLE SCORE;
 DROP TABLE CHOICE;
@@ -65,6 +66,23 @@ CREATE SEQUENCE CN_SQ START 1;
 CREATE SEQUENCE RF_SQ START 1;
 
 CREATE SEQUENCE UR_SQ START 1;
+
+CREATE SEQUENCE RP_SQ START 1;
+
+CREATE TABLE REFERRAL_PARTNER (
+	REF_PAR_ID INT 				PRIMARY KEY NOT NULL,
+	REFERRAL_PARTNER_NAME 		VARCHAR(500),
+	ACTIVE						BOOLEAN DEFAULT TRUE
+);
+
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'ABC Company');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Dental Associates Ohio');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'XYZ Education Department');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Employment Division');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Ohio Housing Board');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Food Company');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Ohio Housing Board');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Erie Money Management');
 
 
 CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
@@ -618,6 +636,9 @@ INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50,
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE);
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE);
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE);
+
+
+
 
 --------------------------------------
  

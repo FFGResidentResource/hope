@@ -273,4 +273,8 @@ public class ResidentServiceImpl {
 
 	}
 
+	public List<String> getAllReferralPartners() {
+		return residentDao.getAllReferralPartners();
+	}
+
 	}

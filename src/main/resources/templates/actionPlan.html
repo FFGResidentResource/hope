@@ -291,9 +291,14 @@
 								<td><textarea class="form-control input-sm" rows="1"
 										id="_planDetailsHousing" style="resize: none;"
 										onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1"
-										id="_referralPartnerHousing" style="resize: none;"
-										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td>								
+								<select class="form-control  input-sm" id="_referralPartnerHousing">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select>		
+								</td>
 								<td><select class="form-control input-sm setable"
 									id="_aoHousing">
 										<option value="">Select</option>
@@ -351,9 +356,12 @@
 								<td><textarea class="form-control input-sm" rows="1"
 										id="_planDetailsMM" style="resize: none;"
 										onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1"
-										id="_referralPartnerMM" style="resize: none;"
-										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control  input-sm" id="_referralPartnerMM">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_aoMM">
 										<option value="">Select</option>
@@ -411,9 +419,12 @@
 								<td><textarea class="form-control input-sm" rows="1"
 										id="_planDetailsEmp" style="resize: none;"
 										onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1"
-										id="_referralPartnerEmp" style="resize: none;"
-										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control  input-sm" id="_referralPartnerEmp">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_aoEmp">
 										<option value="">Select</option>
@@ -471,9 +482,12 @@
 								<td><textarea class="form-control input-sm" rows="1"
 										id="_planDetailsEdu" style="resize: none;"
 										onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1"
-										id="_referralPartnerEdu" style="resize: none;"
-										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control  input-sm" id="_referralPartnerEdu">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_aoEdu">
 										<option value="">Select</option>
@@ -531,9 +545,12 @@
 								<td><textarea class="form-control input-sm" rows="1"
 										id="_planDetailsNS" style="resize: none;"
 										onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1"
-										id="_referralPartnerNS" style="resize: none;"
-										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control  input-sm" id="_referralPartnerNS">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_aoNS">
 										<option value="">Select</option>
@@ -591,9 +608,12 @@
 								<td><textarea class="form-control input-sm" rows="1"
 										id="_planDetailsHH" style="resize: none;"
 										onkeyup="validateInput(this)" draggable="false"></textarea></td>
-								<td><textarea class="form-control input-sm" rows="1"
-										id="_referralPartnerHH" style="resize: none;"
-										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control  input-sm" id="_referralPartnerHH">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_aoHH">
 										<option value="">Select</option>

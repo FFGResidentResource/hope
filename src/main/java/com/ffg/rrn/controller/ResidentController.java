@@ -318,6 +318,8 @@ public class ResidentController extends BaseController {
 
 		resident.setAnticipatedOutcomesList(anticipatedOutcomes);
 
+			resident.setRefPartners(residentService.getAllReferralPartners());
+
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
 

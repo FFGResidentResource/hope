@@ -600,6 +600,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 		}
 	}
 
+	public List<String> getAllReferralPartners() {
+		List<String> refPartners = (List<String>) this.getJdbcTemplate().queryForList("SELECT referral_partner_name from referral_partner  ORDER BY referral_partner_name", String.class);
+		if (CollectionUtils.isEmpty(refPartners)) {
+			return Collections.emptyList();
+		}
+		return refPartners.stream().distinct().collect(Collectors.toList());
+	}
 
 
 }
