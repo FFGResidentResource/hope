@@ -95,6 +95,8 @@ function calculateHousingScore() {
 				jQuery('input[id^=_housingQuestionnaire_5]').prop('checked',false);
 				jQuery('input[id^=_housingQuestionnaire_4]').prop('disabled',true);
 				jQuery('input[id^=_housingQuestionnaire_5]').prop('disabled',true);
+				
+				question678(qChoice6, qChoice7, qChoice8);	
 			} 
 			
 			else {
@@ -147,61 +149,68 @@ function calculateHousingScore() {
 	
 					}
 	
-					else{
-						
-						jQuery('input[id^=_housingQuestionnaire_6]').prop('disabled', false);
-						jQuery('input[id^=_housingQuestionnaire_7]').prop('disabled', false);
-						jQuery('input[id^=_housingQuestionnaire_8]').prop('disabled', false);
-						
-						if (qChoice6[0].checked == true) {
-	
-							jQuery('input[id^=_housingQuestionnaire_7]').prop('checked', false);
-							jQuery('input[id^=_housingQuestionnaire_8]').prop('checked', false);
-		
-							jQuery('input[id^=_housingQuestionnaire_7]').prop('disabled', true);
-							jQuery('input[id^=_housingQuestionnaire_8]').prop('disabled', true);
-		
-							jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
-							jQuery('#currentHousingScore').val(2);
-							jQuery('#hst_6_body').text(2);
-							jQuery('#currentHousingGoal').val(3);
-							jQuery('#hst_7_body').text(3);
-	
-						}
-	
-						else {
-							
-							jQuery('input[id^=_housingQuestionnaire_7]').prop('disabled', false);
-							jQuery('input[id^=_housingQuestionnaire_8]').prop('disabled', false);
-		
-							
-								if (qChoice7[1].checked == true) {
-		
-									jQuery('[id^=hst_3_]').removeClass('info').addClass('info');
-									jQuery('#currentHousingScore').val(3);
-									jQuery('#hst_6_body').text(3);
-									jQuery('#currentHousingGoal').val(4);
-									jQuery('#hst_7_body').text(4);
-		
-								} else if (qChoice8[0].checked == true) {
-		
-									jQuery('[id^=hst_4_]').removeClass('success').addClass('success');
-									jQuery('#currentHousingScore').val(4);
-									jQuery('#hst_6_body').text(4);
-									jQuery('#currentHousingGoal').val(5);
-									jQuery('#hst_7_body').text(5);
-		
-								} else if (qChoice8[1].checked == true) {
-									jQuery('[id^=hst_5_]').removeClass('success').addClass('success');
-									jQuery('#currentHousingScore').val(5);
-									jQuery('#hst_6_body').text(5);
-									jQuery('#currentHousingGoal').val(5);
-									jQuery('#hst_7_body').text(5);
-								}
-						}
+					else {						
+					    question678(qChoice6, qChoice7, qChoice8);						
 					}
 				}
 			}
 		}
 	}
+}
+
+
+function question678(qChoice6, qChoice7, qChoice8){
+    
+    jQuery('input[id^=_housingQuestionnaire_6]').prop('disabled', false);
+    jQuery('input[id^=_housingQuestionnaire_7]').prop('disabled', false);
+    jQuery('input[id^=_housingQuestionnaire_8]').prop('disabled', false);
+	
+	
+	if (qChoice6[0].checked == true) {
+
+		jQuery('input[id^=_housingQuestionnaire_7]').prop('checked', false);
+		jQuery('input[id^=_housingQuestionnaire_8]').prop('checked', false);
+
+		jQuery('input[id^=_housingQuestionnaire_7]').prop('disabled', true);
+		jQuery('input[id^=_housingQuestionnaire_8]').prop('disabled', true);
+
+		jQuery('[id^=hst_2_]').removeClass('warning').addClass('warning');
+		jQuery('#currentHousingScore').val(2);
+		jQuery('#hst_6_body').text(2);
+		jQuery('#currentHousingGoal').val(3);
+		jQuery('#hst_7_body').text(3);
+
+	}
+
+	else {
+		
+		jQuery('input[id^=_housingQuestionnaire_7]').prop('disabled', false);
+		jQuery('input[id^=_housingQuestionnaire_8]').prop('disabled', false);
+
+		
+			if (qChoice7[1].checked == true) {
+
+				jQuery('[id^=hst_3_]').removeClass('info').addClass('info');
+				jQuery('#currentHousingScore').val(3);
+				jQuery('#hst_6_body').text(3);
+				jQuery('#currentHousingGoal').val(4);
+				jQuery('#hst_7_body').text(4);
+
+			} else if (qChoice8[0].checked == true) {
+
+				jQuery('[id^=hst_4_]').removeClass('success').addClass('success');
+				jQuery('#currentHousingScore').val(4);
+				jQuery('#hst_6_body').text(4);
+				jQuery('#currentHousingGoal').val(5);
+				jQuery('#hst_7_body').text(5);
+
+			} else if (qChoice8[1].checked == true) {
+				jQuery('[id^=hst_5_]').removeClass('success').addClass('success');
+				jQuery('#currentHousingScore').val(5);
+				jQuery('#hst_6_body').text(5);
+				jQuery('#currentHousingGoal').val(5);
+				jQuery('#hst_7_body').text(5);
+			}
+	}
+    
 }
