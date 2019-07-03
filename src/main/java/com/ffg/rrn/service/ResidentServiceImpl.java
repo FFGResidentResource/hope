@@ -268,6 +268,10 @@ public class ResidentServiceImpl {
 		return dashboardDao.pullDashboard(dashboard);
 	}
 
+	public Integer getTotalActiveResident() {
+		return dashboardDao.getTotalActiveResident();
+	}
+
 	public long updateCaseNotes(@Valid Resident resident) {
 		return caseNotesDao.updateCaseNotes(resident);
 

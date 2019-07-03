@@ -38,21 +38,8 @@ function pullDashboard(){
 	dataType : 'json',
 	cache : false,
 	timeout : 600000,
-	success : function(data) {
+	success : function(data) {  
 	    
-	    jQuery("#_unitsTotalQ1").text(data.q1Units);
-	    jQuery("#_unitsTotalQ2").text(data.q2Units);
-	    jQuery("#_unitsTotalQ3").text(data.q3Units);
-	    jQuery("#_unitsTotalQ4").text(data.q4Units);
-	    
-	    jQuery('#_unitsTotalYTD').text(data.q1Units + data.q2Units + data.q3Units + data.q4Units);
-	    
-	    jQuery("#_resTotalQ1").text(data.q1Residents);
-	    jQuery("#_resTotalQ2").text(data.q2Residents);
-	    jQuery("#_resTotalQ3").text(data.q3Residents);
-	    jQuery("#_resTotalQ4").text(data.q4Residents);
-	    
-	    jQuery('#_resTotalYTD').text(data.q1Residents + data.q2Residents + data.q3Residents + data.q4Residents);
 	    
 	    jQuery("#_signupQ1").text(data.q1SignUpComplete);
 	    jQuery("#_signupQ2").text(data.q2SignUpComplete);
@@ -189,10 +176,8 @@ function pullDashboard(){
 	    jQuery("#_hhQ2").text(data.hhQ2Count);
 	    jQuery("#_hhQ3").text(data.hhQ3Count);
 	    jQuery("#_hhQ4").text(data.hhQ4Count);
-	    jQuery('#_hhYTD').text(data.hhQ1Count + data.hhQ2Count + data.hhQ3Count + data.hhQ4Count);
-	    
-	    
-	    jQuery('#_totalResidents').text(data.totalActiveResident)
+	    jQuery('#_hhYTD').text(data.hhQ1Count + data.hhQ2Count + data.hhQ3Count + data.hhQ4Count);    
+	   
 	},
 	error : function(e) {
 	    console.log("ERROR : ", e);

@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -43,6 +44,24 @@ public class DashboardController extends BaseController {
 
 		Dashboard dashboard = new Dashboard();
 		dashboard.setProperties(allProperty);
+
+		int total = 0;
+		if (!CollectionUtils.isEmpty(allProperty)) {
+			for (Property property : allProperty) {
+				total = total + property.getUnit();
+			}
+			dashboard.setTotalNoOfUnits(total);
+		}
+
+		total = 0;
+		if (!CollectionUtils.isEmpty(allProperty)) {
+			for (Property property : allProperty) {
+				total = total + property.getNoOfResident();
+			}
+			dashboard.setTotalNoOfResidents(total);
+		}
+
+		dashboard.setTotalActiveResidents(residentService.getTotalActiveResident());
 
 		model.addAttribute("dashboard", dashboard);
 

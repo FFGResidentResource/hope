@@ -835,9 +835,12 @@ public class DashboardDao extends JdbcDaoSupport {
 			}
 		}
 
-		Integer total = this.getJdbcTemplate().queryForObject(SQL_TOTAL_RESIDENT, Integer.class);
-		dashboard.setTotalActiveResident(total);
+
 
 		return dashboard;
+	}
+
+	public Integer getTotalActiveResident() {
+		return this.getJdbcTemplate().queryForObject(SQL_TOTAL_RESIDENT, Integer.class);
 	}
 }

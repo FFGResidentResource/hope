@@ -690,6 +690,85 @@ values (nextval('UR_SQ'), 5, 2);
 
 ---
 
+CREATE MATERIALIZED VIEW SERVICE_CATEGORY_VW
+AS 
+SELECT P."SRVC_CAT"||'_'||P."QUARTER"||'_'||P."YEAR" AS "PRIMARY_CAT", P."SRVC_CAT" AS "SRVC_CAT", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", SUM(P."COUNT"::FLOAT) AS "COUNT" from (
+SELECT
+    plan_of_action->>'HOUSING' AS "SRVC_CAT", 
+    count(plan_of_action->>'HOUSING') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'HOUSING' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'HOUSING' not in ('')
+GROUP BY
+     plan_of_action->>'HOUSING', extract(quarter from date_Added), extract (year from date_added)
+UNION 
+SELECT
+    plan_of_action->>'MONEY MANAGEMENT' AS "SRVC_CAT", 
+    count(plan_of_action->>'MONEY MANAGEMENT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'MONEY MANAGEMENT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'MONEY MANAGEMENT' not in ('')
+GROUP BY
+     plan_of_action->>'MONEY MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)
+UNION 
+SELECT
+    plan_of_action->>'EDUCATION' AS "SRVC_CAT", 
+    count(plan_of_action->>'EDUCATION') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'EDUCATION' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'EDUCATION' not in ('')
+GROUP BY
+     plan_of_action->>'EDUCATION', extract(quarter from date_Added), extract (year from date_added)
+UNION 
+SELECT
+    plan_of_action->>'EMPLOYMENT' AS "SRVC_CAT", 
+    count(plan_of_action->>'EMPLOYMENT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'EMPLOYMENT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'EMPLOYMENT' not in ('')
+GROUP BY
+     plan_of_action->>'EMPLOYMENT', extract(quarter from date_Added), extract (year from date_added)
+UNION
+SELECT
+    plan_of_action->>'NETWORK SUPPORT' AS "SRVC_CAT", 
+    count(plan_of_action->>'NETWORK SUPPORT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'NETWORK SUPPORT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'NETWORK SUPPORT' not in ('')
+GROUP BY
+     plan_of_action->>'NETWORK SUPPORT', extract(quarter from date_Added), extract (year from date_added)
+UNION
+SELECT
+    plan_of_action->>'HOUSEHOLD MANAGEMENT' AS "SRVC_CAT", 
+    count(plan_of_action->>'HOUSEHOLD MANAGEMENT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'HOUSEHOLD MANAGEMENT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'HOUSEHOLD MANAGEMENT' not in ('')
+GROUP BY
+     plan_of_action->>'HOUSEHOLD MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)) P
+GROUP BY P."SRVC_CAT", P."QUARTER", P."YEAR"
+ORDER BY P."SRVC_CAT"
+WITH NO DATA;
+
+REFRESH MATERIALIZED VIEW SERVICE_CATEGORY_VW;
+
+CREATE UNIQUE INDEX srvc_cat_quarter_year ON SERVICE_CATEGORY_VW("PRIMARY_CAT");
+	
+REFRESH MATERIALIZED VIEW CONCURRENTLY SERVICE_CATEGORY_VW;
+
+
 
 
 --Example for Questionnaire

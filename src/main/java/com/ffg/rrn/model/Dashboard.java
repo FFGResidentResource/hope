@@ -154,6 +154,28 @@ public class Dashboard {
 	private Integer hhQ3Count;
 	private Integer hhQ4Count;
 
-	private Integer totalActiveResident;
+	private Integer totalActiveResidents;
+
+	private Integer totalNoOfUnits;
+
+	private Integer totalNoOfResidents;
+
+	private Integer ongoingResidents;
+
+	private Integer newResidents;
+
+	/*
+	 * private Integer getTotalNoOfUnits() {
+	 * 
+	 * Integer total = 0; if (!CollectionUtils.isEmpty(this.getProperties())) { for
+	 * (Property property : properties) { total = total + property.getUnit(); } }
+	 * return total; }
+	 * 
+	 * private Integer getTotalNoOfResidents() {
+	 * 
+	 * Integer total = 0; if (!CollectionUtils.isEmpty(this.getProperties())) { for
+	 * (Property property : properties) { total = total +
+	 * property.getNoOfResident(); } } return total; }
+	 */
 
 }
