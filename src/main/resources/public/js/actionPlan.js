@@ -399,7 +399,10 @@ function validateAndShowMessage(){
 	jQuery("#_actionPlanErrorMessage").removeClass('hideme');
 	jQuery("input[type='submit']").prop('disabled', true);
     }else{
-	jQuery("#_actionPlanErrorMessage").removeClass('hideme').addClass('hideme');
-	jQuery("input[type='submit']").prop('disabled', false);
+	
+	if (jQuery("#_mostRecentSSMDate").text() != '--')
+	    jQuery("#_actionPlanErrorMessage").removeClass('hideme').addClass('hideme');
+		jQuery("input[type='submit']").prop('disabled', false);
+    	}
     }
 }

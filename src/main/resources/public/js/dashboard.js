@@ -48,6 +48,14 @@ function pullDashboard(){
 	    
 	    jQuery('#_signupYTD').text(data.q1SignUpComplete + data.q2SignUpComplete + data.q3SignUpComplete + data.q4SignUpComplete);
 	    
+	    
+	    jQuery("#_resServedQ1").text(data.residentServedQ1);
+	    jQuery("#_resServedQ2").text(data.residentServedQ2);
+	    jQuery("#_resServedQ3").text(data.residentServedQ3);
+	    jQuery("#_resServedQ4").text(data.residentServedQ4);
+	    
+	    jQuery('#_resServedYTD').text(data.residentServedQ1 + data.residentServedQ2 + data.residentServedQ3 + data.residentServedQ4);
+	    
 	    jQuery("#_ssmQ1").text(data.q1AssessmentComplete);
 	    jQuery("#_ssmQ2").text(data.q2AssessmentComplete);
 	    jQuery("#_ssmQ3").text(data.q3AssessmentComplete);

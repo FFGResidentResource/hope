@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,6 +94,10 @@ public class DashboardDao extends JdbcDaoSupport {
 	private static final String SQL_HH_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
 			+ " where  plan_of_action->>'HOUSEHOLD MANAGEMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
 
+	private static final String SQL_NEW_RESIDENT_TOTAL = "select count(*) from NEW_RESIDENT_VIEW";
+
+	private static final String SQL_ONGOING_RESIDENT_TOTAL = "select count(*) from ONGOING_RESIDENT_VIEW";
+
 	@Autowired
 	public DashboardDao(DataSource dataSource) {
 		this.setDataSource(dataSource);
@@ -100,23 +105,44 @@ public class DashboardDao extends JdbcDaoSupport {
 
 	public Dashboard pullDashboard(Dashboard dashboard) {
 
-		String SQL_ALL_RESIDENT_PER_QUARTER = "select extract(quarter from date_Added) as quarter, count(*) as count from resident where extract(year from date_added) = ? and prop_id in (:ids) group by extract(quarter from date_Added)";
+		String RESIDENT_SERVED = "select count(*) from resident_served_view where \r\n" + "(\"RESQ\" = ? OR \"SSMQ\" = ? OR \"CNQ\" = ? OR \"APQ\" = ?) AND \r\n"
+				+ "(\"RESY\" = ? OR \"SSMY\" = ? OR \"CNY\" = ? OR \"APY\" = ?)";
 
-		String SQL_ALL_UNITS_PER_QUARTER = "select count(*) * p.unit as count, extract(quarter from date_Added) as quarter from resident r join Property p on r.prop_id = p.prop_id "
-				+ " 	where extract(year from date_added) = ? and p.prop_id in (:ids) group by p.unit, extract(quarter from date_Added)";
+		int year = Integer.parseInt(dashboard.getYear());
+
+		try {
+			dashboard.setResidentServedQ1(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 1, 1, 1, 1, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ1(0l);
+		}
+
+		try {
+		dashboard.setResidentServedQ2(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 2, 2, 2, 2, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ2(0l);
+		}
+		try {
+		dashboard.setResidentServedQ3(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 3, 3, 3, 3, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ3(0l);
+		}
+		try {
+		dashboard.setResidentServedQ4(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 4, 4, 4, 4, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ4(0l);
+		}
 
 		String SQL_ASSESSMENT_COMPLETED = "select count(*) as count, extract(quarter from on_this_date) as quarter from resident_score_goal rsg"
 				+ " join resident r on r.resident_id = rsg.resident_id and r.prop_id in (:ids) where extract(year from on_this_Date) = ? group by extract(quarter from on_this_Date)";
 
 		String SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = "select count(*) as count, extract(quarter from date_Added) as quarter from resident where extract(year from date_added) = ? and prop_id in  (:ids) and ack_pr = 'TRUE' group by extract(quarter from date_Added) ";
 
-		String SQL_NO_OF_PROP_ACTIVE_RESIDENT = "";
-
 		List<Property> properties = dashboard.getProperties();
 		Set<Integer> ids = new HashSet<Integer>();
 
 		String idString = "";
 
+		// How many Properties are checked on home page
 		for (Property property : properties) {
 
 			if (property.getChecked()) {
@@ -127,75 +153,14 @@ public class DashboardDao extends JdbcDaoSupport {
 		}
 
 		if (StringUtils.isNotEmpty(idString)) {
-			SQL_ALL_RESIDENT_PER_QUARTER = SQL_ALL_RESIDENT_PER_QUARTER.replace(":ids", idString.substring(0, idString.length() - 1));
-			SQL_ALL_UNITS_PER_QUARTER = SQL_ALL_UNITS_PER_QUARTER.replace(":ids", idString.substring(0, idString.length() - 1));
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace(":ids", idString.substring(0, idString.length() - 1));
 			SQL_ASSESSMENT_COMPLETED = SQL_ASSESSMENT_COMPLETED.replace(":ids", idString.substring(0, idString.length() - 1));
 		} else {
-			SQL_ALL_RESIDENT_PER_QUARTER = SQL_ALL_RESIDENT_PER_QUARTER.replace("and prop_id in (:ids)", "");
-			SQL_ALL_UNITS_PER_QUARTER = SQL_ALL_UNITS_PER_QUARTER.replace("and p.prop_id in (:ids)", "");
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace("and prop_id in (:ids)", "");
 			SQL_ASSESSMENT_COMPLETED = SQL_ASSESSMENT_COMPLETED.replace("and r.prop_id in (:ids)", "");
 		}
 
-		List<QuarterCount> qcList = this.getJdbcTemplate().query(SQL_ALL_RESIDENT_PER_QUARTER, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setQ1Residents(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setQ2Residents(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setQ3Residents(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setQ4Residents(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_ALL_UNITS_PER_QUARTER, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setQ1Units(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setQ2Units(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setQ3Units(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setQ4Units(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
+		List<QuarterCount> qcList = new ArrayList<QuarterCount>();
 		qcList = this.getJdbcTemplate().query(SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
 			try {
 				QuarterCount qc = new QuarterCount();
@@ -840,7 +805,16 @@ public class DashboardDao extends JdbcDaoSupport {
 		return dashboard;
 	}
 
-	public Integer getTotalActiveResident() {
-		return this.getJdbcTemplate().queryForObject(SQL_TOTAL_RESIDENT, Integer.class);
+	public Long getTotalActiveResident() {
+		return this.getJdbcTemplate().queryForObject(SQL_TOTAL_RESIDENT, Long.class);
 	}
+
+	public Long getNewResidents() {
+		return this.getJdbcTemplate().queryForObject(SQL_NEW_RESIDENT_TOTAL, Long.class);
+	}
+
+	public Long getOngoingResidents() {
+		return this.getJdbcTemplate().queryForObject(SQL_ONGOING_RESIDENT_TOTAL, Long.class);
+	}
+
 }

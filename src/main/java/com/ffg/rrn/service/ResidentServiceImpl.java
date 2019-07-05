@@ -268,8 +268,16 @@ public class ResidentServiceImpl {
 		return dashboardDao.pullDashboard(dashboard);
 	}
 
-	public Integer getTotalActiveResident() {
+	public Long getTotalActiveResident() {
 		return dashboardDao.getTotalActiveResident();
+	}
+
+	public Long getNewResidents() {
+		return dashboardDao.getNewResidents();
+	}
+
+	public Long getOngoingResidents() {
+		return dashboardDao.getOngoingResidents();
 	}
 
 	public long updateCaseNotes(@Valid Resident resident) {

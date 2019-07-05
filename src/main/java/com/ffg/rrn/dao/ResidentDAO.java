@@ -427,7 +427,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		if (StringUtils.isEmpty(childName)) {
 			return;
 		}
-		this.getJdbcTemplate().update(SQL_INSERT_CHILD, childName, residentId, pvrChild);
+		this.getJdbcTemplate().update(SQL_INSERT_CHILD, StringUtils.capitalize(childName.trim().toLowerCase()), residentId, pvrChild);
 	}
 
 	private void deleteAllChildrenByResidentId(long residentId) {
@@ -437,11 +437,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 	private PreparedStatement buildInsertResidentPS(Connection connection, Resident resident, String[] pkColumnNames)
 			throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_RESIDENT, pkColumnNames);
-		ps.setString(1, resident.getFirstName());
-		ps.setString(2, resident.getMiddle());
-		ps.setString(3, resident.getLastName());
+		ps.setString(1, StringUtils.capitalize(resident.getFirstName().trim().toLowerCase()));
+		ps.setString(2, StringUtils.capitalize(resident.getMiddle().trim().toLowerCase()));
+		ps.setString(3, StringUtils.capitalize(resident.getLastName().trim().toLowerCase()));
 		ps.setInt(4, resident.getPropertyId());
-		ps.setString(5, resident.getAddress());
+		ps.setString(5, StringUtils.capitalize(resident.getAddress().trim().toLowerCase()));
 		ps.setInt(6, resident.getRefId());
 		ps.setBoolean(7, resident.getIsResident());
 		ps.setString(8, resident.getServiceCoord());
@@ -451,14 +451,14 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private PreparedStatement buildUpdateResidentPS(Connection connection, Resident resident) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_RESIDENT);
-		ps.setString(1, resident.getFirstName());
-		ps.setString(2, resident.getMiddle());
-		ps.setString(3, resident.getLastName());
+		ps.setString(1, StringUtils.capitalize(resident.getFirstName().trim().toLowerCase()));
+		ps.setString(2, StringUtils.capitalize(resident.getMiddle().trim().toLowerCase()));
+		ps.setString(3, StringUtils.capitalize(resident.getLastName().trim().toLowerCase()));
 		ps.setInt(4, resident.getPropertyId());
 		ps.setString(5, resident.getVoiceMail());
-		ps.setString(6, resident.getText());
-		ps.setString(7, resident.getEmail());
-		ps.setString(8, resident.getAddress());
+		ps.setString(6, resident.getText().trim());
+		ps.setString(7, resident.getEmail().trim().toLowerCase());
+		ps.setString(8, StringUtils.capitalize(resident.getAddress().trim().toLowerCase()));
 		ps.setBoolean(9, resident.getAckRightToPrivacy());
 		ps.setBoolean(10, resident.getAllowContact());
 		ps.setBoolean(11, resident.getWantSurvey());
@@ -525,8 +525,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_RESIDENT_SCORE_GOAL, pkColumnNames);
 		ps.setLong(1, resident.getResidentId());
 		ps.setString(2, lifeDomain);
-		ps.setInt(3, resident.getCurrentScore());
-		ps.setInt(4, resident.getGoal());
+		ps.setInt(3, (resident.getCurrentScore() == null) ? 0 : resident.getCurrentScore());
+		ps.setInt(4, (resident.getGoal() == null) ? 0 : resident.getGoal());
 		ps.setDate(5, Date.valueOf(LocalDate.now()));
 		return ps;
 	}

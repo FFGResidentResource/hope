@@ -147,12 +147,12 @@ function getAllLatestScoreGoal(residentId){
 	timeout : 600000,
 	success : function(data) {
 	    debugger;
-	    jQuery("#_hScoreGoal").text(data["HOUSING"]);
-	    jQuery("#_mmScoreGoal").text(data["MONEY MANAGEMENT"]);
-	    jQuery("#_empScoreGoal").text(data["EMPLOYMENT"]);
-	    jQuery("#_eduScoreGoal").text(data["EDUCATION"]);
-	    jQuery("#_nsScoreGoal").text(data["NETWORK SUPPORT"]);
-	    jQuery("#_hhScoreGoal").text(data["HOUSEHOLD MANAGEMENT"]);
+	    jQuery("#_hScoreGoal").text((data["HOUSING"] == '0 / 0') ? 'DK / DA' : data["HOUSING"]);
+	    jQuery("#_mmScoreGoal").text((data["MONEY MANAGEMENT"] == '0 / 0' ) ?  'DK / DA' : data["MONEY MANAGEMENT"]);
+	    jQuery("#_empScoreGoal").text((data["EMPLOYMENT"] == '0 / 0') ? 'DK / DA' : data["EMPLOYMENT"]);
+	    jQuery("#_eduScoreGoal").text((data["EDUCATION"] == '0 / 0') ? 'DK / DA' : data["EDUCATION"]);
+	    jQuery("#_nsScoreGoal").text((data["NETWORK SUPPORT"] == '0 / 0') ? 'DK / DA' : data["NETWORK SUPPORT"]);
+	    jQuery("#_hhScoreGoal").text((data["HOUSEHOLD MANAGEMENT"] == '0 / 0') ? 'DK / DA' : data["HOUSEHOLD MANAGEMENT"]);
 	},
 	error : function(e) {
 	    console.log("ERROR retrieving Score and Goal: ", e);

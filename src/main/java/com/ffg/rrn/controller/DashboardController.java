@@ -53,15 +53,17 @@ public class DashboardController extends BaseController {
 			dashboard.setTotalNoOfUnits(total);
 		}
 
-		total = 0;
+		long total2 = 0;
 		if (!CollectionUtils.isEmpty(allProperty)) {
 			for (Property property : allProperty) {
-				total = total + property.getNoOfResident();
+				total2 = total2 + property.getNoOfResident();
 			}
-			dashboard.setTotalNoOfResidents(total);
+			dashboard.setTotalNoOfResidents(total2);
 		}
 
 		dashboard.setTotalActiveResidents(residentService.getTotalActiveResident());
+		dashboard.setNewResidents(residentService.getNewResidents());
+		dashboard.setOngoingResidents(residentService.getOngoingResidents());
 
 		model.addAttribute("dashboard", dashboard);
 

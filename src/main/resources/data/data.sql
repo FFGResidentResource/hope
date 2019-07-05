@@ -1,6 +1,7 @@
 -- PostGreSQL - Initial Datasetup
 -- Create table
 
+--FOLLOWING DROP only requires in NON-PROD Environments - BEGIN
 DROP SEQUENCE SC_SQ;
 DROP SEQUENCE PROP_SQ;
 DROP SEQUENCE RESIDENT_SQ;
@@ -15,7 +16,11 @@ DROP SEQUENCE AP_SQ;
 DROP SEQUENCE CN_SQ;
 DROP SEQUENCE RF_SQ;
 DROP SEQUENCE UR_SQ;
+DROP SEQUENCE RP_SQ;
 
+DROP MATERIALIZED VIEW SERVICE_CATEGORY_VW;
+DROP MATERIALIZED VIEW NEW_RESIDENT_VW;
+DROP MATERIALIZED VIEW ONGOING_RESIDENT_VW;
 
 DROP TABLE REFERRAL_FORM;
 DROP TABLE ACTION_PLAN;
@@ -38,6 +43,10 @@ DROP TABLE APP_ROLE;
 DROP TABLE SERVICE_COORDINATOR;
 DROP TABLE PROPERTY;
 
+--FOLLOWING DROP only requires in NON-PROD Environments - END
+
+
+--COPY FROM HERE FOR PRODUCTION ENVIRONMENT - BEGIN
 
 CREATE SEQUENCE SC_SQ START 1;
 
@@ -484,7 +493,7 @@ CREATE table RESIDENT (
 	WANTS_SURVEY	BOOLEAN DEFAULT FALSE,
 	PHOTO_RELEASE	BOOLEAN DEFAULT FALSE,
 	DATE_ADDED		TIMESTAMP DEFAULT NOW(),
-	DATE_MODIFIED	TIMESTAMP,
+	DATE_MODIFIED	TIMESTAMP DEFAULT NOW(),
 	MODIFIED_BY		VARCHAR(50),
 	SERVICE_COORD	VARCHAR(50),
 	A_TYPE			INT REFERENCES ASSESSMENT_TYPE(A_ID),
@@ -508,8 +517,8 @@ CREATE TABLE REFERRAL_FORM (
 	RESIDENT_ID					BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	INTERPRETATION      		BOOLEAN DEFAULT FALSE,
 	REFERRED_BY					VARCHAR(100),
-	DATE_ADDED					DATE,
-	DATE_MODIFIED				DATE,
+	DATE_ADDED					DATE DEFAULT NOW(),
+	DATE_MODIFIED				DATE DEFAULT NOW(),
 	REFERRAL_REASON				JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
 	COMMENTS					VARCHAR(1000),
 	PREVIOUS_ATTEMPTS			VARCHAR(1000),
@@ -535,7 +544,7 @@ CREATE TABLE ACTION_PLAN(
 	ACHIEVED_SSM			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	FOLLOWUP_NOTES			VARCHAR(2000),
 	DATE_ADDED				DATE DEFAULT NOW(),
-	DATE_MODIFIED			DATE,
+	DATE_MODIFIED			DATE DEFAULT NOW(),
 	SERVICE_COORD			VARCHAR(50)
 );
 	
@@ -547,7 +556,7 @@ CREATE TABLE CASE_NOTES(
 	RESIDENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	SERVICE_COORD	VARCHAR(50),
 	DATE_ADDED		DATE DEFAULT NOW(),		
-	DATE_MODIFIED	DATE
+	DATE_MODIFIED	DATE DEFAULT NOW()
 	
 );
 
@@ -619,23 +628,23 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE, 1200, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE, 1300, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE, 1100, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 900, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE, 500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE, 500, FALSE);
 
 
 
@@ -690,7 +699,7 @@ values (nextval('UR_SQ'), 5, 2);
 
 ---
 
-CREATE MATERIALIZED VIEW SERVICE_CATEGORY_VW
+CREATE VIEW SERVICE_CATEGORY_VIEW
 AS 
 SELECT P."SRVC_CAT"||'_'||P."QUARTER"||'_'||P."YEAR" AS "PRIMARY_CAT", P."SRVC_CAT" AS "SRVC_CAT", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", SUM(P."COUNT"::FLOAT) AS "COUNT" from (
 SELECT
@@ -760,15 +769,63 @@ GROUP BY
      plan_of_action->>'HOUSEHOLD MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)) P
 GROUP BY P."SRVC_CAT", P."QUARTER", P."YEAR"
 ORDER BY P."SRVC_CAT"
-WITH NO DATA;
-
-REFRESH MATERIALIZED VIEW SERVICE_CATEGORY_VW;
-
-CREATE UNIQUE INDEX srvc_cat_quarter_year ON SERVICE_CATEGORY_VW("PRIMARY_CAT");
-	
-REFRESH MATERIALIZED VIEW CONCURRENTLY SERVICE_CATEGORY_VW;
+;
 
 
+
+CREATE VIEW NEW_RESIDENT_VIEW
+AS 
+select z."ID" as "RES_ID" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY" 
+from (
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE" from resident r 
+left join resident_score_goal rsg on rsg.resident_id = r.resident_id
+left join case_notes cn on cn.resident_id = r.resident_id 
+left join action_Plan ap on ap.resident_id = r.resident_id ) P 
+where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
+) z 
+where (
+	(	z."RESQ" = extract (quarter from now()) and z."RESY" = extract (year from now())) 
+	OR (z."SSMQ" = extract (quarter from now()) AND z."SSMY" = extract (year from now())) 
+	OR (z."CNQ"	 = extract (quarter from now()) AND z."CNY" = extract (year from now())) 
+	OR (z."APQ"	 = extract (quarter from now()) AND z."APY"  = extract (year from now())))
+group by z."ID"
+;
+
+
+CREATE VIEW ONGOING_RESIDENT_VIEW
+AS 
+select z."ID" as "RES_ID" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY" 
+from (
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE" from resident r 
+left join resident_score_goal rsg on rsg.resident_id = r.resident_id
+left join case_notes cn on cn.resident_id = r.resident_id 
+left join action_Plan ap on ap.resident_id = r.resident_id ) P 
+where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
+) z 
+where (
+	(	z."RESQ" < extract (quarter from now()) and z."RESY" = extract (year from now())) 
+	OR (z."SSMQ" < extract (quarter from now()) AND z."SSMY" = extract (year from now())) 
+	OR (z."CNQ"	 < extract (quarter from now()) AND z."CNY" = extract (year from now())) 
+	OR (z."APQ"	 < extract (quarter from now()) AND z."APY"  = extract (year from now())))
+group by z."ID";
+
+
+
+CREATE VIEW RESIDENT_SERVED_VIEW
+AS
+select z."ID" as "RES_ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY" 
+from (
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE" from resident r 
+left join resident_score_goal rsg on rsg.resident_id = r.resident_id
+left join case_notes cn on cn.resident_id = r.resident_id 
+left join action_Plan ap on ap.resident_id = r.resident_id ) P 
+where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
+) z 
+group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY"
+ORDER BY "RES_ID";
 
 
 --Example for Questionnaire

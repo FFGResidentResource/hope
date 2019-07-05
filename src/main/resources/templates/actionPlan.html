@@ -58,8 +58,11 @@
 						<div class="col-sm-8">
 							<h3 style="width: 400px;">ACTION PLAN</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
-								th:if="*{firstName == null}" th:text="${message}"></span>							
-						</div>
+								th:if="*{firstName == null}" th:text="${message}"></span>
+							<span class="text-danger"
+								th:text="${resident.mostRecentSSMDate=='--'}?'Please complete Self Sufficiency Matrix first.':''"></span>						
+						</div>								
+						
 						
 						<div class="col-sm-4">
 							<table class="table-responsive table-condensed">
@@ -120,7 +123,7 @@
 										Self-Sufficiency assessment:</span></strong>
 							</div>
 							<div class="col-sm-3">
-								<span th:text="*{mostRecentSSMDate}">&nbsp;</span>
+								<span id="_mostRecentSSMDate" th:text="*{mostRecentSSMDate}">&nbsp;</span>
 							</div>
 						</div>
 
