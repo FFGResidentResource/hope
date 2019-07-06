@@ -828,7 +828,6 @@ group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."AP
 ORDER BY "RES_ID";
 
 
-
 CREATE VIEW ASSESSMENT_COMPLETED_VIEW
 AS
 select z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID" from (
@@ -855,7 +854,6 @@ select 1 from resident_score_goal where extract (year from on_this_date) = z."YE
 )
 group by z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID"
 ;
-
 
 --Example for Questionnaire
 --select aq.question_number, aq.question, c.choice from question_choice qc
