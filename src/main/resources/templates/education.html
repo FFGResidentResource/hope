@@ -113,7 +113,7 @@
 							<div class="col-sm-9">
 								<select class="form-control input-sm" id="_dates"
 									th:field="*{selectedDate}"
-									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'EDUCATION', '_education');"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'EDUCATION', '_education'); validateAndShowMessage();"
 									required>
 									<option value="NewAssessment">Start New Assessment</option>
 									<option th:each="assessmentDate : ${resident.educationDates}"

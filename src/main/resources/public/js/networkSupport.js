@@ -8,6 +8,8 @@ jQuery(document).ready(function() {
 function calculatNetworkSupportScore() {
 
     jQuery("#_lifeDomain").val('NETWORK SUPPORT');
+    jQuery('#currentNetSupportScore').val('');
+    jQuery('#currentNetSupportGoal').val('');
     jQuery('#nsst_6_body').text('');
     jQuery('#nsst_7_body').text('');
     jQuery('[id^=nsst_]').removeClass('danger').removeClass('success')

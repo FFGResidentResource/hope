@@ -828,6 +828,35 @@ group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."AP
 ORDER BY "RES_ID";
 
 
+
+CREATE VIEW ASSESSMENT_COMPLETED_VIEW
+AS
+select z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID" from (
+select rsg.resident_id as "RES_ID", extract ( quarter from rsg.on_this_date) as "QUARTER" , extract (year from rsg.on_this_date) as "YEAR", rsg.life_domain, r.prop_id as "PROP_ID" from resident_score_goal rsg
+join resident r on r.resident_id = rsg.resident_id 
+group by rsg.resident_id, extract (quarter from rsg.on_this_date), extract(year from rsg.on_this_date), rsg.life_domain, r.prop_id ) z
+where exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'HOUSING'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'NETWORK SUPPORT'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'EMPLOYMENT'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'EDUCATION'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'MONEY MANAGEMENT'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'HOUSEHOLD MANAGEMENT'
+)
+group by z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID"
+;
+
+
 --Example for Questionnaire
 --select aq.question_number, aq.question, c.choice from question_choice qc
 --join assessment_questionnaire aq on aq.question_id = qc.question_id and aq.life_domain = 'HOUSING'

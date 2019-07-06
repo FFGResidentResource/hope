@@ -9,6 +9,8 @@ function calculateEmploymentScore() {
 
     jQuery("#_empLifeDomain").val('EMPLOYMENT');
 
+    jQuery('#currentEmpScore').val('');
+    jQuery('#currentEmpGoal').val('');
     jQuery('#empst_6_body').text('');
     jQuery('#empst_7_body').text('');
     jQuery('[id^=empst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');

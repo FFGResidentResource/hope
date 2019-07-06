@@ -105,6 +105,7 @@ public class DashboardDao extends JdbcDaoSupport {
 
 	public Dashboard pullDashboard(Dashboard dashboard) {
 
+
 		String RESIDENT_SERVED = "select count(*) from resident_served_view where \r\n" + "(\"RESQ\" = ? OR \"SSMQ\" = ? OR \"CNQ\" = ? OR \"APQ\" = ?) AND \r\n"
 				+ "(\"RESY\" = ? OR \"SSMY\" = ? OR \"CNY\" = ? OR \"APY\" = ?)";
 
@@ -132,8 +133,7 @@ public class DashboardDao extends JdbcDaoSupport {
 			dashboard.setResidentServedQ4(0l);
 		}
 
-		String SQL_ASSESSMENT_COMPLETED = "select count(*) as count, extract(quarter from on_this_date) as quarter from resident_score_goal rsg"
-				+ " join resident r on r.resident_id = rsg.resident_id and r.prop_id in (:ids) where extract(year from on_this_Date) = ? group by extract(quarter from on_this_Date)";
+		String ASSESSMENT_COMPLETED = "select count(*) from assessment_completed_view where \"QUARTER\" = ? and \"YEAR\" = ? and \"PROP_ID\" in (:ids) ";
 
 		String SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = "select count(*) as count, extract(quarter from date_Added) as quarter from resident where extract(year from date_added) = ? and prop_id in  (:ids) and ack_pr = 'TRUE' group by extract(quarter from date_Added) ";
 
@@ -154,10 +154,34 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotEmpty(idString)) {
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace(":ids", idString.substring(0, idString.length() - 1));
-			SQL_ASSESSMENT_COMPLETED = SQL_ASSESSMENT_COMPLETED.replace(":ids", idString.substring(0, idString.length() - 1));
+			ASSESSMENT_COMPLETED = ASSESSMENT_COMPLETED.replace(":ids", idString.substring(0, idString.length() - 1));
 		} else {
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace("and prop_id in (:ids)", "");
-			SQL_ASSESSMENT_COMPLETED = SQL_ASSESSMENT_COMPLETED.replace("and r.prop_id in (:ids)", "");
+			ASSESSMENT_COMPLETED = ASSESSMENT_COMPLETED.replace("and \"PROP_ID\" in (:ids)", "");
+		}
+
+		try {
+			dashboard.setQ1AssessmentComplete(this.getJdbcTemplate().queryForObject(ASSESSMENT_COMPLETED, new Object[] { 1, year }, Integer.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setQ1AssessmentComplete(0);
+		}
+
+		try {
+			dashboard.setQ2AssessmentComplete(this.getJdbcTemplate().queryForObject(ASSESSMENT_COMPLETED, new Object[] { 2, year }, Integer.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setQ2AssessmentComplete(0);
+		}
+
+		try {
+			dashboard.setQ3AssessmentComplete(this.getJdbcTemplate().queryForObject(ASSESSMENT_COMPLETED, new Object[] { 3, year }, Integer.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setQ3AssessmentComplete(0);
+		}
+
+		try {
+			dashboard.setQ4AssessmentComplete(this.getJdbcTemplate().queryForObject(ASSESSMENT_COMPLETED, new Object[] { 4, year }, Integer.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setQ4AssessmentComplete(0);
 		}
 
 		List<QuarterCount> qcList = new ArrayList<QuarterCount>();
@@ -186,35 +210,6 @@ public class DashboardDao extends JdbcDaoSupport {
 			}
 			if (quarterCount.getQuarter() == 4) {
 				dashboard.setQ4SignUpComplete(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_ASSESSMENT_COMPLETED, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setQ1AssessmentComplete(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setQ2AssessmentComplete(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setQ3AssessmentComplete(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setQ4AssessmentComplete(quarterCount.getCount());
 			}
 		}
 

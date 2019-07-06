@@ -574,8 +574,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_RESIDENT_SCORE_GOAL);
 		ps.setLong(1, resident.getResidentId());
 		ps.setString(2, lifeDomain);
-		ps.setInt(3, resident.getCurrentScore());
-		ps.setInt(4,  resident.getGoal());
+		ps.setInt(3, (resident.getCurrentScore() == null) ? 0 : resident.getCurrentScore());
+		ps.setInt(4, (resident.getGoal() == null) ? 0 : resident.getGoal());
 		ps.setLong(5, resident.getResidentId());
 		ps.setString(6, lifeDomain);
 		ps.setDate(7, parseMyDate(resident.getSelectedDate()));		

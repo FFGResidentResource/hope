@@ -8,8 +8,11 @@ function calculateHousingScore() {
 
 	jQuery("#_lifeDomain").val('HOUSING');
 
+	jQuery('#currentHousingScore').val('');
+	jQuery('#currentHousingGoal').val('');
 	jQuery('#hst_6_body').text('');
 	jQuery('#hst_7_body').text('');
+	
 	jQuery('[id^=hst_]').removeClass('danger').removeClass('success')
 			.removeClass('info').removeClass('warning');
 
