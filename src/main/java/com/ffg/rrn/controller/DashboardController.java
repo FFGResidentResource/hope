@@ -38,9 +38,6 @@ public class DashboardController extends BaseController {
 		}
 
 		List<Property> allProperty = residentService.getAllProperty(getSessionUsername());
-		for (Property property : allProperty) {
-			property.setChecked(true);
-		}
 
 		Dashboard dashboard = new Dashboard();
 		dashboard.setProperties(allProperty);

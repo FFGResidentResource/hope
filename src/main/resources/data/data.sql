@@ -815,16 +815,16 @@ group by z."ID";
 
 CREATE VIEW RESIDENT_SERVED_VIEW
 AS
-select z."ID" as "RES_ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY" from (
-select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY" 
+select z."ID" as "RES_ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY", z."PROP_ID" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY", P."PROP_ID" as "PROP_ID"
 from (
-select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE" from resident r 
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE", r.PROP_ID as "PROP_ID" from resident r 
 left join resident_score_goal rsg on rsg.resident_id = r.resident_id
 left join case_notes cn on cn.resident_id = r.resident_id 
 left join action_Plan ap on ap.resident_id = r.resident_id ) P 
 where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
 ) z 
-group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY"
+group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY", z."PROP_ID"
 ORDER BY "RES_ID";
 
 

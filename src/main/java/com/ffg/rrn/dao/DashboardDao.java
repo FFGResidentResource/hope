@@ -107,35 +107,11 @@ public class DashboardDao extends JdbcDaoSupport {
 
 
 		String RESIDENT_SERVED = "select count(*) from resident_served_view where \r\n" + "(\"RESQ\" = ? OR \"SSMQ\" = ? OR \"CNQ\" = ? OR \"APQ\" = ?) AND \r\n"
-				+ "(\"RESY\" = ? OR \"SSMY\" = ? OR \"CNY\" = ? OR \"APY\" = ?)";
-
-		int year = Integer.parseInt(dashboard.getYear());
-
-		try {
-			dashboard.setResidentServedQ1(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 1, 1, 1, 1, year, year, year, year }, Long.class));
-		} catch (EmptyResultDataAccessException ers) {
-			dashboard.setResidentServedQ1(0l);
-		}
-
-		try {
-		dashboard.setResidentServedQ2(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 2, 2, 2, 2, year, year, year, year }, Long.class));
-		} catch (EmptyResultDataAccessException ers) {
-			dashboard.setResidentServedQ2(0l);
-		}
-		try {
-		dashboard.setResidentServedQ3(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 3, 3, 3, 3, year, year, year, year }, Long.class));
-		} catch (EmptyResultDataAccessException ers) {
-			dashboard.setResidentServedQ3(0l);
-		}
-		try {
-		dashboard.setResidentServedQ4(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 4, 4, 4, 4, year, year, year, year }, Long.class));
-		} catch (EmptyResultDataAccessException ers) {
-			dashboard.setResidentServedQ4(0l);
-		}
+				+ "(\"RESY\" = ? OR \"SSMY\" = ? OR \"CNY\" = ? OR \"APY\" = ?) and \"PROP_ID\" in (:ids) ";
 
 		String ASSESSMENT_COMPLETED = "select count(*) from assessment_completed_view where \"QUARTER\" = ? and \"YEAR\" = ? and \"PROP_ID\" in (:ids) ";
 
-		String SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = "select count(*) as count, extract(quarter from date_Added) as quarter from resident where extract(year from date_added) = ? and prop_id in  (:ids) and ack_pr = 'TRUE' group by extract(quarter from date_Added) ";
+		String SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = "select count(*) as count, extract(quarter from date_Added) as quarter from resident where extract(year from date_added) = ? and prop_id in (:ids) and ack_pr = 'TRUE' group by extract(quarter from date_Added) ";
 
 		List<Property> properties = dashboard.getProperties();
 		Set<Integer> ids = new HashSet<Integer>();
@@ -152,12 +128,39 @@ public class DashboardDao extends JdbcDaoSupport {
 			}
 		}
 
+
 		if (StringUtils.isNotEmpty(idString)) {
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace(":ids", idString.substring(0, idString.length() - 1));
 			ASSESSMENT_COMPLETED = ASSESSMENT_COMPLETED.replace(":ids", idString.substring(0, idString.length() - 1));
+			RESIDENT_SERVED = RESIDENT_SERVED.replace(":ids", idString.substring(0, idString.length() - 1));
 		} else {
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace("and prop_id in (:ids)", "");
 			ASSESSMENT_COMPLETED = ASSESSMENT_COMPLETED.replace("and \"PROP_ID\" in (:ids)", "");
+			RESIDENT_SERVED = RESIDENT_SERVED.replace("and \"PROP_ID\" in (:ids)", "");
+		}
+
+		int year = Integer.parseInt(dashboard.getYear());
+
+		try {
+			dashboard.setResidentServedQ1(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 1, 1, 1, 1, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ1(0l);
+		}
+
+		try {
+			dashboard.setResidentServedQ2(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 2, 2, 2, 2, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ2(0l);
+		}
+		try {
+			dashboard.setResidentServedQ3(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 3, 3, 3, 3, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ3(0l);
+		}
+		try {
+			dashboard.setResidentServedQ4(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 4, 4, 4, 4, year, year, year, year }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setResidentServedQ4(0l);
 		}
 
 		try {
