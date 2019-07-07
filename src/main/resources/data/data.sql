@@ -698,7 +698,7 @@ insert into user_role (ID, USER_ID, ROLE_ID)
 values (nextval('UR_SQ'), 5, 2);
 
 ---
-
+--
 CREATE VIEW SERVICE_CATEGORY_VIEW
 AS 
 SELECT P."SRVC_CAT"||'_'||P."QUARTER"||'_'||P."YEAR" AS "PRIMARY_CAT", P."SRVC_CAT" AS "SRVC_CAT", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", SUM(P."COUNT"::FLOAT) AS "COUNT" from (
@@ -772,7 +772,7 @@ ORDER BY P."SRVC_CAT"
 ;
 
 
-
+--new = totla of current quarter for current year 
 CREATE VIEW NEW_RESIDENT_VIEW
 AS 
 select z."ID" as "RES_ID" from (
@@ -792,7 +792,7 @@ where (
 group by z."ID"
 ;
 
-
+--Ongoing = total of all previous quarters for current year
 CREATE VIEW ONGOING_RESIDENT_VIEW
 AS 
 select z."ID" as "RES_ID" from (
@@ -812,7 +812,7 @@ where (
 group by z."ID";
 
 
-
+--Number of Resident Served
 CREATE VIEW RESIDENT_SERVED_VIEW
 AS
 select z."ID" as "RES_ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY", z."PROP_ID" from (
@@ -827,7 +827,7 @@ where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or
 group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY", z."PROP_ID"
 ORDER BY "RES_ID";
 
-
+--REsident who completed all the 6 assessment
 CREATE VIEW ASSESSMENT_COMPLETED_VIEW
 AS
 select z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID" from (
@@ -856,9 +856,10 @@ group by z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID"
 ;
 
 
-CREATE VIEW RESIDENT_SERVED_BY_PARTNER_AGENCY
+--Resident by agency referred
+CREATE VIEW AGENCY_RESIDENT_VIEW
 AS
-SELECT z."AGENCY", z."RES_ID", z."QUARTER", z."YEAR" from (
+SELECT z."AGENCY", z."RES_ID", z."QUARTER", z."YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME" from (
 select referral_partner->>'HOUSING' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
 from action_plan ap
 where referral_partner->>'HOUSING' not in ('')
@@ -883,6 +884,25 @@ select referral_partner->>'HOUSEHOLD MANAGEMENT' as "AGENCY", resident_id as "RE
 from action_plan ap
 where referral_partner->>'HOUSEHOLD MANAGEMENT' not in ('')
  ) Z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+ORDER BY z."AGENCY";
+
+--Resident Who moved atleast one level up
+CREATE VIEW PROGRESSING_RESIDENTS_VIEW
+AS
+select z."RES_ID" as "RES_ID", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME", z."LIFE_DOMAIN" as "LIFE_DOMAIN", z."SCORE" as "SCORE" from (
+select rsg.resident_id as "RES_ID", extract (quarter from rsg.on_this_date) as "QUARTER", extract (year from rsg.on_this_date) as "YEAR" , rsg.life_domain as "LIFE_DOMAIN", rsg.score as "SCORE"
+from resident_Score_goal rsg
+join resident_score_goal rsg1 on rsg1.resident_id = rsg.resident_id and rsg1.life_domain = rsg.life_domain and rsg.score > rsg1.score
+)z
+JOIN RESIDENT R on R.RESIDENT_ID = z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+order by z."YEAR", z."QUARTER";
+
+
+
+
 
 --Example for Questionnaire
 --select aq.question_number, aq.question, c.choice from question_choice qc
