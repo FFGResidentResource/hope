@@ -855,6 +855,35 @@ select 1 from resident_score_goal where extract (year from on_this_date) = z."YE
 group by z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID"
 ;
 
+
+CREATE VIEW RESIDENT_SERVED_BY_PARTNER_AGENCY
+AS
+SELECT z."AGENCY", z."RES_ID", z."QUARTER", z."YEAR" from (
+select referral_partner->>'HOUSING' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'HOUSING' not in ('')
+union
+select referral_partner->>'MONEY MANAGEMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'MONEY MANAGEMENT' not in ('')
+union
+select referral_partner->>'EMPLOYMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'EMPLOYMENT' not in ('')
+union
+select referral_partner->>'EDUCATION' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'EDUCATION' not in ('')
+union
+select referral_partner->>'NETWORK SUPPORT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'NETWORK SUPPORT' not in ('')
+union
+select referral_partner->>'HOUSEHOLD MANAGEMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'HOUSEHOLD MANAGEMENT' not in ('')
+ ) Z
+
 --Example for Questionnaire
 --select aq.question_number, aq.question, c.choice from question_choice qc
 --join assessment_questionnaire aq on aq.question_id = qc.question_id and aq.life_domain = 'HOUSING'

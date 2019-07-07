@@ -400,7 +400,7 @@ function validateAndShowMessage(){
 	jQuery("input[type='submit']").prop('disabled', true);
     }else{
 	
-	if (jQuery("#_mostRecentSSMDate").text() != '--')
+	if (jQuery("#_mostRecentSSMDate").text() != '--'){
 	    jQuery("#_actionPlanErrorMessage").removeClass('hideme').addClass('hideme');
 		jQuery("input[type='submit']").prop('disabled', false);
     	}
