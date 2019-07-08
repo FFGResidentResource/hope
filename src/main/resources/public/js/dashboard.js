@@ -41,6 +41,76 @@ function pullDashboard(){
 	success : function(data) {  
 	    
 	    
+	    var chart = c3.generate({
+		bindto : '#_dashboardChart1',
+		data : {
+		    x: 'x',
+		    columns: [
+			    ['x', 'Q1', 'Q2', 'Q3', 'Q4'],
+		            ['Resident Served', data.residentServedQ1, data.residentServedQ2, data.residentServedQ3, data.residentServedQ4],
+		            ['SignUp Completed', data.q1SignUpComplete, data.q2SignUpComplete, data.q3SignUpComplete, data.q4SignUpComplete],
+		            ['Assessment Completed', data.q1AssessmentComplete, data.q2AssessmentComplete, data.q3AssessmentComplete, data.q4AssessmentComplete]
+		        ],
+		    type : 'bar',
+		    labels: true
+		},
+		axis : {
+		    x: {
+		            type: 'category'		            	           
+		        },
+		    y : {
+			min : 1,
+			tick: {
+		                format: function (d) {
+		                    return (parseInt(d) == d) ? d : null;
+		                }
+		            }
+		    // Range includes padding, set 0 if no padding needed
+		    // padding: {top:0, bottom:0}
+		    }
+		}
+		
+	    });
+	    
+	    
+	    var chart2 = c3.generate({
+		bindto : '#_dashboardChart2',
+		data : {
+		    x: 'x',
+		    columns: [
+			    ['x', 'Q1', 'Q2', 'Q3', 'Q4'],
+		            ['HOUSING', data.housingQ1Count, data.housingQ2Count, data.housingQ3Count, data.housingQ4Count],
+		            ['MONEY MGMT', data.mmQ1Count, data.mmQ2Count, data.mmQ3Count, data.mmQ4Count],
+		            ['EMP', data.empQ1Count, data.empQ2Count, data.empQ3Count, data.empQ4Count],
+		            ['EDU', data.eduQ1Count, data.eduQ2Count, data.eduQ3Count, data.eduQ4Count],
+		            ['NETWORK SUPP', data.nsQ1Count, data.nsQ2Count, data.nsQ3Count, data.nsQ4Count],
+		            ['HOUSEHOLD', data.hhQ1Count, data.hhQ2Count, data.hhQ3Count, data.hhQ4Count]
+		        ],
+		    type : 'bar',
+		    labels: true
+		},
+		color: {
+		    pattern: ['#719dd7', '#e29305', '#81923a', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9', '#3296dc', '#ffbb78', '#d3d093']
+		},
+		axis : {
+		    x: {
+		            type: 'category'		            	           
+		        },
+		    y : {
+			min : 1,
+			tick: {
+		                format: function (d) {
+		                    return (parseInt(d) == d) ? d : null;
+		                }
+		            }
+		    // Range includes padding, set 0 if no padding needed
+		    // padding: {top:0, bottom:0}
+		    }
+		}
+		
+	    });
+	    
+	    
 	    jQuery("#_signupQ1").text(data.q1SignUpComplete);
 	    jQuery("#_signupQ2").text(data.q2SignUpComplete);
 	    jQuery("#_signupQ3").text(data.q3SignUpComplete);

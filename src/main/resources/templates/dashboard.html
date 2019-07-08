@@ -8,6 +8,7 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
+<link href="/css/c3.min.css" rel="stylesheet">
 
 <style>
 .bd-placeholder-img {
@@ -125,25 +126,23 @@
 					<div class="col-sm-12 form-group">
 
 						<ul class="list-group">
-							<li class="list-group-item list-group-item-success"> <strong><i>Total
-								Active Residents: </i> </strong><span class="badge"
-								th:text="*{totalActiveResidents}"></span>
-							</li>
+							<li class="list-group-item list-group-item-success"><strong><i>Total
+										Active Residents: </i> </strong><span class="badge"
+								th:text="*{totalActiveResidents}"></span></li>
 							<li class="list-group-item list-group-item-warning"><strong><i>Ongoing
-								Residents: (All Previous Quarter) </i></strong> <span class="badge" th:text="*{ongoingResidents}"></span>
-							</li>
-							<li class="list-group-item list-group-item-default"> <strong><i>New
-								Residents: (Current Quarter) </i></strong> <span class="badge" th:text="*{newResidents}"></span>
-							</li>
+										Residents: (All Previous Quarter) </i></strong> <span class="badge"
+								th:text="*{ongoingResidents}"></span></li>
+							<li class="list-group-item list-group-item-default"><strong><i>New
+										Residents: (Current Quarter) </i></strong> <span class="badge"
+								th:text="*{newResidents}"></span></li>
 
 						</ul>
 					</div>
-						
-				</div>			
 
-				<div clas="col-sm-12">
+				</div>
 
-					<div class="col-sm-3">
+				<div class="col-sm-3">
+
 						<table id="_quarterTable"
 							class="table table-responsive table-bordered table-condensed text-center"
 							style="background-color: ghostwhite;">
@@ -183,6 +182,69 @@
 									<td id="_ssmQ3"></td>
 									<td id="_ssmQ4"></td>
 									<td id="_ssmYTD"></td>
+								</tr>
+								
+								<tr>
+									<td colspan="6"></td>
+								</tr>
+
+								<tr>
+									<td colspan="6"><label> Action Plan Per Life
+											Domain </label></td>
+								</tr>
+
+								<tr>
+									<td>HOUSING</td>
+									<td id="_housingQ1"></td>
+									<td id="_housingQ2"></td>
+									<td id="_housingQ3"></td>
+									<td id="_housingQ4"></td>
+									<td id="_housingYTD"></td>
+								</tr>
+
+								<tr>
+									<td>MONEY MANAGEMENT</td>
+									<td id="_mmQ1"></td>
+									<td id="_mmQ2"></td>
+									<td id="_mmQ3"></td>
+									<td id="_mmQ4"></td>
+									<td id="_mmYTD"></td>
+								</tr>
+
+								<tr>
+									<td>EMPLOYMENT</td>
+									<td id="_empQ1"></td>
+									<td id="_empQ2"></td>
+									<td id="_empQ3"></td>
+									<td id="_empQ4"></td>
+									<td id="_empYTD"></td>
+								</tr>
+
+								<tr>
+									<td>EDUCATION</td>
+									<td id="_eduQ1"></td>
+									<td id="_eduQ2"></td>
+									<td id="_eduQ3"></td>
+									<td id="_eduQ4"></td>
+									<td id="_eduYTD"></td>
+								</tr>
+
+								<tr>
+									<td>NETWORK SUPPORT</td>
+									<td id="_nsQ1"></td>
+									<td id="_nsQ2"></td>
+									<td id="_nsQ3"></td>
+									<td id="_nsQ4"></td>
+									<td id="_nsYTD"></td>
+								</tr>
+
+								<tr>
+									<td>HOUSEHOLD MANAGEMENT</td>
+									<td id="_hhQ1"></td>
+									<td id="_hhQ2"></td>
+									<td id="_hhQ3"></td>
+									<td id="_hhQ4"></td>
+									<td id="_hhYTD"></td>
 								</tr>
 
 								<tr>
@@ -317,82 +379,28 @@
 									<td id="_rr14Q3"></td>
 									<td id="_rr14Q4"></td>
 									<td id="_rr14YTD"></td>
-								</tr>
-
-								<tr>
-									<td colspan="6"></td>
-								</tr>
-
-								<tr>
-									<td colspan="6"><label> Action Plan Per Life
-											Domain </label></td>
-								</tr>
-
-								<tr>
-									<td>HOUSING</td>
-									<td id="_housingQ1"></td>
-									<td id="_housingQ2"></td>
-									<td id="_housingQ3"></td>
-									<td id="_housingQ4"></td>
-									<td id="_housingYTD"></td>
-								</tr>
-
-								<tr>
-									<td>MONEY MANAGEMENT</td>
-									<td id="_mmQ1"></td>
-									<td id="_mmQ2"></td>
-									<td id="_mmQ3"></td>
-									<td id="_mmQ4"></td>
-									<td id="_mmYTD"></td>
-								</tr>
-
-								<tr>
-									<td>EMPLOYMENT</td>
-									<td id="_empQ1"></td>
-									<td id="_empQ2"></td>
-									<td id="_empQ3"></td>
-									<td id="_empQ4"></td>
-									<td id="_empYTD"></td>
-								</tr>
-
-								<tr>
-									<td>EDUCATION</td>
-									<td id="_eduQ1"></td>
-									<td id="_eduQ2"></td>
-									<td id="_eduQ3"></td>
-									<td id="_eduQ4"></td>
-									<td id="_eduYTD"></td>
-								</tr>
-
-								<tr>
-									<td>NETWORK SUPPORT</td>
-									<td id="_nsQ1"></td>
-									<td id="_nsQ2"></td>
-									<td id="_nsQ3"></td>
-									<td id="_nsQ4"></td>
-									<td id="_nsYTD"></td>
-								</tr>
-
-								<tr>
-									<td>HOUSEHOLD MANAGEMENT</td>
-									<td id="_hhQ1"></td>
-									<td id="_hhQ2"></td>
-									<td id="_hhQ3"></td>
-									<td id="_hhQ4"></td>
-									<td id="_hhYTD"></td>
-								</tr>
+								</tr>								
 
 							</tbody>
 
 						</table>
+
 					</div>
-
+					
+														
+					<!-- <div class="col-sm-6">
+						<div id="_dashboardChart1" style="min-height: 200px;"></div>
+					</div>
+										
+					<div class="col-sm-6">
+						<div id="_dashboardChart2" style="min-height: 200px;"></div>
+					</div> -->
+				
 				</div>
+				
 
-			</div>
 
-
-		</form>
+	</form>
 
 
 
@@ -412,8 +420,14 @@
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+	<script src="/js/c3.min.js"></script>
+	<script src="/js/d3-5.4.0.min.js"></script>
+
 	<script src="/js/menu.js"></script>
 	<script src="/js/dashboard.js"></script>
+
+
 
 </body>
 

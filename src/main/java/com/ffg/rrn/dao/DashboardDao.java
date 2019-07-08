@@ -33,67 +33,6 @@ public class DashboardDao extends JdbcDaoSupport {
 
 	private static final String SQL_TOTAL_RESIDENT = "select count(*) from resident where active = 'TRUE'";
 
-	private static final String SQL_REFERRAL_REASON_1 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Childcare/afterschool care') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_2 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Education/job training') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_3 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Employment/job readiness') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_4 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Healthcare/medical issues') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_5 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Housekeeping/home management') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_6 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Lease violation for:') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_7 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Non/late payment of rent') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_8 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Noticeable change in:') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_9 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Other:') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_10 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Resident-to-resident conflict issues') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_11 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Safety') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_12 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Suspected abuse/domestic violence/exploitation') not in ('false', '') and extract(year from date_added) = ? "
-			+ "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_13 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Transportation') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_REFERRAL_REASON_14 = "select count(*) as count , extract(quarter from date_Added) as quarter from referral_form "
-			+ " where (referral_reason ->> 'Utility Shut-off, scheduled for (Date):') not in ('false', '') and extract(year from date_added) = ? " + "  group by extract(quarter from date_Added)";
-
-	private static final String SQL_HOUSING_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
-			+ " where  plan_of_action->>'HOUSING' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
-
-	private static final String SQL_MM_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
-			+ " where  plan_of_action->>'MONEY MANAGEMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
-
-	private static final String SQL_EMP_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
-			+ " where  plan_of_action->>'EMPLOYMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
-
-	private static final String SQL_EDU_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
-			+ " where  plan_of_action->>'EDUCATION' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
-
-	private static final String SQL_NS_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
-			+ " where  plan_of_action->>'NETWORK SUPPORT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
-
-	private static final String SQL_HH_COUNT = "select count(*) as count, extract(quarter from date_Added) as quarter FROM ACTION_PLAN "
-			+ " where  plan_of_action->>'HOUSEHOLD MANAGEMENT' not in ('') and extract (year from date_added) = ?" + " GROUP BY extract(quarter from date_Added)";
-
 	private static final String SQL_NEW_RESIDENT_TOTAL = "select count(*) from NEW_RESIDENT_VIEW";
 
 	private static final String SQL_ONGOING_RESIDENT_TOTAL = "select count(*) from ONGOING_RESIDENT_VIEW";
@@ -112,6 +51,10 @@ public class DashboardDao extends JdbcDaoSupport {
 		String ASSESSMENT_COMPLETED = "select count(*) from assessment_completed_view where \"QUARTER\" = ? and \"YEAR\" = ? and \"PROP_ID\" in (:ids) ";
 
 		String SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = "select count(*) as count, extract(quarter from date_Added) as quarter from resident where extract(year from date_added) = ? and prop_id in (:ids) and ack_pr = 'TRUE' group by extract(quarter from date_Added) ";
+
+		String ACTION_PLAN_BY_DOMAIN = "select count(*) from RESIDENT_ACTION_PLAN_VIEW where \"QUARTER\" = ? and \"YEAR\" = ? and \"LIFE_DOMAIN\" = ? and \"PROP_ID\" in (:ids)  group by \"LIFE_DOMAIN\" ";
+
+		String REFERRAL_REASON = "select count(*) from REFERRAL_REASON_VIEW where \"QUARTER\" = ? and \"YEAR\" = ? and \"REASONS\" = ? and \"PROP_ID\" in (:ids)  group by \"REASONS\" ";
 
 		List<Property> properties = dashboard.getProperties();
 		Set<Integer> ids = new HashSet<Integer>();
@@ -133,13 +76,464 @@ public class DashboardDao extends JdbcDaoSupport {
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace(":ids", idString.substring(0, idString.length() - 1));
 			ASSESSMENT_COMPLETED = ASSESSMENT_COMPLETED.replace(":ids", idString.substring(0, idString.length() - 1));
 			RESIDENT_SERVED = RESIDENT_SERVED.replace(":ids", idString.substring(0, idString.length() - 1));
+			ACTION_PLAN_BY_DOMAIN = ACTION_PLAN_BY_DOMAIN.replace(":ids", idString.substring(0, idString.length() - 1));
+			REFERRAL_REASON = REFERRAL_REASON.replace(":ids", idString.substring(0, idString.length() - 1));
 		} else {
 			SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER = SQL_RESIDENT_COMPLETED_SIGNUP_PER_QUARTER.replace("and prop_id in (:ids)", "");
 			ASSESSMENT_COMPLETED = ASSESSMENT_COMPLETED.replace("and \"PROP_ID\" in (:ids)", "");
 			RESIDENT_SERVED = RESIDENT_SERVED.replace("and \"PROP_ID\" in (:ids)", "");
+			ACTION_PLAN_BY_DOMAIN = ACTION_PLAN_BY_DOMAIN.replace("and \"PROP_ID\" in (:ids)", "");
+			REFERRAL_REASON = REFERRAL_REASON.replace("and \"PROP_ID\" in (:ids)", "");
 		}
 
 		int year = Integer.parseInt(dashboard.getYear());
+
+		// Referral Reason 1 to 14
+
+		try {
+			dashboard.setRr1q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Childcare/afterschool care" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr1q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr1q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Childcare/afterschool care" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr1q2Count(0l);
+		}
+		try {
+			dashboard.setRr1q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Childcare/afterschool care" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr1q3Count(0l);
+		}
+		try {
+			dashboard.setRr1q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Childcare/afterschool care" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr1q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr2q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Education/job training" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr2q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr2q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Education/job training" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr2q2Count(0l);
+		}
+		try {
+			dashboard.setRr2q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Education/job training" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr2q3Count(0l);
+		}
+		try {
+			dashboard.setRr2q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Education/job training" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr2q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr3q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Employment/job readiness" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr3q1Count(0l);
+		}
+		try {
+			dashboard.setRr3q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Employment/job readiness" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr3q2Count(0l);
+		}
+		try {
+			dashboard.setRr3q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Employment/job readiness" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr3q3Count(0l);
+		}
+		try {
+			dashboard.setRr3q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Employment/job readiness" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr3q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr4q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Healthcare/medical issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr4q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr4q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Healthcare/medical issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr4q2Count(0l);
+		}
+		try {
+			dashboard.setRr4q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Healthcare/medical issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr4q3Count(0l);
+		}
+		try {
+			dashboard.setRr4q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Healthcare/medical issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr4q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr5q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Housekeeping/home management" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr5q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr5q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Housekeeping/home management" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr5q2Count(0l);
+		}
+		try {
+			dashboard.setRr5q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Housekeeping/home management" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr5q3Count(0l);
+		}
+		try {
+			dashboard.setRr5q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Housekeeping/home management" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr5q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr6q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Lease violation for:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr6q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr6q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Lease violation for:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr6q2Count(0l);
+		}
+		try {
+			dashboard.setRr6q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Lease violation for:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr6q3Count(0l);
+		}
+		try {
+			dashboard.setRr6q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Lease violation for:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr6q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr7q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Non/late payment of rent" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr7q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr7q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Non/late payment of rent" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr7q2Count(0l);
+		}
+		try {
+			dashboard.setRr7q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Non/late payment of rent" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr7q3Count(0l);
+		}
+		try {
+			dashboard.setRr7q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Non/late payment of rent" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr7q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr8q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Noticeable change in:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr8q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr8q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Noticeable change in:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr8q2Count(0l);
+		}
+		try {
+			dashboard.setRr8q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Noticeable change in:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr8q3Count(0l);
+		}
+		try {
+			dashboard.setRr8q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Noticeable change in:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr8q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr9q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Other:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr9q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr9q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Other:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr9q2Count(0l);
+		}
+		try {
+			dashboard.setRr9q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Other:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr9q3Count(0l);
+		}
+		try {
+			dashboard.setRr9q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Other:" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr9q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr10q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Resident-to-resident conflict issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr10q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr10q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Resident-to-resident conflict issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr10q2Count(0l);
+		}
+		try {
+			dashboard.setRr10q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Resident-to-resident conflict issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr10q3Count(0l);
+		}
+		try {
+			dashboard.setRr10q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Resident-to-resident conflict issues" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr10q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr11q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Safety" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr11q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr11q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Safety" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr11q2Count(0l);
+		}
+		try {
+			dashboard.setRr11q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Safety" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr11q3Count(0l);
+		}
+		try {
+			dashboard.setRr11q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Safety" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr11q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr12q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Suspected abuse/domestic violence/exploitation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr12q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr12q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Suspected abuse/domestic violence/exploitation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr12q2Count(0l);
+		}
+		try {
+			dashboard.setRr12q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Suspected abuse/domestic violence/exploitation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr12q3Count(0l);
+		}
+		try {
+			dashboard.setRr12q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Suspected abuse/domestic violence/exploitation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr12q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr13q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Transportation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr13q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr13q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Transportation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr13q2Count(0l);
+		}
+		try {
+			dashboard.setRr13q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Transportation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr13q3Count(0l);
+		}
+		try {
+			dashboard.setRr13q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Transportation" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr13q4Count(0l);
+		}
+
+		try {
+			dashboard.setRr14q1Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 1, year, "Utility Shut-off, scheduled for (Date):" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr14q1Count(0l);
+		}
+
+		try {
+			dashboard.setRr14q2Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 2, year, "Utility Shut-off, scheduled for (Date):" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr14q2Count(0l);
+		}
+		try {
+			dashboard.setRr14q3Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 3, year, "Utility Shut-off, scheduled for (Date):" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr14q3Count(0l);
+		}
+		try {
+			dashboard.setRr14q4Count(this.getJdbcTemplate().queryForObject(REFERRAL_REASON, new Object[] { 4, year, "Utility Shut-off, scheduled for (Date):" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setRr14q4Count(0l);
+		}
+
+		// REferral_reason - END
+
+		// Action Plan developed per domain
+
+		try {
+			dashboard.setHousingQ1Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 1, year, "HOUSING" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHousingQ1Count(0l);
+		}
+
+		try {
+			dashboard.setHousingQ2Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 2, year, "HOUSING" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHousingQ2Count(0l);
+		}
+		try {
+			dashboard.setHousingQ3Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 3, year, "HOUSING" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHousingQ3Count(0l);
+		}
+		try {
+			dashboard.setHousingQ4Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 4, year, "HOUSING" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHousingQ4Count(0l);
+		}
+
+		try {
+			dashboard.setMmQ1Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 1, year, "MONEY MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setMmQ1Count(0l);
+		}
+
+		try {
+			dashboard.setMmQ2Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 2, year, "MONEY MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setMmQ2Count(0l);
+		}
+		try {
+			dashboard.setMmQ3Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 3, year, "MONEY MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setMmQ3Count(0l);
+		}
+		try {
+			dashboard.setMmQ4Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 4, year, "MONEY MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setMmQ4Count(0l);
+		}
+
+		try {
+			dashboard.setEmpQ1Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 1, year, "EMPLOYMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEmpQ1Count(0l);
+		}
+
+		try {
+			dashboard.setEmpQ2Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 2, year, "EMPLOYMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEmpQ2Count(0l);
+		}
+		try {
+			dashboard.setEmpQ3Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 3, year, "EMPLOYMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEmpQ3Count(0l);
+		}
+		try {
+			dashboard.setEmpQ4Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 4, year, "EMPLOYMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEmpQ4Count(0l);
+		}
+
+		try {
+			dashboard.setEduQ1Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 1, year, "EDUCATION" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEduQ1Count(0l);
+		}
+
+		try {
+			dashboard.setEduQ2Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 2, year, "EDUCATION" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEduQ2Count(0l);
+		}
+		try {
+			dashboard.setEduQ3Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 3, year, "EDUCATION" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEduQ3Count(0l);
+		}
+		try {
+			dashboard.setEduQ4Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 4, year, "EDUCATION" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setEduQ4Count(0l);
+		}
+
+		try {
+			dashboard.setNsQ1Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 1, year, "NETWORK SUPPORT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setNsQ1Count(0l);
+		}
+
+		try {
+			dashboard.setNsQ2Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 2, year, "NETWORK SUPPORT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setNsQ2Count(0l);
+		}
+		try {
+			dashboard.setNsQ3Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 3, year, "NETWORK SUPPORT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setNsQ3Count(0l);
+		}
+		try {
+			dashboard.setNsQ4Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 4, year, "NETWORK SUPPORT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setNsQ4Count(0l);
+		}
+
+		try {
+			dashboard.setHhQ1Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 1, year, "HOUSEHOLD MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHhQ1Count(0l);
+		}
+
+		try {
+			dashboard.setHhQ2Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 2, year, "HOUSEHOLD MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHhQ2Count(0l);
+		}
+		try {
+			dashboard.setHhQ3Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 3, year, "HOUSEHOLD MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHhQ3Count(0l);
+		}
+		try {
+			dashboard.setHhQ4Count(this.getJdbcTemplate().queryForObject(ACTION_PLAN_BY_DOMAIN, new Object[] { 4, year, "HOUSEHOLD MANAGEMENT" }, Long.class));
+		} catch (EmptyResultDataAccessException ers) {
+			dashboard.setHhQ4Count(0l);
+		}
+
+		// REsident served per Quarter
 
 		try {
 			dashboard.setResidentServedQ1(this.getJdbcTemplate().queryForObject(RESIDENT_SERVED, new Object[] { 1, 1, 1, 1, year, year, year, year }, Long.class));
@@ -162,6 +556,8 @@ public class DashboardDao extends JdbcDaoSupport {
 		} catch (EmptyResultDataAccessException ers) {
 			dashboard.setResidentServedQ4(0l);
 		}
+
+		// Assessment Completed per Quarter
 
 		try {
 			dashboard.setQ1AssessmentComplete(this.getJdbcTemplate().queryForObject(ASSESSMENT_COMPLETED, new Object[] { 1, year }, Integer.class));
@@ -215,589 +611,6 @@ public class DashboardDao extends JdbcDaoSupport {
 				dashboard.setQ4SignUpComplete(quarterCount.getCount());
 			}
 		}
-
-		/* REferral Reasons Begin 1 to 14 */
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_1, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr1q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr1q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr1q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr1q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_2, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr2q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr2q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr2q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr2q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_3, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr3q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr3q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr3q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr3q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_4, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr4q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr4q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr4q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr4q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_5, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr5q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr5q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr5q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr5q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_6, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr6q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr6q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr6q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr6q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_7, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr7q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr7q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr7q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr7q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_8, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr8q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr8q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr8q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr8q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_9, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr9q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr9q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr9q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr9q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_10, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr10q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr10q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr10q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr10q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_11, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr11q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr11q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr11q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr11q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_12, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr12q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr12q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr12q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr12q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_13, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr13q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr13q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr13q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr13q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_REFERRAL_REASON_14, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setRr14q1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setRr14q2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setRr14q3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setRr14q4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_HOUSING_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setHousingQ1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setHousingQ2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setHousingQ3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setHousingQ4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_MM_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setMmQ1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setMmQ2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setMmQ3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setMmQ4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_EMP_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setEmpQ1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setEmpQ2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setEmpQ3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setEmpQ4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_EDU_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setEduQ1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setEduQ2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setEduQ3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setEduQ4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_NS_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setNsQ1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setNsQ2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setNsQ3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setNsQ4Count(quarterCount.getCount());
-			}
-		}
-
-		qcList = new ArrayList<QuarterCount>();
-		qcList = this.getJdbcTemplate().query(SQL_HH_COUNT, new Object[] { Integer.parseInt(dashboard.getYear()) }, (rs, rowNumber) -> {
-			try {
-				QuarterCount qc = new QuarterCount();
-				qc.setQuarter(rs.getInt("quarter"));
-				qc.setCount(rs.getInt("count"));
-
-				return qc;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-
-		for (QuarterCount quarterCount : qcList) {
-
-			if (quarterCount.getQuarter() == 1) {
-				dashboard.setHhQ1Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 2) {
-				dashboard.setHhQ2Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 3) {
-				dashboard.setHhQ3Count(quarterCount.getCount());
-			}
-			if (quarterCount.getQuarter() == 4) {
-				dashboard.setHhQ4Count(quarterCount.getCount());
-			}
-		}
-
 
 
 		return dashboard;

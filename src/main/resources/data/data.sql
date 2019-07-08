@@ -888,19 +888,128 @@ JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
 ORDER BY z."AGENCY";
 
+
 --Resident Who moved atleast one level up
-CREATE VIEW PROGRESSING_RESIDENTS_VIEW
+CREATE VIEW MOVING_UP_RESIDENTS_VIEW
 AS
 select z."RES_ID" as "RES_ID", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME", z."LIFE_DOMAIN" as "LIFE_DOMAIN", z."SCORE" as "SCORE" from (
 select rsg.resident_id as "RES_ID", extract (quarter from rsg.on_this_date) as "QUARTER", extract (year from rsg.on_this_date) as "YEAR" , rsg.life_domain as "LIFE_DOMAIN", rsg.score as "SCORE"
 from resident_Score_goal rsg
-join resident_score_goal rsg1 on rsg1.resident_id = rsg.resident_id and rsg1.life_domain = rsg.life_domain and rsg.score > rsg1.score
+join resident_score_goal rsg1 on rsg1.resident_id = rsg.resident_id and rsg1.life_domain = rsg.life_domain and rsg.score > rsg1.score and rsg.on_this_date > rsg1.on_this_Date
+)z
+JOIN RESIDENT R on R.RESIDENT_ID = z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+order by z."YEAR", z."QUARTER";
+
+--Resident Who moved one more level down
+CREATE VIEW MOVING_DOWN_RESIDENTS_VIEW
+AS
+select z."RES_ID" as "RES_ID", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME", z."LIFE_DOMAIN" as "LIFE_DOMAIN", z."SCORE" as "SCORE" from (
+select rsg.resident_id as "RES_ID", extract (quarter from rsg.on_this_date) as "QUARTER", extract (year from rsg.on_this_date) as "YEAR" , rsg.life_domain as "LIFE_DOMAIN", rsg.score as "SCORE"
+from resident_Score_goal rsg
+join resident_score_goal rsg1 on rsg1.resident_id = rsg.resident_id and rsg1.life_domain = rsg.life_domain and rsg.score < rsg1.score and rsg.on_this_date > rsg1.on_this_Date
 )z
 JOIN RESIDENT R on R.RESIDENT_ID = z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
 order by z."YEAR", z."QUARTER";
 
 
+CREATE VIEW OUTCOMES_ACHIEVED_VIEW
+AS
+SELECT z."RES_ID" as "RES_ID", z."OUTCOMES" as "OUTCOMES", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROPERTY" from (
+select OUTCOME_ACHIEVED ->> 'HOUSING' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'HOUSING' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'MONEY MANAGEMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'MONEY MANAGEMENT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'EMPLOYMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'EMPLOYMENT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'EDUCATION' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'EDUCATION' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'NETWORK SUPPORT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'NETWORK SUPPORT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'HOUSEHOLD MANAGEMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'HOUSEHOLD MANAGEMENT' not in ('')
+) z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+ORDER BY z."OUTCOMES";
+
+
+CREATE VIEW RESIDENT_ACTION_PLAN_VIEW
+AS
+select z."RES_ID", z."LIFE_DOMAIN", z."PLAN_OF_ACTION", Z."QUARTER", z."YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROPERTY" from (
+select RESIDENT_ID as "RES_ID", 'HOUSING' as "LIFE_DOMAIN", plan_of_Action ->>'HOUSING' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'HOUSING' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'MONEY MANAGEMENT' as "LIFE_DOMAIN", plan_of_Action ->>'MONEY MANAGEMENT' as "PLAN_OF_ACTION",  EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'MONEY MANAGEMENT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'EMPLOYMENT' as "LIFE_DOMAIN", plan_of_Action ->>'EMPLOYMENT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'EMPLOYMENT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'EDUCATION' as "LIFE_DOMAIN", plan_of_Action ->>'EDUCATION' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'EDUCATION' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'NETWORK SUPPORT' as "LIFE_DOMAIN", plan_of_Action ->>'NETWORK SUPPORT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'NETWORK SUPPORT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'HOUSEHOLD MANAGEMENT' as "LIFE_DOMAIN", plan_of_Action ->>'HOUSEHOLD MANAGEMENT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'HOUSEHOLD MANAGEMENT' not in ('')) z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
+
+
+CREATE VIEW REFERRAL_REASON_VIEW
+AS
+select z."RES_ID" as "RES_ID", z."REASON" as "REASONS", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME AS "PROPERTY" from (
+select 'Childcare/afterschool care' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Childcare/afterschool care' not in ('', 'false')
+UNION ALL
+select 'Education/job training' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Education/job training' not in ('', 'false')
+UNION ALL
+select 'Employment/job readiness' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Employment/job readiness' not in ('', 'false')
+UNION ALL
+select 'Healthcare/medical issues' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Healthcare/medical issues' not in ('', 'false')
+UNION ALL
+select 'Housekeeping/home management' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Housekeeping/home management' not in ('', 'false')
+UNION ALL
+select 'Lease violation for:' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Lease violation for:' not in ('', 'false')
+UNION ALL
+select 'Non/late payment of rent' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Non/late payment of rent' not in ('', 'false')
+UNION ALL
+select 'Noticeable change in:' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Noticeable change in:' not in ('', 'false')
+UNION ALL
+select 'Other:' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Other:' not in ('', 'false')
+UNION ALL
+select 'Resident-to-resident conflict issues' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Resident-to-resident conflict issues' not in ('', 'false')
+UNION ALL
+select 'Safety' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Safety' not in ('', 'false')
+UNION ALL
+select 'Suspected abuse/domestic violence/exploitation' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Suspected abuse/domestic violence/exploitation' not in ('', 'false')
+UNION ALL
+select 'Transportation' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Transportation' not in ('', 'false')
+UNION ALL
+select 'Utility Shut-off, scheduled for (Date):' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Utility Shut-off, scheduled for (Date):' not in ('', 'false')) z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
 
 
 
