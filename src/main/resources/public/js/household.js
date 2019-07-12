@@ -1,7 +1,16 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
+
 function calculateHouseholdScore() {
 
     jQuery("#_lifeDomainhh").val('HOUSEHOLD MANAGEMENT');
 
+    jQuery('#currentHHScore').val('');
+    jQuery('#currentHHGoal').val('');
     jQuery('#hhmst_6_body').text('');
     jQuery('#hhmst_7_body').text('');
     jQuery('[id^=hhmst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');

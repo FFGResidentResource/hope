@@ -1,6 +1,7 @@
 -- PostGreSQL - Initial Datasetup
 -- Create table
 
+--FOLLOWING DROP only requires in NON-PROD Environments - BEGIN
 DROP SEQUENCE SC_SQ;
 DROP SEQUENCE PROP_SQ;
 DROP SEQUENCE RESIDENT_SQ;
@@ -15,7 +16,11 @@ DROP SEQUENCE AP_SQ;
 DROP SEQUENCE CN_SQ;
 DROP SEQUENCE RF_SQ;
 DROP SEQUENCE UR_SQ;
+DROP SEQUENCE RP_SQ;
 
+DROP MATERIALIZED VIEW SERVICE_CATEGORY_VW;
+DROP MATERIALIZED VIEW NEW_RESIDENT_VW;
+DROP MATERIALIZED VIEW ONGOING_RESIDENT_VW;
 
 DROP TABLE REFERRAL_FORM;
 DROP TABLE ACTION_PLAN;
@@ -28,6 +33,7 @@ DROP TABLE RESIDENT;
 DROP TABLE ASSESSMENT_TYPE;
 DROP TABLE ASSESSMENT_QUESTIONNAIRE;
 DROP TABLE REFERRAL;
+DROP TABLE REFERRAL_PARTNER;
 
 DROP TABLE SCORE;
 DROP TABLE CHOICE;
@@ -37,6 +43,10 @@ DROP TABLE APP_ROLE;
 DROP TABLE SERVICE_COORDINATOR;
 DROP TABLE PROPERTY;
 
+--FOLLOWING DROP only requires in NON-PROD Environments - END
+
+
+--COPY FROM HERE FOR PRODUCTION ENVIRONMENT - BEGIN
 
 CREATE SEQUENCE SC_SQ START 1;
 
@@ -65,6 +75,23 @@ CREATE SEQUENCE CN_SQ START 1;
 CREATE SEQUENCE RF_SQ START 1;
 
 CREATE SEQUENCE UR_SQ START 1;
+
+CREATE SEQUENCE RP_SQ START 1;
+
+CREATE TABLE REFERRAL_PARTNER (
+	REF_PAR_ID INT 				PRIMARY KEY NOT NULL,
+	REFERRAL_PARTNER_NAME 		VARCHAR(500),
+	ACTIVE						BOOLEAN DEFAULT TRUE
+);
+
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'ABC Company');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Dental Associates Ohio');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'XYZ Education Department');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Employment Division');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Ohio Housing Board');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Food Company');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Ohio Housing Board');
+INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Erie Money Management');
 
 
 CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
@@ -426,7 +453,9 @@ CREATE table PROPERTY (
 	PROP_NAME		VARCHAR(128) UNIQUE NOT NULL,
 	UNIT			INT,
 	UNIT_FEE		INT,
-	ACTIVE			BOOLEAN DEFAULT TRUE
+	ACTIVE			BOOLEAN DEFAULT TRUE,
+	TOTAL_RESIDENTS	INT,
+	RESIDENT_COUNCIL BOOLEAN DEFAULT FALSE
 );
 
 CREATE table SERVICE_COORDINATOR (
@@ -445,7 +474,7 @@ CREATE table SERVICE_COORDINATOR (
 
 CREATE table RESIDENT (
 	RESIDENT_ID		BIGINT PRIMARY KEY NOT NULL,
-	ACTIVE			BOOLEAN DEFAULT FALSE,
+	ACTIVE			BOOLEAN DEFAULT TRUE,
 	IS_RESIDENT 	BOOLEAN DEFAULT TRUE,
 	REF_TYPE		INT REFERENCES REFERRAL(REF_ID) NOT NULL,
 	FIRST_NAME		VARCHAR(128),
@@ -459,12 +488,12 @@ CREATE table RESIDENT (
 	TEXT_NO			VARCHAR(20),
 	EMAIL			VARCHAR(256) UNIQUE,
 	ADDRESS			VARCHAR(256),
-	ACK_PR			BOOLEAN DEFAULT TRUE,
+	ACK_PR			BOOLEAN DEFAULT FALSE,
 	ALLOW_CONTACT	BOOLEAN DEFAULT FALSE,
 	WANTS_SURVEY	BOOLEAN DEFAULT FALSE,
 	PHOTO_RELEASE	BOOLEAN DEFAULT FALSE,
 	DATE_ADDED		TIMESTAMP DEFAULT NOW(),
-	DATE_MODIFIED	TIMESTAMP,
+	DATE_MODIFIED	TIMESTAMP DEFAULT NOW(),
 	MODIFIED_BY		VARCHAR(50),
 	SERVICE_COORD	VARCHAR(50),
 	A_TYPE			INT REFERENCES ASSESSMENT_TYPE(A_ID),
@@ -473,6 +502,8 @@ CREATE table RESIDENT (
 
 alter table RESIDENT
   add constraint RESIDENT_UK unique (FIRST_NAME, LAST_NAME, PROP_ID, ADDRESS);
+  
+alter table RESIDENT drop constraint resident_email_key;
 
 CREATE table CHILD (
 	CHILD_ID		BIGINT PRIMARY KEY NOT NULL,
@@ -486,14 +517,14 @@ CREATE TABLE REFERRAL_FORM (
 	RESIDENT_ID					BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	INTERPRETATION      		BOOLEAN DEFAULT FALSE,
 	REFERRED_BY					VARCHAR(100),
-	DATE_ADDED					DATE,
-	DATE_MODIFIED				DATE,
+	DATE_ADDED					DATE DEFAULT NOW(),
+	DATE_MODIFIED				DATE DEFAULT NOW(),
 	REFERRAL_REASON				JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
 	COMMENTS					VARCHAR(1000),
 	PREVIOUS_ATTEMPTS			VARCHAR(1000),
-	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false" }',
-	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false"}',
-	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false"}',
+	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false", "Other":"" }',
+	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false", "Other":""}',
+	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false", "Other":""}',
 	RF_FOLLOWUP_NOTES			VARCHAR(1000),
 	RES_APP_SCHEDULED			JSON DEFAULT '{ "Resident Appointment Scheduled?":""}',
 	SERVICE_COORD				VARCHAR(50)
@@ -501,17 +532,19 @@ CREATE TABLE REFERRAL_FORM (
 
 CREATE TABLE ACTION_PLAN(
     ACTION_PLAN_ID			BIGINT PRIMARY KEY NOT NULL,
-	RESIDENT_ID				BIGINT REFERENCES RESIDENT(RESIDENT_ID),
-	RESIDENT_CONCERNS    	VARCHAR(500),
-    ACTIVE              	BOOLEAN DEFAULT TRUE,
-    FOCUS_ON_DOMAIN 		JSON DEFAULT '{ "HOUSING": "false", "MONEY MANAGEMENT": "false", "EMPLOYMENT": "false", "EDUCATION": "false", "NETWORK SUPPORT": "false", "HOUSEHOLD MANAGEMENT": "false" }',
+	RESIDENT_ID				BIGINT REFERENCES RESIDENT(RESIDENT_ID),	
+    ACTIVE              	BOOLEAN DEFAULT TRUE,   
 	PLAN_OF_ACTION			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	PLAN_DETAILS			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	REFERRAL_PARTNER		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	ANTICIPATED_OUTCOMES	JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	ANTICIPATED_DATE		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	OUTCOME_ACHIEVED		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	OUTCOME_DATE			DATE,
+	COMPLETION_DATE			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	ACHIEVED_SSM			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
 	FOLLOWUP_NOTES			VARCHAR(2000),
 	DATE_ADDED				DATE DEFAULT NOW(),
-	DATE_MODIFIED			DATE,
+	DATE_MODIFIED			DATE DEFAULT NOW(),
 	SERVICE_COORD			VARCHAR(50)
 );
 	
@@ -523,7 +556,7 @@ CREATE TABLE CASE_NOTES(
 	RESIDENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	SERVICE_COORD	VARCHAR(50),
 	DATE_ADDED		DATE DEFAULT NOW(),		
-	DATE_MODIFIED	DATE
+	DATE_MODIFIED	DATE DEFAULT NOW()
 	
 );
 
@@ -595,23 +628,26 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE, 1200, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE, 1300, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE, 1100, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 900, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE, 500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE, 500, FALSE);
+
+
+
 
 --------------------------------------
  
@@ -662,6 +698,318 @@ insert into user_role (ID, USER_ID, ROLE_ID)
 values (nextval('UR_SQ'), 5, 2);
 
 ---
+--
+CREATE VIEW SERVICE_CATEGORY_VIEW
+AS 
+SELECT P."SRVC_CAT"||'_'||P."QUARTER"||'_'||P."YEAR" AS "PRIMARY_CAT", P."SRVC_CAT" AS "SRVC_CAT", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", SUM(P."COUNT"::FLOAT) AS "COUNT" from (
+SELECT
+    plan_of_action->>'HOUSING' AS "SRVC_CAT", 
+    count(plan_of_action->>'HOUSING') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'HOUSING' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'HOUSING' not in ('')
+GROUP BY
+     plan_of_action->>'HOUSING', extract(quarter from date_Added), extract (year from date_added)
+UNION 
+SELECT
+    plan_of_action->>'MONEY MANAGEMENT' AS "SRVC_CAT", 
+    count(plan_of_action->>'MONEY MANAGEMENT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'MONEY MANAGEMENT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'MONEY MANAGEMENT' not in ('')
+GROUP BY
+     plan_of_action->>'MONEY MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)
+UNION 
+SELECT
+    plan_of_action->>'EDUCATION' AS "SRVC_CAT", 
+    count(plan_of_action->>'EDUCATION') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'EDUCATION' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'EDUCATION' not in ('')
+GROUP BY
+     plan_of_action->>'EDUCATION', extract(quarter from date_Added), extract (year from date_added)
+UNION 
+SELECT
+    plan_of_action->>'EMPLOYMENT' AS "SRVC_CAT", 
+    count(plan_of_action->>'EMPLOYMENT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'EMPLOYMENT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'EMPLOYMENT' not in ('')
+GROUP BY
+     plan_of_action->>'EMPLOYMENT', extract(quarter from date_Added), extract (year from date_added)
+UNION
+SELECT
+    plan_of_action->>'NETWORK SUPPORT' AS "SRVC_CAT", 
+    count(plan_of_action->>'NETWORK SUPPORT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'NETWORK SUPPORT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'NETWORK SUPPORT' not in ('')
+GROUP BY
+     plan_of_action->>'NETWORK SUPPORT', extract(quarter from date_Added), extract (year from date_added)
+UNION
+SELECT
+    plan_of_action->>'HOUSEHOLD MANAGEMENT' AS "SRVC_CAT", 
+    count(plan_of_action->>'HOUSEHOLD MANAGEMENT') AS "COUNT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'HOUSEHOLD MANAGEMENT' AS "LIFE_DOMAIN"
+FROM
+    ACTION_PLAN where  plan_of_action->>'HOUSEHOLD MANAGEMENT' not in ('')
+GROUP BY
+     plan_of_action->>'HOUSEHOLD MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)) P
+GROUP BY P."SRVC_CAT", P."QUARTER", P."YEAR"
+ORDER BY P."SRVC_CAT"
+;
+
+
+--new = totla of current quarter for current year 
+CREATE VIEW NEW_RESIDENT_VIEW
+AS 
+select z."ID" as "RES_ID" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY" 
+from (
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE" from resident r 
+left join resident_score_goal rsg on rsg.resident_id = r.resident_id
+left join case_notes cn on cn.resident_id = r.resident_id 
+left join action_Plan ap on ap.resident_id = r.resident_id ) P 
+where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
+) z 
+where (
+	(	z."RESQ" = extract (quarter from now()) and z."RESY" = extract (year from now())) 
+	OR (z."SSMQ" = extract (quarter from now()) AND z."SSMY" = extract (year from now())) 
+	OR (z."CNQ"	 = extract (quarter from now()) AND z."CNY" = extract (year from now())) 
+	OR (z."APQ"	 = extract (quarter from now()) AND z."APY"  = extract (year from now())))
+group by z."ID"
+;
+
+--Ongoing = total of all previous quarters for current year
+CREATE VIEW ONGOING_RESIDENT_VIEW
+AS 
+select z."ID" as "RES_ID" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY" 
+from (
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE" from resident r 
+left join resident_score_goal rsg on rsg.resident_id = r.resident_id
+left join case_notes cn on cn.resident_id = r.resident_id 
+left join action_Plan ap on ap.resident_id = r.resident_id ) P 
+where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
+) z 
+where (
+	(	z."RESQ" < extract (quarter from now()) and z."RESY" = extract (year from now())) 
+	OR (z."SSMQ" < extract (quarter from now()) AND z."SSMY" = extract (year from now())) 
+	OR (z."CNQ"	 < extract (quarter from now()) AND z."CNY" = extract (year from now())) 
+	OR (z."APQ"	 < extract (quarter from now()) AND z."APY"  = extract (year from now())))
+group by z."ID";
+
+
+--Number of Resident Served
+CREATE VIEW RESIDENT_SERVED_VIEW
+AS
+select z."ID" as "RES_ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY", z."PROP_ID" from (
+select distinct P."ID", P."ACK", extract( quarter from P."RES_DATE") as "RESQ" , extract( year from P."RES_DATE") as "RESY" , extract( quarter from P."SSM_DATE") as "SSMQ", extract( year from P."SSM_DATE") as "SSMY", extract ( quarter from P."CN_DATE" ) as "CNQ", extract ( year from P."CN_DATE" ) as "CNY", extract ( quarter from P."AP_DATE") as "APQ" , extract ( year from P."AP_DATE") as "APY", P."PROP_ID" as "PROP_ID"
+from (
+select r.resident_id as "ID", r.ack_pr as "ACK", r.date_modified as "RES_DATE", rsg.on_this_date as "SSM_DATE", cn.DATE_MODIFIED as "CN_DATE", ap.DATE_MODIFIED as "AP_DATE", r.PROP_ID as "PROP_ID" from resident r 
+left join resident_score_goal rsg on rsg.resident_id = r.resident_id
+left join case_notes cn on cn.resident_id = r.resident_id 
+left join action_Plan ap on ap.resident_id = r.resident_id ) P 
+where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
+) z 
+group by z."ID", z."RESQ", z."RESY", z."SSMQ", z."SSMY", z."CNQ", z."CNY", z."APQ", z."APY", z."PROP_ID"
+ORDER BY "RES_ID";
+
+--REsident who completed all the 6 assessment
+CREATE VIEW ASSESSMENT_COMPLETED_VIEW
+AS
+select z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID" from (
+select rsg.resident_id as "RES_ID", extract ( quarter from rsg.on_this_date) as "QUARTER" , extract (year from rsg.on_this_date) as "YEAR", rsg.life_domain, r.prop_id as "PROP_ID" from resident_score_goal rsg
+join resident r on r.resident_id = rsg.resident_id 
+group by rsg.resident_id, extract (quarter from rsg.on_this_date), extract(year from rsg.on_this_date), rsg.life_domain, r.prop_id ) z
+where exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'HOUSING'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'NETWORK SUPPORT'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'EMPLOYMENT'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'EDUCATION'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'MONEY MANAGEMENT'
+)
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'HOUSEHOLD MANAGEMENT'
+)
+group by z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID"
+;
+
+
+--Resident by agency referred
+CREATE VIEW AGENCY_RESIDENT_VIEW
+AS
+SELECT z."AGENCY", z."RES_ID", z."QUARTER", z."YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME" from (
+select referral_partner->>'HOUSING' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'HOUSING' not in ('')
+union
+select referral_partner->>'MONEY MANAGEMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'MONEY MANAGEMENT' not in ('')
+union
+select referral_partner->>'EMPLOYMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'EMPLOYMENT' not in ('')
+union
+select referral_partner->>'EDUCATION' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'EDUCATION' not in ('')
+union
+select referral_partner->>'NETWORK SUPPORT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'NETWORK SUPPORT' not in ('')
+union
+select referral_partner->>'HOUSEHOLD MANAGEMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'HOUSEHOLD MANAGEMENT' not in ('')
+ ) Z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+ORDER BY z."AGENCY";
+
+
+--Resident Who moved atleast one level up
+CREATE VIEW MOVING_UP_RESIDENTS_VIEW
+AS
+select z."RES_ID" as "RES_ID", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME", z."LIFE_DOMAIN" as "LIFE_DOMAIN", z."SCORE" as "SCORE" from (
+select rsg.resident_id as "RES_ID", extract (quarter from rsg.on_this_date) as "QUARTER", extract (year from rsg.on_this_date) as "YEAR" , rsg.life_domain as "LIFE_DOMAIN", rsg.score as "SCORE"
+from resident_Score_goal rsg
+join resident_score_goal rsg1 on rsg1.resident_id = rsg.resident_id and rsg1.life_domain = rsg.life_domain and rsg.score > rsg1.score and rsg.on_this_date > rsg1.on_this_Date
+)z
+JOIN RESIDENT R on R.RESIDENT_ID = z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+order by z."YEAR", z."QUARTER";
+
+--Resident Who moved one more level down
+CREATE VIEW MOVING_DOWN_RESIDENTS_VIEW
+AS
+select z."RES_ID" as "RES_ID", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROP_NAME", z."LIFE_DOMAIN" as "LIFE_DOMAIN", z."SCORE" as "SCORE" from (
+select rsg.resident_id as "RES_ID", extract (quarter from rsg.on_this_date) as "QUARTER", extract (year from rsg.on_this_date) as "YEAR" , rsg.life_domain as "LIFE_DOMAIN", rsg.score as "SCORE"
+from resident_Score_goal rsg
+join resident_score_goal rsg1 on rsg1.resident_id = rsg.resident_id and rsg1.life_domain = rsg.life_domain and rsg.score < rsg1.score and rsg.on_this_date > rsg1.on_this_Date
+)z
+JOIN RESIDENT R on R.RESIDENT_ID = z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+order by z."YEAR", z."QUARTER";
+
+
+CREATE VIEW OUTCOMES_ACHIEVED_VIEW
+AS
+SELECT z."RES_ID" as "RES_ID", z."OUTCOMES" as "OUTCOMES", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROPERTY" from (
+select OUTCOME_ACHIEVED ->> 'HOUSING' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'HOUSING' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'MONEY MANAGEMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'MONEY MANAGEMENT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'EMPLOYMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'EMPLOYMENT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'EDUCATION' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'EDUCATION' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'NETWORK SUPPORT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'NETWORK SUPPORT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'HOUSEHOLD MANAGEMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'HOUSEHOLD MANAGEMENT' not in ('')
+) z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
+ORDER BY z."OUTCOMES";
+
+
+CREATE VIEW RESIDENT_ACTION_PLAN_VIEW
+AS
+select z."RES_ID", z."LIFE_DOMAIN", z."PLAN_OF_ACTION", Z."QUARTER", z."YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME as "PROPERTY" from (
+select RESIDENT_ID as "RES_ID", 'HOUSING' as "LIFE_DOMAIN", plan_of_Action ->>'HOUSING' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'HOUSING' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'MONEY MANAGEMENT' as "LIFE_DOMAIN", plan_of_Action ->>'MONEY MANAGEMENT' as "PLAN_OF_ACTION",  EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'MONEY MANAGEMENT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'EMPLOYMENT' as "LIFE_DOMAIN", plan_of_Action ->>'EMPLOYMENT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'EMPLOYMENT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'EDUCATION' as "LIFE_DOMAIN", plan_of_Action ->>'EDUCATION' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'EDUCATION' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'NETWORK SUPPORT' as "LIFE_DOMAIN", plan_of_Action ->>'NETWORK SUPPORT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'NETWORK SUPPORT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'HOUSEHOLD MANAGEMENT' as "LIFE_DOMAIN", plan_of_Action ->>'HOUSEHOLD MANAGEMENT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'HOUSEHOLD MANAGEMENT' not in ('')) z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
+
+
+CREATE VIEW REFERRAL_REASON_VIEW
+AS
+select z."RES_ID" as "RES_ID", z."REASON" as "REASONS", z."QUARTER" as "QUARTER", z."YEAR" as "YEAR", P.PROP_ID as "PROP_ID", P.PROP_NAME AS "PROPERTY" from (
+select 'Childcare/afterschool care' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Childcare/afterschool care' not in ('', 'false')
+UNION ALL
+select 'Education/job training' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Education/job training' not in ('', 'false')
+UNION ALL
+select 'Employment/job readiness' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Employment/job readiness' not in ('', 'false')
+UNION ALL
+select 'Healthcare/medical issues' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Healthcare/medical issues' not in ('', 'false')
+UNION ALL
+select 'Housekeeping/home management' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Housekeeping/home management' not in ('', 'false')
+UNION ALL
+select 'Lease violation for:' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Lease violation for:' not in ('', 'false')
+UNION ALL
+select 'Non/late payment of rent' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Non/late payment of rent' not in ('', 'false')
+UNION ALL
+select 'Noticeable change in:' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Noticeable change in:' not in ('', 'false')
+UNION ALL
+select 'Other:' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Other:' not in ('', 'false')
+UNION ALL
+select 'Resident-to-resident conflict issues' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Resident-to-resident conflict issues' not in ('', 'false')
+UNION ALL
+select 'Safety' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Safety' not in ('', 'false')
+UNION ALL
+select 'Suspected abuse/domestic violence/exploitation' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Suspected abuse/domestic violence/exploitation' not in ('', 'false')
+UNION ALL
+select 'Transportation' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Transportation' not in ('', 'false')
+UNION ALL
+select 'Utility Shut-off, scheduled for (Date):' as "REASON", extract (quarter from date_modified) as "QUARTER", extract( year from date_modified) as "YEAR", resident_id as "RES_ID" from referral_form
+where referral_reason ->> 'Utility Shut-off, scheduled for (Date):' not in ('', 'false')) z
+JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
+JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
 
 
 

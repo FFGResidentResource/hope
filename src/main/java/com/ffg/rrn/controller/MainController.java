@@ -79,15 +79,5 @@ public class MainController extends BaseController{
 		
 		return "caseNotes";
 	}
-	
-	@RequestMapping(value = { "/dashboard" }, method = RequestMethod.GET)
-	public String dashboardPage(Model model, Principal principal) {
-		
-		if (principal != null) {
-			populateSCinModel(model, principal);
-		}
-		
-		return "dashboard";
-	}
 
 }

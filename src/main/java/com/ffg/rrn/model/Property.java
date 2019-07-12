@@ -21,5 +21,9 @@ public class Property {
 	private int unit;
 	private int unitFee;
 	private Boolean active;
+	private int noOfResident;
+	private Boolean residentCouncil;
+
+	private Boolean checked;
 
 }

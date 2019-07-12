@@ -90,7 +90,7 @@ jQuery(document).ready(
 				    visible : false
 				} ],
 				"order" : [ [ 9, "desc" ] ],
-				pageLength : 15,
+				pageLength : 10,
 				pagingType : "full_numbers",
 				"initComplete" : function(settings, json) {
 				    var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="residents" value="all" onchange="filterActives(this);"> All '
@@ -129,7 +129,7 @@ jQuery(document).ready(
 			return false;
 		    });
 
-		    jQuery('#residentTable tbody').on('click', 'tr', function() {
+		    /*jQuery('#residentTable tbody').on('click', 'tr', function() {
 
 			var tr = $(this);
 			currentRow = table.row(this).data();
@@ -161,7 +161,8 @@ jQuery(document).ready(
 			     * Assessment buttons when a row is clicked in all
 			     * Resident Table
 			     */
-			    var suffix = '&residentId=' + currentRow.residentId;
+			   
+		    /*var suffix = '&residentId=' + currentRow.residentId;
 			    var assessmentLinks = jQuery('a[id^="_load"]');
 
 			    jQuery.each(assessmentLinks, function(idx, obj) {
@@ -174,7 +175,8 @@ jQuery(document).ready(
 			     * Following code populates score and goal once a
 			     * row a clicked
 			     */
-			    jQuery.ajax({
+			   
+		    /*jQuery.ajax({
 				type : "POST",
 				contentType : "application/json",
 				url : "/getAllLatestScoreGoal?residentId=" + currentRow.residentId,
@@ -195,7 +197,7 @@ jQuery(document).ready(
 				}
 			    });
 			}
-		    });
+		    });*/
 		},
 		error : function(e) {
 		    console.log("ERROR : ", e);
@@ -273,6 +275,9 @@ function buildPieChartData(data) {
 	    columns : columns,
 	    type : 'bar'
 	},
+	color: {
+	    pattern: ['#3296dc', '#719dd7', '#e29305', '#ffbb78', '#81923a', '#d3d093', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9']
+	},
 	axis : {
 	    x : {
 		tick : {
@@ -281,10 +286,16 @@ function buildPieChartData(data) {
 	    },
 	    y : {
 		min : 0,
+		tick: {
+	                format: function (d) {
+	                    return (parseInt(d) == d) ? d : null;
+	                }
+	            }
 	    // Range includes padding, set 0 if no padding needed
 	    // padding: {top:0, bottom:0}
 	    }
 	}
+	
     });
 
 };

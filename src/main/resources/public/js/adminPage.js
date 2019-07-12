@@ -6,6 +6,8 @@ jQuery(document).ready(
 	    
 	    jQuery('a[id^="_load"]').attr('disabled', true);
 	    
+	    jQuery('#_property').prop('disabled', jQuery('#_isAdmin').prop('checked'));
+	    
 	    jQuery.ajax({
 		type : "POST",
 		contentType : "application/json",
@@ -70,7 +72,7 @@ jQuery(document).ready(
 			    $(this).removeClass('selected');
 			    jQuery('a[id^="_load"]').attr('disabled', true);
 			    
-			    jQuery('select').prop('selectedIndex', 0);
+			    jQuery('select').prop('selectedIndex', '');
 			    jQuery('input:text').val('');
 			    jQuery('#inputEmail1').val('');
 			    jQuery('#inputPassword1').val('');
@@ -85,8 +87,13 @@ jQuery(document).ready(
 			    
 			    jQuery("#inputEmail1").val(currentRow.email);
 			    jQuery("#userName1").val(currentRow.userName);		    
-			    jQuery('select').val(currentRow.propertyId);
+			    jQuery('#_property').val((currentRow.propertyId == 0) ? '' : currentRow.propertyId);
 			    jQuery('#_isAdmin').prop('checked', currentRow.admin);
+			    jQuery('#_property').prop('disabled', currentRow.admin);
+			    
+			    if(currentRow.admin == true){
+				jQuery('#_property').removeAttr('required');			
+			    }
 			    
 			    jQuery('a[id^="_load"]').attr('disabled', false);
 			    

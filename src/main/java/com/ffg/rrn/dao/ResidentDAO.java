@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,7 +29,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import com.ffg.rrn.mapper.AssessmentMapper;
 import com.ffg.rrn.mapper.ChildrenMapper;
@@ -56,10 +56,8 @@ import com.ffg.rrn.utils.AppConstants;
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
 
-	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, "
-			+ "VOICEMAIL_NO, TEXT_NO, EMAIL, ADDRESS, ACK_PR, ALLOW_CONTACT, WANTS_SURVEY, PHOTO_RELEASE, SERVICE_COORD,"
-			+ " REF_TYPE, VIA_VOICEMAIL, VIA_TEXT, VIA_EMAIL, ACTIVE, MODIFIED_BY, IS_RESIDENT) VALUES (nextval('RESIDENT_SQ'), "
-			+ " ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, ADDRESS, "
+			+ "REF_TYPE, IS_RESIDENT, SERVICE_COORD) VALUES (nextval('RESIDENT_SQ'),  ?,?,?,?,?,?,?,?)";
 
 	private final static String SQL_UPDATE_RESIDENT = "UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, "
 			+ "VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?,"
@@ -122,6 +120,37 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return sortedDatesOfAssessments.stream().distinct().collect(Collectors.toList());
 	}
 	
+	/**
+	 * This will display as dropdown on Contact Notes Form
+	 * 
+	 * @param residentId
+	 * @return
+	 */
+	public List<String> getContactNoteDates(Long residentId) {
+		List<String> sortedDatesOfContactNotes = (List<String>) this.getJdbcTemplate().queryForList(
+				"select TO_CHAR(DATE_ADDED, '" + AppConstants.DATE_PATTERN_POSTGRE + "') FROM CASE_NOTES " + " WHERE RESIDENT_ID = ?  ORDER BY DATE_ADDED DESC", new Object[] { residentId },
+				String.class);
+		if (CollectionUtils.isEmpty(sortedDatesOfContactNotes)) {
+			return Collections.emptyList();
+		}
+		return sortedDatesOfContactNotes.stream().distinct().collect(Collectors.toList());
+	}
+
+	/**
+	 * This will display as dropdown on Action Plan Form
+	 * 
+	 * @param residentId
+	 * @return
+	 */
+	public List<String> getActionPlanDates(Long residentId) {
+		List<String> sortedDatesOfActionPlan = (List<String>) this.getJdbcTemplate().queryForList(
+				"select TO_CHAR(DATE_ADDED, '" + AppConstants.DATE_PATTERN_POSTGRE + "') FROM ACTION_PLAN " + " WHERE RESIDENT_ID = ?  ORDER BY DATE_ADDED DESC", new Object[] { residentId },
+				String.class);
+		if (CollectionUtils.isEmpty(sortedDatesOfActionPlan)) {
+			return Collections.emptyList();
+		}
+		return sortedDatesOfActionPlan.stream().distinct().collect(Collectors.toList());
+	}
 	
 
 	public List<ResidentAssessmentQuestionnaire> getAllAssessment(Long residentId, String onThisDate) {
@@ -198,15 +227,32 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return resident;
 	}
 
-	public Resident getResidentById(Long residentId, String serviceCoord) throws Exception {
+	public Resident getResidentById(Long residentId, String serviceCoord, String onThisDate, String stepName) throws Exception {
 
 		ResidentMapper rowMapper = new ResidentMapper();
 		ChildrenMapper childMapper = new ChildrenMapper();
 		Resident resident = new Resident();
 
 		try {
-			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? ",
+
+			String dateSuffix = "";
+
+			switch (stepName) {
+			case "ActionPlan":
+
+				dateSuffix = (StringUtils.equals("new", onThisDate) ? "" : " and ap.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ");
+
+				break;
+			case "ContactNotes":
+
+				dateSuffix = (StringUtils.equals("new", onThisDate) ? "" : " and cn.DATE_ADDED = TO_DATE('" + onThisDate + "','DD-MON-YYYY') ");
+
+				break;
+			}
+
+			resident = this.getJdbcTemplate().queryForObject(ResidentMapper.RESIDENT_SQL + " where r.resident_id = ? " + dateSuffix + " LIMIT 1",
 					new Object[] { residentId }, rowMapper);
+
 
 			WizardStepCounter wsCounter = new WizardStepCounter();
 
@@ -280,6 +326,9 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident.setHouseholdDates(
 				this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSEHOLD MANAGEMENT"));
 		
+		resident.setActionPlanDates(this.getActionPlanDates(residentId));
+		resident.setContactNoteDates(this.getContactNoteDates(residentId));
+
 		//resident.setHousingScoreGoal(this.getLatestScoreGoal(residentId, "HOUSING"));
 		//resident.setMoneyMgmtScoreGoal(this.getLatestScoreGoal(residentId, "MONEY MANAGEMENT"));
 		//resident.setEmploymentScoreGoal(this.getLatestScoreGoal(residentId, "EMPLOYMENT"));
@@ -378,7 +427,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		if (StringUtils.isEmpty(childName)) {
 			return;
 		}
-		this.getJdbcTemplate().update(SQL_INSERT_CHILD, childName, residentId, pvrChild);
+		this.getJdbcTemplate().update(SQL_INSERT_CHILD, StringUtils.capitalize(childName.trim().toLowerCase()), residentId, pvrChild);
 	}
 
 	private void deleteAllChildrenByResidentId(long residentId) {
@@ -388,39 +437,28 @@ public class ResidentDAO extends JdbcDaoSupport {
 	private PreparedStatement buildInsertResidentPS(Connection connection, Resident resident, String[] pkColumnNames)
 			throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_RESIDENT, pkColumnNames);
-		ps.setString(1, resident.getFirstName());
-		ps.setString(2, resident.getMiddle());
-		ps.setString(3, resident.getLastName());
+		ps.setString(1, StringUtils.capitalize(resident.getFirstName().trim().toLowerCase()));
+		ps.setString(2, StringUtils.capitalize(resident.getMiddle().trim().toLowerCase()));
+		ps.setString(3, StringUtils.capitalize(resident.getLastName().trim().toLowerCase()));
 		ps.setInt(4, resident.getPropertyId());
-		ps.setString(5, resident.getVoiceMail());
-		ps.setString(6, resident.getText());
-		ps.setString(7, resident.getEmail());
-		ps.setString(8, resident.getAddress());
-		ps.setBoolean(9, resident.getAckRightToPrivacy());
-		ps.setBoolean(10, resident.getAllowContact());
-		ps.setBoolean(11, resident.getWantSurvey());
-		ps.setBoolean(12, resident.getPhotoRelease());
-		ps.setString(13, resident.getServiceCoord());
-		ps.setInt(14, resident.getRefId());
-		ps.setBoolean(15, resident.getViaVoicemail());
-		ps.setBoolean(16, resident.getViaText());
-		ps.setBoolean(17, resident.getViaEmail());
-		ps.setBoolean(18, resident.getActive());
-		ps.setString(19, resident.getModifiedBy());
-		ps.setBoolean(20, resident.getIsResident());
+		ps.setString(5, StringUtils.capitalize(resident.getAddress().trim().toLowerCase()));
+		ps.setInt(6, resident.getRefId());
+		ps.setBoolean(7, resident.getIsResident());
+		ps.setString(8, resident.getServiceCoord());
+
 		return ps;
 	}
 
 	private PreparedStatement buildUpdateResidentPS(Connection connection, Resident resident) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_RESIDENT);
-		ps.setString(1, resident.getFirstName());
-		ps.setString(2, resident.getMiddle());
-		ps.setString(3, resident.getLastName());
+		ps.setString(1, StringUtils.capitalize(resident.getFirstName().trim().toLowerCase()));
+		ps.setString(2, StringUtils.capitalize(resident.getMiddle().trim().toLowerCase()));
+		ps.setString(3, StringUtils.capitalize(resident.getLastName().trim().toLowerCase()));
 		ps.setInt(4, resident.getPropertyId());
 		ps.setString(5, resident.getVoiceMail());
-		ps.setString(6, resident.getText());
-		ps.setString(7, resident.getEmail());
-		ps.setString(8, resident.getAddress());
+		ps.setString(6, resident.getText().trim());
+		ps.setString(7, resident.getEmail().trim().toLowerCase());
+		ps.setString(8, StringUtils.capitalize(resident.getAddress().trim().toLowerCase()));
 		ps.setBoolean(9, resident.getAckRightToPrivacy());
 		ps.setBoolean(10, resident.getAllowContact());
 		ps.setBoolean(11, resident.getWantSurvey());
@@ -487,8 +525,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_RESIDENT_SCORE_GOAL, pkColumnNames);
 		ps.setLong(1, resident.getResidentId());
 		ps.setString(2, lifeDomain);
-		ps.setInt(3, resident.getCurrentScore());
-		ps.setInt(4, resident.getGoal());
+		ps.setInt(3, (resident.getCurrentScore() == null) ? 0 : resident.getCurrentScore());
+		ps.setInt(4, (resident.getGoal() == null) ? 0 : resident.getGoal());
 		ps.setDate(5, Date.valueOf(LocalDate.now()));
 		return ps;
 	}
@@ -536,8 +574,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_RESIDENT_SCORE_GOAL);
 		ps.setLong(1, resident.getResidentId());
 		ps.setString(2, lifeDomain);
-		ps.setInt(3, resident.getCurrentScore());
-		ps.setInt(4,  resident.getGoal());
+		ps.setInt(3, (resident.getCurrentScore() == null) ? 0 : resident.getCurrentScore());
+		ps.setInt(4, (resident.getGoal() == null) ? 0 : resident.getGoal());
 		ps.setLong(5, resident.getResidentId());
 		ps.setString(6, lifeDomain);
 		ps.setDate(7, parseMyDate(resident.getSelectedDate()));		
@@ -562,6 +600,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 		}
 	}
 
-	
+	public List<String> getAllReferralPartners() {
+		List<String> refPartners = (List<String>) this.getJdbcTemplate().queryForList("SELECT referral_partner_name from referral_partner  ORDER BY referral_partner_name", String.class);
+		if (CollectionUtils.isEmpty(refPartners)) {
+			return Collections.emptyList();
+		}
+		return refPartners.stream().distinct().collect(Collectors.toList());
+	}
+
 
 }

@@ -45,7 +45,9 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	private final static String INSERTION_SQL_SERVICECOORDINATOR_ADMINS = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON)"
 			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW())";
 
-	private final static String UPDATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , PROP_ID = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
+	private final static String UPDATE_SQL_SERVICECOORDINATOR_ADMIN = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , DATE_MODIFIED = NOW() where USER_NAME = ? ";
+
+	private final static String UPDATE_SQL_SERVICECOORDINATOR_NONADMIN = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , PROP_ID = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
 	private final static String INACTIVATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET ACTIVE = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
@@ -107,6 +109,9 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			this.getJdbcTemplate().queryForObject("select 1 from service_coordinator where user_name = ? and email = ? ", new Object[] { sc.getUserName(), sc.getEmail() }, String.class);
 			this.getJdbcTemplate().update(conn -> buildUpdateServiceCoordinatorPreparedStatement(conn, sc, pkColumnNames), keyHolder);
 
+			long scId = keyHolder.getKey().longValue();
+			sc.setScId(toIntExact(scId));
+
 			// Delete and build fresh User_ROLE
 			this.getJdbcTemplate().update(conn -> buildDeleteUserRolePS(conn, sc));
 			this.getJdbcTemplate().update(conn -> buildInsertUserRolePS(conn, sc));
@@ -131,10 +136,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 		}
 
-		long scId = keyHolder.getKey().longValue();
-		sc.setScId(toIntExact(scId));
-
-		return scId;
+		return Long.valueOf(sc.getScId());
 	}
 	
 	private PreparedStatement buildInsertDefaultUserRolePS(Connection conn, ServiceCoordinator sc) throws SQLException {
@@ -165,12 +167,25 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	}
 
 	private PreparedStatement buildUpdateServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement(UPDATE_SQL_SERVICECOORDINATOR, pkColumnNames);
+
+		String sql = UPDATE_SQL_SERVICECOORDINATOR_NONADMIN;
+
+		if (sc.getPropertyId() == null) {
+			sql = UPDATE_SQL_SERVICECOORDINATOR_ADMIN;
+		}
+
+		PreparedStatement ps = connection.prepareStatement(sql, pkColumnNames);
 		
 		ps.setString(1, sc.getEmail());
 		ps.setString(2, sc.getEncrytedPassword());
-		ps.setInt(3, (sc.getPropertyId() == null) ? null : sc.getPropertyId());
-		ps.setString(4, sc.getUserName());
+
+		if (sc.getPropertyId() != null) {
+			ps.setInt(3, sc.getPropertyId());
+			ps.setString(4, sc.getUserName());
+		} else {
+			ps.setString(3, sc.getUserName());
+		}
+
 		return ps;
 	}
 

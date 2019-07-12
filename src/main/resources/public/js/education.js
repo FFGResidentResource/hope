@@ -1,7 +1,14 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
 function calculateEducationScore() {
 
     jQuery("#_eduLifeDomain").val('EDUCATION');
-
+    jQuery('#currentEducationScore').val('');    
+    jQuery('#currentEducationGoal').val('');
     jQuery('#edust_6_body').text('');
     jQuery('#edust_7_body').text('');
     jQuery('[id^=edust_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');

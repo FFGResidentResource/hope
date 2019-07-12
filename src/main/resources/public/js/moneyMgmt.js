@@ -1,7 +1,16 @@
+jQuery(document).ready(function() {
+    
+    validateAndShowMessage();
+    
+});
+
+
 function calculateMoneyMgmtScore(){
 	
 	jQuery("#_mmlifeDomain").val('MONEY MANAGEMENT');
 	
+	jQuery('#currentMoneyMgmtScore').val('');	
+	jQuery('#currentMoneyMgmtGoal').val('');
 	jQuery('#mmst_6_body').text('');
 	jQuery('#mmst_7_body').text('');
 	jQuery('[id^=mmst_]').removeClass('danger').removeClass('success').removeClass('info').removeClass('warning');

@@ -55,7 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// If no login, it will redirect to /login page.
 		//uncomment before PROD
 		http.authorizeRequests()
-				.antMatchers("/getResidentById", "/saveResident", "/newResident", "/saveAssessment", "/allResident", "/getCurrentAssessment", "/getActionPlan", "/getCaseNotes", "/getReferralForm")
+				.antMatchers("/getResidentById", "/saveResident", "/newResident", "/onboarding", "/saveAssessment", "/allResident", "/getCurrentAssessment", "/getActionPlan", "/getCaseNotes",
+						"/getReferralForm", "/dashboard", "/pullDashboard")
 				.access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 		
 		// For ADMIN only.

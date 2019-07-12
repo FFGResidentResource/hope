@@ -51,11 +51,32 @@
 
 				<div class="col-sm-12 myPanel">
 					<div class="row">
-						<div class="col-sm-10">
+						<div class="col-sm-8">
 							<h3 style="width: 400px;">CASE NOTES</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>
 						</div>
+						
+						<div class="col-sm-4">
+						<table class="table-responsive table-condensed">
+							<tr><td><select class="form-control input-sm" id="_dates"
+									th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
+									<option value="new">New Contact Notes</option>
+									<option th:each="contactNotes : ${resident.contactNoteDates}"
+										th:value="${contactNotes}" th:utext="${contactNotes}" />
+							</select>	</td>
+							<td style="vertical-align: middle;"><span class="glyphicon glyphicon-arrow-right" style="color:crimson;"></span></td>
+							<td><a id="_loadCaseNotes" class="btn btn-default btn-sm"								
+								th:href="@{/getCaseNotes?entryPoint=onboarding}"> <span
+								class="glyphicon glyphicon-cloud-download" style="color: goldenrod;"
+								aria-hidden="true"></span> Contact Notes
+							</a></td>
+							
+							</tr>
+						</table>	
+						
+						</div>					
+						
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 						</div>
@@ -147,7 +168,10 @@
 							type="hidden" th:field="*{residentId}" /> 
 							<input
 							type="hidden" th:field="*{isResident}" /> 
-							
+						
+						<div class="text-danger hidden-print hideme">
+							<span>There is already Contact Notes from today's Date, retrieve today's Contact Notes from dropdown above to view/modify.</span>
+						</div>
 
 						<!-- Submit  -->
 						<input type="submit" id="_caseNotesSubmit"
@@ -165,6 +189,8 @@
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
 
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
