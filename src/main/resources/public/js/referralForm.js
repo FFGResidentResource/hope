@@ -3,6 +3,10 @@ window.onbeforeprint = function() {
 	$('#_prevAttemptsPrint').text($('#_prevAttemps').val());
 	$('#_followupPrint').text($('#_rfFollowupNotes').val());
 	
+	$('#_ssOther_P').text($('#_ssOther').val());
+	$('#_hsOther_P').text($('#_hsOther').val());
+	$('#_safeSuppOther_P').text($('#_safeSuppOther').val());
+	
 	if($('#_inputDateTextResAppSch').val() == ""){
 		$('#_inputDateTextResAppSch').removeAttr('placeholder');
 	}
