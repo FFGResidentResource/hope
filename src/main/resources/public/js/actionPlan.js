@@ -1,25 +1,73 @@
-/*window.onbeforeprint = function() {
-    $('#_rrcPrint').text($('#_rrc').val());
-    $('#_housingPOA').text($('#_planOfActionHousing').val());
-    $('#_mmPOA').text($('#_planOfActionMM').val());
-    $('#_empPOA').text($('#_planOfActionEmp').val());
-    $('#_eduPOA').text($('#_planOfActionEdu').val());
-    $('#_nsPOA').text($('#_planOfActionNS').val());
-    $('#_hhPOA').text($('#_planOfActionHH').val());
-    $('#_housingAnOut').text($('#_anticipatedOutcomeHousing').val());
-    $('#_mmAnOut').text($('#_anticipatedOutcomeMM').val());
-    $('#_empAnOut').text($('#_anticipatedOutcomeEmp').val());
-    $('#_eduAnOut').text($('#_anticipatedOutcomeEdu').val());
-    $('#_nsAnOut').text($('#_anticipatedOutcomeNS').val());
-    $('#_hhAnOut').text($('#_anticipatedOutcomeHH').val());
-    $('#_followUpNotesPrint').text($('#_followUpNotes').val());
-    $('#_housingOutAch').text($('#_outcomesAchievedHousing').val());
-    $('#_mmOutAch').text($('#_outcomesAchievedMM').val());
-    $('#_empOutAch').text($('#_outcomesAchievedEmp').val());
-    $('#_eduOutAch').text($('#_outcomesAchievedEdu').val());
-    $('#_nsOutAch').text($('#_outcomesAchievedNS').val());
-    $('#_hhOutAch').text($('#_outcomesAchievedHH').val());
-};*/
+window.onbeforeprint = function() {
+   
+    $("#_poActionHousingPrint").text($("#_planOfActionHousing").val());
+    $("#_planDetailHousingPrint").text($("#_planDetailsHousing").val());
+    $("#_referralPartnerHousingPrint").text($("#_referralPartnerHousing").val());
+    $("#_aoHousingPrint").text($("#_aoHousing").val());
+    $("#_aoDateHousingPrint").text($("#_inputDateTextAnticipatedHousing").val());
+    
+    
+    $("#_poActionMMPrint").text($("#_planOfActionMM").val());
+    $("#_planDetailMMPrint").text($("#_planDetailsMM").val());
+    $("#_referralPartnerMMPrint").text($("#_referralPartnerMM").val());
+    $("#_aoMMPrint").text($("#_aoMM").val());
+    $("#_aoDateMMPrint").text($("#_inputDateTextAnticipatedMM").val());
+    
+    $("#_poActionEmpPrint").text($("#_planOfActionEmp").val());
+    $("#_planDetailEmpPrint").text($("#_planDetailsEmp").val());
+    $("#_referralPartnerEmpPrint").text($("#_referralPartnerEmp").val());
+    $("#_aoEmpPrint").text($("#_aoEmp").val());
+    $("#_aoDateEmpPrint").text($("#_inputDateTextAnticipatedEmp").val());
+    
+    $("#_poActionEduPrint").text($("#_planOfActionEdu").val());
+    $("#_planDetailEduPrint").text($("#_planDetailsEdu").val());
+    $("#_referralPartnerEduPrint").text($("#_referralPartnerEdu").val());
+    $("#_aoEduPrint").text($("#_aoEdu").val());
+    $("#_aoDateEduPrint").text($("#_inputDateTextAnticipatedEdu").val());
+    
+    $("#_poActionNSPrint").text($("#_planOfActionNS").val());
+    $("#_planDetailNSPrint").text($("#_planDetailsNS").val());
+    $("#_referralPartnerNSPrint").text($("#_referralPartnerNS").val());
+    $("#_aoNSPrint").text($("#_aoNS").val());
+    $("#_aoDateNSPrint").text($("#_inputDateTextAnticipatedNS").val());
+    
+    $("#_poActionHHPrint").text($("#_planOfActionHH").val());
+    $("#_planDetailHHPrint").text($("#_planDetailsHH").val());
+    $("#_referralPartnerHHPrint").text($("#_referralPartnerHH").val());
+    $("#_aoHHPrint").text($("#_aoHH").val());
+    $("#_aoDateHHPrint").text($("#_inputDateTextAnticipatedHH").val());
+    
+    $("#_followUpNotesPrint").text($("#_followUpNotes").val());
+    
+    $("#_outAchHousing_P").text($("#_outAchHousing").val());
+    $("#_achGoalHousing_P").text($("#_achGoalHousing").val());
+    $("#_inputDateTextHousing_P").text($("#_inputDateTextHousing").val());
+    
+    $("#_outAchMM_P").text($("#_outAchMM").val());
+    $("#_achGoalMM_P").text($("#_achGoalMM").val());
+    $("#_inputDateTextMM_P").text($("#_inputDateTextMM").val());
+    
+    $("#_outAchEmp_P").text($("#_outAchEmp").val());
+    $("#_achGoalEmp_P").text($("#_achGoalEmp").val());
+    $("#_inputDateTextEmp_P").text($("#_inputDateTextEmp").val());
+    
+    $("#_outAchEdu_P").text($("#_outAchEdu").val());
+    $("#_achGoalEdu_P").text($("#_achGoalEdu").val());
+    $("#_inputDateTextEdu_P").text($("#_inputDateTextEdu").val());
+    
+    $("#_outAchNS_P").text($("#_outAchNS").val());
+    $("#_achGoalNS_P").text($("#_achGoalNS").val());
+    $("#_inputDateTextNS_P").text($("#_inputDateTextNS").val());
+    
+    $("#_outAchHH_P").text($("#_outAchHH").val());
+    $("#_achGoalHH_P").text($("#_achGoalHH").val());
+    $("#_inputDateTextHH_P").text($("#_inputDateTextHH").val());
+    
+    
+    
+    
+   
+};
     
 jQuery(document).ready(function() {
 
