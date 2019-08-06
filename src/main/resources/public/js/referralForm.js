@@ -2,6 +2,26 @@ window.onbeforeprint = function() {
 	$('#_commentsPrint').text($('#_commentsOrExplanation').val());
 	$('#_prevAttemptsPrint').text($('#_prevAttemps').val());
 	$('#_followupPrint').text($('#_rfFollowupNotes').val());
+	
+	$('#_ssOther_P').text($('#_ssOther').val());
+	$('#_hsOther_P').text($('#_hsOther').val());
+	$('#_safeSuppOther_P').text($('#_safeSuppOther').val());
+	
+	if($('#_inputDateTextResAppSch').val() == ""){
+		$('#_inputDateTextResAppSch').removeAttr('placeholder');
+	}
+	
+	if($('#_ssOther').val() == ""){
+		$('#_ssOther').removeAttr('placeholder');
+	}
+	
+	if($('#_hsOther').val() == ""){
+		$('#_hsOther').removeAttr('placeholder');
+	}
+	
+	if($('#_safeSuppOther').val() == ""){
+		$('#_safeSuppOther').removeAttr('placeholder');
+	}
 };
 
 jQuery(document).ready(function() {

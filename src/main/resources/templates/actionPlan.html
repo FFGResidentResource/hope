@@ -5,7 +5,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
+<link rel="stylesheet" media="all"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
 
@@ -65,7 +65,7 @@
 						
 						
 						<div class="col-sm-4">
-							<table class="table-responsive table-condensed">
+							<table class="table-responsive table-condensed hidden-print">
 								<tr><td><select class="form-control input-sm" id="_dates"
 										th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
 										<option value="new">New Action Plan</option>
@@ -115,36 +115,25 @@
 							</tr>
 						</tbody>
 					</table>
-
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="col-sm-9">
-								<strong><span id="_ssmDate">Date of most recent
-										Self-Sufficiency assessment:</span></strong>
-							</div>
-							<div class="col-sm-3">
-								<span id="_mostRecentSSMDate" th:text="*{mostRecentSSMDate}">&nbsp;</span>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="col-sm-6">
-								<strong><span id="_todaysDate">Date Added:</span></strong>
-							</div>
-							<div class="col-sm-3">
-								<span th:text="*{actionPlanDateAdded}">&nbsp;</span>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="col-sm-7">
-								<strong><span id="_todaysDate">Date Modified:</span></strong>
-							</div>
-							<div class="col-sm-3">
-								<span th:text="*{actionPlanDateModified}">&nbsp;</span>
-							</div>
-						</div>
-					</div>
+					
+					
+					<table
+						class="table table-responsive table-bordered table-condensed text-center"
+						style="background-color: ghostwhite;">
+						<thead>
+							<th class="text-center"><span id="_ssmDate">Date of most recent
+										Self-Sufficiency assessment:</span></th>
+							<th class="text-center"><span id="_todaysDate">Date Added:</span></th>
+							<th class="text-center"><span id="_todaysDate">Date Modified:</span></th>							
+						</thead>
+						<tbody>
+							<tr>
+								<td><span id="_mostRecentSSMDate" th:text="*{mostRecentSSMDate}">&nbsp;</span></td>
+								<td><span th:text="*{actionPlanDateAdded}">&nbsp;</span></td>
+								<td><span th:text="*{actionPlanDateModified}">&nbsp;</span></td>
+							</tr>
+						</tbody>
+					</table>					
 
 					<hr class="solidline1">
 
@@ -230,11 +219,92 @@
 							</tr>
 						</tbody>
 					</table>
-					<br />
-
+					<br />				
+										
+					
+					<table id="_poaTablePrint"
+						class="table table-responsive table-bordered table-condensed hideme print-only">
+						<caption>
+							<strong>Plan of Action for Each Domain of Focus</strong>
+						</caption>
+						<thead>
+							<th class="text-center">DOMAIN</th>
+							<th class="text-center">Plan Of Action</th>
+							<th class="text-center">Plan Details</th>
+							<th class="text-center">Referral Partner</th>
+							<th class="text-center">Anticipated Outcomes</th>
+							<th class="text-center">Anticipated Date</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>HOUSING</td>
+								<td id="_poActionHousingPrint"></td>
+								<td id="_planDetailHousingPrint"></td>
+								<td id="_referralPartnerHousingPrint"></td>
+								<td id="_aoHousingPrint"></td>
+								<td id="_aoDateHousingPrint"></td>
+							</tr>
+							<tr>
+								<td>MONEY MGMT.</td>
+								<td id="_poActionMMPrint"></td>
+								<td id="_planDetailMMPrint"></td>
+								<td id="_referralPartnerMMPrint"></td>
+								<td id="_aoMMPrint"></td>
+								<td id="_aoDateMMPrint"></td>
+							</tr>
+							<tr>
+								<td>EMPLOYMENT</td>
+								<td id="_poActionEmpPrint"></td>
+								<td id="_planDetailEmpPrint"></td>
+								<td id="_referralPartnerEmpPrint"></td>
+								<td id="_aoEmpPrint"></td>
+								<td id="_aoDateEmpPrint"></td>
+							</tr>
+							<tr>
+								<td>EDUCATION</td>
+								<td id="_poActionEduPrint"></td>
+								<td id="_planDetailEduPrint"></td>
+								<td id="_referralPartnerEduPrint"></td>
+								<td id="_aoEduPrint"></td>
+								<td id="_aoDateEduPrint"></td>
+							</tr>
+							<tr>
+								<td>NETWORK SUPP.</td>
+								<td id="_poActionNSPrint"></td>
+								<td id="_planDetailNSPrint"></td>
+								<td id="_referralPartnerNSPrint"></td>
+								<td id="_aoNSPrint"></td>
+								<td id="_aoDateNSPrint"></td>
+							</tr>
+							<tr>
+								<td>HOUSEHOLD MGMT.</td>
+								<td id="_poActionHHPrint"></td>
+								<td id="_planDetailHHPrint"></td>
+								<td id="_referralPartnerHHPrint"></td>
+								<td id="_aoHHPrint"></td>
+								<td id="_aoDateHHPrint"></td>
+							</tr>
+							<tr>
+								<td colspan="4">Resident's Signature:</td>
+								<td colspan="2">Date:</td>								
+							</tr>
+							<tr>
+								<td colspan="4">Community Manager's Signature:</td>
+								<td colspan="2">Date:</td>								
+							</tr>
+							<tr>
+								<td colspan="4">Service Corrdinator's Signature:</td>
+								<td colspan="2">Date:</td>								
+							</tr>
+							
+						</tbody>
+					</table>
+							
+								
+								
 
 					<table id="_poaTable"
-						class="table table-responsive table-bordered table-condensed">
+						class="table table-responsive table-bordered table-condensed hidden-print">
 						<caption>
 							<strong>Plan of Action for Each Domain of Focus</strong>
 						</caption>
@@ -631,6 +701,8 @@
 					</table>
 
 					<br />
+					<div class="pagebreak"></div>
+					
 					<div class="row hidden-print">
 						<div class="col-sm-2  control-label">Follow-Up Notes</div>
 						<div class="col-sm-10">
@@ -642,18 +714,73 @@
 
 
 					<table class="table table-condensed hideme print-only">
-						<thead>
-							<th class="text-center">Follow-Up Notes</th>
-						</thead>
+						<caption>
+							<strong>Follow-Up Notes</strong>
+						</caption>						
 						<tbody>
 							<tr>
 								<td id="_followUpNotesPrint" style="width: 1100px"></td>
 							</tr>
 						</tbody>
 					</table>
+					
+					<table id="_outcomesTablePrint"
+						class="table table-responsive table-bordered table-condensed hideme print-only">
+						<caption>
+							<strong>Outcomes Achieved</strong>
+						</caption>
+						<thead>
+							<th class="text-center">DOMAIN</th>
+							<th class="text-center">Outcomes Achieved</th>
+							<th class="text-center">Achieved Self-Sufficiency Goal</th>
+							<th class="text-center">Completion Date</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>HOUSING</td>
+								<td id="_outAchHousing_P"></td>
+								<td id="_achGoalHousing_P"></td>
+								<td id="_inputDateTextHousing_P"></td>
+							</tr>
+							<tr>
+								<td>MONEY MANAGEMENT</td>
+								<td id="_outAchMM_P"></td>
+								<td id="_achGoalMM_P"></td>
+								<td id="_inputDateTextMM_P"></td>
+							</tr>
+							<tr>
+								<td>EMPLOYMENT</td>
+								<td id="_outAchEmp_P"></td>
+								<td id="_achGoalEmp_P"></td>
+								<td id="_inputDateTextEmp_P"></td>
+							</tr>
+							<tr>
+								<td>EDUCATION</td>
+								<td id="_outAchEdu_P"></td>
+								<td id="_achGoalEdu_P"></td>
+								<td id="_inputDateTextEdu_P"></td>
+							</tr>
+							<tr>
+								<td>NETWORK SUPPORT</td>
+								<td id="_outAchNS_P"></td>
+								<td id="_achGoalNS_P"></td>
+								<td id="_inputDateTextNS_P"></td>
+							</tr>
+							<tr>
+								<td>HOUSEHOLD MANAGEMENT</td>
+								<td id="_outAchHH_P"></td>
+								<td id="_achGoalHH_P"></td>
+								<td id="_inputDateTextHH_P"></td>
+							</tr>
+							<tr>
+								<td colspan="3">Service Corrdinator's Signature:</td>
+								<td colspan="1">Date:</td>								
+							</tr>
+						</tbody>
+					</table>
 
 					<table id="_outcomesTable"
-						class="table table-responsive table-bordered table-condensed">
+						class="table table-responsive table-bordered table-condensed hidden-print">
 						<caption>
 							<strong>Outcomes Achieved</strong>
 						</caption>
@@ -774,7 +901,7 @@
 					</table>
 
 					<br /> <br /> <br />
-					<div class="row text-center">
+					<div class="row text-center hidden-print">
 						<strong>NOTE:</strong>&nbsp;To the extent possible, outcomes
 						selected should reflect those included in RRN’s Service
 						Coordination Model

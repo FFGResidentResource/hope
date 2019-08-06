@@ -58,7 +58,7 @@
 						</div>
 						
 						<div class="col-sm-4">
-						<table class="table-responsive table-condensed">
+						<table class="table-responsive table-condensed hidden-print">
 							<tr><td><select class="form-control input-sm" id="_dates"
 									th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
 									<option value="new">New Contact Notes</option>
@@ -110,34 +110,59 @@
 						</tbody>
 					</table>
 				
-					<div class="panel panel-default">
+					<div class="panel panel-default hidden-print">
 						<div class="panel-heading">Description (a factual
 							description of the interaction- the who, what, when, where, and
 							why)</div>
 						<div class="panel-body">
-							<textarea class="form-control" rows="5"
+							<textarea class="form-control" rows="5" id="_cnDesc"
 								th:field="*{description}"
 								th:value="*{description}"></textarea>
 						</div>
 					</div>
 
-					<div class="panel panel-default">
+					<div class="panel panel-default hidden-print">
 						<div class="panel-heading">Assessment (an evaluation of the
 							current status and progress)</div>
 						<div class="panel-body">
-							<textarea class="form-control" rows="5"
+							<textarea class="form-control" rows="5" id="_cnAssessment"
 								th:field="*{assessment}"
 								th:value="*{assessment}"></textarea>
 						</div>
 					</div>
 
-					<div class="panel panel-default">
+					<div class="panel panel-default hidden-print">
 						<div class="panel-heading">Plan (statements about what will
 							happen next)</div>
 						<div class="panel-body">
-							<textarea class="form-control" rows="5"
+							<textarea class="form-control" rows="5" id="_cnPlan"
 								th:field="*{plan}"
 								th:value="*{plan}"></textarea>
+						</div>
+					</div>
+					
+					<div class="panel panel-default hideme print-only">
+						<div class="panel-heading">Description (a factual
+							description of the interaction- the who, what, when, where, and
+							why)</div>
+						<div class="panel-body">
+							<p id="_cnDesc_P"></p>
+						</div>
+					</div>
+
+					<div class="panel panel-default  hideme print-only">
+						<div class="panel-heading">Assessment (an evaluation of the
+							current status and progress)</div>
+						<div class="panel-body">
+							<p id="_cnAssessment_P"></p>
+						</div>
+					</div>
+
+					<div class="panel panel-default hideme print-only">
+						<div class="panel-heading">Plan (statements about what will
+							happen next)</div>
+						<div class="panel-body">
+							<p id="_cnPlan_P"></p>
 						</div>
 					</div>
 					

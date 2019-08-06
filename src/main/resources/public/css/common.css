@@ -9,13 +9,43 @@
   }
   
   .print-only{  
-  	display:block !important;
+  	display:block !important;  	
   }
   
   .my-text-print{
   	font-family: monospace;
   	font-size: 	larger;
-  }  
+  }
+  
+  table.table-condensed {
+   	font-size: smaller; 
+  } 
+  
+  table tbody tr td.danger {
+    background-color: #f2dede !important;
+  }
+  
+  table tbody tr td.warning {
+    background-color: #fcf8e3 !important;
+	} 
+
+	td.info {
+    background-color: #d9edf7 !important;
+	}
+	
+	td.success {
+    background-color: #dff0d8 !important;
+	}
+	
+	td.primary {
+    color: #fff;
+    background-color: #337ab7 !important;
+	}
+	
+	 .pagebreak {
+        clear: both;
+        page-break-after: always;
+    }
   
 }
 
