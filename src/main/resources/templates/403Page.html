@@ -32,7 +32,7 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+	<th:block th:include="_menu"></th:block>
 
 	<div class="container">
 		<h3 th:if="${message != null}" th:utext="${message}" style="color: red;"></h3>
