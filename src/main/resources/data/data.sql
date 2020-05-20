@@ -668,7 +668,9 @@ INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Please select yo
 INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your household annual gross income?', 'Income');
 INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Do you feel safe at home during the night/day?', 'HouseholdSafety');
 INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is the primary language spoken in the home?', 'Language');
-commit;
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your age?', 'Age');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your gross annual household income?', 'Income');
+
 CREATE SEQUENCE DM_AN_SQ START 1;
 
 CREATE table DEMOGRAPHICS_CHOICES (
@@ -787,6 +789,18 @@ INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Spanish', 'Languag
 INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Language');
 INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Language');
 INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Language');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Under 18', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '18-25', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '26-35', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '36-50', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '+50', 'Age');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Less than $15,000 a year', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '$15,000-$30,000', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '$30,000-$45,000', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '$45,000-$60,000', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Greater than $60,000 a year', 'Income');
 
 CREATE TABLE DEMOGRAPHICS_QUESTION_CHOICE(
     RESIDENT_ID INT REFERENCES RESIDENT(RESIDENT_ID),
