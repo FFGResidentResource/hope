@@ -50,6 +50,10 @@ public class Resident {
 	@NotNull(message = "Referral is Required!")
 	private Integer refId;
 	private String refValue;
+	
+	@NotNull(message = "race choice is Required!")
+	private Integer choiceId;
+	private String choiceValue;
 
 	private Integer aId;
 	private String aValue;
@@ -118,6 +122,24 @@ public class Resident {
 
 	@JsonView
 	private List<Referral> refList;
+	
+	@JsonView
+	private List<DemographicChoice> raceList;
+	
+	@JsonView
+	private List<DemographicChoice> ethnList;
+	
+	@JsonView
+	private List<DemographicChoice> genderList;
+	
+	@JsonView
+	private List<DemographicChoice> headHseHldList;
+	
+	@JsonView
+	private List<DemographicChoice> vetList;
+	
+	@JsonView
+	private List<DemographicQuestions> demoQList;
 
 	@JsonView
 	private List<ResidentAssessmentQuestionnaire> housingQuestionnaire;
@@ -236,13 +258,7 @@ public class Resident {
 
 	}
 
-	public Resident(List<Property> propertyList, List<AssessmentType> atList, List<Referral> refList,
-			String serviceCoord) {
-		this.propertyList = propertyList;
-		this.atList = atList;
-		this.refList = refList;
-		this.serviceCoord = serviceCoord;
-	}
+	
 
 	public Resident(Long residentId, Boolean active, String firstName, String middle, String lastName,
 			String propertyName, String voiceMail, String text, String email, Boolean allowContact, Boolean wantSurvey,
@@ -346,4 +362,21 @@ public class Resident {
 
 		return false;
 	}
+
+	public Resident(List<Property> propertyList, List<AssessmentType> atList, List<Referral> refList, List<DemographicChoice> raceList,List<DemographicChoice> ethnList,
+			List<DemographicChoice> genderList, List<DemographicChoice> headHseHldList, List<DemographicChoice> vetList, String serviceCoord) {
+		this.propertyList = propertyList;
+		this.atList = atList;
+		this.refList = refList;
+		this.raceList = raceList;
+		this.ethnList = ethnList;
+		this.genderList = genderList;
+		this.headHseHldList = headHseHldList;
+		this.vetList = vetList;
+		this.serviceCoord = serviceCoord;
+		
+	}
+
+
+	
 }
