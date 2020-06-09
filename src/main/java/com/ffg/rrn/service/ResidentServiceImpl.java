@@ -23,6 +23,8 @@ import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Choice;
 import com.ffg.rrn.model.Dashboard;
+import com.ffg.rrn.model.DemographicChoice;
+import com.ffg.rrn.model.DemographicQuestions;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
@@ -154,6 +156,30 @@ public class ResidentServiceImpl {
 
 	public List<Referral> getAllReferral() {
 		return this.residentDao.getAllReferral();
+	}
+	
+	public List<DemographicChoice> getRaceChoice() {
+		return this.residentDao.getRaceChoice();
+	}
+	
+	public List<DemographicChoice> getEthnicityChoice() {
+		return this.residentDao.getEthnicytyChoice();
+	}
+	
+	public List<DemographicChoice> getGenderChoice() {
+		return this.residentDao.getGenderChoice();
+	}
+	
+	public List<DemographicChoice> getHeadHseHldChoice() {
+		return this.residentDao.getHdHouseholdChoice();
+	}
+	
+	public List<DemographicChoice> getVeteranChoice() {
+		return this.residentDao.getVeteranChoice();
+	}
+	
+	public List<DemographicQuestions> getAllDemoQuestions() {
+		return this.residentDao.getAllDemoQuestions();
 	}
 
 	public List<AssessmentType> getAllAType() {
