@@ -440,6 +440,12 @@ public class ResidentController extends BaseController {
 		resident.setPropertyList(residentService.getAllProperty(resident.getServiceCoord()));
 		resident.setRefList(residentService.getAllReferral());
 		resident.setAtList(residentService.getAllAType());
+		resident.setRaceList(residentService.getRaceChoice());
+		resident.setEthnList(residentService.getEthnicityChoice());
+		resident.setGenderList(residentService.getGenderChoice());
+		resident.setHeadHseHldList(residentService.getHeadHseHldChoice());
+		resident.setVetList(residentService.getVeteranChoice());
+		resident.setDemoQList(residentService.getAllDemoQuestions());
 	}
 
 	@PostMapping(value = "/saveReferralForm")
