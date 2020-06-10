@@ -448,6 +448,13 @@ public class ResidentController extends BaseController {
 		resident.setDemoQList(residentService.getAllDemoQuestions());
 	}
 
+	@RequestMapping(value = "_addResident", method={RequestMethod.GET, RequestMethod.POST})
+	public String buildQuestion(@RequestParam int questionNum, Model model){
+		String question = "Test" + questionNum;
+		model.addAttribute("questionNum", question);
+		return "_addResident";
+	}
+
 	@PostMapping(value = "/saveReferralForm")
 	public String saveReferralForm(@Valid @ModelAttribute Resident resident, BindingResult bindingResult) throws DataAccessException, ParseException {
 		residentService.saveReferralForm(resident);

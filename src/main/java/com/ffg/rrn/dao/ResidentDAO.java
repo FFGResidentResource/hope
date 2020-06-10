@@ -360,7 +360,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident.setAtList(this.getAllAType());
 		resident.setRaceList(this.getRaceChoice());
 		resident.setEthnList(this.getEthnicytyChoice());
-		resident.setGenderList(this.getEthnicytyChoice());
+		resident.setGenderList(this.getGenderChoice());
 		resident.setHeadHseHldList(this.getHdHouseholdChoice());
 		resident.setVetList(this.getVeteranChoice());
 

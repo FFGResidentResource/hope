@@ -202,7 +202,7 @@
                                 <option value="">Select</option>
                                 <option th:each="race: ${resident.raceList}"
                                         th:value="${race}"
-                                        th:utext="${race}"
+                                        th:utext="${race.choiceValue}"
 
                                 ></option>
 
@@ -210,13 +210,13 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label class="col-sm-2 control-label" for="_race">Gender:</label>
+                        <label class="col-sm-2 control-label" for="_ethnicity">Ethnicity:</label>
                         <div class="col-sm-10">
-                            <select class="form-control setable" id="_race">
+                            <select class="form-control setable" id="_ethnicity">
                                 <option value="">Select</option>
-                                <option th:each="race: ${resident.raceList}"
-                                        th:value="TEST"
-                                        th:utext="TEST1"
+                                <option th:each="ethn: ${resident.ethnList}"
+                                        th:value="${ethn}"
+                                        th:utext="${ethn.choiceValue}"
 
                                 ></option>
 
@@ -224,11 +224,25 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label class="col-sm-2 control-label" for="_race">Primary Language:</label>
+                        <label class="col-sm-2 control-label" for="_gender">Gender:</label>
                         <div class="col-sm-10">
-                            <select class="form-control setable" id="_race">
+                            <select class="form-control setable" id="_gender">
                                 <option value="">Select</option>
-                                <option th:each="race: ${resident.raceList}"
+                                <option th:each="gender: ${resident.genderList}"
+                                        th:value="${gender}"
+                                        th:utext="${gender.choiceValue}"
+
+                                ></option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-2 control-label" for="_primaryLanguage">Primary Language:</label>
+                        <div class="col-sm-10">
+                            <select class="form-control setable" id="_PrimaryLanguage">
+                                <option value="">Select</option>
+                                <option th:each="race: ${resident}"
                                         th:value="TEST"
                                         th:utext="TEST1"
 
@@ -256,42 +270,42 @@
                         <div class="col-sm-10">
                             <select class="form-control setable" id="_race">
                                 <option value="">Select</option>
-                                <option th:each="race: ${resident.raceList}"
+                                <option th:each="race: ${resident}"
                                         th:value="TEST"
-                                        th:utext="${resident.raceList}"
+                                        th:utext="TEST1"
 
                                 ></option>
 
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6"> <label class="col-sm-2 control-label" for="_race">Disability Status:</label>
+                    <div class="col-sm-6"> <label class="col-sm-2 control-label" for="_disabilityStatus">Disability Status:</label>
                         <div class="col-sm-10">
-                            <select class="form-control setable" id="_race">
+                            <select class="form-control setable" id="_disabilityStatus">
                                 <option value="">Select</option>
-                                <option th:each="race: ${resident.raceList}"
+                                <option th:each="race: ${resident}"
                                         th:value="TEST"
-                                        th:utext="${resident.raceList}"
+                                        th:utext="TEST"
 
                                 ></option>
 
                             </select>
                         </div></div>
                     <div class="col-sm-6">
-                        <label class="col-sm-2 control-label" for="_race">Veteran Status:</label>
+                        <label class="col-sm-2 control-label" for="_vet">Veteran Status:</label>
                         <div class="col-sm-10">
-                            <select class="form-control setable" id="_race">
+                            <select class="form-control setable" id="_vet">
                                 <option value="">Select</option>
-                                <option th:each="race: ${resident.raceList}"
-                                        th:value="TEST"
-                                        th:utext="${resident.raceList}"
+                                <option th:each="veteran: ${resident.vetList}"
+                                        th:value="${veteran}"
+                                        th:utext="${veteran.choiceValue}"
 
                                 ></option>
 
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <!-- <div class="col-sm-6">
                         <label class="col-sm-2 control-label" for="_race">Returning Citizen/ Ex-Offender:</label>
                         <div class="col-sm-10">
                             <select class="form-control setable" id="_race">
@@ -319,7 +333,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                   <div class="col-sm-6">
                         <label class="col-sm-2 control-label" for="_race">Social Security Disability Insurance:</label>
                         <div class="col-sm-10">
                             <select class="form-control setable" id="_race">
@@ -392,7 +406,7 @@
                 </div>
 
             </div>
-        </div>
+        </div>-->
         <div class="col-sm-6">
             <label class="col-sm-2 control-label" for="_property">Property:</label>
             <div class="col-sm-10">

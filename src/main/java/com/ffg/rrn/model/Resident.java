@@ -255,12 +255,6 @@ public class Resident {
 
 	// Referral Form fields - End
 
-	//Onboarding Form Fields
-	//private List<String> raceList= Arrays.asList("Asian","Black/African", "Caucasian", "Hispanic/Latino", "Native American", "Mixed Race", "Other");
-	private List<String> raceList;
-	private String race;
-	private String age;
-	//Onboarding Form Fields
 
 	public Resident() {
 
