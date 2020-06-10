@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -606,6 +607,12 @@ public class ResidentDAO extends JdbcDaoSupport {
 			return Collections.emptyList();
 		}
 		return refPartners.stream().distinct().collect(Collectors.toList());
+	}
+
+	public List<String> getAllRaces() {
+		List<String> raceList = Arrays.asList("Asian","Black/African", "Caucasian", "Hispanic/Latino", "Native American", "Mixed Race", "Other");
+		//return raceList.stream().distinct().collect(Collectors.toList());
+		return raceList;
 	}
 
 

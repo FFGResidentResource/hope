@@ -3,6 +3,7 @@ window.onbeforeprint = function() {
 	$('#printreferralType').text($('#_referral option:selected').text());
 	$('#printproperty').text($('#_property option:selected').text());
 	$('#printaddress').text($('#address').val());
+	$('#printTEST').text("inline test");
 	if(!$('#allowcontact').prop("checked") && $('#viaemail').prop("checked")){
 		$('#printEmail').prop('checked', true);
 		$('#printEmailText').text($('#email').val());

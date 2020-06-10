@@ -4,6 +4,8 @@
 package com.ffg.rrn.model;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -231,6 +233,12 @@ public class Resident {
 
 	// Referral Form fields - End
 
+	//Onboarding Form Fields
+	//private List<String> raceList= Arrays.asList("Asian","Black/African", "Caucasian", "Hispanic/Latino", "Native American", "Mixed Race", "Other");
+	private List<String> raceList;
+	private String race;
+	private String age;
+	//Onboarding Form Fields
 
 	public Resident() {
 
