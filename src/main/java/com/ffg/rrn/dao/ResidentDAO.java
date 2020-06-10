@@ -33,13 +33,21 @@ import org.springframework.util.CollectionUtils;
 
 import com.ffg.rrn.mapper.AssessmentMapper;
 import com.ffg.rrn.mapper.ChildrenMapper;
+import com.ffg.rrn.mapper.RaceMapper;
+import com.ffg.rrn.mapper.DemoQuestionsMapper;
+import com.ffg.rrn.mapper.EthnicityMapper;
+import com.ffg.rrn.mapper.GenderMapper;
+import com.ffg.rrn.mapper.HOHouseholdMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
+import com.ffg.rrn.mapper.VeteranMapper;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
 import com.ffg.rrn.model.Child;
 import com.ffg.rrn.model.Choice;
+import com.ffg.rrn.model.DemographicChoice;
+import com.ffg.rrn.model.DemographicQuestions;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.QuestionChoice;
 import com.ffg.rrn.model.Referral;
@@ -206,6 +214,38 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ReferralMapper rowMapper = new ReferralMapper();
 		return this.getJdbcTemplate().query(ReferralMapper.REF_SQL, rowMapper);
 	}
+	
+	public List<DemographicChoice> getRaceChoice() {
+		RaceMapper rowMapper = new RaceMapper();
+		return this.getJdbcTemplate().query(RaceMapper.RACE_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getGenderChoice() {
+		GenderMapper rowMapper = new GenderMapper();
+		return this.getJdbcTemplate().query(GenderMapper.GEND_SQL, rowMapper);
+	}
+	
+	
+	public List<DemographicChoice> getEthnicytyChoice() {
+		EthnicityMapper rowMapper = new EthnicityMapper();
+		return this.getJdbcTemplate().query(EthnicityMapper.ETHCTY_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getHdHouseholdChoice() {
+		HOHouseholdMapper rowMapper = new HOHouseholdMapper();
+		return this.getJdbcTemplate().query(HOHouseholdMapper.HHH_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getVeteranChoice() {
+		VeteranMapper rowMapper = new VeteranMapper();
+		return this.getJdbcTemplate().query(VeteranMapper.VET_SQL, rowMapper);
+	}
+	
+	
+	public List<DemographicQuestions> getAllDemoQuestions() {
+		DemoQuestionsMapper rowMapper = new DemoQuestionsMapper();
+		return this.getJdbcTemplate().query(DemoQuestionsMapper.DEMOQ_SQL, rowMapper);
+	}
 
 	public List<Resident> getAllResident() {
 
@@ -308,16 +348,24 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		} catch (EmptyResultDataAccessException ex) {
 			// When No resident found - Page will open for NewResident
-			Resident r = new Resident(this.getAllProperty(serviceCoord), this.getAllAType(), this.getAllReferral(), serviceCoord);
+			Resident r = new Resident(this.getAllProperty(serviceCoord), this.getAllAType(), this.getAllReferral(), this.getRaceChoice(), this.getEthnicytyChoice(), this.getGenderChoice() ,this.getHdHouseholdChoice(), this.getVeteranChoice(), serviceCoord);
 			WizardStepCounter wsCounter = new WizardStepCounter();
 			r.setWsCounter(wsCounter);
 			return r;
+			
 		}
 
 		resident.setPropertyList(this.getAllProperty(serviceCoord));
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
+		resident.setRaceList(this.getRaceChoice());
+		resident.setEthnList(this.getEthnicytyChoice());
+		resident.setGenderList(this.getEthnicytyChoice());
+		resident.setHeadHseHldList(this.getHdHouseholdChoice());
+		resident.setVetList(this.getVeteranChoice());
 
+		
+		
 		// All Historical Dates that are populated on each Assessment Step Dropdown
 		resident.setHousingDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSING"));
 		resident.setMoneymgmtDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "MONEY MANAGEMENT"));

@@ -473,31 +473,31 @@ CREATE table SERVICE_COORDINATOR (
 );
 
 CREATE table RESIDENT (
-	RESIDENT_ID		BIGINT PRIMARY KEY NOT NULL,
-	ACTIVE			BOOLEAN DEFAULT TRUE,
-	IS_RESIDENT 	BOOLEAN DEFAULT TRUE,
-	REF_TYPE		INT REFERENCES REFERRAL(REF_ID) NOT NULL,
-	FIRST_NAME		VARCHAR(128),
-	MIDDLE			VARCHAR(128),
-	LAST_NAME		VARCHAR(128),
-	PROP_ID			INT REFERENCES PROPERTY(PROP_ID),
-	VIA_VOICEMAIL	BOOLEAN DEFAULT FALSE,
-	VIA_TEXT		BOOLEAN DEFAULT FALSE,
-	VIA_EMAIL		BOOLEAN DEFAULT FALSE,
-	VOICEMAIL_NO	VARCHAR(20),
-	TEXT_NO			VARCHAR(20),
-	EMAIL			VARCHAR(256) UNIQUE,
-	ADDRESS			VARCHAR(256),
-	ACK_PR			BOOLEAN DEFAULT FALSE,
-	ALLOW_CONTACT	BOOLEAN DEFAULT FALSE,
-	WANTS_SURVEY	BOOLEAN DEFAULT FALSE,
-	PHOTO_RELEASE	BOOLEAN DEFAULT FALSE,
-	DATE_ADDED		TIMESTAMP DEFAULT NOW(),
-	DATE_MODIFIED	TIMESTAMP DEFAULT NOW(),
-	MODIFIED_BY		VARCHAR(50),
-	SERVICE_COORD	VARCHAR(50),
-	A_TYPE			INT REFERENCES ASSESSMENT_TYPE(A_ID),
-	A_DATE			DATE
+	RESIDENT_ID		        BIGINT PRIMARY KEY NOT NULL,
+	ACTIVE			        BOOLEAN DEFAULT TRUE,
+	IS_RESIDENT 	        BOOLEAN DEFAULT TRUE,
+	REF_TYPE		        INT REFERENCES REFERRAL(REF_ID) NOT NULL,
+	FIRST_NAME		        VARCHAR(128),
+	MIDDLE			        VARCHAR(128),
+	LAST_NAME		        VARCHAR(128),
+	PROP_ID			        INT REFERENCES PROPERTY(PROP_ID),
+	VIA_VOICEMAIL	        BOOLEAN DEFAULT FALSE,
+	VIA_TEXT		        BOOLEAN DEFAULT FALSE,
+	VIA_EMAIL		        BOOLEAN DEFAULT FALSE,
+	VOICEMAIL_NO	        VARCHAR(20),
+	TEXT_NO			        VARCHAR(20),
+	EMAIL			        VARCHAR(256) UNIQUE,
+	ADDRESS			        VARCHAR(256),
+	ACK_PR			        BOOLEAN DEFAULT FALSE,
+	ALLOW_CONTACT	        BOOLEAN DEFAULT FALSE,
+	WANTS_SURVEY	        BOOLEAN DEFAULT FALSE,
+	PHOTO_RELEASE	        BOOLEAN DEFAULT FALSE,
+	DATE_ADDED		        TIMESTAMP DEFAULT NOW(),
+	DATE_MODIFIED	        TIMESTAMP DEFAULT NOW(),
+	MODIFIED_BY		        VARCHAR(50),
+	SERVICE_COORD	        VARCHAR(50),
+	A_TYPE			        INT REFERENCES ASSESSMENT_TYPE(A_ID),
+	A_DATE			        DATE
 );
 
 alter table RESIDENT
@@ -645,6 +645,170 @@ INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50,
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE, 1000, TRUE);
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE, 500, TRUE);
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE, 500, FALSE);
+
+CREATE table DEMOGRAPHICS_QUESTIONS (
+	QUESTION_ID	INT PRIMARY KEY UNIQUE NOT NULL,
+	QUESTION	VARCHAR(128) NOT NULL,
+	TYPE		VARCHAR(50)
+);
+CREATE SEQUENCE DM_QU_SQ START 1;
+
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your gender?', 'Gender');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your ethnicity?', 'Ethnicity');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your race?', 'Race');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Are you the head of the household?', 'HeadOfHousehold');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Are you a veteran?', 'Veteran');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Do you have a disability?', 'Disability');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Are you a Returning Citizen/Ex-Offender?', 'Ex-Offender');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Are you a part of the Supplemental Nutrition Assistance Program (SNAP)?', 'SNAP');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Do you receive Supplemental Security Income (SSI)?', 'SSI');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Do you have Social Security Disability Insurance (SSDI)?', 'SSDI');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Please select your health coverage.', 'Health');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Please select your highest level of education.', 'Education');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your household annual gross income?', 'Income');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'Do you feel safe at home during the night/day?', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is the primary language spoken in the home?', 'Language');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your age?', 'Age');
+INSERT INTO DEMOGRAPHICS_QUESTIONS VALUES(nextval('DM_QU_SQ'), 'What is your gross annual household income?', 'Income');
+
+CREATE SEQUENCE DM_AN_SQ START 1;
+
+CREATE table DEMOGRAPHICS_CHOICES (
+	CHOICE_ID	INT PRIMARY KEY NOT NULL,
+	CHOICE		VARCHAR(100) NOT NULL,
+	TYPE		VARCHAR(50) NOT NULL
+);
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Male', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Female?', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Transgendered Male to Female', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Transgendered Female to Male', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Other', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Gender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Gender');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Hispanic/Latino', 'Ethnicity');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Not Hispanic/Latino', 'Ethnicity');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Ethnicity');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Ethnicity');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Ethnicity');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'American Indian or Alaska Native', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Asian', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Black or African American', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Native Hawaiian or Other Pacific Islander', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'White', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Mixed Race', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Race');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Race');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes', 'HeadOfHousehold');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No', 'HeadOfHousehold');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'HeadOfHousehold');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'HeadOfHousehold');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'HeadOfHousehold');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes', 'Veteran');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No', 'Veteran');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Veteran');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Veteran');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Veteran');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes, individual indicates a disability as defined in ADA', 'Disability');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No, individual indicates no disability as defined in ADA', 'Disability');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Disability');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Disability');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Disability');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes', 'Ex-Offender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No', 'Ex-Offender');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Ex-Offender');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes', 'SNAP');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No', 'SNAP');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'SNAP');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes', 'SSI');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No', 'SSI');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'SSI');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes', 'SSDI');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No', 'SSDI');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'SSDI');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes, covered through employer or union (current or former)', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes, purchased insurance from insurance company', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Medicare', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Medicaid/Medical Assistance', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'TRICARE or other military health care', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'VA health care', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Indian Health Service', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Other health insurance or health coverage plan', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No coverage', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Health');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Health');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'No schooling completed, Nursery school, or Kindergarten', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 1', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 2', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 3', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 4', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 5', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 6', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 7', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 8', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 9', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 10', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 11', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Grade 12', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'High School Diploma', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'GED or alternative credential', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Less than 1 year of college credit', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'One or more years of college credit, no degree', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Asssociate degree', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Bachelor degree', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Master degree', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Professional degree', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Education');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Education');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes, only during the day', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes, only during the night', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Yes, for both day and night', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'I do not feel safe at home', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'HouseholdSafety');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'HouseholdSafety');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'English', 'Language');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Spanish', 'Language');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Information not collected', 'Language');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual refused', 'Language');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Individual does not know', 'Language');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Under 18', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '18-25', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '26-35', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '36-50', 'Age');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '+50', 'Age');
+
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Less than $15,000 a year', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '$15,000-$30,000', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '$30,000-$45,000', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), '$45,000-$60,000', 'Income');
+INSERT INTO DEMOGRAPHICS_CHOICES VALUES(nextval('DM_AN_SQ'), 'Greater than $60,000 a year', 'Income');
+
+CREATE TABLE DEMOGRAPHICS_QUESTION_CHOICE(
+    RESIDENT_ID INT REFERENCES RESIDENT(RESIDENT_ID),
+	QUESTION_ID INT REFERENCES DEMOGRAPHICS_QUESTIONS(QUESTION_ID) ,
+	CHOICE_ID	INT REFERENCES DEMOGRAPHICS_CHOICES(CHOICE_ID),
+	TYPE        VARCHAR(50)
+);
+
 
 
 
