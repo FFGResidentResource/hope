@@ -202,4 +202,8 @@ public class Demographics {
         this.serviceCoord = serviceCoord;
     }
 
+    public boolean typeEqualsLanguage(){
+       return this.getType().equalsIgnoreCase("Language");
+    }
+
 }

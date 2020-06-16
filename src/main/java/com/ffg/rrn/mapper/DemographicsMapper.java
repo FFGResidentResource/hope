@@ -9,11 +9,6 @@ import java.sql.SQLException;
 public class DemographicsMapper implements RowMapper<Demographics>{
 
 
-    private static final String SQL_GET_DEMOGRAPHICS ="SELECT resident.resident_id, active, is_resident, prop_id, ack_pr, ref_type, wants_survey, via_voicemail, via_text, allow_contact, choice, demographics_question_choice.choice_id, question_id, date_added, date_modified, service_coord, demographics_question_choice.type, photo_release FROM resident \n" +
-            "FULL OUTER JOIN demographics_question_choice ON demographics_question_choice.resident_id = resident.resident_id \n" +
-            "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id =  demographics_choices.choice_id;";
-
-
     @Override
     public Demographics mapRow(ResultSet rs, int row) throws SQLException {
 
