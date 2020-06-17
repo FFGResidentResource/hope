@@ -139,6 +139,33 @@ public class Resident {
 	private List<DemographicChoice> vetList;
 	
 	@JsonView
+	private List<DemographicChoice> disabilityList;
+	
+	@JsonView
+	private List<DemographicChoice> xoffenderList;
+	
+	@JsonView
+	private List<DemographicChoice> ssiList;
+	
+	@JsonView
+	private List<DemographicChoice> ssdiList;
+	
+	@JsonView
+	private List<DemographicChoice> healthList;
+	
+	@JsonView
+	private List<DemographicChoice> snapList;
+	
+	@JsonView
+	private List<DemographicChoice> educationList;
+	
+	@JsonView
+	private List<DemographicChoice> hsafetyList;
+	
+	@JsonView
+	private List<DemographicChoice> languageList;
+	
+	@JsonView
 	private List<DemographicQuestions> demoQList;
 
 	@JsonView
