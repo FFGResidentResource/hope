@@ -3,14 +3,16 @@ package com.ffg.rrn.model;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 public class Demographics {
+
+    private Long residentId;
     private Long questionId;
     private Long choiceId;
     private String type;
     private String choice;
-    private Long residentId;
     private Boolean isResident;
     private Boolean active;
     private Integer propertyId;
@@ -206,4 +208,59 @@ public class Demographics {
        return this.getType().equalsIgnoreCase("Language");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Demographics)) return false;
+        Demographics that = (Demographics) o;
+        return getResidentId().equals(that.getResidentId()) &&
+                Objects.equals(getQuestionId(), that.getQuestionId()) &&
+                Objects.equals(getChoiceId(), that.getChoiceId()) &&
+                Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getChoice(), that.getChoice()) &&
+                Objects.equals(getIsResident(), that.getIsResident()) &&
+                Objects.equals(getActive(), that.getActive()) &&
+                getPropertyId().equals(that.getPropertyId()) &&
+                Objects.equals(getRefId(), that.getRefId()) &&
+                Objects.equals(getAckRightToPrivacy(), that.getAckRightToPrivacy()) &&
+                Objects.equals(getViaVoicemail(), that.getViaVoicemail()) &&
+                Objects.equals(getViaText(), that.getViaText()) &&
+                Objects.equals(getViaEmail(), that.getViaEmail()) &&
+                Objects.equals(getAllowContact(), that.getAllowContact()) &&
+                Objects.equals(getWantSurvey(), that.getWantSurvey()) &&
+                Objects.equals(getPhotoRelease(), that.getPhotoRelease()) &&
+                Objects.equals(getDateAdded(), that.getDateAdded()) &&
+                Objects.equals(getDateModified(), that.getDateModified()) &&
+                Objects.equals(getServiceCoord(), that.getServiceCoord());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getResidentId(), getQuestionId(), getChoiceId(), getType(), getChoice(), getIsResident(), getActive(), getPropertyId(), getRefId(), getAckRightToPrivacy(), getViaVoicemail(), getViaText(), getViaEmail(), getAllowContact(), getWantSurvey(), getPhotoRelease(), getDateAdded(), getDateModified(), getServiceCoord());
+    }
+
+    @Override
+    public String toString() {
+        return "Demographics{" +
+                "residentId=" + residentId +
+                ", questionId=" + questionId +
+                ", choiceId=" + choiceId +
+                ", type='" + type + '\'' +
+                ", choice='" + choice + '\'' +
+                ", isResident=" + isResident +
+                ", active=" + active +
+                ", propertyId=" + propertyId +
+                ", refId=" + refId +
+                ", ackRightToPrivacy=" + ackRightToPrivacy +
+                ", viaVoicemail=" + viaVoicemail +
+                ", viaText=" + viaText +
+                ", viaEmail=" + viaEmail +
+                ", allowContact=" + allowContact +
+                ", wantSurvey=" + wantSurvey +
+                ", photoRelease=" + photoRelease +
+                ", dateAdded=" + dateAdded +
+                ", dateModified=" + dateModified +
+                ", serviceCoord='" + serviceCoord + '\'' +
+                '}';
+    }
 }

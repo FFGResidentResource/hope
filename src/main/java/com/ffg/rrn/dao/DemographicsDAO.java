@@ -70,124 +70,112 @@ public class DemographicsDAO extends JdbcDaoSupport {
         return this.getJdbcTemplate().query(DEMOGRAPHICSQL, demographicsMapper);
     }
 
-    public List<Demographics> getPrimaryLanguagesSpokenAtHomeByProperty(Integer propertyId){
-        Object[] params = new Object[]{propertyId};
-        String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
-                "FROM demographics_question_choice\n" +
-                "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
-                "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 15 AND demographics_choices.type LIKE 'Language%' ORDER BY prop_id";
-
-        return this.getJdbcTemplate().query(sql, params, demographicsMapper);
-
-    }
-
-    public List<Demographics> getLanguageCountByProperty(Integer propertyId) {
+    public List<Demographics> getLanguageCountByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select count(demographics_question_choice.choice_id)\n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 15 AND demographics_choices.type LIKE 'Language%' GROUP BY prop_id";
+                "WHERE prop_id = ? AND question_id = 15 AND demographics_choices.type LIKE 'Language%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getGenderByProperty(Integer propertyId) {
+    public List<Demographics> getGenderByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 1 AND demographics_choices.type LIKE 'Gender%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 1 AND demographics_choices.type LIKE 'Gender%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getEthnicityByProperty(Integer propertyId) {
+    public List<Demographics> getEthnicityByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 2 AND demographics_choices.type LIKE 'Ethnicity%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 2 AND demographics_choices.type LIKE 'Ethnicity%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getRaceByProperty(Integer propertyId) {
+    public List<Demographics> getRaceByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 3 AND demographics_choices.type LIKE 'Race%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 3 AND demographics_choices.type LIKE 'Race%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getHeadOfHouseholdByProperty(Integer propertyId) {
+    public List<Demographics> getHeadOfHouseholdByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 4 AND demographics_choices.type LIKE 'HeadOfHousehold%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 4 AND demographics_choices.type LIKE 'HeadOfHousehold%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
-    public List<Demographics> getVeteranStatusByProperty(Integer propertyId) {
+    public List<Demographics> getVeteranStatusByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 5 AND demographics_choices.type LIKE 'Veteran%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 5 AND demographics_choices.type LIKE 'Veteran%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
-    public List<Demographics> getDisabilityStatusByProperty(Integer propertyId) {
+    public List<Demographics> getDisabilityStatusByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 6 AND demographics_choices.type LIKE 'Disability%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 6 AND demographics_choices.type LIKE 'Disability%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
-    public List<Demographics> getReturningCitizenByProperty(Integer propertyId) {
+    public List<Demographics> getReturningCitizenByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 7 AND demographics_choices.type LIKE 'Ex-Offender%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 7 AND demographics_choices.type LIKE 'Ex-Offender%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
-    public List<Demographics> getSNAPRecipientByProperty(Integer propertyId) {
+    public List<Demographics> getSNAPRecipientByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 8 AND demographics_choices.type LIKE 'SNAP%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 8 AND demographics_choices.type LIKE 'SNAP%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getSSIRecipientByProperty(Integer propertyId) {
+    public List<Demographics> getSSIRecipientByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 9 AND demographics_choices.type LIKE 'SSI%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 9 AND demographics_choices.type LIKE 'SSI%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
-    public List<Demographics> getSSDIRecipientByProperty(Integer propertyId) {
+    public List<Demographics> getSSDIRecipientByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
@@ -198,58 +186,81 @@ public class DemographicsDAO extends JdbcDaoSupport {
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getHealthCoverageStatusByProperty(Integer propertyId) {
+    public List<Demographics> getHealthCoverageStatusByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 11 AND demographics_choices.type LIKE 'Health%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 11 AND demographics_choices.type LIKE 'Health%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getEducationLevelByProperty(Integer propertyId) {
+    public List<Demographics> getEducationLevelByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 12 AND demographics_choices.type LIKE 'Education%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 12 AND demographics_choices.type LIKE 'Education%' ";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getHouseholdAnnualIncomeByProperty(Integer propertyId) {
+    public List<Demographics> getHouseholdAnnualIncomeByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 13 AND demographics_choices.type LIKE 'Income%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 13 AND demographics_choices.type LIKE 'Income%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getHouseholdSafetyByProperty(Integer propertyId) {
+    public List<Demographics> getHouseholdSafetyByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 14 AND demographics_choices.type LIKE 'HouseholdSafety%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 14 AND demographics_choices.type LIKE 'HouseholdSafety%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
     }
 
-    public List<Demographics> getAgeRangeByProperty(Integer propertyId) {
+    public List<Demographics> getAgeRangeByProperty(Long propertyId) {
         Object[] params = new Object[]{propertyId};
         String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
                 "FROM demographics_question_choice\n" +
                 "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
                 "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
-                "WHERE question_id = 16 AND demographics_choices.type LIKE 'Age%' ORDER BY prop_id";
+                "WHERE prop_id = ? AND question_id = 16 AND demographics_choices.type LIKE 'Age%'";
 
         return this.getJdbcTemplate().query(sql, params, demographicsMapper);
+    }
+
+    public List<Demographics> getPrimaryLanguagesSpokenAtHomeByProperty(Long propertyId){
+        Object[] params = new Object[]{propertyId};
+        String sql = "select demographics_question_choice.resident_id, question_id, demographics_question_choice.choice_id, demographics_question_choice.type, prop_id, demographics_choices.choice \n" +
+                "FROM demographics_question_choice\n" +
+                "FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
+                "FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
+                "WHERE prop_id = ? AND question_id = 15 AND demographics_choices.type LIKE 'Language%'";
+
+        return this.getJdbcTemplate().query(sql, params, demographicsMapper);
+
+    }
+
+    public Long getNumberOfEnglishSpeakersByProperty(Long propertyId){
+        Object[] params = new Object[]{propertyId};
+        String sql = "select count(demographics_question_choice.choice_id)\n" +
+                "        FROM demographics_question_choice\n" +
+                "        FULL OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
+                "        FULL OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id\n" +
+                "        WHERE question_id = 1 AND demographics_choices.choice_id = 14;\n";
+
+        return this.getJdbcTemplate().queryForObject(sql, params, Long.class);
     }
 }
