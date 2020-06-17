@@ -174,6 +174,42 @@ public class ResidentServiceImpl {
 		return this.residentDao.getHdHouseholdChoice();
 	}
 	
+	public List<DemographicChoice> getDisabilityChoice() {
+		return this.residentDao.getDisabilityChoice();
+	}
+	
+	public List<DemographicChoice> getXOffenderChoice() {
+		return this.residentDao.getXOffenderChoice();
+	}
+	
+	public List<DemographicChoice> getSSIChoice() {
+		return this.residentDao.getSSIChoice();
+	}
+	
+	public List<DemographicChoice> getSSDIChoice() {
+		return this.residentDao.getSSDIChoice();
+	}
+	
+	public List<DemographicChoice> getHealthChoice() {
+		return this.residentDao.getHealthChoice();
+	}
+	
+	public List<DemographicChoice> getSNAPChoice() {
+		return this.residentDao.getSNAPChoice();
+	}
+	
+	public List<DemographicChoice> getEducationChoice() {
+		return this.residentDao.getEducationChoice();
+	}
+	
+	public List<DemographicChoice> getHHSafetyChoice() {
+		return this.residentDao.getHHSafetyChoice();
+	}
+	
+	public List<DemographicChoice> getLanguageChoice() {
+		return this.residentDao.getLanguageChoice();
+	}
+	
 	public List<DemographicChoice> getVeteranChoice() {
 		return this.residentDao.getVeteranChoice();
 	}
