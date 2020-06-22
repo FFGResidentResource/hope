@@ -17,8 +17,18 @@ public class RRNHope {
 
 		List<Demographics> testDemographicData = new ArrayList<>();
 		AssessmentReport assessmentReport = new AssessmentReport();
-		testDemographicData = assessmentReport.filterDemographicsDataByPropertyId((long) 1);
+		testDemographicData = assessmentReport.queryAllDemographicsData();
 		System.out.println(testDemographicData);
+
+		List<Demographics> testDemographicDataByPropertyId = new ArrayList<>();
+		AssessmentReport assessmentReport1 = new AssessmentReport();
+		testDemographicDataByPropertyId = assessmentReport.filterDemographicsDataByPropertyId((long) 1);
+		System.out.println(testDemographicDataByPropertyId);
+
+		List<Demographics> testDemographicDataByPropertyIdQuestionId = new ArrayList<>();
+		AssessmentReport assessmentReport2 = new AssessmentReport();
+		testDemographicDataByPropertyIdQuestionId = assessmentReport2.filterByPropertyIdByQuestionId((long) 1, (long) 15);
+		System.out.println(testDemographicDataByPropertyIdQuestionId);
 
 
 	}

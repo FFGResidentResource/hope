@@ -1,8 +1,6 @@
 package com.ffg.rrn.report.filter;
 import com.ffg.rrn.dao.DemographicsDAO;
-import com.ffg.rrn.mapper.DemographicsMapper;
 import com.ffg.rrn.model.Demographics;
-import com.ffg.rrn.model.Property;
 import com.ffg.rrn.service.ResidentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +65,7 @@ public class AssessmentReport implements Report {
      */
     public List<Demographics> filterDemographicsDataByPropertyId(Long propertyId) {
         List<Demographics> demographicsByProperty = new ArrayList<>();
-        List<Demographics> tempDemographics = demographicsDAO.findAllResidentDemographicsDataByPropertyId(propertyId);
+        List<Demographics> tempDemographics = demographicsDAO.findAllResidentDemographicsData();
 
         for(Demographics demographics : tempDemographics) {
 
@@ -88,6 +86,21 @@ public class AssessmentReport implements Report {
         return demographicsByProperty;
 
     }
+    // Filter Demographics by PropertyId and by question ID
+    public List<Demographics> filterByPropertyIdByQuestionId(Long propertyId, Long questionId){
+        List<Demographics> demographicsByPropertyIdQuestionId = this.filterDemographicsDataByPropertyId(propertyId);
+
+        Predicate<Demographics> filterByQuestionId = d -> d.getQuestionId() == questionId;
+
+        //get demographics data based on the QuestionID
+        List<Demographics> datafilteredByQIDPID = demographicsByPropertyIdQuestionId.stream()
+                .filter(filterByQuestionId).collect(Collectors.toList());
+        return datafilteredByQIDPID;
+    }
+
+
+
+
 
     
 
