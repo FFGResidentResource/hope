@@ -9,13 +9,14 @@ import java.util.Objects;
 public class Demographics {
 
     private Long residentId;
+    private Long propertyId;
     private Long questionId;
+    private Boolean isResident;
+    private String address;
     private Long choiceId;
     private String type;
     private String choice;
-    private Boolean isResident;
     private Boolean active;
-    private Integer propertyId;
     private Integer refId;
     private Boolean ackRightToPrivacy;
     private Boolean viaVoicemail;
@@ -28,7 +29,7 @@ public class Demographics {
     private Date dateModified;
     private String serviceCoord;
 
-    public Demographics(Long questionId, Long choiceId, String type, String choice, Long residentId, Boolean isResident, Boolean active, String firstName, String lastName, String middle, Integer propertyId, String propertyName, String voiceMail, String text, Integer refId, String email, String address, Boolean ackRightToPrivacy, Boolean viaVoicemail, Boolean viaText, Boolean viaEmail, Boolean allowContact, Boolean wantSurvey, Boolean photoRelease, Date dateAdded, Date dateModified, String serviceCoord) {
+    public Demographics(Long questionId, Long choiceId, String type, String choice, Long residentId, Boolean isResident, Boolean active, String firstName, String lastName, String middle, Long propertyId, String propertyName, String voiceMail, String text, Integer refId, String email, String address, Boolean ackRightToPrivacy, Boolean viaVoicemail, Boolean viaText, Boolean viaEmail, Boolean allowContact, Boolean wantSurvey, Boolean photoRelease, Date dateAdded, Date dateModified, String serviceCoord) {
         this.questionId = questionId;
         this.choiceId = choiceId;
         this.type = type;
@@ -50,7 +51,16 @@ public class Demographics {
         this.serviceCoord = serviceCoord;
     }
 
+
     public Demographics(){}
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Long getQuestionId() {
         return questionId;
@@ -108,11 +118,11 @@ public class Demographics {
         this.active = active;
     }
 
-    public Integer getPropertyId() {
+    public Long getPropertyId() {
         return propertyId;
     }
 
-    public void setPropertyId(Integer propertyId) {
+    public void setPropertyId(Long propertyId) {
         this.propertyId = propertyId;
     }
 
@@ -218,6 +228,7 @@ public class Demographics {
                 Objects.equals(getChoiceId(), that.getChoiceId()) &&
                 Objects.equals(getType(), that.getType()) &&
                 Objects.equals(getChoice(), that.getChoice()) &&
+                Objects.equals(getAddress(), that.getAddress()) &&
                 Objects.equals(getIsResident(), that.getIsResident()) &&
                 Objects.equals(getActive(), that.getActive()) &&
                 getPropertyId().equals(that.getPropertyId()) &&
@@ -249,6 +260,7 @@ public class Demographics {
                 ", choice='" + choice + '\'' +
                 ", isResident=" + isResident +
                 ", active=" + active +
+                ", address=" + address +
                 ", propertyId=" + propertyId +
                 ", refId=" + refId +
                 ", ackRightToPrivacy=" + ackRightToPrivacy +

@@ -1,9 +1,9 @@
 package com.ffg.rrn.report.filter;
 import com.ffg.rrn.dao.DemographicsDAO;
+import com.ffg.rrn.mapper.DemographicsMapper;
 import com.ffg.rrn.model.Demographics;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.service.ResidentServiceImpl;
-import com.google.gson.internal.LinkedTreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,10 @@ import java.util.stream.Collectors;
 @Service
 public class AssessmentReport implements Report {
 
-    private Integer propertyId;
-
    private  Demographics demographics;
 
-   private DemographicsDAO demographicsDAO;
+   @Autowired
+   private DemographicsDAO demographicsDAO = new DemographicsDAO();
 
     @Autowired
     private ResidentServiceImpl residentService;
@@ -47,20 +46,50 @@ public class AssessmentReport implements Report {
         };
     }
 
-    @Override
-    public List<Property> getAllProperty() {
-
-        List<Property> propertyList = demographicsDAO.getAllPropertyObjects();
-
-        return propertyList;
-    }
 
     @Override
     public List<Demographics> getAllDemographicObjects() {
-        List<Demographics> demographicsList = demographicsDAO.getAllDemographicObjects();
+        List<Demographics> demographicsList = demographicsDAO.findAllResidentDemographicsData();
 
         return demographicsList;
     }
+
+
+    public List<Demographics> queryAllDemographicsData() {
+        List<Demographics> rawDemographicsData = demographicsDAO.findAllResidentDemographicsData();
+
+        return rawDemographicsData;
+    }
+
+    /*
+    This method filters the List of Demographics data into on demographic object by property ID.
+
+     */
+    public List<Demographics> filterDemographicsDataByPropertyId(Long propertyId) {
+        List<Demographics> demographicsByProperty = new ArrayList<>();
+        List<Demographics> tempDemographics = demographicsDAO.findAllResidentDemographicsDataByPropertyId(propertyId);
+
+        for(Demographics demographics : tempDemographics) {
+
+            if(demographics.getPropertyId().equals(propertyId)) {
+
+                demographicsByProperty.add(demographics);
+
+            }
+            //sort by resident Id
+            Collections.sort(demographicsByProperty, new Comparator<Demographics>() {
+                        @Override
+                        public int compare(Demographics o1, Demographics o2) {
+                            return o1.getResidentId().compareTo(o2.getResidentId());
+                        }
+                    });
+
+        }
+        return demographicsByProperty;
+
+    }
+
+    
 
 
     /*

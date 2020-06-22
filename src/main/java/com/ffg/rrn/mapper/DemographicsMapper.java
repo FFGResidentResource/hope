@@ -17,7 +17,8 @@ public class DemographicsMapper implements RowMapper<Demographics>{
         demographics.setResidentId(rs.getLong("resident_id"));
         demographics.setActive(rs.getBoolean("active"));
         demographics.setIsResident(rs.getBoolean("is_resident"));
-        demographics.setPropertyId(rs.getInt("prop_id"));
+        demographics.setAddress(rs.getString("address"));
+        demographics.setPropertyId(rs.getLong("prop_id"));
         demographics.setAckRightToPrivacy(rs.getBoolean("ack_pr"));
         demographics.setRefId(rs.getInt("ref_type"));
         demographics.setWantSurvey(rs.getBoolean("wants_survey"));

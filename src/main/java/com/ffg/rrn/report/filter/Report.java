@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface Report {
 
-    public List<Property> getAllProperty();
     public List<Demographics> getAllDemographicObjects();
 
 }
