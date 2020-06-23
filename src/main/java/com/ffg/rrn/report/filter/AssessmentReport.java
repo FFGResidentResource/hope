@@ -114,7 +114,7 @@ public class AssessmentReport implements Report {
         return mapChoice;
     }
 
-    public Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> filterDataByHousehold(Long propertyId, Long questionId){
+    public Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> mapChoioce2IDAndMap2Count(Long propertyId, Long questionId){
         //get the unique choices
         List<Demographics> myDemographicList  = this.filterByPropertyIdByQuestionId(propertyId, questionId);
         List<Long> uniqueVariableIDs = myDemographicList.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
@@ -143,36 +143,36 @@ public class AssessmentReport implements Report {
         return mapChoice2Count;
     }
 
+public Map<String, Long> extractMapFromMapChoice2Count(Long properyId, long questionId) {
+
+    Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> countDataSet = this.mapChoioce2IDAndMap2Count(properyId, questionId);
 
 
 
+        return null;
+}
 
-    
+    public Map<Collection<String>, Collection<Long>> mapChoice2Count(Long propertyId, Long questionId) {
+        Map<Long, String> mapChoiceToID = this.mapChoiceId2choice(propertyId, questionId);
+
+        List<Demographics> myDemographicList  = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Long> uniqueVariableIDs = myDemographicList.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
+        long countAllChoiceIDs = myDemographicList.stream().map(Demographics::getChoiceId).count();
+        Map<Long, Long> frequencyCount4ChoiceId = new HashMap<>();
+        long count = 0;
+        for(Long variable : uniqueVariableIDs){
+            count = myDemographicList.stream().filter(e -> e.getChoiceId().equals(variable)).count();
+            frequencyCount4ChoiceId.put(variable, count);
+        }
+        Map<Long, Long> collateFrequencyCount = frequencyCount4ChoiceId;
+        Map<Collection<String>, Collection<Long>> mapChoice2Count = new HashMap<>();
+
+        mapChoiceToID.forEach((K, v) -> {
+           mapChoice2Count.put(mapChoiceToID.values(), collateFrequencyCount.values());
+        });
+
+        return mapChoice2Count;
+    }
 
 
-    /*
-    generate data for languages spoken at home
-//     */
-//    public Map<String, Long> primaryLanguage(Long residentId){
-//        List<Demographics> rawData = demographicsDAO.getPrimaryLanguagesSpokenAtHomeByProperty(residentId);
-//        //get a total count of all the type(matching Language) returned from database::total language count
-//        Long totalLanguageCount = rawData.stream().map(Demographics::getType).count();
-//
-//        //get the unique count of all choice-types from the list of demographic entities returned from query.
-//        List<String> uniqueLanguages = rawData.stream().map(Demographics::getChoice).distinct().collect(Collectors.toList());
-//        List<Map<String, Long>> getTheCount = null;
-//        for (Demographics demographics : rawData) {
-//
-//            Map<String, Long> LanguageByCount = rawData.stream().collect(Collectors.groupingBy(Demographics::getChoice, Collectors.counting()));
-//
-//        }
-
-//        public static <T, NewKey> Map<NewKey, List<T>> groupingBy(List<T> list, Function<T, NewKey> function) {
-//            return list.stream().collect(Collectors.groupingBy(function, LinkedHashMap::new, mapping(Function.identity(), Collectors.toList())))
-//    }
-
-//    public static <T, NewKey> Map<NewKey, List<T>> groupingBy(List<T> list, Function<T, NewKey> function) {
-//        return list.stream().collect(Collectors.groupingBy(function, LinkedHashMap::new, mapping(Function.identity(), Collectors.toList())))
-//
-//    }
 }

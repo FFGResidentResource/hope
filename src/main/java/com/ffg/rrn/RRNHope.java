@@ -6,10 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootApplication
 public class RRNHope {
@@ -33,7 +30,7 @@ public class RRNHope {
 		System.out.println(testDemographicDataByPropertyIdQuestionId);
 
 		AssessmentReport assessmentReport3 = new AssessmentReport();
-		Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> printMapChoices2Id = assessmentReport3.filterDataByHousehold((long) 1, (long) 15);
+		Map<Collection<String>, Collection<Long>> printMapChoices2Id = assessmentReport3.mapChoice2Count((long) 1, (long) 15);
 		System.out.println(printMapChoices2Id);
 	}
 
