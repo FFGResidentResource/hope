@@ -98,6 +98,51 @@ public class AssessmentReport implements Report {
         return datafilteredByQIDPID;
     }
 
+    //Function to map Choice to Choice ID since they're not on the same table.
+    public Map<Long, String> mapChoiceId2choice(Long propertyId, Long questionId){
+        List<Demographics> getDemographics = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Demographics> getDemographics2 = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<String> choices = getDemographics.stream().distinct().map(Demographics::getChoice).collect(Collectors.toList());
+        List<Long> choiceId = getDemographics2.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
+
+      Map<Long, String> mapChoice = new HashMap<>();
+
+      for (int i = 0; i < choiceId.size(); i++) {
+          mapChoice.put(choiceId.get(i), choices.get(i));
+      }
+
+        return mapChoice;
+    }
+
+    public Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> filterDataByHousehold(Long propertyId, Long questionId){
+        //get the unique choices
+        List<Demographics> myDemographicList  = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Long> uniqueVariableIDs = myDemographicList.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
+        //count all the choice Ids
+        long countAllChoiceIDs = myDemographicList.stream().map(Demographics::getChoiceId).count();
+        //get the mapping of choiceId to Choices
+        Map<Long, String> variablesCount = this.mapChoiceId2choice(propertyId, questionId);
+        Map<Long, Long> frequencyCount4ChoiceId = new HashMap<>();
+        long count = 0;
+        for(Long variable : uniqueVariableIDs){
+
+            count = myDemographicList.stream().filter(e -> e.getChoiceId().equals(variable)).count();
+            frequencyCount4ChoiceId.put(variable, count);
+        }
+
+        Map<Long, Long> collateFrequencyCount = frequencyCount4ChoiceId;
+        Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> mapChoice2Count = new HashMap<>();
+
+        Set<Long> keys = variablesCount.keySet();
+        for (Long K : keys) {
+            if(keys.equals(collateFrequencyCount.keySet())){
+                mapChoice2Count.put(variablesCount.entrySet(), collateFrequencyCount.entrySet());
+            }
+        }
+
+        return mapChoice2Count;
+    }
+
 
 
 
