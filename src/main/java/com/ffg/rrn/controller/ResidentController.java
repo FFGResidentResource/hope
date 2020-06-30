@@ -445,6 +445,15 @@ public class ResidentController extends BaseController {
 		resident.setGenderList(residentService.getGenderChoice());
 		resident.setHeadHseHldList(residentService.getHeadHseHldChoice());
 		resident.setVetList(residentService.getVeteranChoice());
+		resident.setDisabilityList(residentService.getDisabilityChoice());
+		resident.setXoffenderList(residentService.getXOffenderChoice());
+		resident.setSsiList(residentService.getSSIChoice());
+		resident.setSsdiList(residentService.getSSDIChoice());
+		resident.setHealthList(residentService.getHealthChoice());
+		resident.setSnapList(residentService.getSNAPChoice());
+		resident.setEducationList(residentService.getEducationChoice());
+		resident.setHsafetyList(residentService.getHHSafetyChoice());
+		resident.setLanguageList(residentService.getLanguageChoice());
 		resident.setDemoQList(residentService.getAllDemoQuestions());
 	}
 

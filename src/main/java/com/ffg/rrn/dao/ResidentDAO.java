@@ -35,12 +35,21 @@ import com.ffg.rrn.mapper.AssessmentMapper;
 import com.ffg.rrn.mapper.ChildrenMapper;
 import com.ffg.rrn.mapper.RaceMapper;
 import com.ffg.rrn.mapper.DemoQuestionsMapper;
+import com.ffg.rrn.mapper.DisabilityMapper;
+import com.ffg.rrn.mapper.EducationMapper;
 import com.ffg.rrn.mapper.EthnicityMapper;
+import com.ffg.rrn.mapper.ExOffenderMapper;
 import com.ffg.rrn.mapper.GenderMapper;
 import com.ffg.rrn.mapper.HOHouseholdMapper;
+import com.ffg.rrn.mapper.HealthMapper;
+import com.ffg.rrn.mapper.HouseholdSafetyMapper;
+import com.ffg.rrn.mapper.PrimLanguageMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
+import com.ffg.rrn.mapper.SapSecIncomeMapper;
+import com.ffg.rrn.mapper.SocSecurityDisMapper;
+import com.ffg.rrn.mapper.SupNutAssisMapper;
 import com.ffg.rrn.mapper.VeteranMapper;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
@@ -236,10 +245,57 @@ public class ResidentDAO extends JdbcDaoSupport {
 		return this.getJdbcTemplate().query(HOHouseholdMapper.HHH_SQL, rowMapper);
 	}
 	
+	public List<DemographicChoice> getDisabilityChoice() {
+		DisabilityMapper rowMapper = new DisabilityMapper();
+		return this.getJdbcTemplate().query(DisabilityMapper.DISA_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getXOffenderChoice() {
+		ExOffenderMapper rowMapper = new ExOffenderMapper();
+		return this.getJdbcTemplate().query(ExOffenderMapper.XOFF_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getSSIChoice() {
+		SapSecIncomeMapper rowMapper = new SapSecIncomeMapper();
+		return this.getJdbcTemplate().query(SapSecIncomeMapper.SSI_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getSSDIChoice() {
+		SocSecurityDisMapper rowMapper = new SocSecurityDisMapper();
+		return this.getJdbcTemplate().query(SocSecurityDisMapper.SSDI_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getHealthChoice() {
+		HealthMapper rowMapper = new HealthMapper();
+		return this.getJdbcTemplate().query(HealthMapper.HLTH_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getEducationChoice() {
+		EducationMapper rowMapper = new EducationMapper();
+		return this.getJdbcTemplate().query(EducationMapper.EDU_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getSNAPChoice() {
+		SupNutAssisMapper rowMapper = new SupNutAssisMapper();
+		return this.getJdbcTemplate().query(SupNutAssisMapper.SNAP_SQL, rowMapper);
+	}
+	
+	public List<DemographicChoice> getHHSafetyChoice() {
+		HouseholdSafetyMapper rowMapper = new HouseholdSafetyMapper();
+		return this.getJdbcTemplate().query(HouseholdSafetyMapper.HHST_SQL, rowMapper);
+	}
+	public List<DemographicChoice> getLanguageChoice() {
+		PrimLanguageMapper rowMapper = new PrimLanguageMapper();
+		return this.getJdbcTemplate().query(PrimLanguageMapper.LANG_SQL, rowMapper);
+	}
+	
+	
+	
 	public List<DemographicChoice> getVeteranChoice() {
 		VeteranMapper rowMapper = new VeteranMapper();
 		return this.getJdbcTemplate().query(VeteranMapper.VET_SQL, rowMapper);
 	}
+	
 	
 	
 	public List<DemographicQuestions> getAllDemoQuestions() {
