@@ -1,6 +1,8 @@
 package com.ffg.rrn.dao;
 
+import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.model.Demographics;
+import com.ffg.rrn.model.Property;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.*;
@@ -36,7 +38,7 @@ public class DemographicsDAO {
     public DemographicsDAO() {
 
     }
-
+    private static final String SQL_LIST_PROPERTY = "SELECT prop_name, prop_id, unit, unit_fee, active, total_residents, resident_council FROM property" ;
     private static final String RAW_DEMOGRAPHIC_DATA = "SELECT resident.resident_id, active, is_resident, resident.address, prop_id, ack_pr, ref_type, wants_survey, via_voicemail, via_email, via_text, allow_contact, choice, \n" +
             "demographics_question_choice.choice_id, question_id, date_added, date_modified, service_coord, photo_release, demographics_question_choice.type\n" +
             " FROM demographics_question_choice\n" +
@@ -87,4 +89,32 @@ public class DemographicsDAO {
 
     }
 
+    public List<Property> getAllPropertyObjects() {
+        PropertyMapper propertyMapper = new PropertyMapper();
+        List<Property> propertyList = new ArrayList<>();
+        Connection connection = null;
+        try{
+            connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(SQL_LIST_PROPERTY);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                Property p = new Property();
+                p.setPropertyId(rs.getInt("prop_id"));
+                p.setPropertyName(rs.getString("prop_name"));
+                p.setUnit(rs.getInt("unit"));
+                p.setUnitFee(rs.getInt("unit_fee"));
+                p.setActive(rs.getBoolean("active"));
+                p.setNoOfResident(rs.getInt("total_residents"));
+                p.setResidentCouncil(rs.getBoolean("resident_council"));
+
+                propertyList.add(p);
+
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }finally {
+            closeConnection(connection);
+        }
+        return propertyList;
+    }
 }

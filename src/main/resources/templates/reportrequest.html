@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resident Resource Network</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="/css/report.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @media ( min-width : 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .navbar-brand>img {
+            height: 100%;
+        }
+
+        .navbar-brand {
+            padding: 0;
+        }
+    </style>
+
+</head>
+
+
+<body>
+<h1>property list</h1>
+<h2>th:each property</h2>
+<div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
+<table class="table datatable">
+    <thead>
+    <tr>
+        <th>property List</th>
+    </tr>
+    </thead>
+</table>
+<tbody>
+<tr th:each="propertyList : ${propertyList}">
+    <td th:text="${propertyList.getPropertyName()}">Text...</td>
+</tr>
+</tbody>
+</div>
+
+
+</body>
+</html>
+
