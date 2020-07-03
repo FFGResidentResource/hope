@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Resident Resource Network</title>
 
@@ -32,36 +29,17 @@
             padding: 0;
         }
     </style>
-
 </head>
-
-
 <body>
-<h1>Reports</h1>
-<h2>Select Report by Property</h2>
-
-
-
-<div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
-    <table class="table datatable">
-        <thead>
-        <tr>
-            <th>Property Name</th>
-            <th>Property ID</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="propertyList : ${propertyList}">
-            <td th:text="${propertyList.getPropertyName()}">Text ...</td>
-            <td th:text="${propertyList.getPropertyId()}">Text ...</td>
-            <td><button type="button"
-                        class="btn btn-primary btn-condensed">
-                <i class="glyphicon glyphicon-folder-open"></i>
-            </button></td>
-        </tr>
-        </tbody>
+<div th:fragment="reportHeader">
 </div>
-
+<div class="propertydropdown" th:unless="${#lists.isEmpty(propertyList)}">
+    <select th:field="*{propertyList}">
+        <option th:each="propertyList : ${propertyList}"
+        <td th:text="${propertyList.getPropertyName()}">Text ...</td>
+        </option>
+    </select>
+</div>
 </body>
-</html>
 
+</html>
