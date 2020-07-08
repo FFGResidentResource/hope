@@ -15,10 +15,6 @@ public class RRNHope {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RRNHope.class, args);
-		Report report = new Report();
-
-		System.out.println(report.getAllDemographicObjects());
-		System.out.println(report.filterByPropertyIdByQuestionId((long)1, (long)5));
 
 	}
 

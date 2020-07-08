@@ -47,17 +47,11 @@
         <thead>
         <tr>
             <th>Property Name</th>
-            <th>Property ID</th>
         </tr>
-        </thead>
+         </thead>
         <tbody>
         <tr th:each="propertyList : ${propertyList}">
-            <td th:text="${propertyList.getPropertyName()}">Text ...</td>
-            <td th:text="${propertyList.getPropertyId()}">Text ...</td>
-            <td><button type="button"
-                        class="btn btn-primary btn-condensed">
-                <i class="glyphicon glyphicon-folder-open"></i>
-            </button></td>
+            <td th:text="${propertyList.getPropertyId()} +  ': ' + ${propertyList.getPropertyName()}">Text ...</td>
         </tr>
         </tbody>
 </div>

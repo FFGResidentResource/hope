@@ -15,18 +15,15 @@ import java.util.stream.Collectors;
 @Service
 public class Report implements IReport {
 
-   private  Demographics demographics;
-
-   @Autowired
-   private DemographicsDAO demographicsDAO = new DemographicsDAO();
 
     @Autowired
-    private ResidentServiceImpl residentService;
+   private DemographicsDAO demographicsDAO;
+
 
 
     public Report(){}
 
-    public static <T> Predicate<T> distinctByKey( Function<? super T, ?> keyExtractor) {
+    private static <T> Predicate<T> distinctByKey( Function<? super T, ?> keyExtractor) {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
@@ -53,12 +50,6 @@ public class Report implements IReport {
         return demographicsList;
     }
 
-
-    public List<Demographics> queryAllDemographicsData() {
-        List<Demographics> rawDemographicsData = demographicsDAO.findAllResidentDemographicsData();
-
-        return rawDemographicsData;
-    }
 
     public List<Property> getAllProperty(){
         List<Property> propertyList = demographicsDAO.getAllPropertyObjects();
@@ -105,7 +96,7 @@ public class Report implements IReport {
     }
 
     //Function to map Choice to Choice ID since they're not on the same table.
-    public Map<Long, String> mapChoiceId2choice(Long propertyId, Long questionId){
+    private Map<Long, String> mapChoiceId2choice(Long propertyId, Long questionId){
         List<Demographics> getDemographics = this.filterByPropertyIdByQuestionId(propertyId, questionId);
         List<Demographics> getDemographics2 = this.filterByPropertyIdByQuestionId(propertyId, questionId);
         List<String> choices = getDemographics.stream().distinct().map(Demographics::getChoice).collect(Collectors.toList());
@@ -149,16 +140,8 @@ public class Report implements IReport {
         return mapChoice2Count;
     }
 
-public Map<String, Long> extractMapFromMapChoice2Count(Long properyId, long questionId) {
 
-    Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> countDataSet = this.mapChoioce2IDAndMap2Count(properyId, questionId);
-
-
-
-        return null;
-}
-
-    public Map<Collection<String>, Collection<Long>> mapChoice2Count(Long propertyId, Long questionId) {
+    public Map<Collection<String>, Collection<Long>> getAnswerOccurenceCount(Long propertyId, Long questionId) {
         Map<Long, String> mapChoiceToID = this.mapChoiceId2choice(propertyId, questionId);
 
         List<Demographics> myDemographicList  = this.filterByPropertyIdByQuestionId(propertyId, questionId);
