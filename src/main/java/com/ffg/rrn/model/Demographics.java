@@ -1,11 +1,13 @@
 package com.ffg.rrn.model;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Data
+@Component
 public class Demographics {
 
     private Long residentId;

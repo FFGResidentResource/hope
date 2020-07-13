@@ -1,9 +1,9 @@
-package com.ffg.rrn.report.filter;
+package com.ffg.rrn.report;
 import com.ffg.rrn.dao.DemographicsDAO;
 import com.ffg.rrn.model.Demographics;
 import com.ffg.rrn.model.Property;
-import com.ffg.rrn.service.ResidentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,13 +12,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class Report implements IReport {
 
 
-    @Autowired
-   private DemographicsDAO demographicsDAO;
-
+    private DemographicsDAO demographicsDAO = new DemographicsDAO();
 
 
     public Report(){}
@@ -85,7 +83,7 @@ public class Report implements IReport {
     }
     // Filter Demographics by PropertyId and by question ID
     public List<Demographics> filterByPropertyIdByQuestionId(Long propertyId, Long questionId){
-        List<Demographics> demographicsByPropertyIdQuestionId = this.filterDemographicsDataByPropertyId(propertyId);
+        List<Demographics> demographicsByPropertyIdQuestionId = filterDemographicsDataByPropertyId(propertyId);
 
         Predicate<Demographics> filterByQuestionId = d -> d.getQuestionId() == questionId;
 
@@ -97,8 +95,8 @@ public class Report implements IReport {
 
     //Function to map Choice to Choice ID since they're not on the same table.
     private Map<Long, String> mapChoiceId2choice(Long propertyId, Long questionId){
-        List<Demographics> getDemographics = this.filterByPropertyIdByQuestionId(propertyId, questionId);
-        List<Demographics> getDemographics2 = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Demographics> getDemographics = filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Demographics> getDemographics2 = filterByPropertyIdByQuestionId(propertyId, questionId);
         List<String> choices = getDemographics.stream().distinct().map(Demographics::getChoice).collect(Collectors.toList());
         List<Long> choiceId = getDemographics2.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
 
@@ -113,12 +111,12 @@ public class Report implements IReport {
 
     public Map<Set<Map.Entry<Long, String>>, Set<Map.Entry<Long, Long>>> mapChoioce2IDAndMap2Count(Long propertyId, Long questionId){
         //get the unique choices
-        List<Demographics> myDemographicList  = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Demographics> myDemographicList  = filterByPropertyIdByQuestionId(propertyId, questionId);
         List<Long> uniqueVariableIDs = myDemographicList.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
         //count all the choice Ids
         long countAllChoiceIDs = myDemographicList.stream().map(Demographics::getChoiceId).count();
         //get the mapping of choiceId to Choices
-        Map<Long, String> variablesCount = this.mapChoiceId2choice(propertyId, questionId);
+        Map<Long, String> variablesCount = mapChoiceId2choice(propertyId, questionId);
         Map<Long, Long> frequencyCount4ChoiceId = new HashMap<>();
         long count = 0;
         for(Long variable : uniqueVariableIDs){
@@ -142,9 +140,9 @@ public class Report implements IReport {
 
 
     public Map<Collection<String>, Collection<Long>> getAnswerOccurenceCount(Long propertyId, Long questionId) {
-        Map<Long, String> mapChoiceToID = this.mapChoiceId2choice(propertyId, questionId);
+        Map<Long, String> mapChoiceToID = mapChoiceId2choice(propertyId, questionId);
 
-        List<Demographics> myDemographicList  = this.filterByPropertyIdByQuestionId(propertyId, questionId);
+        List<Demographics> myDemographicList  = filterByPropertyIdByQuestionId(propertyId, questionId);
         List<Long> uniqueVariableIDs = myDemographicList.stream().distinct().map(Demographics::getChoiceId).collect(Collectors.toList());
         long countAllChoiceIDs = myDemographicList.stream().map(Demographics::getChoiceId).count();
         Map<Long, Long> frequencyCount4ChoiceId = new HashMap<>();
@@ -162,6 +160,21 @@ public class Report implements IReport {
 
         return mapChoice2Count;
     }
+
+/*
+    Method to generate all the report variables so far taking in just the property id when called from the UI
+ */
+    private List<Map<Collection<String>, Collection<Long>>> getChartParametersPerProperty(Long propertyId){
+        List<Map<Collection<String>, Collection<Long>>> chartParameters  = new ArrayList<>();
+
+        for(int i = 1; i <= 16; i++){
+
+            chartParameters.add(getAnswerOccurenceCount(propertyId, (long)i));
+        }
+
+        return chartParameters;
+    }
+
 
 
 }

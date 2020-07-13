@@ -22,7 +22,7 @@ public class DemographicsDAO {
     }
 
     private Connection getConnection() throws SQLException{
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/hopedb", "hope", "ffgrrn");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/rrn", "ffg", "dbadmin1");
     }
     private void closeConnection(Connection connection) {
         if(connection == null)

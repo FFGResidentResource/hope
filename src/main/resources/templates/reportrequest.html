@@ -1,61 +1,53 @@
-<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
 
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Resident Resource Network</title>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="/css/report.css" rel="stylesheet">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-        }
-
-        @media ( min-width : 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-
-        .navbar-brand>img {
-            height: 100%;
-        }
-
-        .navbar-brand {
-            padding: 0;
-        }
-    </style>
-
+    <title>Resident Resources Network | Report Request Page</title>
+    <meta content="Resident Resources Network Demographics Report" name="description" />
 </head>
 
 
 <body>
 <h1>Reports</h1>
-<h2>Select Report by Property</h2>
 
-
-
-<div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
-    <table class="table datatable">
-        <thead>
+<div class="reportPanel" style="overflow:auto">
+    <table class="displayTable">
         <tr>
-            <th>Property Name</th>
-        </tr>
-         </thead>
-        <tbody>
-        <tr th:each="propertyList : ${propertyList}">
-            <td th:text="${propertyList.getPropertyId()} +  ': ' + ${propertyList.getPropertyName()}">Text ...</td>
-        </tr>
-        </tbody>
-</div>
+            <th>Select Property</th>
+            <th>
 
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
+                    <table class="table datatable">
+                        <thead>
+                        <tr>
+                            <th>Property Name</th>
+                        </tr>
+                         </thead>
+                        <tbody>
+                        <tr th:each="propertyList : ${propertyList}">
+                            <td>
+                            <form action="#" th:action="@{/reportrequest} + ${{propertyList.getPropertyId()}}" method="get">
+                            <button th:text="${propertyList.getPropertyId()} +  ' ' + ${propertyList.getPropertyName()}">Text ...</button>
+                            </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                </div>
+            </td>
+
+            <td>
+
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
 

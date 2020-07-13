@@ -1,4 +1,4 @@
-package com.ffg.rrn.report.filter;
+package com.ffg.rrn.report;
 
 import com.ffg.rrn.model.Demographics;
 import com.ffg.rrn.model.Property;
