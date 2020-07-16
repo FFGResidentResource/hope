@@ -56,12 +56,21 @@ public class Demographics {
 
     public Demographics(){}
 
-    public String getAddress() {
-        return address;
+
+    public Long getResidentId() {
+        return residentId;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setResidentId(Long residentId) {
+        this.residentId = residentId;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
     }
 
     public Long getQuestionId() {
@@ -70,6 +79,22 @@ public class Demographics {
 
     public void setQuestionId(Long questionId) {
         this.questionId = questionId;
+    }
+
+    public Boolean getResident() {
+        return isResident;
+    }
+
+    public void setIsResident(Boolean isResident) {
+        this.isResident = isResident;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Long getChoiceId() {
@@ -96,36 +121,12 @@ public class Demographics {
         this.choice = choice;
     }
 
-    public Long getResidentId() {
-        return residentId;
-    }
-
-    public void setResidentId(Long residentId) {
-        this.residentId = residentId;
-    }
-
-    public Boolean getResident() {
-        return isResident;
-    }
-
-    public void setResident(Boolean resident) {
-        isResident = resident;
-    }
-
     public Boolean getActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Long getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
     }
 
     public Integer getRefId() {
@@ -216,24 +217,20 @@ public class Demographics {
         this.serviceCoord = serviceCoord;
     }
 
-    public boolean typeEqualsLanguage(){
-       return this.getType().equalsIgnoreCase("Language");
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Demographics)) return false;
         Demographics that = (Demographics) o;
-        return getResidentId().equals(that.getResidentId()) &&
+        return Objects.equals(getResidentId(), that.getResidentId()) &&
+                Objects.equals(getPropertyId(), that.getPropertyId()) &&
                 Objects.equals(getQuestionId(), that.getQuestionId()) &&
+                Objects.equals(isResident, that.isResident) &&
+                Objects.equals(getAddress(), that.getAddress()) &&
                 Objects.equals(getChoiceId(), that.getChoiceId()) &&
                 Objects.equals(getType(), that.getType()) &&
                 Objects.equals(getChoice(), that.getChoice()) &&
-                Objects.equals(getAddress(), that.getAddress()) &&
-                Objects.equals(getIsResident(), that.getIsResident()) &&
                 Objects.equals(getActive(), that.getActive()) &&
-                getPropertyId().equals(that.getPropertyId()) &&
                 Objects.equals(getRefId(), that.getRefId()) &&
                 Objects.equals(getAckRightToPrivacy(), that.getAckRightToPrivacy()) &&
                 Objects.equals(getViaVoicemail(), that.getViaVoicemail()) &&
@@ -249,21 +246,21 @@ public class Demographics {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getResidentId(), getQuestionId(), getChoiceId(), getType(), getChoice(), getIsResident(), getActive(), getPropertyId(), getRefId(), getAckRightToPrivacy(), getViaVoicemail(), getViaText(), getViaEmail(), getAllowContact(), getWantSurvey(), getPhotoRelease(), getDateAdded(), getDateModified(), getServiceCoord());
+        return Objects.hash(getResidentId(), getPropertyId(), getQuestionId(), isResident, getAddress(), getChoiceId(), getType(), getChoice(), getActive(), getRefId(), getAckRightToPrivacy(), getViaVoicemail(), getViaText(), getViaEmail(), getAllowContact(), getWantSurvey(), getPhotoRelease(), getDateAdded(), getDateModified(), getServiceCoord());
     }
 
     @Override
     public String toString() {
         return "Demographics{" +
                 "residentId=" + residentId +
+                ", propertyId=" + propertyId +
                 ", questionId=" + questionId +
+                ", isResident=" + isResident +
+                ", address='" + address + '\'' +
                 ", choiceId=" + choiceId +
                 ", type='" + type + '\'' +
                 ", choice='" + choice + '\'' +
-                ", isResident=" + isResident +
                 ", active=" + active +
-                ", address=" + address +
-                ", propertyId=" + propertyId +
                 ", refId=" + refId +
                 ", ackRightToPrivacy=" + ackRightToPrivacy +
                 ", viaVoicemail=" + viaVoicemail +

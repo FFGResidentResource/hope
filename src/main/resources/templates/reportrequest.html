@@ -1,52 +1,85 @@
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+
 <!--<![endif]-->
 
 <head>
     <title>Resident Resources Network | Report Request Page</title>
     <meta content="Resident Resources Network Demographics Report" name="description" />
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript"
+            src="https://www.gstatic.com/charts/loader.js"></script>
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Assessment Report</title>
 </head>
 
-
 <body>
-<h1>Reports</h1>
-
+<div><th:block th:replace="fragments/header :: header"/></div>
+<div>
+        <h1>Reports</h1>
 <div class="reportPanel" style="overflow:auto">
     <table class="displayTable">
-        <tr>
-            <th>Select Property</th>
-            <th>
-
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
-                    <table class="table datatable">
-                        <thead>
-                        <tr>
-                            <th>Property Name</th>
-                        </tr>
-                         </thead>
-                        <tbody>
+        <tr><th>Select From Property List</th><th> Report for ... </th></tr>
+        <tr><td>
+            <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
+                <table class="table datatable">
+                    <thead>
+                    <tr>
+                        <th>Property Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div class="col-sm-6 col-sm-offset-3">
                         <tr th:each="propertyList : ${propertyList}">
                             <td>
-                            <form action="#" th:action="@{/reportrequest} + ${{propertyList.getPropertyId()}}" method="get">
-                            <button th:text="${propertyList.getPropertyId()} +  ' ' + ${propertyList.getPropertyName()}">Text ...</button>
-                            </form>
+                                <form action="#" th:action="@{/reportrequest/} + ${{propertyList.getPropertyId()}}" method="POST" th:value="${propertyList.getPropertyId()}">
+                                    <button th:text="${propertyList.getPropertyId()} +  ' ' + ${propertyList.getPropertyName()}">Text ...</button>
+                                </form>
                             </td>
                         </tr>
-                        </tbody>
-                </div>
-            </td>
+                    </div>
+                    </tbody>
 
-            <td>
+        </td></tr>  <tr><td>
+                    <div class="chart-content" style="overflow:auto">
+                        <table class="chart-content">
+                            <thead>
+                            </thead>
 
-            </td>
-        </tr>
+                            <tbody>
+                            <tr>
+                                <th> </th><th> </th><th> </th><th> </th>
+                            </tr>
+
+                            <tr>
+                                <th> </th><th> </th><th> </th><th> </th>
+                            </tr>
+
+                            <tr>
+                                <th> </th><th> </th><th> </th><th> </th>
+                            </tr>
+
+                            <tr>
+                                <th> </th><th> </th><th> </th><th> </th>
+                            </tr>
+
+                            </tbody>
+
+
+
+                        </table>
+
+                    </div>
+                </td></tr>
     </table>
+</div>
+        <th:block th:replace="fragments/footer :: footer"/>
+</div>
 </div>
 </body>
 </html>
