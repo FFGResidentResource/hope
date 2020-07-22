@@ -35,47 +35,47 @@
                     </thead>
                     <tbody>
                     <div class="col-sm-6 col-sm-offset-3">
-                        <tr th:each="propertyList : ${propertyList}">
+                        <tr th:each="property : ${propertyList}">
                             <td>
-                                <form action="#" th:action="@{/reportrequest/} + ${{propertyList.getPropertyId()}}" method="POST" th:value="${propertyList.getPropertyId()}">
-                                    <button th:text="${propertyList.getPropertyId()} +  ' ' + ${propertyList.getPropertyName()}">Text ...</button>
+                                <form action="#" th:action="@{/reportrequest/} + ${{property.getPropertyId()}}" method="POST" th:field="*{property.getPropertyId()}" th:value="${property.getPropertyId()}">
+                                    <button type="submit" th:text="${property.getPropertyId()} +  ' ' + ${property.getPropertyName()}">Text ...</button>
                                 </form>
                             </td>
                         </tr>
                     </div>
                     </tbody>
 
-        </td></tr>  <tr><td>
-                    <div class="chart-content" style="overflow:auto">
-                        <table class="chart-content">
-                            <thead>
-                            </thead>
+        </td><td>
 
-                            <tbody>
-                            <tr>
-                                <th> </th><th> </th><th> </th><th> </th>
-                            </tr>
+                </td><td>  <div class="chart-content" style="overflow:auto">
+                    <table class="chart-content">
+                        <thead>
+                        </thead>
 
-                            <tr>
-                                <th> </th><th> </th><th> </th><th> </th>
-                            </tr>
+                        <tbody>
+                        <tr>
+                            <th> </th><th> </th><th> </th><th> </th>
+                        </tr>
 
-                            <tr>
-                                <th> </th><th> </th><th> </th><th> </th>
-                            </tr>
+                        <tr>
+                            <th> </th><th> </th><th> </th><th> </th>
+                        </tr>
 
-                            <tr>
-                                <th> </th><th> </th><th> </th><th> </th>
-                            </tr>
+                        <tr>
+                            <th> </th><th> </th><th> </th><th> </th>
+                        </tr>
 
-                            </tbody>
+                        <tr>
+                            <th> </th><th> </th><th> </th><th> </th>
+                        </tr>
+
+                        </tbody>
 
 
 
-                        </table>
+                    </table>
 
-                    </div>
-                </td></tr>
+                </div></td></tr>
     </table>
 </div>
         <th:block th:replace="fragments/footer :: footer"/>

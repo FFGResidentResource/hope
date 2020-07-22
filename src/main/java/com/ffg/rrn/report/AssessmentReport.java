@@ -1,275 +1,201 @@
 package com.ffg.rrn.report;
 
-import org.springframework.stereotype.Service;
-
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-@Service
-public class AssessmentReport extends Report{
-
-    /*
-    This is to move most of the processing to the backend, so that question Ids will be hard-coded for now.
-    Assessment Report will extract information from Report.class. This will include categories include
-    Demographic information, Education, Health and Safety.
-     */
-
-    ArrayList<Collection> keys = new ArrayList<>();
-    ArrayList<Collection> values = new ArrayList<>();
-
-    public List<String> getGenderList(Integer propertyId){
-
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)1);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-                keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
-
-    public List<Long> getGenderDistribution(Integer propertyId){
-
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)1);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
+public class AssessmentReport extends AssessmentReportBuilder {
 
 
-    public List<String> getEthnicityList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)2);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
+    private List<String> category = new ArrayList<>();
+    private List<Long> data = new ArrayList<>();
+
+    public class MergeListsToMap<K, V> implements Iterable<Map.Entry<K, V>> {
+        private final List<K> keys;
+        private final List<V> values;
+        private int baseValue = 0;
+
+        public MergeListsToMap(List<K> keys, List<V> values) {
+            // do all the validations here
+            this.keys = keys;
+            this.values = values;
         }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+
+        @Override
+        public Iterator<Map.Entry<K, V>> iterator() {
+            return new Iterator<Map.Entry<K, V>>() {
+                @Override
+                public boolean hasNext() {
+                    return keys.size() > baseValue;
+                }
+
+                @Override
+                public Map.Entry<K, V> next() {
+                    Map.Entry<K, V> e = new AbstractMap.SimpleEntry<>(keys.get(baseValue), values.get(baseValue));
+                    baseValue += 1;
+                    return e;
+                }
+            };
+        }
+
     }
 
-    public List<Long> getEthnicityDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)2);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
+    public Map<String, Long> genderData(Long propertyId){
+        category = getGenderList(propertyId);
+        data = getGenderDistribution(propertyId);
+        Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+        for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+            dataMap.put(e.getKey(), e.getValue());
         }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+        return dataMap;
     }
 
-    public List<String> getRaceDistributionList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)3);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
+    public Map<String, Long> ethnicityData(Long propertyId){
+        category = getEthnicityList(propertyId);
+        data = getEthnicityDistribution(propertyId);
+        Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+        for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+            dataMap.put(e.getKey(), e.getValue());
         }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+        return dataMap;
     }
 
-    public List<Long> getRaceDistributionFrequency(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)3);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
+    public Map<String, Long> raceData(Long propertyId){
+        category = getRaceDistributionList(propertyId);
+        data = getRaceDistributionFrequency(propertyId);
+        Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+        for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+            dataMap.put(e.getKey(), e.getValue());
         }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getHeadOfHousehold(Integer propertyId){
-        ArrayList<Collection> keys = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)4);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+        return dataMap;
     }
 
-    public List<Long> getHeadOfHouseholdDistribution(Integer propertyId){
-        ArrayList<Collection> values = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)4);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
+    public Map<String, Long> headOfHouseholdData(Long propertyId){
+        category = getHeadOfHousehold(propertyId);
+        data = getHeadOfHouseholdDistribution(propertyId);
+        Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+        for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+            dataMap.put(e.getKey(), e.getValue());
         }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+        return dataMap;
     }
-    public List<String> getVeteranStatus(Integer propertyId){
-        ArrayList<Collection> keys = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)5);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     public Map<String, Long> veteranData(Long propertyId){
+        category = getVeteranStatus(propertyId);
+        data = getVeteranStatusDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getVeteranStatusDistribution(Integer propertyId){
-        ArrayList<Collection> values = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)5);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+     public Map<String, Long> disabilityData(Long propertyId){
+        category = getDisabilityStatus(propertyId);
+        data = getDisabilityDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    }   public List<String> getDisabilityStatus(Integer propertyId){
-        ArrayList<Collection> keys = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)6);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     public Map<String, Long> returningCitizenData(Long propertyId){
+        category = getReturningCitizenList(propertyId);
+        data = getReturningCitizenDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getDisabilityDistribution(Integer propertyId){
-        ArrayList<Collection> values = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)6);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getReturningCitizenList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)7);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     public Map<String, Long> SNAPData(Long propertyId){
+        category = getSNAPList(propertyId);
+        data = getSNAPDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getReturningCitizenDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)7);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getSNAPList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)8);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> SSILData(Long propertyId){
+        category = getSSIList(propertyId);
+        data = getSSIDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getSNAPDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)8);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getSSIList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)9);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> SSDIData(Long propertyId){
+        category = getSSDIList(propertyId);
+        data = getSSDIDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getSSIDistribution(Integer propertyId){
-        ArrayList<Collection> values = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)9);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getSSDIList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)10);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> healthCoverageData(Long propertyId){
+        category = getHealthCoverageList(propertyId);
+        data = getHealthCoverageDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getSSDIDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)10);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getHealthCoverageList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)11);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> educationLevelData(Long propertyId){
+        category = getEducationLevel(propertyId);
+        data = getEducationLevelDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getHealthCoverageDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)11);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getEducationLevel(Integer propertyId){
-         Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)12);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> incomeData(Long propertyId){
+        category = getHouseHoldIncome(propertyId);
+        data = getHouseHoldIncomeDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getEducationLevelDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)12);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getHouseHoldIncome(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)13);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> homeSafetyData(Long propertyId) {
+        category = getHomeSafetyList(propertyId);
+        data = getHomeSafetyDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getHouseHoldIncomeDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)13);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getHomeSafetyList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)14);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> languageData(Long propertyId){
+        category = getLanguageList(propertyId);
+        data = getLanguageDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getHomeSafetyDistribution(Integer propertyId){
-        ArrayList<Collection> values = new ArrayList<>();
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)14);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getLanguageList(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)15);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
+     Map<String, Long> ageRangeData(Long propertyId) {
+        category = getAgeRange(propertyId);
+        data = getAgeRangeDistribution(propertyId);
+         Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+         for(Map.Entry<String, Long> e : new MergeListsToMap<>(category, data)){
+             dataMap.put(e.getKey(), e.getValue());
+         }
+         return dataMap;
+     }
 
-    public List<Long> getLanguageDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)15);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
-    public List<String> getAgeRange(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)16);
-        for (Map.Entry<Collection<String>, Collection<Long>> entry : getLanguage.entrySet()){
-            keys.add(entry.getKey());
-        }
-        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
-    }
-
-    public List<Long> getAgeRangeDistribution(Integer propertyId){
-        Map<Collection<String>, Collection<Long>> getLanguage = getAnswerOccurenceCount((long)propertyId, (long)16);
-        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getLanguage.entrySet()){
-            values.add(entry.getValue());
-        }
-        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
-    }
 
 }

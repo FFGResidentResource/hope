@@ -164,7 +164,7 @@ public class Report implements IReport {
 /*
     Method to generate all the report variables so far taking in just the property id when called from the UI
  */
-    private List<Map<Collection<String>, Collection<Long>>> getChartParametersPerProperty(Long propertyId){
+    public List<Map<Collection<String>, Collection<Long>>> getChartParametersPerProperty(Long propertyId){
         List<Map<Collection<String>, Collection<Long>>> chartParameters  = new ArrayList<>();
 
         for(int i = 1; i <= 16; i++){
