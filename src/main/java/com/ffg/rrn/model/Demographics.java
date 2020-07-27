@@ -1,5 +1,6 @@
 package com.ffg.rrn.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Data
+@JsonView
 @Component
 public class Demographics {
 

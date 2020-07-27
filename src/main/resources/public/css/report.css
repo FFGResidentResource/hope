@@ -1,0 +1,132 @@
+#areport-nav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    border-right-width: 50px;
+
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 400px);
+    grid-template-rows: repeat(4, 300px);
+    grid-column-gap: 20px;
+    grid-row-gap: 1em;
+    grid-auto-rows: min-content;
+    grid-auto-rows: max-content;
+    grid-auto-rows: auto;
+}
+
+#gender_piechart_div{
+    grid-column: 1 ;
+    grid-row: 1 ;
+}
+
+#ethnicity_piechart_div{
+    grid-column: 2 ;
+    grid-row: 1 ;
+}
+
+#race_piechart_div{
+    grid-column: 3 ;
+    grid-row: 1 ;
+}
+#head_of_household_piechart_div{
+    grid-column: 4 ;
+    grid-row: 1 ;
+}
+#veteran_piechart_div{
+    grid-column: 1 ;
+    grid-row: 2 ;
+}
+#disability_piechart_div{
+    grid-column: 2;
+    grid-row: 2 ;
+}
+#returning_citizen_piechart_div{
+    grid-column: 3 ;
+    grid-row: 2 ;
+}
+
+#snap_piechart_div{
+    grid-column: 4;
+    grid-row: 2;
+}
+#ssi_piechart_div{
+    grid-column: 1;
+    grid_row: 3;
+}
+#ssdi_piechart_div{
+    grid-column: 2;
+    grid_row: 3;
+}
+#health_piechart_div{
+    grid-column: 3;
+    grid_row: 3;
+}
+#education_piechart_div{
+    grid-column: 4;
+    grid_row: 3;
+}
+#income_piechart_div{
+    grid-column: 1;
+    grid_row:4;
+}
+#safety_piechart_div{
+    grid-column: 2;
+    grid_row: 4;
+}
+#language_piechart_div{
+    grid-column: 3;
+    grid_row: 4;
+}
+#age_piechart_div{
+    grid-column: 4;
+    grid_row: 4;
+}
+
+#navbar{
+    float:left;
+    width:25%;
+    height:80px;
+}
+#backbar{
+    float:left;
+    width:25%;
+    height:80px;
+}
+.sidenav{
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 160px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 50px; /* Stay at the top */
+    left: 0;
+    background-color: #111; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    overflow-y: auto;
+    padding-top: 20px;
+}
+
+.main-content{
+    padding-left: 200px;
+}
+
+
+/* Page content */
+.content {
+    padding: 16px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.sticky + .content {
+    padding-right: 60px;
+}

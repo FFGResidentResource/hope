@@ -21,7 +21,7 @@ public class PasswordUtils {
  
     public static void main(String[] args) {
         String password = createRandomPassword();
-        String encrytedPassword = encryptPassword(password);
+        String encrytedPassword = encryptPassword("ffgrrn");
         System.out.println("Password: " + password);
         System.out.println("Encryted Password: " + encrytedPassword);
         String password1 = createRandomPassword();

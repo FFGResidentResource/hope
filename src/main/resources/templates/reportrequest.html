@@ -9,78 +9,420 @@
 <head>
     <title>Resident Resources Network | Report Request Page</title>
     <meta content="Resident Resources Network Demographics Report" name="description" />
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script type="text/javascript"
-            src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Assessment Report</title>
+    <link href="/css/report.css" rel="stylesheet">
 </head>
 
 <body>
 <div><th:block th:replace="fragments/header :: header"/></div>
+<section>
 <div>
-        <h1>Reports</h1>
+
 <div class="reportPanel" style="overflow:auto">
-    <table class="displayTable">
-        <tr><th>Select From Property List</th><th> Report for ... </th></tr>
-        <tr><td>
-            <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
-                <table class="table datatable">
-                    <thead>
-                    <tr>
-                        <th>Property Name</th>
+    <div class="sidenav">
+    <nav id="areport-nav">
+        <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
+            <table class="table datatable">
+                <thead>
+                </thead>
+                <tbody>
+                <div class="col-sm-6 col-sm-offset-3">
+                    <tr th:each="property : ${propertyList}">
+                        <td>
+                            <form th:action="@{/reportrequest/} + ${{property.getPropertyId()}}" method="GET" th:field="${property.getPropertyId()}" th:value="${property.getPropertyId()}">
+                                <button type="submit" th:text="${property.getPropertyId()} +  ' ' + ${property.getPropertyName()}">Text ...</button>
+                            </form>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <tr th:each="property : ${propertyList}">
-                            <td>
-                                <form action="#" th:action="@{/reportrequest/} + ${{property.getPropertyId()}}" method="POST" th:field="*{property.getPropertyId()}" th:value="${property.getPropertyId()}">
-                                    <button type="submit" th:text="${property.getPropertyId()} +  ' ' + ${property.getPropertyName()}">Text ...</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </div>
-                    </tbody>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </nav>
+    </div>
+    <div class="main-content">
+    <table class="displayTable">
+        <tbody>
+        <tr>
+            <td>
+            <div class="gendermap" th:unless="${#maps.isEmpty(GenderData)}" align="center" style="width: 500px;">
 
-        </td><td>
+                <div th:class="wrapper">
+                    <div id="gender_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="ethnicity_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="race_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="head_of_household_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="veteran_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="disability_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="returning_citizen_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="snap_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="ssi_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="ssdi_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="health_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="education_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="income_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="safety_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="language_piechart_div" style="width: 600px; height: 600px;"></div>
+                    <div id="age_piechart_div" style="width: 600px; height: 600px;"></div>
+                    
+                    
+                </div>
+            <script th:inline="javascript">
+                var Gender_data = [[${GenderData}]];
+                var Ethnicity_data = [[${EthnicityData}]];
+                var Race_data = [[${RaceData}]];
+                var HeadOfHousehold_data = [[${HeadOfHousehold}]];
+                var Veteran_data = [[${VeteranData}]];
+                var Disability_data = [[${DisabilityData}]];
+                var ReturningCitizen_data = [[${ReturningCitizenData}]];
+                var SNAP_data = [[${SNAPData}]];
+                var SSI_data = [[${SSIData}]];
+                var SSDI_data = [[${SSDIData}]];
+                var Health_data = [[${HealthData}]];
+                var Education_data = [[${EducationData}]];
+                var Income_data = [[${IncomeData}]];
+                var HomeSafety_data = [[${HomeSafetyData}]];
+                var Language_data = [[${LanguageData}]];
+                var Age_data = [[${AgeRangeData}]];
+                $(document).ready(function() {
+                    google.charts.load('current', {
+                        packages : [ 'corechart', 'bar' ]
+                    });
+                    
+                    google.charts.setOnLoadCallback(drawGenderPieChart);
+                    google.charts.setOnLoadCallback(drawEthnicityPieChart);
+                    google.charts.setOnLoadCallback(drawRacePieChart);
+                    google.charts.setOnLoadCallback(drawHeadOfHouseholdPieChart);
+                    google.charts.setOnLoadCallback(drawVeteranPieChart);
+                    google.charts.setOnLoadCallback(drawDisabilityPieChart);
+                    google.charts.setOnLoadCallback(drawReturningCitizenPieChart);
+                    google.charts.setOnLoadCallback(drawSNAPPieChart);
+                    google.charts.setOnLoadCallback(drawSSIPieChart);
+                    google.charts.setOnLoadCallback(drawSSDIPieChart);
+                    google.charts.setOnLoadCallback(drawHealthPieChart);
+                    google.charts.setOnLoadCallback(drawEducationPieChart);
+                    google.charts.setOnLoadCallback(drawIncomePieChart);
+                    google.charts.setOnLoadCallback(drawSafetyPieChart);
+                    google.charts.setOnLoadCallback(drawLanguagePieChart);
+                    google.charts.setOnLoadCallback(drawAgePieChart);
+                });
+              
+                function drawGenderPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Gender');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Gender_data).forEach(function (key) {
+                        data.addRow([key, Gender_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Gender Distribution',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('gender_piechart_div'));
+                    chart.draw(data, options);
+    
+                }
+                    // var barchart_options = {title:'Gender Distribution',
+                    //     width:400,
+                    //     height:300,
+                    //     legend: 'none'};
+                    // var barchart = new google.visualization.BarChart(document.getElementById('gender_barchart_div'));
+                    // barchart.draw(data, barchart_options);
+    
+                    function drawEthnicityPieChart() {
+                        var data = new google.visualization.DataTable();
+                        data.addColumn('string', 'Ethnicity');
+                        data.addColumn('number', 'Residents');
+                        Object.keys(Ethnicity_data).forEach(function(key) {
+                            data.addRow([ key, Ethnicity_data[key] ]);
+                        });
+                        var options = {
+                            'legend':'left',
+                            'title':'Ethnicity Distribution',
+                            'is3D':true,
+                            'width':400,
+                            'height':300
+                        };
+                        var chart = new google.visualization.PieChart(document
+                                .getElementById('ethnicity_piechart_div'));
+                        chart.draw(data, options);
+                }
+                function drawRacePieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Race');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Race_data).forEach(function(key) {
+                        data.addRow([ key, Race_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'Race Distribution',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('race_piechart_div'));
+                    chart.draw(data, options);
+                }
 
-                </td><td>  <div class="chart-content" style="overflow:auto">
-                    <table class="chart-content">
-                        <thead>
-                        </thead>
+                function drawHeadOfHouseholdPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Head of Household');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(HeadOfHousehold_data).forEach(function(key) {
+                        data.addRow([ key, HeadOfHousehold_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'Head of Household',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('head_of_household_piechart_div'));
+                    chart.draw(data, options);
+                }
 
-                        <tbody>
-                        <tr>
-                            <th> </th><th> </th><th> </th><th> </th>
-                        </tr>
+                function drawVeteranPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Veteran');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Veteran_data).forEach(function(key) {
+                        data.addRow([ key, Veteran_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'Veteran Status',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('veteran_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawDisabilityPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Disability');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Disability_data).forEach(function(key) {
+                        data.addRow([ key, Disability_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'Disability Status',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('disability_piechart_div'));
+                    chart.draw(data, options);
+                }
 
-                        <tr>
-                            <th> </th><th> </th><th> </th><th> </th>
-                        </tr>
+                function drawReturningCitizenPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Returning Citizens');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(ReturningCitizen_data).forEach(function(key) {
+                        data.addRow([ key, ReturningCitizen_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'Returning Citizen Status',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('returning_citizen_piechart_div'));
+                    chart.draw(data, options);
+                }
 
-                        <tr>
-                            <th> </th><th> </th><th> </th><th> </th>
-                        </tr>
+                function drawSNAPPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'SNAP Information');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(SNAP_data).forEach(function(key) {
+                        data.addRow([ key, SNAP_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'SNAP',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('snap_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawSSIPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'SSI Information');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(SSI_data).forEach(function(key) {
+                        data.addRow([ key, SSI_data[key] ]);
+                    });
+                    var options = {
+                        'legend':'left',
+                        'title':'SSI',
+                        'is3D':true,
+                        'width':400,
+                        'height':300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('ssi_piechart_div'));
+                    chart.draw(data, options);
+                }
 
-                        <tr>
-                            <th> </th><th> </th><th> </th><th> </th>
-                        </tr>
+                function drawSSDIPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'SSDI Information');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(SSDI_data).forEach(function (key) {
+                        data.addRow([key, SSDI_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'SSDI',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('ssdi_piechart_div'));
+                    chart.draw(data, options);
+                }
 
-                        </tbody>
-
-
-
-                    </table>
-
-                </div></td></tr>
+                function drawHealthPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Health Coverage');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Health_data).forEach(function (key) {
+                        data.addRow([key, Health_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Health Coverage',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('health_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawEducationPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Education');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Education_data).forEach(function (key) {
+                        data.addRow([key, Education_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Educational Level',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('education_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawIncomePieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Income');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Income_data).forEach(function (key) {
+                        data.addRow([key, Income_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Income',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('income_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawSafetyPieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Home Safety');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(HomeSafety_data).forEach(function (key) {
+                        data.addRow([key, HomeSafety_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Home Safety',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('safety_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawLanguagePieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Language');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Language_data).forEach(function (key) {
+                        data.addRow([key, Language_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Primary Language',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('language_piechart_div'));
+                    chart.draw(data, options);
+                }
+                function drawAgePieChart() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Age Range');
+                    data.addColumn('number', 'Residents');
+                    Object.keys(Age_data).forEach(function (key) {
+                        data.addRow([key, Age_data[key]]);
+                    });
+                    var options = {
+                        'legend': 'left',
+                        'title': 'Age Range',
+                        'is3D': true,
+                        'width': 400,
+                        'height': 300
+                    };
+                    var chart = new google.visualization.PieChart(document
+                            .getElementById('age_piechart_div'));
+                    chart.draw(data, options);
+                }
+            </script>
+            </div>
+        
+        </td>
+        </tbody>
     </table>
+    </div>
 </div>
-        <th:block th:replace="fragments/footer :: footer"/>
-</div>
-</div>
+</section>
+
+<div> <th:block th:replace="fragments/footer :: footer"/></div>
 </body>
 </html>
 

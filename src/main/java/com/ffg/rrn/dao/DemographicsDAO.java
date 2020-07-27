@@ -3,8 +3,13 @@ package com.ffg.rrn.dao;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.model.Demographics;
 import com.ffg.rrn.model.Property;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +26,12 @@ public class DemographicsDAO {
         }
     }
 
+
     private Connection getConnection() throws SQLException{
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/rrn", "ffg", "dbadmin1");
     }
+
+
     private void closeConnection(Connection connection) {
         if(connection == null)
             return;
@@ -35,16 +43,12 @@ public class DemographicsDAO {
     }
 
 
-    public DemographicsDAO() {
-
-    }
     private static final String SQL_LIST_PROPERTY = "SELECT prop_name, prop_id, unit, unit_fee, active, total_residents, resident_council FROM property" ;
     private static final String RAW_DEMOGRAPHIC_DATA = "SELECT resident.resident_id, active, is_resident, resident.address, prop_id, ack_pr, ref_type, wants_survey, via_voicemail, via_email, via_text, allow_contact, choice, \n" +
             "demographics_question_choice.choice_id, question_id, date_added, date_modified, service_coord, photo_release, demographics_question_choice.type\n" +
             " FROM demographics_question_choice\n" +
             "        LEFT OUTER JOIN demographics_choices ON demographics_question_choice.choice_id = demographics_choices.choice_id\n" +
             "        LEFT OUTER JOIN resident ON resident.resident_id = demographics_question_choice.resident_id";
-
 
 
     public List<Demographics> findAllResidentDemographicsData(){

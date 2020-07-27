@@ -1,16 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<link href="/css/report.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <body>
 <th:block th:fragment="header">
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container">
-            <div class="navbar-header">
-
-            </div>
+           
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active">
                         <a th:href="@{/allResident}">Home</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="backbar" class="collapse navbar-collapse">
+                <ul class="nav backbar-nav">
+                    <li class="active">
+                        <a th:href="@{/reportrequest}">Back To Reports</a>
                     </li>
                 </ul>
             </div>
