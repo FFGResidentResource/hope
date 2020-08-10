@@ -12,42 +12,64 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
+import java.security.Principal;
 import java.util.*;
 import java.util.List;
 
 @Controller
 @RequestMapping("/reportrequest")
-public class ReportMVCController {
+public class ReportMVCController extends BaseController{
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getPropertyList(Model model){
+    public String getPropertyList(Model model, Principal principal){
+        // (1) (en)
+        // After user login successfully.
+        String serviceCoord = null;
+        if (principal != null) {
+            serviceCoord = populateSCinModel(model, principal);
+        }
         List<Property> propertyList = new Report().getAllProperty();
+
         model.addAttribute("propertyList", propertyList);
+        model.addAttribute("principal", principal);
+
 
         return "reportrequest";
     }
 
-    @GetMapping("/{propertyId}")
-    public ModelAndView getDemographicDataList(@PathVariable("propertyId")Long propertyId, ModelAndView model){
+    @RequestMapping(method = RequestMethod.POST)
+    public String loadPropertyList(Model model, Principal principal){
+        String serviceCoord = null;
+        if (principal != null) {
+            serviceCoord = populateSCinModel(model, principal);
+        }
+        List<Property> propertyList = new Report().getAllProperty();
+        model.addAttribute("propertyList", propertyList);
+        model.addAttribute("principal", principal);
+        return "/fragments/header";
+    }
 
-        model.addObject("GenderData", new AssessmentReportBuilder().genderData(propertyId));
-        model.addObject("EthnicityData", new AssessmentReportBuilder().ethnicityData(propertyId));
-        model.addObject("RaceData", new AssessmentReportBuilder().raceData(propertyId));
-        model.addObject("HeadOfHousehold", new AssessmentReportBuilder().headOfHouseholdData(propertyId));
-        model.addObject("VeteranData", new AssessmentReportBuilder().veteranData(propertyId));
-        model.addObject("DisabilityData", new AssessmentReportBuilder().disabilityData(propertyId));
-        model.addObject("ReturningCitizenData", new AssessmentReportBuilder().returningCitizenData(propertyId));
-        model.addObject("SNAPData", new AssessmentReportBuilder().SNAPData(propertyId));
-        model.addObject("SSIData", new AssessmentReportBuilder().SSIData(propertyId));
-        model.addObject("SSDIData", new AssessmentReportBuilder().SSDIData(propertyId));
-        model.addObject("HealthData", new AssessmentReportBuilder().healthCoverageData(propertyId));
-        model.addObject("EducationData", new AssessmentReportBuilder().educationLevelData(propertyId));
-        model.addObject("IncomeData", new AssessmentReportBuilder().incomeData(propertyId));
-        model.addObject("HomeSafetyData", new AssessmentReportBuilder().homeSafetyData(propertyId));
-        model.addObject("LanguageData", new AssessmentReportBuilder().languageData(propertyId));
-        model.addObject("AgeRangeData", new AssessmentReportBuilder().ageRangeData(propertyId));
-        model.setViewName("reportrequest");
-        return model;
+    @RequestMapping("/{propertyId}")
+    public String getDemographicDataList(@PathVariable("propertyId")Long propertyId, Model model){
+
+        model.addAttribute("GenderData", new AssessmentReportBuilder().genderData(propertyId));
+        model.addAttribute("EthnicityData", new AssessmentReportBuilder().ethnicityData(propertyId));
+        model.addAttribute("RaceData", new AssessmentReportBuilder().raceData(propertyId));
+        model.addAttribute("HeadOfHousehold", new AssessmentReportBuilder().headOfHouseholdData(propertyId));
+        model.addAttribute("VeteranData", new AssessmentReportBuilder().veteranData(propertyId));
+        model.addAttribute("DisabilityData", new AssessmentReportBuilder().disabilityData(propertyId));
+        model.addAttribute("ReturningCitizenData", new AssessmentReportBuilder().returningCitizenData(propertyId));
+        model.addAttribute("SNAPData", new AssessmentReportBuilder().SNAPData(propertyId));
+        model.addAttribute("SSIData", new AssessmentReportBuilder().SSIData(propertyId));
+        model.addAttribute("SSDIData", new AssessmentReportBuilder().SSDIData(propertyId));
+        model.addAttribute("HealthData", new AssessmentReportBuilder().healthCoverageData(propertyId));
+        model.addAttribute("EducationData", new AssessmentReportBuilder().educationLevelData(propertyId));
+        model.addAttribute("IncomeData", new AssessmentReportBuilder().incomeData(propertyId));
+        model.addAttribute("HomeSafetyData", new AssessmentReportBuilder().homeSafetyData(propertyId));
+        model.addAttribute("LanguageData", new AssessmentReportBuilder().languageData(propertyId));
+        model.addAttribute("AgeRangeData", new AssessmentReportBuilder().ageRangeData(propertyId));
+
+        return "forward:/reportrequest";
     }
 
 

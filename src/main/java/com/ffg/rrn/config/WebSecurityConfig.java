@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		//uncomment before PROD
 		http.authorizeRequests()
 				.antMatchers("/getResidentById", "/saveResident", "/newResident", "/onboarding", "/saveAssessment", "/allResident", "/getCurrentAssessment", "/getActionPlan", "/getCaseNotes",
-						"/getReferralForm", "/dashboard", "/pullDashboard", "/reportrequest", "/reportrequest/*")
+						"/getReferralForm", "/dashboard", "/pullDashboard", "/reportrequest", "/reportrequest/*", "/qreport", "/qreport/*")
 				.access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 		
 		// For ADMIN only.

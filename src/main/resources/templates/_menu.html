@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" role="navigation" id="my-navbar">
+<nav class="navbar navbar-default" role="navigation" id="my-navbar" xmlns:th="http://www.w3.org/1999/xhtml">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -17,6 +17,7 @@
 			<ul class="nav navbar-nav navbar-right">
 
 				<li><a th:href="@{/allResident}">All Residents</a></li>
+				<li><a th:href="@{/reportrequest}">Reports</a></li>
 				<li><a th:href="@{/onboarding}">Onboarding</a></li>				
 				<li><a th:href="@{/dashboard}">Dashboard</a></li>
 				<li><a th:if="${isAdmin}" th:href="@{/admin}">Admin</a></li>
