@@ -33,7 +33,7 @@
                     <tr th:each="property : ${propertyList}">
                         <td>
                             <form th:action="@{/reportrequest/} + ${{property.getPropertyId()}}" method="GET" th:class="property-form" th:field="${property.getPropertyId()}" th:value="${property.getPropertyId()}">
-                                <button type="submit" th:text="${property.getPropertyId()} +  ' ' + ${property.getPropertyName()}" th:id="property-button">Text ...</button>
+                                <button type="submit" th:text="${property.getPropertyName()}" th:id="property-button">Text ...</button>
                             </form>
                         </td>
                     </tr>

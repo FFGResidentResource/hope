@@ -1,39 +1,124 @@
 package com.ffg.rrn.report;
 
-import com.ffg.rrn.controller.BaseController;
-import com.ffg.rrn.model.Demographics;
-import org.springframework.web.bind.annotation.*;
+import com.ffg.rrn.model.Property;
+import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@RestController
-@RequestMapping(path = "/")
-@CrossOrigin(origins="*")
-public class PerformanceReportBuilder {
+@Service
+public class PerformanceReportBuilder extends Report {
 
-//    @GetMapping("/{propertyId}")
-//    public List<Map<String, Long>> getDemographicDataList(@PathVariable("propertyId")Long propertyId){
-//
-//        List<Map<String, Long>> demoData = new LinkedList<>();
-//        demoData.add(new AssessmentReportBuilder().genderData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().ethnicityData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().raceData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().headOfHouseholdData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().veteranData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().disabilityData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().returningCitizenData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().SNAPData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().SSIData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().SSDIData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().healthCoverageData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().educationLevelData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().incomeData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().homeSafetyData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().languageData(propertyId));
-//        demoData.add(new AssessmentReportBuilder().ageRangeData(propertyId));
-//
-//        return demoData;
-//    }
+    private List<String> category = new ArrayList<>();
+    private List<Long> data = new ArrayList<>();
+    private Map<String, Long> dataMap = new LinkedHashMap<>(category.size());
+    public List<Integer> propertyIdList = getAllProperty().stream().map(Property::getPropertyId).collect(Collectors.toList());
+    private List<Map<String, Long>> allDemoData = new LinkedList<>();
+
+
+
+    public List<String> propertyNameList = getAllProperty().stream().map(Property::getPropertyName).collect(Collectors.toList());
+    public List<Property> propertyList = getAllProperty();
+
+    public List<Map<String, Long>> getAllGenderData(){
+      for (Integer propId : propertyIdList){
+          allDemoData.add(new AssessmentReportBuilder().genderData(Long.valueOf(propId)));
+      }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllEthnicitiesData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().ethnicityData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+
+    public List<Map<String, Long>> getAllRaceData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().raceData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+
+    public List<Map<String, Long>> getAllHeadOfHouseholdData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().headOfHouseholdData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllVeteranData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().veteranData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllDisabilityData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().disabilityData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllReturningCitizenData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().returningCitizenData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllSNAPData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().SNAPData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllSSIData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().SSIData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllSSDIData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().SSDIData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+
+    public List<Map<String, Long>> getAllHealthCoverageData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().healthCoverageData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllEducationalData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().educationLevelData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+
+    public List<Map<String, Long>> getAllIncomeData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().incomeData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllHomeSafetyData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().homeSafetyData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllLanguageData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().languageData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
+    public List<Map<String, Long>> getAllAgeData(){
+        for (Integer propId : propertyIdList){
+            allDemoData.add(new AssessmentReportBuilder().ageRangeData(Long.valueOf(propId)));
+        }
+        return allDemoData;
+    }
 }

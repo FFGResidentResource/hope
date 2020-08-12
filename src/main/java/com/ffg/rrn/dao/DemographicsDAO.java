@@ -28,7 +28,7 @@ public class DemographicsDAO {
 
 
     private Connection getConnection() throws SQLException{
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/rrn", "ffg", "dbadmin1");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/rrn", "nuuwski", "dbadmin1");
     }
 
 

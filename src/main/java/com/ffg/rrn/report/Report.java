@@ -176,4 +176,305 @@ public class Report implements IReport {
     }
 
 
+    public class MergeListsToMap<K, V> implements Iterable<Map.Entry<K, V>> {
+        private final List<K> keys;
+        private final List<V> values;
+        private int baseValue = 0;
+
+        public MergeListsToMap(List<K> keys, List<V> values) {
+            // do all the validations here
+            this.keys = keys;
+            this.values = values;
+        }
+
+        @Override
+        public Iterator<Map.Entry<K, V>> iterator() {
+            return new Iterator<Map.Entry<K, V>>() {
+                @Override
+                public boolean hasNext() {
+                    return keys.size() > baseValue;
+                }
+
+                @Override
+                public Map.Entry<K, V> next() {
+                    Map.Entry<K, V> e = new AbstractMap.SimpleEntry<>(keys.get(baseValue), values.get(baseValue));
+                    baseValue += 1;
+                    return e;
+                }
+            };
+        }
+
+    }
+
+     /*
+    This is to move most of the processing to the backend, so that question Ids will be hard-coded for now.
+    Assessment Report will extract information from Report.class. This will include categories include
+    Demographic information, Education, Health and Safety.
+     */
+
+    /*define placeholders for temporary datasets*/
+    private ArrayList<Collection> keys = new ArrayList<>();
+    private ArrayList<Collection> values = new ArrayList<>();
+    private Map<String, Long> map = new LinkedHashMap<String, Long>();
+    private List<String> list;
+    //private List<Long> data;
+
+    protected List<String> getGenderList(Long propertyId){
+
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)1);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getGenderDistribution(Long propertyId) {
+
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long) 1);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()) {
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+
+
+    protected List<String> getEthnicityList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount((long)propertyId, (long)2);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getEthnicityDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)2);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<String> getRaceDistributionList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)3);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getRaceDistributionFrequency(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)3);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getHeadOfHousehold(Long propertyId){
+        ArrayList<Collection> keys = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)4);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getHeadOfHouseholdDistribution(Long propertyId){
+        ArrayList<Collection> values = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)4);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getVeteranStatus(Long propertyId){
+        ArrayList<Collection> keys = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)5);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getVeteranStatusDistribution(Long propertyId){
+        ArrayList<Collection> values = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)5);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+
+    }
+    protected List<String> getDisabilityStatus(Long propertyId){
+        ArrayList<Collection> keys = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)6);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getDisabilityDistribution(Long propertyId){
+        ArrayList<Collection> values = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)6);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getReturningCitizenList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)7);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getReturningCitizenDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)7);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getSNAPList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)8);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getSNAPDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)8);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getSSIList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)9);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getSSIDistribution(Long propertyId){
+        ArrayList<Collection> values = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)9);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getSSDIList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)10);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getSSDIDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)10);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getHealthCoverageList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)11);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getHealthCoverageDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)11);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getEducationLevel(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)12);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getEducationLevelDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)12);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getHouseHoldIncome(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)13);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getHouseHoldIncomeDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)13);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getHomeSafetyList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)14);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getHomeSafetyDistribution(Long propertyId){
+        ArrayList<Collection> values = new ArrayList<>();
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)14);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getLanguageList(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)15);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getLanguageDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)15);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+    protected List<String> getAgeRange(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)16);
+        for (Map.Entry<Collection<String>, Collection<Long>> entry : getData.entrySet()){
+            keys.add(entry.getKey());
+        }
+        return (List<String>) keys.get(0).stream().collect(Collectors.toList());
+    }
+
+    protected List<Long> getAgeRangeDistribution(Long propertyId){
+        Map<Collection<String>, Collection<Long>> getData = getAnswerOccurenceCount(propertyId, (long)16);
+        for(Map.Entry<Collection<String>, Collection<Long>>  entry: getData.entrySet()){
+            values.add(entry.getValue());
+        }
+        return (List<Long>) values.get(0).stream().collect(Collectors.toList());
+    }
+
+
+
+
 }
