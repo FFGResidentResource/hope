@@ -23,11 +23,6 @@ public class QuarterlyMVCController extends BaseController {
     @Autowired
     private ResidentServiceImpl residentService;
 
-    @Autowired
-    PerformanceReportBuilder performanceReportBuilder;
-
-    List<Property> propertyList = new Report().getAllProperty();
-
     @RequestMapping(value = "/quarterly", method = { RequestMethod.GET, RequestMethod.POST })
     public String getDashboardParameters(Model model, Principal principal) throws Exception {
 
@@ -65,26 +60,7 @@ public class QuarterlyMVCController extends BaseController {
 
         model.addAttribute("dashboard", dashboard);
 
-        model.addAttribute("propertyList", propertyList);
-        model.addAttribute("principal", principal);
-        model.addAttribute("propertyNameList", performanceReportBuilder.propertyNameList);
-        model.addAttribute("propertyIdList", performanceReportBuilder.propertyIdList);
-        model.addAttribute("allGenderList", performanceReportBuilder.getAllGenderData());
-        model.addAttribute("allEthnicityList", performanceReportBuilder.getAllEthnicitiesData());
-        model.addAttribute("allRaceList", performanceReportBuilder.getAllRaceData());
-        model.addAttribute("allHeadOfHouseholdData", performanceReportBuilder.getAllHeadOfHouseholdData());
-        model.addAttribute("allVeteranData", performanceReportBuilder.getAllVeteranData());
-        model.addAttribute("allDisabilityData", performanceReportBuilder.getAllDisabilityData());
-        model.addAttribute("allReturningCitizenData", performanceReportBuilder.getAllReturningCitizenData());
-        model.addAttribute("allSNAPData", performanceReportBuilder.getAllSNAPData());
-        model.addAttribute("allSSIData", performanceReportBuilder.getAllSSIData());
-        model.addAttribute("allSSDIData", performanceReportBuilder.getAllSSDIData());
-        model.addAttribute("allHealthCoverageData", performanceReportBuilder.getAllHealthCoverageData());
-        model.addAttribute("allEducationalData", performanceReportBuilder.getAllEducationalData());
-        model.addAttribute("allIncomeData", performanceReportBuilder.getAllIncomeData());
-        model.addAttribute("allHomeSafetyData", performanceReportBuilder.getAllHomeSafetyData());
-        model.addAttribute("allLanguageData", performanceReportBuilder.getAllLanguageData());
-        model.addAttribute("allAgeData", performanceReportBuilder.getAllAgeData());
+
         return "quarterly";
     }
 
