@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
@@ -59,7 +60,8 @@ public class QuarterlyMVCController extends BaseController {
         dashboard.setOngoingResidents(residentService.getOngoingResidents());
 
         model.addAttribute("dashboard", dashboard);
-
+        List<Property> propertyList = new Report().getAllProperty();
+        model.addAttribute("propertyList", propertyList);
 
         return "quarterly";
     }

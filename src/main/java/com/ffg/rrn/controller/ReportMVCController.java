@@ -45,7 +45,6 @@ public class ReportMVCController extends BaseController{
         }
         List<Property> propertyList = new Report().getAllProperty();
         model.addAttribute("propertyList", propertyList);
-        model.addAttribute("principal", principal);
         return "quarterly";
     }
 

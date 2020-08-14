@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,16 +25,16 @@ public class PropertyOverviewController extends BaseController {
     List<Property> propertyList = new Report().getAllProperty();
 
     @RequestMapping(method = RequestMethod.GET)
-    public String showOverview(Model model, Principal principal){
-        model.addAttribute("propertyList", propertyList);
-        model.addAttribute("principal", principal);
-        model.addAttribute("propertyIdList", performanceReportBuilder.propertyIdList);
-        model.addAttribute("propertyNameList", performanceReportBuilder.propertyNameList);
-        return "overview";
+    public ModelAndView showOverview(ModelAndView model, Principal principal){
+        model.addObject("propertyList", propertyList);
+        model.addObject("principal", principal);
+        model.addObject("propertyIdList", performanceReportBuilder.propertyIdList);
+        model.addObject("propertyNameList", performanceReportBuilder.propertyNameList);
+        model.setViewName("overview");
+        return model;
     }
 
     @RequestMapping(value = "/gender", method = { RequestMethod.GET, RequestMethod.POST })
-    @ResponseBody
     public String showGenderInfoOverview(Model model){
         model.addAttribute("allGenderList", performanceReportBuilder.getAllGenderData());
         return "forward:/overview";
