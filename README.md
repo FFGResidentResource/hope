@@ -24,9 +24,9 @@
  
 > - Eclipse Maven setting --> window preferences type "maven" and follow below screen shots:
 
- ![JRE Settings](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/eclipse-maven-setting.png)
+ ![Maven Setting 1](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/eclipse-maven-setting.png)
 
- ![JRE Settings](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/eclipse-maven-setting2.png)
+ ![Maven Setting 2](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/eclipse-maven-setting2.png)
  
 > - Download [DBeaver](https://dbeaver.io/download/)
 
@@ -44,19 +44,19 @@
  
 > Let's Open this DB on DBeaver now, open DBeaver that you downloaded from above step and File -> New -> DBeaver (Database Connection) as shown in iamge below:
 
- ![DB Connection Details](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-1.png)
+ ![DB Connection Details 1](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-1.png)
 
- ![DB Connection Details](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-2.png)
+ ![DB Connection Details 2](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-2.png)
 
 > Put values from your elephantSQL Account as shown below:
 
- ![DB Connection Details](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-3.png) 
+ ![DB Connection Details 3](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-3.png) 
  
 > Copy entire contents of data.sql from github location - [data.sql](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/data/data.sql) and put it in new SQL Editor of DBeaver and execute entire SQL Script (Alt +X) in Dbeaver. This will create All tables/ views and insert initial Data
 
- ![DB Connection Details](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-4.png) 
+ ![DB Connection Details 4](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-4.png) 
  
 > After Executing Script your Table and views looks like as below:
 
- ![DB Connection Details](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-5.png) 
+ ![DB Connection Details 5](https://github.com/FFGResidentResource/hope/tree/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-5.png) 
  
