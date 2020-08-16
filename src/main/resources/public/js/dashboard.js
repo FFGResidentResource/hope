@@ -109,8 +109,49 @@ function pullDashboard(){
 		}
 		
 	    });
-	    
-	    
+
+		var chart3 = c3.generate({
+			bindto : '#_dashboardChart3',
+			data : {
+				x: 'x',
+				columns: [
+					['x', 'Q1', 'Q2', 'Q3', 'Q4'],
+					['Childcare/After-School Care', data.rr1q1Count, data.rr1q2Count, data.rr1q3Count, data.rr1q4Count],
+					['Education/Job Training', data.rr2q1Count, data.rr2q2Count, data.rr2q3Count, data.rr2q4Count],
+					['Employment/Job Readiness', data.rr3q1Count, data.rr3q2Count, data.rr3q3Count, data.rr3q4Count],
+					['Healthcare/Medical Issues', data.rr4q1Count, data.rr4q2Count, data.rr4q3Count, data.rr4q4Count],
+					['Housekeeping/Home Management', data.rr5q1Count, data.rr5q2Count, data.rr5q3Count, data.rr5q4Count],
+					['Lease Violation', data.rr6q1Count, data.rr6q2Count, data.rr6q3Count, data.rr6q4Count],
+					['Non/Late Payment of Rent', data.rr7q1Count, data.rr7q2Count, data.rr7q3Count, data.rr7q4Count],
+					['Noticeable Change', data.rr8q1Count, data.rr8q2Count, data.rr8q3Count, data.rr8q4Count],
+					['Other', data.rr9q1Count, data.rr9q2Count, data.rr9q3Count, data.rr9q4Count],
+					['Resident-to-Resident Conflict Issues', data.rr10q1Count, data.rr10q2Count, data.rr10q3Count, data.rr10q4Count],
+					['Safety', data.rr11q1Count, data.rr11q2Count, data.rr11q3Count, data.rr11q4Count],
+					['Suspected Abuse/Domestic Violence/Exploitation', data.rr12q1Count, data.rr12q2Count, data.rr12q3Count, data.rr12q4Count],
+					['Transportation', data.rr13q1Count, data.rr13q2Count, data.rr13q3Count, data.rr13q4Count],
+					['Utility Shut-Off/Scheduled For', data.rr14q1Count, data.rr14q2Count, data.rr14q3Count, data.rr14q4Count]
+				],
+				type : 'bar',
+				labels: true
+			},
+			axis : {
+				x: {
+					type: 'category'
+				},
+				y : {
+					min : 1,
+					tick: {
+						format: function (d) {
+							return (parseInt(d) == d) ? d : null;
+						}
+					}
+					// Range includes padding, set 0 if no padding needed
+					// padding: {top:0, bottom:0}
+				}
+			}
+
+		});
+
 	    jQuery("#_signupQ1").text(data.q1SignUpComplete);
 	    jQuery("#_signupQ2").text(data.q2SignUpComplete);
 	    jQuery("#_signupQ3").text(data.q3SignUpComplete);

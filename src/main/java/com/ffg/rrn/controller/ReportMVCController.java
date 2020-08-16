@@ -45,7 +45,7 @@ public class ReportMVCController extends BaseController{
         }
         List<Property> propertyList = new Report().getAllProperty();
         model.addAttribute("propertyList", propertyList);
-        return "quarterly";
+        return "overview";
     }
 
     @RequestMapping("/{propertyId}")

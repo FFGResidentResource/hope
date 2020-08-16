@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/overview")
-public class PropertyOverviewController extends BaseController {
+public class OverviewController extends BaseController {
 
     @Autowired
     PerformanceReportBuilder performanceReportBuilder;

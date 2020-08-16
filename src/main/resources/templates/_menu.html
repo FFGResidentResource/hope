@@ -18,8 +18,7 @@
 
 				<li><a th:href="@{/allResident}">All Residents</a></li>
 				<li><a th:href="@{/reportrequest}">Reports</a></li>
-				<li><a th:href="@{/onboarding}">Onboarding</a></li>				
-				<li><a th:href="@{/dashboard}">Dashboard</a></li>
+				<li><a th:href="@{/onboarding}">Onboarding</a></li>
 				<li><a th:if="${isAdmin}" th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}"
 					th:href="@{/logout}">Logout</a></li>

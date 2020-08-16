@@ -2,13 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Resident Resource Network</title>
-
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="/css/common.css" rel="stylesheet">
 <link href="/css/c3.min.css" rel="stylesheet">
+
+
 
 <style>
 .bd-placeholder-img {
@@ -30,12 +31,12 @@
 	padding: 0;
 }
 </style>
-
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+	<div><th:block th:replace="fragments/header :: header"/></div>
 
 	<div class="container-fluid">
 
@@ -386,16 +387,16 @@
 						</table>
 
 					</div>
-					
-														
 				<div class="col-sm-6">
-						<div id="_dashboardChart1" style="min-height: 200px;"></div>
-					</div>
-										
-					<div class="col-sm-6">
-						<div id="_dashboardChart2" style="min-height: 200px;"></div>
-					</div>
-				
+					<div id="_dashboardChart1" style="min-height: 200px;"></div>
+				</div>
+				<div class="col-sm-6">
+					<div id="_dashboardChart2" style="min-height: 200px;"></div>
+				</div>
+				<div class="col-sm-6">
+					<div id="_dashboardChart3" style="min-height: 200px;"></div>
+				</div>
+
 				</div>
 				
 
