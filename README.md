@@ -80,9 +80,11 @@
 
 ### Start Server
 
+> open Application.properties under resources and put url, username and password from ElephantSQL Details tab after logging in ElephanSQL Account
+
+ ![Maven Jar Build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/jdbc-setup-and-server-startup.png?raw=true)
+
 > Configure Spring Boot Settings (You may have to add Spring Tool Suite 4 from Eclipse Marketplace as well) and see below Screenshot:
 
  ![Maven Jar Build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/run-project-localhost.png?raw=true)
-
-
 
