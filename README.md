@@ -36,7 +36,7 @@
 
 > we are using Postgresql in our project for backend Relational Database. Please follow link here to create your own account:
 
-> [ElephantSQL](https://www.elephantsql.com/) - Choose TinyTurle Free Plan while creating instance (it gives you 20 MB which is more than enough to Store 1000s of record in each table)
+> [ElephantSQL](https://www.elephantsql.com/) - Choose <ins> TinyTurle Free </ins> Plan while creating instance (it gives you 20 MB which is more than enough to Store 1000s of record in each table)
  
 > After creating instance go to "Details" Tab and it will look like this
 
@@ -59,4 +59,30 @@
 > After Executing Script your Table and views looks like as below:
 
  ![DB Connection Details 5](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-5.png?raw=true) 
+
+### Configure Local Workspace 
+
+> Clone Projet from GitHub and import as git project into Eclipse
+
+ ![Git Clone](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/clone-git-project.png?raw=true)
  
+> Configure Eclipse Maven Run Configurations, Go to "Run" and "Do run configurations" right click above maven build and choose "Create new"
+ 
+  ![maven build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/maven-build-run-config.png?raw=true)
+  
+> clean build Project go to Project and choose Clean build as shown in image below:
+
+ ![maven build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/clean-build-project.png?raw=true)
+  
+> In order to deploy to cloud you may also need to generate JAR add one more Maven jar Config as shown in picture below, after run you will see jar created in target folder (Refresh Target folder).
+
+  ![Maven Jar Build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/maven-jarbuild-run-config.png?raw=true)
+
+### Start Server
+
+> Configure Spring Boot Settings (You may have to add Spring Tool Suite 4 from Eclipse Marketplace as well) and see below Screenshot:
+
+ ![Maven Jar Build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/run-project-localhost.png?raw=true)
+
+
+
