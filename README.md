@@ -5,7 +5,7 @@
 > - Download JDK1.8 from [JDK](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
 > - Download [Maven](https://maven.apache.org/download.cgi#) choose zip one and unzip in any location and give location of your repository where you want maven to download all related dependencies
 
- ![maven Settings](/images/project_setup/mavenSettings.png?raw=true)
+ ![maven Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/mavenSettings.png?raw=true)
  
 > - Download [Eclipse](https://www.eclipse.org/downloads/) or any similar Development Space
 > - Create a folder "workspace" in any drive and open eclipse Project here.
