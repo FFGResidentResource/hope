@@ -11,10 +11,7 @@ public class RRNHope {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RRNHope.class, args);
-
-		System.out.println(new PerformanceReportBuilder().getAllAgeData());
-		System.out.println(new PerformanceReportBuilder().propertyNameList);
-		System.out.println(new PerformanceReportBuilder().propertyIdList);
+		System.out.println(new PerformanceReportBuilder().getAllGenderData());
 	}
 }
 

@@ -5,131 +5,129 @@ import com.ffg.rrn.model.Property;
 import com.ffg.rrn.report.PerformanceReportBuilder;
 import com.ffg.rrn.report.Report;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/overview")
 public class OverviewController extends BaseController {
 
     @Autowired
     PerformanceReportBuilder performanceReportBuilder;
 
-    List<Property> propertyList = new Report().getAllProperty();
-
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView showOverview(ModelAndView model, Principal principal){
+    @RequestMapping(value = "/overview" , method = RequestMethod.GET)
+        public ModelAndView getOverview(ModelAndView model){
+        List<Property> propertyList = new Report().getAllProperty();
         model.addObject("propertyList", propertyList);
-        model.addObject("principal", principal);
-        model.addObject("propertyIdList", performanceReportBuilder.propertyIdList);
         model.addObject("propertyNameList", performanceReportBuilder.propertyNameList);
+//        model.addObject("gender", performanceReportBuilder.getAllGenderData());
+//        model.addObject("ethnicity", performanceReportBuilder.getAllEthnicitiesData());
+//        model.addObject("race", performanceReportBuilder.getAllRaceData());
+//        model.addObject("hoh", performanceReportBuilder.getAllHeadOfHouseholdData());
+//        model.addObject("veteran", performanceReportBuilder.getAllVeteranData());
+//        model.addObject("disability", performanceReportBuilder.getAllDisabilityData());
+//        model.addObject("ex-offender", performanceReportBuilder.getAllReturningCitizenData());
+//        model.addObject("snap", performanceReportBuilder.getAllSNAPData());
+//        model.addObject("ssi", performanceReportBuilder.getAllSSIData());
+//        model.addObject("ssdi", performanceReportBuilder.getAllSSDIData());
+//        model.addObject("health", performanceReportBuilder.getAllHealthCoverageData());
+//        model.addObject("education", performanceReportBuilder.getAllEducationalData());
+//        model.addObject("income", performanceReportBuilder.getAllIncomeData());
+//        model.addObject("safety", performanceReportBuilder.getAllHomeSafetyData());
+//        model.addObject("language", performanceReportBuilder.getAllLanguageData());
+//        model.addObject("age", performanceReportBuilder.getAllAgeData());
         model.setViewName("overview");
         return model;
     }
 
-    @RequestMapping(value = "/gender", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showGenderInfoOverview(Model model){
-        model.addAttribute("allGenderList", performanceReportBuilder.getAllGenderData());
-        return "forward:/overview";
+    @RequestMapping(value = "/overview/gender", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showGenderInfoOverview(){
+       return performanceReportBuilder.getAllGenderData();
+
     }
 
-    @RequestMapping(value="/ethnicity", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showEthnicityOverview(Model model){
-        model.addAttribute("allEthnicityList", performanceReportBuilder.getAllEthnicitiesData());
-
-        return "forward:/overview";
+    @RequestMapping(value="/overview/ethnicity", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showEthnicityOverview(){
+        return performanceReportBuilder.getAllEthnicitiesData();
     }
 
-    @RequestMapping(value="/race", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showRaceOverview(Model model){
-        model.addAttribute("allRaceList", performanceReportBuilder.getAllRaceData());
-
-        return "forward:/overview";
+    @RequestMapping(value="/overview/race", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showRaceOverview(){
+        return performanceReportBuilder.getAllRaceData();
     }
 
-    @RequestMapping(value="/household", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showHoHOverview(Model model){
-        model.addAttribute("allHeadOfHouseholdData", performanceReportBuilder.getAllHeadOfHouseholdData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/household", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showHoHOverview(){
+        return performanceReportBuilder.getAllHeadOfHouseholdData();
     }
 
-    @RequestMapping(value="/veteran", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showVeteranOverview(Model model){
-        model.addAttribute("allVeteranData", performanceReportBuilder.getAllVeteranData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/veteran", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showVeteranOverview(){
+        return performanceReportBuilder.getAllVeteranData();
     }
 
-    @RequestMapping(value="/disability", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showDisabilityOverview(Model model){
-        model.addAttribute("allDisabilityData", performanceReportBuilder.getAllDisabilityData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/disability", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showDisabilityOverview(){
+        return performanceReportBuilder.getAllDisabilityData();
     }
 
-    @RequestMapping(value="/returning", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showReturningCitizenOverview(Model model){
-        model.addAttribute("allReturningCitizenData", performanceReportBuilder.getAllReturningCitizenData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/returning", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showReturningCitizenOverview(){
+        return performanceReportBuilder.getAllReturningCitizenData();
     }
 
-    @RequestMapping(value="/snap", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showSNAPOverview(Model model){
-        model.addAttribute("allSNAPData", performanceReportBuilder.getAllSNAPData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/snap", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showSNAPOverview(){
+        return performanceReportBuilder.getAllSNAPData();
     }
 
-    @RequestMapping(value="/ssi", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showSSIOverview(Model model){
-        model.addAttribute("allSSIData", performanceReportBuilder.getAllSSIData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/ssi", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showSSIOverview(){
+        return performanceReportBuilder.getAllSSIData();
     }
 
-    @RequestMapping(value="/ssdi", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showSSDIOverview(Model model){
-        model.addAttribute("allSSDIData", performanceReportBuilder.getAllSSDIData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/ssdi", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showSSDIOverview(){
+        return performanceReportBuilder.getAllSSDIData();
     }
 
-    @RequestMapping(value="/health", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showHealthCoverageOverview(Model model){
-        model.addAttribute("allHealthCoverageData", performanceReportBuilder.getAllHealthCoverageData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/health", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showHealthCoverageOverview(){
+       return performanceReportBuilder.getAllHealthCoverageData();
     }
 
-    @RequestMapping(value="/education", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showEducationOverview(Model model){
-        model.addAttribute("allEducationalData", performanceReportBuilder.getAllEducationalData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/education", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showEducationOverview(){
+        return performanceReportBuilder.getAllEducationalData();
     }
 
-    @RequestMapping(value="/income", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showHIncomeOverview(Model model){
-        model.addAttribute("allIncomeData", performanceReportBuilder.getAllIncomeData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/income", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showHIncomeOverview(){
+        return performanceReportBuilder.getAllIncomeData();
     }
 
-    @RequestMapping(value="/safety", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showSafetyInfoOverview(Model model){
-        model.addAttribute("allHomeSafetyData", performanceReportBuilder.getAllHomeSafetyData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/safety", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showSafetyInfoOverview(){
+        return performanceReportBuilder.getAllHomeSafetyData();
     }
 
-    @RequestMapping(value="/language", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showLanguageOverview(Model model){
-        model.addAttribute("allLanguageData", performanceReportBuilder.getAllLanguageData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/language", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showLanguageOverview(){
+        return performanceReportBuilder.getAllLanguageData();
     }
 
-    @RequestMapping(value="/age", method = { RequestMethod.GET, RequestMethod.POST })
-    public String showAgeOverview(Model model) {
-        model.addAttribute("allAgeData", performanceReportBuilder.getAllAgeData());
-        return "forward:/overview";
+    @RequestMapping(value="/overview/age", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Map<String, Long>> showAgeOverview() {
+        return performanceReportBuilder.getAllAgeData();
     }
 
 }

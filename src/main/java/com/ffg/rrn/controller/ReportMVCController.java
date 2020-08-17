@@ -3,6 +3,7 @@ package com.ffg.rrn.controller;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.report.AssessmentReportBuilder;
 import com.ffg.rrn.report.IReport;
+import com.ffg.rrn.report.PerformanceReportBuilder;
 import com.ffg.rrn.report.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,12 @@ import java.util.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/reportrequest")
 public class ReportMVCController extends BaseController{
+    @Autowired
+    PerformanceReportBuilder performanceReportBuilder;
 
-    @RequestMapping(method = RequestMethod.GET)
+
+    @RequestMapping(value="/reportrequest", method = RequestMethod.GET)
     public String getPropertyList(Model model, Principal principal){
         // (1) (en)
         // After user login successfully.
@@ -37,18 +40,7 @@ public class ReportMVCController extends BaseController{
         return "reportrequest";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String loadPropertyList(Model model, Principal principal){
-        String serviceCoord = null;
-        if (principal != null) {
-            serviceCoord = populateSCinModel(model, principal);
-        }
-        List<Property> propertyList = new Report().getAllProperty();
-        model.addAttribute("propertyList", propertyList);
-        return "overview";
-    }
-
-    @RequestMapping("/{propertyId}")
+    @RequestMapping(value = "/reportrequest/{propertyId}", method = { RequestMethod.GET, RequestMethod.POST })
     public String getDemographicDataList(@PathVariable("propertyId")Long propertyId, Model model){
 
         model.addAttribute("GenderData", new AssessmentReportBuilder().genderData(propertyId));

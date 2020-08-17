@@ -18,6 +18,41 @@
 
 <body>
 <div><th:block th:replace="fragments/header :: header"/></div>
+<section>
+    <div class="container-fluid">
+    <form th:name="overview-form" th:method="GET" class="form-horizontal">
+        <div class="reportPanel" style="overflow:auto">
+            <div class="sidenav-overview">
+                <nav id="oreport-nav">
+                        <div class="overview-list">
+                            <ul class="demo-overview">
+                                <li><a th:href="@{/overview/gender}">Gender Distribution</a></li>
+                                <li><a th:href="@{/overview/ethnicity}">Ethnicity Distribution</a></li>
+                                <li><a th:href="@{/overview/race}">Race Distribution</a></li>
+                                <li><a th:href="@{/overview/household}">Head of Hold</a></li>
+                                <li><a th:href="@{/overview/veteran}">Veteran Status</a></li>
+                                <li><a th:href="@{/overview/disability}">Disability Status</a></li>
+                                <li><a th:href="@{/overview/returning}">Ex-Offender</a></li>
+                                <li><a th:href="@{/overview/snap}">SNAP Recipients</a></li>
+                                <li><a th:href="@{/overview/ssi}">SSI Recipients</a></li>
+                                <li><a th:href="@{/overview/ssdi}">SSDI Recipients</a></li>
+                                <li><a th:href="@{/overview/health}">Health Coverage</a></li>
+                                <li><a th:href="@{/overview/education}">Education Status</a></li>
+                                <li><a th:href="@{/overview/income}">Income Level</a></li>
+                                <li><a th:href="@{/overview/safety}">Home Safety</a></li>
+                                <li><a th:href="@{/overview/language}">Language Distribution</a></li>
+                                <li><a th:href="@{/overview/age}">Age Range Distribution</a></li>
+                            </ul>
+                        </div>
+                </nav>
+            </div>
+            <div class="main-content">
 
+            </div>
+        </div>
+    </form>
+    </div>
+
+</section>
 </body>
 </html>
