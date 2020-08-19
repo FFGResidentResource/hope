@@ -14,6 +14,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Assessment Report</title>
     <link href="/css/report.css" rel="stylesheet">
+    <script src="/js/report.js"></script>
 </head>
 
 <body>
@@ -22,26 +23,27 @@
 <div>
 
 <div class="reportPanel" style="overflow:auto">
+
     <div class="sidenav">
-    <nav id="areport-nav">
-        <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
-            <table class="table datatable">
-                <thead>
-                </thead>
-                <tbody>
-                <div class="col-sm-6 col-sm-offset-3">
-                    <tr th:each="property : ${propertyList}">
-                        <td>
-                            <form th:action="@{/reportrequest/} + ${{property.getPropertyId()}}" method="GET" th:class="property-form" th:field="${property.getPropertyId()}" th:value="${property.getPropertyId()}">
-                                <button type="submit" th:text="${property.getPropertyName()}" th:id="property-button">Text ...</button>
-                            </form>
-                        </td>
-                    </tr>
-                </div>
-                </tbody>
-            </table>
-        </div>
-    </nav>
+        <nav id="areport-nav">
+            <div class="propertylist" th:unless="${#lists.isEmpty(propertyList)}">
+                <table class="tabledatatable">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <tr th:each="property : ${propertyList}">
+                            <td>
+                                <form th:action="@{/reportrequest/} + ${{property.getPropertyId()}}" method="GET" th:class="property-form" th:field="${property.getPropertyId()}" th:value="${property.getPropertyId()}">
+                                    <button type="submit" th:text="${property.getPropertyName()}" th:id="property-button">Text ...</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </div>
+                    </tbody>
+                </table>
+            </div>
+        </nav>
     </div>
     <div class="main-content">
     <table class="displayTable">

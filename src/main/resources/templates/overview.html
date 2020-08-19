@@ -20,34 +20,410 @@
 <div><th:block th:replace="fragments/header :: header"/></div>
 <section>
     <div class="container-fluid">
-    <form th:name="overview-form" th:method="GET" class="form-horizontal">
+    <form th:name="overview-form" th:method="POST" class="form-horizontal">
         <div class="reportPanel" style="overflow:auto">
             <div class="sidenav-overview">
                 <nav id="oreport-nav">
-                        <div class="overview-list">
-                            <ul class="demo-overview">
-                                <li><a th:href="@{/overview/gender}">Gender Distribution</a></li>
-                                <li><a th:href="@{/overview/ethnicity}">Ethnicity Distribution</a></li>
-                                <li><a th:href="@{/overview/race}">Race Distribution</a></li>
-                                <li><a th:href="@{/overview/household}">Head of Hold</a></li>
-                                <li><a th:href="@{/overview/veteran}">Veteran Status</a></li>
-                                <li><a th:href="@{/overview/disability}">Disability Status</a></li>
-                                <li><a th:href="@{/overview/returning}">Ex-Offender</a></li>
-                                <li><a th:href="@{/overview/snap}">SNAP Recipients</a></li>
-                                <li><a th:href="@{/overview/ssi}">SSI Recipients</a></li>
-                                <li><a th:href="@{/overview/ssdi}">SSDI Recipients</a></li>
-                                <li><a th:href="@{/overview/health}">Health Coverage</a></li>
-                                <li><a th:href="@{/overview/education}">Education Status</a></li>
-                                <li><a th:href="@{/overview/income}">Income Level</a></li>
-                                <li><a th:href="@{/overview/safety}">Home Safety</a></li>
-                                <li><a th:href="@{/overview/language}">Language Distribution</a></li>
-                                <li><a th:href="@{/overview/age}">Age Range Distribution</a></li>
-                            </ul>
-                        </div>
+                    <div class="demolist" th:unless="${#lists.isEmpty(demographicTypes)}">
+                        <table class="tabledatatable">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <tr th:each="elems : ${demographicTypes}">
+                                    <td>
+                                        <form th:action="@{/overview/} + ${{elems.value}}" method="POST" th:class="property-form" th:field="${elems.value}" th:value="${elems.value}">
+                                            <button type="submit" th:text="${elems.key}" th:id="overview-button">Text ...</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </nav>
             </div>
             <div class="main-content">
+                <!--data for visualization --->
+                <table class="displayTable">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="gender-overview" th:unless="${#maps.isEmpty(gender)}" align="center" style="width: 500px;">
 
+                                <div th:class="overview-wrapper">
+                                    <div id="gender_chart_div" style="width: 900px; height: 1600px;"></div>
+<!--                                    <div id="ethnicity_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="race_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="head_of_household_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="veteran_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="disability_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="returning_citizen_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="snap_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="ssi_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="ssdi_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="health_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="education_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="income_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="safety_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="language_chart_div" style="width: 600px; height: 600px;"></div>-->
+<!--                                    <div id="age_chart_div" style="width: 600px; height: 600px;"></div>-->
+
+
+                                </div>
+                                <script th:inline="javascript">
+                                    var propertyList =[[${propertyNameList}]];
+                                    var Gender_data = [[${gender}]];
+                                    // var Ethnicity_data = [[${ethnicity}]];
+                                    // var Race_data = [[${race}]];
+                                    // var HeadOfHousehold_data = [[${hoh}]];
+                                    // var Veteran_data = [[${veteran}]];
+                                    // var Disability_data = [[${disability}]];
+                                    // var ReturningCitizen_data = [[${ex-offender}]];
+                                    // var SNAP_data = [[${snap}]];
+                                    // var SSI_data = [[${ssi}]];
+                                    // var SSDI_data = [[${ssdi}]];
+                                    // var Health_data = [[${health}]];
+                                    // var Education_data = [[${education}]];
+                                    // var Income_data = [[${income}]];
+                                    // var HomeSafety_data = [[${safety}]];
+                                    // var Language_data = [[${language}]];
+                                    // var Age_data = [[${age}]];
+                                    $(document).ready(function() {
+                                        google.charts.load('current', {
+                                            packages : [ 'corechart', 'bar' ]
+                                        });
+
+                                        google.charts.setOnLoadCallback(drawGenderChart);
+                                        // google.charts.setOnLoadCallback(drawEthnicityChart);
+                                        // google.charts.setOnLoadCallback(drawRaceChart);
+                                        // google.charts.setOnLoadCallback(drawHeadOfHouseholdChart);
+                                        // google.charts.setOnLoadCallback(drawVeteranChart);
+                                        // google.charts.setOnLoadCallback(drawDisabilityChart);
+                                        // google.charts.setOnLoadCallback(drawReturningCitizenChart);
+                                        // google.charts.setOnLoadCallback(drawSNAPChart);
+                                        // google.charts.setOnLoadCallback(drawSSIChart);
+                                        // google.charts.setOnLoadCallback(drawSSDIChart);
+                                        // google.charts.setOnLoadCallback(drawHealthChart);
+                                        // google.charts.setOnLoadCallback(drawEducationChart);
+                                        // google.charts.setOnLoadCallback(drawIncomeChart);
+                                        // google.charts.setOnLoadCallback(drawSafetyChart);
+                                        // google.charts.setOnLoadCallback(drawLanguageChart);
+                                        // google.charts.setOnLoadCallback(drawAgeChart);
+                                    });
+
+                                    function drawGenderChart() {
+                                        var data = new google.visualization.DataTable();
+                                        data.addColumn('string', 'Gender');
+                                        data.addColumn('number', 'Residents');
+                                        Object.keys(Gender_data).forEach(function (key) {
+                                            data.addRow([key, Gender_data[key]]);
+                                        });
+                                        var options = {
+                                            chart: {
+                                                'legend': 'left',
+                                                'title': 'Overall Gender Distribution',
+
+                                            },
+                                            bars: 'horizontal'
+
+
+                                        };
+                                        var chart = new google.visualization.Bar(document
+                                            .getElementById('gender_chart_div'));
+                                        chart.draw(data, google.charts.Bar.convertOptions(options));
+
+                                    }
+                                    // var barchart_options = {title:'Gender Distribution',
+                                    //     width:400,
+                                    //     height:300,
+                                    //     legend: 'none'};
+                                    // var barchart = new google.visualization.BarChart(document.getElementById('gender_barchart_div'));
+                                    // barchart.draw(data, barchart_options);
+
+                                    // function drawEthnicityChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Ethnicity');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Ethnicity_data).forEach(function(key) {
+                                    //         data.addRow([ key, Ethnicity_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'Ethnicity Distribution',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('ethnicity_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawRaceChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Race');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Race_data).forEach(function(key) {
+                                    //         data.addRow([ key, Race_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'Race Distribution',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('race_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    //
+                                    // function drawHeadOfHouseholdChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Head of Household');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(HeadOfHousehold_data).forEach(function(key) {
+                                    //         data.addRow([ key, HeadOfHousehold_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'Head of Household',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('head_of_household_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    //
+                                    // function drawVeteranChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Veteran');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Veteran_data).forEach(function(key) {
+                                    //         data.addRow([ key, Veteran_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'Veteran Status',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('veteran_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawDisabilityPieChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Disability');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Disability_data).forEach(function(key) {
+                                    //         data.addRow([ key, Disability_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'Disability Status',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('disability_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    //
+                                    // function drawReturningCitizenChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Returning Citizens');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(ReturningCitizen_data).forEach(function(key) {
+                                    //         data.addRow([ key, ReturningCitizen_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'Returning Citizen Status',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('returning_citizen_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    //
+                                    // function drawSNAPChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'SNAP Information');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(SNAP_data).forEach(function(key) {
+                                    //         data.addRow([ key, SNAP_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'SNAP',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('snap_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawSSIChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'SSI Information');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(SSI_data).forEach(function(key) {
+                                    //         data.addRow([ key, SSI_data[key] ]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend':'left',
+                                    //         'title':'SSI',
+                                    //         'is3D':true,
+                                    //         'width':400,
+                                    //         'height':300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('ssi_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    //
+                                    // function drawSSDIChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'SSDI Information');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(SSDI_data).forEach(function (key) {
+                                    //         data.addRow([key, SSDI_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'SSDI',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('ssdi_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    //
+                                    // function drawHealthChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Health Coverage');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Health_data).forEach(function (key) {
+                                    //         data.addRow([key, Health_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'Health Coverage',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('health_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawEducationChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Education');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Education_data).forEach(function (key) {
+                                    //         data.addRow([key, Education_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'Educational Level',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('education_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawIncomeChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Income');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Income_data).forEach(function (key) {
+                                    //         data.addRow([key, Income_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'Income',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('income_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawSafetyChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Home Safety');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(HomeSafety_data).forEach(function (key) {
+                                    //         data.addRow([key, HomeSafety_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'Home Safety',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('safety_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawLanguageChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Language');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Language_data).forEach(function (key) {
+                                    //         data.addRow([key, Language_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'Primary Language',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('language_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                    // function drawAgeChart() {
+                                    //     var data = new google.visualization.DataTable();
+                                    //     data.addColumn('string', 'Age Range');
+                                    //     data.addColumn('number', 'Residents');
+                                    //     Object.keys(Age_data).forEach(function (key) {
+                                    //         data.addRow([key, Age_data[key]]);
+                                    //     });
+                                    //     var options = {
+                                    //         'legend': 'left',
+                                    //         'title': 'Age Range',
+                                    //         'is3D': true,
+                                    //         'width': 400,
+                                    //         'height': 300
+                                    //     };
+                                    //     var chart = new google.visualization.PieChart(document
+                                    //         .getElementById('age_piechart_div'));
+                                    //     chart.draw(data, options);
+                                    // }
+                                </script>
+                            </div>
+
+                        </td>
+                    </tbody>
+                </table>
             </div>
         </div>
     </form>

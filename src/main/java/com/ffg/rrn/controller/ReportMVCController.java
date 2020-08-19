@@ -1,9 +1,9 @@
 package com.ffg.rrn.controller;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.report.AssessmentReportBuilder;
 import com.ffg.rrn.report.IReport;
-import com.ffg.rrn.report.PerformanceReportBuilder;
 import com.ffg.rrn.report.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +19,6 @@ import java.util.List;
 
 @Controller
 public class ReportMVCController extends BaseController{
-    @Autowired
-    PerformanceReportBuilder performanceReportBuilder;
 
 
     @RequestMapping(value="/reportrequest", method = RequestMethod.GET)
@@ -35,7 +33,6 @@ public class ReportMVCController extends BaseController{
 
         model.addAttribute("propertyList", propertyList);
         model.addAttribute("principal", principal);
-
 
         return "reportrequest";
     }
@@ -62,7 +59,6 @@ public class ReportMVCController extends BaseController{
 
         return "forward:/reportrequest";
     }
-
 
 }
 
