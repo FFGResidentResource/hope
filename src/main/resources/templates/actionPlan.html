@@ -44,9 +44,6 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="../templates/_menu"></th:block>
 
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
 	<div class="container	">
 		<div id="actionPlan_Form">
 
@@ -66,7 +63,10 @@
 						
 						<div class="col-sm-4">
 							<table class="table-responsive table-condensed hidden-print">
-								<tr><td><select class="form-control input-sm" id="_dates"
+								
+								<tr>
+								<td>System of Record:</td>
+								<td><select class="form-control input-sm" id="_dates"
 										th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
 										<option value="new">New Action Plan</option>
 										<option th:each="actionPlanDate : ${resident.actionPlanDates}"
@@ -82,7 +82,8 @@
 								</tr>
 							</table>
 						</div>						
-						
+						<div class="col-sm-2 hideme print-only">
+						</div>
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 						</div>

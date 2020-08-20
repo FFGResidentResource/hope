@@ -40,9 +40,6 @@
 	<!-- Include _menu.html -->
 	<th:block th:include="../templates/_menu"></th:block>
 
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
 	<div class="container">
 		<div id="caseNotes_Form">
 
@@ -51,17 +48,17 @@
 
 				<div class="col-sm-12 myPanel">
 					<div class="row">
-						<div class="col-sm-8">
-							<h3 style="width: 400px;">CASE NOTES</h3>
+						<div class="col-sm-7">
+							<h3 style="width: 400px;">CONTACT NOTES</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>
 						</div>
 						
-						<div class="col-sm-4">
+						<div class="col-sm-5">
 						<table class="table-responsive table-condensed hidden-print">
-							<tr><td><select class="form-control input-sm" id="_dates"
+							<tr><td>System of Record:</td><td><select class="form-control input-sm" id="_dates"
 									th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
-									<option value="new">New Contact Notes</option>
+									<option value="new">New Contact Note</option>
 									<option th:each="contactNotes : ${resident.contactNoteDates}"
 										th:value="${contactNotes}" th:utext="${contactNotes}" />
 							</select>	</td>
@@ -69,7 +66,7 @@
 							<td><a id="_loadCaseNotes" class="btn btn-default btn-sm"								
 								th:href="@{/getCaseNotes?entryPoint=onboarding}"> <span
 								class="glyphicon glyphicon-cloud-download" style="color: goldenrod;"
-								aria-hidden="true"></span> Contact Notes
+								aria-hidden="true"></span> Retrieve
 							</a></td>
 							
 							</tr>
@@ -77,6 +74,8 @@
 						
 						</div>					
 						
+						<div class="col-sm-3 hideme print-only">
+						</div>
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 						</div>
