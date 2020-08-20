@@ -11,9 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-/*import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
-import org.springframework.boot.actuate.context.ShutdownEndpoint;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;*/
 
 import com.ffg.rrn.service.UserDetailsServiceImpl;
 
@@ -23,6 +20,7 @@ import com.ffg.rrn.service.UserDetailsServiceImpl;
  */
 @Configuration
 @EnableWebSecurity
+
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired

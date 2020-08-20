@@ -40,7 +40,7 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+	<th:block th:include="../templates/_menu"></th:block>
 
 	<form name='_onboardingF' th:action="@{/saveResident}"
 		th:object="${resident}" method="POST" class="form-horizontal">
