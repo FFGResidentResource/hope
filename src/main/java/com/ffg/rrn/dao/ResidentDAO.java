@@ -61,7 +61,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_UPDATE_RESIDENT = "UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, "
 			+ "VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?,"
-			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=?,IS_RESIDENT=? WHERE RESIDENT_ID=?";
+			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=?,IS_RESIDENT=?, AGE=?, PRI_LANGUAGE=?, MARITAL_STATUS=?, ANNUAL_GROSS=?, GENDER=?, ETHNICITY=?, RACE=?, H_O_H=?, VETERAN=?, DISABILITY=?, RC_OR_EX_OFF=?, SSI=?, SSDI=?, HEALTH_COVERAGE=?, HIGHEST_EDU=? WHERE RESIDENT_ID=?";
 
 	private final static String SQL_CHANGE_STATUS_OF_RESIDENT = "UPDATE RESIDENT SET ACTIVE=?, DATE_MODIFIED=?, MODIFIED_BY=? "
 			+ " WHERE RESIDENT_ID=?";
@@ -455,9 +455,9 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setString(2, StringUtils.capitalize(resident.getMiddle().trim().toLowerCase()));
 		ps.setString(3, StringUtils.capitalize(resident.getLastName().trim().toLowerCase()));
 		ps.setInt(4, resident.getPropertyId());
-		ps.setString(5, resident.getVoiceMail());
-		ps.setString(6, resident.getText().trim());
-		ps.setString(7, resident.getEmail().trim().toLowerCase());
+		ps.setString(5, (StringUtils.isBlank(resident.getVoiceMail()) ? null : resident.getVoiceMail().trim()));
+		ps.setString(6, (StringUtils.isBlank(resident.getText()) ? null : resident.getText().trim()));
+		ps.setString(7, (StringUtils.isBlank(resident.getEmail()) ? null : resident.getEmail().trim().toLowerCase()));
 		ps.setString(8, StringUtils.capitalize(resident.getAddress().trim().toLowerCase()));
 		ps.setBoolean(9, resident.getAckRightToPrivacy());
 		ps.setBoolean(10, resident.getAllowContact());
@@ -471,7 +471,23 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setTimestamp(18, Timestamp.valueOf(LocalDateTime.now()));// modify date
 		ps.setString(19, resident.getModifiedBy());
 		ps.setBoolean(20, resident.getIsResident());
-		ps.setLong(21, resident.getResidentId());
+		ps.setString(21, resident.getAge());
+		ps.setString(22, resident.getPrimaryLanguage());
+		ps.setString(23, resident.getMaritalStatus());
+		ps.setString(24, resident.getAnnualGross());
+		ps.setString(25, resident.getGender());
+		ps.setString(26, resident.getEthnicity());
+		ps.setString(27, resident.getRace());
+		ps.setString(28, resident.getHouseHold());
+		ps.setString(29, resident.getVeteran());
+		ps.setString(30, resident.getDisabilityStatus());
+		ps.setString(31, resident.getRcOrExOff());
+		ps.setString(32, resident.getSsi());
+		ps.setString(33, resident.getSsdi());
+		ps.setString(34, resident.getHealthCoverage());
+		ps.setString(35, resident.getHighestEdu());		
+		//where ? is 36th in number in SQL_UPDATE_RESIDENT
+		ps.setLong(36, resident.getResidentId());		
 		return ps;
 	}
 

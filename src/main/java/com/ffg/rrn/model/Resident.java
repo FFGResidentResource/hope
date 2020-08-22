@@ -4,6 +4,7 @@
 package com.ffg.rrn.model;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -231,7 +232,40 @@ public class Resident {
 
 	// Referral Form fields - End
 
-
+	public static final List<String> genderList = Arrays.asList("Male","Female","Transgendered Male to Female", "Transgendered Female to Male", "Other", "Information not collected", "Individual refused","Individual does not know");
+	public static final List<String> ethnicityList = Arrays.asList("Hispanic/Latino","Not Hispanic/Latino", "Information not collected", "Individual refused","Individual does not know");
+	public static final List<String> primaryLangList = Arrays.asList("English","Spanish", "Other");
+	public static final List<String> maritalStatusList = Arrays.asList("Married","Single", "Significant Other");
+	public static final List<String> raceList = Arrays.asList("American Indian or Alaska Native","Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", "Mixed Race", "Information not collected", "Individual refused","Individual does not know");
+	public static final List<String> houseHoldList = Arrays.asList("Yes","No", "Information not collected", "Individual refused","Individual does not know");
+	public static final List<String> veteranList = Arrays.asList("Yes","No", "Information not collected", "Individual refused","Individual does not know");
+	public static final List<String> disabilityStatusList = Arrays.asList("Yes, individual indicates a disability as defined in ADA","No, individual indicates a disability as defined in ADA", "Information not collected", "Individual refused","Individual does not know", "N/A");
+	public static final List<String> rcOrExOffList = Arrays.asList("Yes", "Information not collected", "N/A");
+	public static final List<String> ssiList = Arrays.asList("Yes", "Information not collected", "N/A");
+	public static final List<String> ssdiList = Arrays.asList("Yes", "Information not collected", "N/A");
+	public static final List<String> healthCoverageList = Arrays.asList("Yes, covered through employer or union (current or former)", "Yes, purchased insurance from insurance company","Medicare","Medicaid/Medical Assistant","TRICARE or other military health care","VA health care","Indian Health Service","Other health insurance or health coverage plan","No coverage","Information not collected","Individual refused","Individual does not know","N/A");
+	public static final List<String> highestEduList = Arrays.asList("No schooling completed, Nursery school, or Kindergarten","12th grade, no diploma", "High School Diploma", "Grade 1 GED or alternative credentials","Grade 2 Less than 1 year of college credit","Grade 3 One or more yearss of college dredit, no degree", "Grade 4 Associate's degree","Grade 5 Bachelor's degree","Grade 6 Master's degree","Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)","Grade 8 Doctorate degree","Grade 9 Individual refused","Grade 10Individual does not know", "Grade 11 N/A", "Information not collected");
+	
+	private String age;
+	private String gender;
+	private String primaryLanguage;
+	private String ethnicity;
+	private String race;
+	private String maritalStatus;	
+	private String houseHold;
+	private String veteran;
+	private String disabilityStatus;
+	private String rcOrExOff;
+	private String ssi;
+	private String ssdi;
+	private String healthCoverage;
+	private String highestEdu;
+	private String annualGross;
+	
+	public String getFullName() {
+		return StringUtils.normalizeSpace(this.firstName + " " + this.middle + " " + this.lastName);
+	}
+	
 	public Resident() {
 
 	}

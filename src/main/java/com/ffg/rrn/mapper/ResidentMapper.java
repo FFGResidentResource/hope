@@ -12,6 +12,7 @@ import com.ffg.rrn.model.Resident;
 
 /**
  * @author FFGRRNTEam
+ * 
  *
  */
 public class ResidentMapper implements RowMapper<Resident> {
@@ -20,6 +21,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 			= "select r.RESIDENT_ID, r.ACTIVE, r.IS_RESIDENT, r.FIRST_NAME, r.MIDDLE, r.LAST_NAME, r.PROP_ID,r.VIA_VOICEMAIL, r.VOICEMAIL_NO, r.VIA_TEXT, r.TEXT_NO, r.VIA_EMAIL, r.EMAIL, r.ADDRESS, r.ACK_PR, "
 					+ " r.ALLOW_CONTACT, r.WANTS_SURVEY, r.PHOTO_RELEASE, r.SERVICE_COORD, r.REF_TYPE, r.A_TYPE, "
 					+ " r.date_added, r.date_modified, r.modified_by, p.prop_name, ref.ref_value, a.a_value, "
+					+ " r.AGE, r.GENDER, r.PRI_LANGUAGE, r.MARITAL_STATUS,  r.ANNUAL_GROSS, r.ETHNICITY, r.RACE, r.H_O_H, r.VETERAN, r.DISABILITY, r.RC_OR_EX_OFF, r.SSI, r.SSDI, r.HEALTH_COVERAGE, r.HIGHEST_EDU, "
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
 					+ " ap.referral_partner , ap.anticipated_date , ap.plan_of_action, ap.plan_details, ap.anticipated_outcomes,  ap.followup_notes, ap.outcome_achieved, ap.achieved_ssm, ap.completion_date, ap.date_added as apDateAdded, ap.date_modified as apDateModified, "
 					+ " cn.description, cn.assessment, cn.plan, cn.date_added as cnDateAdded, cn.date_modified as cnDateModified,"
@@ -64,6 +66,22 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setRefValue(rs.getString("REF_VALUE"));
 		r.setAValue(rs.getString("A_VALUE"));
 		r.setChildList(rs.getString("children"));
+		r.setAge(rs.getString("AGE"));
+		r.setGender(rs.getString("GENDER"));
+		r.setPrimaryLanguage(rs.getString("PRI_LANGUAGE"));
+		r.setMaritalStatus(rs.getString("MARITAL_STATUS"));
+		r.setAnnualGross(rs.getString("ANNUAL_GROSS"));
+		r.setEthnicity(rs.getString("ETHNICITY"));
+		r.setVeteran(rs.getString("VETERAN"));
+		r.setRace(rs.getString("RACE"));
+		r.setHouseHold(rs.getString("H_O_H"));//Head of Household
+		r.setDisabilityStatus(rs.getString("DISABILITY"));
+		r.setRcOrExOff(rs.getString("RC_OR_EX_OFF"));
+		r.setSsi(rs.getString("SSI"));
+		r.setSsdi(rs.getString("SSDI"));
+		r.setHealthCoverage(rs.getString("HEALTH_COVERAGE"));
+		r.setHighestEdu(rs.getString("HIGHEST_EDU"));
+		
 
 		// ActionPlan
 		r.setReferralPartner(rs.getString("referral_partner"));

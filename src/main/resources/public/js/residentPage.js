@@ -1,8 +1,8 @@
 window.onbeforeprint = function() {
-	$('#residentFullName').text($('#firstName').val() + " " + $('#middle').val() + " " + $('#lastname').val());
+	//$('#residentFullName').text($('#firstName').val() + " " + $('#middle').val() + " " + $('#lastname').val());
 	$('#printreferralType').text($('#_referral option:selected').text());
 	$('#printproperty').text($('#_property option:selected').text());
-	$('#printaddress').text($('#address').val());
+	//$('#printaddress').text($('#address').val());
 	if(!$('#allowcontact').prop("checked") && $('#viaemail').prop("checked")){
 		$('#printEmail').prop('checked', true);
 		$('#printEmailText').text($('#email').val());

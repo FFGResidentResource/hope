@@ -104,61 +104,47 @@
 
 					<table class="table table-bordered table-condensed">
 						<tr>
-							<td><label class="checkbox-inline" for="ackPR"> <input class="setable"
-									id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}">I
-									acknowledge that I was informed of my right to privacy.
-							</label>
-
+							<td><div class="row">
+								<div class="col-sm-6">
+									<label class="checkbox-inline" for="ackPR"> <input class="setable"
+									id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}"><strong>I
+									acknowledge that I was informed of my right to privacy.</strong>
+									</label>
+								</div>
+								<div class="col-sm-6"><label class="col-sm-3 control-label" for="unit">Is Resident?:
+										</label>
+											<div class="radio">
+  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
+  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="FALSE" />No</label>
+    										</div>
+    							</div>
+								</div>
 								<p>
 								<div class="hideme print-only">
 									<p>
 									<div class="row">
 										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Name:&nbsp;</strong>
+											<div class="col-sm-3">
+												<strong>Name:</strong>											
+												<div></div><span id="residentFullName" class="my-text-print" th:text=*{fullName}></span></div>
 											</div>
-											<div class="col-sm-10">
-												<span id="residentFullName" class="my-text-print"></span>
+											<div class="col-sm-3">
+												<strong>Referral:</strong>											
+												<div><span id="printreferralType" class="my-text-print"></span></div>
 											</div>
+											<div class="col-sm-3">
+												<strong>Property:</strong>											
+												<div><span id="printproperty" class="my-text-print"></span></div>
+											</div>
+											<div class="col-sm-3">
+												<strong>Address:</strong>											
+												<div><span id="printaddress" class="my-text-print" th:text=*{address}></span></div>
+											</div>										
+											
 										</div>
-									</div>
+									</div>									
 									</p>
-									<p>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Referral:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
-												<span id="printreferralType" class="my-text-print"></span>
-											</div>
-										</div>
-									</div>
-									</p>
-									<p>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Property:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
-												<span id="printproperty" class="my-text-print"></span>
-											</div>
-										</div>
-									</div>
-									</p>
-									<p>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Address:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
-												<span id="printaddress" class="my-text-print"></span>
-											</div>
-										</div>
-									</div>
-									</p>
+									
 								</div>
 
 								<div class="row hidden-print">
@@ -210,7 +196,7 @@
 									</div>
 									<div class="col-sm-6">
 
-										<label class="col-sm-2 control-label" for="unit">Address:
+										<label class="col-sm-2 control-label" for="address">Address:
 										</label>
 										<div class="col-sm-10">
 											<input class="form-control setable" id="address"
@@ -218,20 +204,270 @@
 										</div>
 									</div>
 									
-									<div class="col-sm-6">
-
-										<label class="col-sm-3 control-label" for="unit">Is Resident?:
-										</label>
-											<div class="radio">
-  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
-  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="FALSE" />No</label>
-    										</div>
-									</div>
 								</div>
+								
+								<div class="row col-sm-12">
+									<h5><strong>Demographics</strong></h5>
+								</div>
+								
+								<div class="hideme print-only">							
+									
+									
+									<table class="table table-condensed" style="border:solid 0px transparent;">
+										<tr><td><strong>Age:</strong>											
+												<div><span id="printAge" class="my-text-print" th:text=*{age}></span></div></td>
+											<td><strong>Gender:</strong>											
+												<div><span id="printGender" class="my-text-print" th:text=*{gender}></span></div></td>
+											<td><strong>Language:</strong>											
+												<div><span id="printLang" class="my-text-print" th:text=*{primaryLanguage}></span></div></td>
+											<td><strong>Ethnicity:</strong>											
+												<div><span id="printEthnicity" class="my-text-print" th:text=*{ethnicity}></span></div></td>	
+										</tr>
+										<tr><td><strong>Race:</strong>											
+												<div><span id="printRace" class="my-text-print" th:text=*{race}></span></div></td>
+											<td><strong>Head of Household:</strong>											
+												<div><span id="printhoh" class="my-text-print" th:text=*{houseHold}></span></div></td>
+											<td><strong>Marital Status:</strong>											
+												<div><span id="printMs" class="my-text-print" th:text=*{maritalStatus}></span></div></td>
+											<td><strong>Veteran:</strong>											
+												<div><span id="printVeteran" class="my-text-print" th:text=*{veteran}></span></div></td>
+											
+										</tr>
+										<tr>
+											<td><strong>Disability Status:</strong>											
+												<div><span id="printds" class="my-text-print" th:text=*{disabilityStatus}></span></div></td>
+											<td><strong>Returning Citizen/Ex Offender:</strong>											
+												<div><span id="printrc" class="my-text-print" th:text=*{rcOrExOff}></span></div></td>
+											<td><strong>Supplemental Security Income:</strong>											
+												<div><span id="printssi" class="my-text-print" th:text=*{ssi}></span></div></td>
+											<td><strong>Social Security Disability Insurance:</strong>											
+												<div><span id="printssdi" class="my-text-print" th:text=*{ssdi}></span></div></td>										
+										</tr>
+										<tr>
+											<td><strong>Health Coverage:</strong>											
+												<div><span id="printhealthCoverage" class="my-text-print" th:text=*{healthCoverage}></span></div></td>
+											<td><strong>Highest Education:</strong>											
+												<div><span id="printhighestEdu" class="my-text-print" th:text=*{highestEdu}></span></div></td>
+											<td><strong>Household Annual Gross Income Amount:</strong>											
+												<div><span id="printannual" class="my-text-print" th:text=*{annualGross}></span></div></td>
+											<td></td>										
+										</tr>
+									</table>
+									
+									
+																		
+								</div>
+								
+																	
+								<div class="row col-sm-12 hidden-print">
+									<div class="col-sm-3">										
+    									<label class="control-label" for="age">Age:
+										</label>
+										<div>
+											<input class="form-control setable " id="age"
+												th:field="*{age}" placeholder="Age">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										
+										<label class="control-label" for="_gender">Gender:</label>
+										<div>
+											<select class="form-control setable" id="_gender"
+												th:field="*{gender}">
+												<option th:each="gender : ${resident.genderList}"
+													th:value="${gender}"
+													th:utext="${gender}" />
+											</select>
+										</div>
+										
+									</div>
+									<div class="col-sm-3">
+									
+										<label class="control-label" for="_priLang">Language:</label>
+										<div >
+											<select class="form-control setable" id="_priLang"
+												th:field="*{primaryLanguage}" >
+												<option th:each="lang : ${resident.primaryLangList}"
+													th:value="${lang}"
+													th:utext="${lang}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+									
+										<label class="control-label" for="_ethnicity">Ethnicity:</label>
+										<div>
+											<select class="form-control setable" id="_ethnicity"
+												th:field="*{ethnicity}">
+												<option th:each="eth : ${resident.ethnicityList}"
+													th:value="${eth}"
+													th:utext="${eth}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+									
+										<label class="control-label" for="_race">Race:</label>
+										<div>
+											<select class="form-control setable" id="_race"
+												th:field="*{race}">
+												<option th:each="raceStr : ${resident.raceList}"
+													th:value="${raceStr}"
+													th:utext="${raceStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+									
+										<label class="control-label" for="_hoh">Head Of Household:</label>
+										<div>
+											<select class="form-control setable" id="_hoh"
+												th:field="*{houseHold}">
+												<option th:each="hohStr : ${resident.houseHoldList}"
+													th:value="${hohStr}"
+													th:utext="${hohStr}" />
+											</select>
+										</div>
+									</div>
+									
+								
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_maritalStatus">Marital Status:
+										</label>
+										<div>
+											<select class="form-control setable" id="_maritalStatus"
+												th:field="*{maritalStatus}">												
+												<option th:each="msStr : ${resident.maritalStatusList}"
+													th:value="${msStr}"
+													th:utext="${msStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_veteran">Veteran:
+										</label>
+										<div>
+											<select class="form-control setable" id="_veteran"
+												th:field="*{veteran}">												
+												<option th:each="vStr : ${resident.veteranList}"
+													th:value="${vStr}"
+													th:utext="${vStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_veteran">Disability Status:
+										</label>
+										<div>
+											<select class="form-control setable" id="_disability"
+												th:field="*{disabilityStatus}">												
+												<option th:each="dsStr : ${resident.disabilityStatusList}"
+													th:value="${dsStr}"
+													th:utext="${dsStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_rcOrEx">Returning Citizen/Ex Offender:
+										</label>
+										<div>
+											<select class="form-control setable" id="_rcOrEx"
+												th:field="*{rcOrExOff}">												
+												<option th:each="rcStr : ${resident.rcOrExOffList}"
+													th:value="${rcStr}"
+													th:utext="${rcStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_ssi">Supplemental Security Income:
+										</label>
+										<div>
+											<select class="form-control setable" id="_ssi"
+												th:field="*{ssi}">												
+												<option th:each="ssiStr : ${resident.ssiList}"
+													th:value="${ssiStr}"
+													th:utext="${ssiStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_ssdi">Social Security Disability Insurance:
+										</label>
+										<div>
+											<select class="form-control setable" id="_ssdi"
+												th:field="*{ssdi}">												
+												<option th:each="ssdiStr : ${resident.ssdiList}"
+													th:value="${ssdiStr}"
+													th:utext="${ssdiStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_hcov">Health Coverage:
+										</label>
+										<div>
+											<select class="form-control setable" id="_hcov"
+												th:field="*{healthCoverage}">												
+												<option th:each="hcStr : ${resident.healthCoverageList}"
+													th:value="${hcStr}"
+													th:utext="${hcStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">										
+    									<label class="control-label" for="_hedu">Highest Education:
+										</label>
+										<div>
+											<select class="form-control setable" id="_hedu"
+												th:field="*{highestEdu}">												
+												<option th:each="heduStr : ${resident.highestEduList}"
+													th:value="${heduStr}"
+													th:utext="${heduStr}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+										<label class="control-label" for="_annualGross">Household Annual Gross Income Amount:
+										</label>
+										<input class="form-control setable " id="_annualGross"
+												th:field="*{annualGross}" placeholder="Annual Gross Income">
+									</div>
+									
+									
+								</div>
+								
 								</p></td>
 						</tr>
 
 					</table>
+					
+					<div class="hideme print-only">
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>
+									</br>									
+									</br>
+									</br>
+									</br>
+					</div>
 
 					<p>
 					<h5>
