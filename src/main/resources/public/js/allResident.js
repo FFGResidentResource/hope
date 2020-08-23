@@ -35,7 +35,8 @@ jQuery(document).ready(
 				}, {
 				    data : 'firstName',
 				    render : function(t, type, row) {
-					return row.firstName + ' ' + row.middle + ' ' + row.lastName;
+					var spanStr = (row.viaVoicemail == false && row.viaText == false && row.viaEmail == false ) ? '&nbsp;<span class="glyphicon glyphicon-unchecked" style="color:red;"></span>' : '';					
+					return row.firstName + ' ' + row.middle + ' ' + row.lastName + spanStr ;
 				    }
 				}, {
 				    data : 'propertyName'
@@ -43,15 +44,15 @@ jQuery(document).ready(
 				    data : 'voiceMail',
 				    render : function(t, type, row) {
 					if (row.viaVoicemail == true) {
-					    return row.voiceMail + '&nbsp;<span class="glyphicon glyphicon-hand-left" style="color:blue;"></span>';
+					    return row.voiceMail + '&nbsp;<span class="glyphicon glyphicon-check" style="color:blue;"></span>';
 					}
-					return row.voiceMail;
+					return row.voiceMail; 
 				    }
 				}, {
 				    data : 'text',
 				    render : function(t, type, row) {
 					if (row.viaText == true) {
-					    return row.text + '&nbsp;<span class="glyphicon glyphicon-hand-left" style="color:blue;"></span>';
+					    return row.text + '&nbsp;<span class="glyphicon glyphicon-check" style="color:blue;"></span>';
 					}
 					return row.text;
 				    }
@@ -59,7 +60,7 @@ jQuery(document).ready(
 				    data : 'email',
 				    render : function(t, type, row) {
 					if (row.viaEmail == true) {
-					    return row.email + '&nbsp;<span class="glyphicon glyphicon-hand-left" style="color:blue;"></span>';
+					    return row.email + '&nbsp;<span class="glyphicon glyphicon-check" style="color:blue;"></span>';
 					}
 					return row.email;
 				    }
@@ -95,7 +96,9 @@ jQuery(document).ready(
 				"initComplete" : function(settings, json) {
 				    var radioHtml = '&nbsp;&nbsp;&nbsp;&nbsp;<span><input type="radio" name="residents" value="all" onchange="filterActives(this);"> All '
 					    + ' <input type="radio" name="residents" value="true" onchange="filterActives(this);"> Active '
-					    + ' <input type="radio" name="residents" value="false" onchange="filterActives(this);"> Inactive </span>';
+					    + ' <input type="radio" name="residents" value="false" onchange="filterActives(this);"> Inactive </span>'						
+						+ ' &nbsp;&nbsp;&nbsp;&nbsp;<span> <strong><u>Legend:</u></strong> Blue Check (</span><span class="glyphicon glyphicon-check" style="color:blue;"></span><span>) icon = <strong>only contact me via:</strong></span>'
+						+ ' &nbsp;&nbsp;&nbsp;&nbsp;<span> Red Unchecked (</strong></span><span class="glyphicon glyphicon-unchecked" style="color:red;"></span><span>) icon = <strong>resident opt out to be contacted.</strong></span>';
 				    
 				   
 
@@ -224,10 +227,31 @@ function _defaultActive() {
 
 /* Formatting function for row details - modify as you need */
 function format(d) {
+	
+	var childListString = (d.childList != null) ? d.childList : '';
+	
+	var tableBodyStr = jQuery("table.hideme").html();
+	
+	tableBodyStr = tableBodyStr.replace("d.refValue", d.refValue);
+	tableBodyStr = tableBodyStr.replace("d.gender", d.gender);
+	tableBodyStr = tableBodyStr.replace("d.address", d.address);
+	tableBodyStr = tableBodyStr.replace("d.age", d.age);
+	tableBodyStr = tableBodyStr.replace("d.ethnicity", d.ethnicity);
+	tableBodyStr = tableBodyStr.replace("d.race", d.race);
+	tableBodyStr = tableBodyStr.replace("d.maritalStatus", d.maritalStatus);
+	tableBodyStr = tableBodyStr.replace("d.primaryLanguage", d.primaryLanguage);
+	tableBodyStr = tableBodyStr.replace("d.houseHold", d.houseHold);
+	tableBodyStr = tableBodyStr.replace("d.veteran", d.veteran);
+	tableBodyStr = tableBodyStr.replace("d.disabilityStatus", d.disabilityStatus);
+	tableBodyStr = tableBodyStr.replace("d.rcOrExOff", d.rcOrExOff);
+	tableBodyStr = tableBodyStr.replace("d.annualGross", d.annualGross);
+	tableBodyStr = tableBodyStr.replace("d.healthCoverage", d.healthCoverage);
+	tableBodyStr = tableBodyStr.replace("d.highestEdu", d.highestEdu);
+	
+	// this will have Subtable from allResident.html
     // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + '<tr>' + '<td>Referral:</td>' + '<td>' + d.refValue + '</td>' + '</tr>' + '<tr>' + '<td>Address:</td>'
-	    + '<td>' + d.address + '</td>' + '</tr>' + '<tr>' + '<td>Assessment:</td>' + '<td>' + d.aValue + '</td>' + '</tr>' + '<tr>' + '<td>Children:</td>' + '<td>' + d.childList + '</td>'
-	    + '</tr>' + '</table>';
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + tableBodyStr +'</table>' 
+		+ '<table><tr>' + '<td><strong>Children:</strong></td>' + '<td>' + childListString + '</td></tr></table>';
 }
 
 function filterActives(dat) {

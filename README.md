@@ -99,3 +99,5 @@
 ### How to debug UI 
 
  ![UI Debugging Examnple](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-debug-ui.png?raw=true)
+ 
+ ![UI Debugging cond...](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-debug-ui2.png?raw=true)

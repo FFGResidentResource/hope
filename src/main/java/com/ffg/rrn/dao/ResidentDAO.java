@@ -57,7 +57,7 @@ import com.ffg.rrn.utils.AppConstants;
 public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (RESIDENT_ID, FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, ADDRESS, "
-			+ "REF_TYPE, IS_RESIDENT, SERVICE_COORD) VALUES (nextval('RESIDENT_SQ'),  ?,?,?,?,?,?,?,?)";
+			+ "REF_TYPE, IS_RESIDENT, TEXT_NO, SERVICE_COORD) VALUES (nextval('RESIDENT_SQ'),  ?,?,?,?,?,?,?,?,?)";
 
 	private final static String SQL_UPDATE_RESIDENT = "UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, "
 			+ "VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?,"
@@ -444,7 +444,8 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setString(5, StringUtils.capitalize(resident.getAddress().trim().toLowerCase()));
 		ps.setInt(6, resident.getRefId());
 		ps.setBoolean(7, resident.getIsResident());
-		ps.setString(8, resident.getServiceCoord());
+		ps.setString(8, resident.getText());
+		ps.setString(9, resident.getServiceCoord());
 
 		return ps;
 	}
