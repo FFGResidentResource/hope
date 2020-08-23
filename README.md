@@ -95,3 +95,7 @@
 ### Deploy on Cloud - TBD
 
 [Azure Spring Cloud](https://tanzu.vmware.com/content/webinars/dec-5-introducing-azure-spring-cloud-a-managed-runtime-for-spring-based-apps-webinar)
+
+### How to debug UI 
+
+ ![UI Debugging Examnple](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-debug-ui.png?raw=true)
