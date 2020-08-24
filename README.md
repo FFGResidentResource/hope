@@ -101,3 +101,9 @@
  ![UI Debugging Examnple](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-debug-ui.png?raw=true)
  
  ![UI Debugging cond...](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-debug-ui2.png?raw=true)
+ 
+### ### How to use onboarding Modify functionality
+
+> Together with name, property search we have also enable email, text, voicemail, address search as well. Please see screen shot below:
+
+ ![onboarding modify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-use-onboarding-modify.png?raw=true)

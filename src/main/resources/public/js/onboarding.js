@@ -43,6 +43,22 @@ jQuery(document).ready(function() {
 		    }
 		}, {
 		    data : 'serviceCoord'
+		},
+		 {
+		    data : 'voiceMail',
+			visible: false
+		},
+		 {
+		    data : 'text',
+			visible: false
+		},
+		 {
+		    data : 'email',
+			visible: false
+		},
+		 {
+		    data : 'address',
+			visible: false
 		} ],
 		"order" : [ [ 1, "desc" ] ],
 		pageLength : 8,
