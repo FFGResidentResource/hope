@@ -261,6 +261,8 @@ public class Resident {
 	private String healthCoverage;
 	private String highestEdu;
 	private String annualGross;
+	private Boolean safeDay;
+	private Boolean safeNight;
 	
 	public String getFullName() {
 		return StringUtils.normalizeSpace(this.firstName + " " + this.middle + " " + this.lastName);

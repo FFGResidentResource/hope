@@ -61,7 +61,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_UPDATE_RESIDENT = "UPDATE RESIDENT SET FIRST_NAME=?, MIDDLE=?, LAST_NAME=?, PROP_ID=?, "
 			+ "VOICEMAIL_NO=?, TEXT_NO=?, EMAIL=?, ADDRESS=?, ACK_PR=?, ALLOW_CONTACT=?, WANTS_SURVEY=?, PHOTO_RELEASE=?, SERVICE_COORD=?,"
-			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=?,IS_RESIDENT=?, AGE=?, PRI_LANGUAGE=?, MARITAL_STATUS=?, ANNUAL_GROSS=?, GENDER=?, ETHNICITY=?, RACE=?, H_O_H=?, VETERAN=?, DISABILITY=?, RC_OR_EX_OFF=?, SSI=?, SSDI=?, HEALTH_COVERAGE=?, HIGHEST_EDU=? WHERE RESIDENT_ID=?";
+			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=?,IS_RESIDENT=?, AGE=?, PRI_LANGUAGE=?, MARITAL_STATUS=?, ANNUAL_GROSS=?, GENDER=?, ETHNICITY=?, RACE=?, H_O_H=?, VETERAN=?, DISABILITY=?, RC_OR_EX_OFF=?, SSI=?, SSDI=?, HEALTH_COVERAGE=?, HIGHEST_EDU=?, SAFE_DAY=?, SAFE_NIGHT=? WHERE RESIDENT_ID=?";
 
 	private final static String SQL_CHANGE_STATUS_OF_RESIDENT = "UPDATE RESIDENT SET ACTIVE=?, DATE_MODIFIED=?, MODIFIED_BY=? "
 			+ " WHERE RESIDENT_ID=?";
@@ -486,9 +486,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setString(32, resident.getSsi());
 		ps.setString(33, resident.getSsdi());
 		ps.setString(34, resident.getHealthCoverage());
-		ps.setString(35, resident.getHighestEdu());		
-		//where ? is 36th in number in SQL_UPDATE_RESIDENT
-		ps.setLong(36, resident.getResidentId());		
+		ps.setString(35, resident.getHighestEdu());
+		ps.setBoolean(36, resident.getSafeDay());
+		ps.setBoolean(37, resident.getSafeNight());
+		
+		ps.setLong(38, resident.getResidentId()); //where ? is 38th in number in SQL_UPDATE_RESIDENT		
 		return ps;
 	}
 

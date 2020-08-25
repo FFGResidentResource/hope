@@ -523,7 +523,9 @@ CREATE table RESIDENT (
 	SSI				VARCHAR(128) DEFAULT 'Information not collected',
 	SSDI			VARCHAR(128) DEFAULT 'Information not collected',
 	HEALTH_COVERAGE	VARCHAR(128) DEFAULT 'Information not collected',
-	HIGHEST_EDU		VARCHAR(128) DEFAULT 'Information not collected'
+	HIGHEST_EDU		VARCHAR(128) DEFAULT 'Information not collected',
+	SAFE_DAY		BOOLEAN DEFAULT TRUE,
+	SAFE_NIGHT 		BOOLEAN DEFAULT TRUE
 	
 );
 
