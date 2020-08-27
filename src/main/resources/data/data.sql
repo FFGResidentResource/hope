@@ -461,6 +461,9 @@ INSERT INTO REFERRAL values(nextval('REF_SQ'), 'Other');
 CREATE table PROPERTY (
 	PROP_ID			INT PRIMARY KEY NOT NULL,
 	PROP_NAME		VARCHAR(128) UNIQUE NOT NULL,
+	CITY			VARCHAR(50),
+	STATE			VARCHAR(50),
+	COUNTY			VARCHAR(20) 
 	UNIT			INT,
 	UNIT_FEE		INT,
 	ACTIVE			BOOLEAN DEFAULT TRUE,
@@ -655,23 +658,23 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE, 1200, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE, 1300, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE, 1100, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 900, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE, 500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE, 500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts','','','', 50, 1000, TRUE, 1200, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square','','','', 50, 1000, TRUE, 1300, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes II','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States','','','', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows','','','', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square','','','', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes','','','', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks','','','', 50, 1000, TRUE, 1500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind','','','', 50, 1000, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)','','','', 50, 1000, TRUE, 1100, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)','','','', 50, 900, TRUE, 1500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood','','','', 50, 1000, TRUE, 1000, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts','','','', 50, 1000, TRUE, 500, FALSE);
 
 
 
