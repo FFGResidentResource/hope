@@ -39,30 +39,30 @@
 
 	<!-- Include _menu.html -->
 	<th:block th:include="../templates/_menu"></th:block>
-	
-	<div class="container">
-		<div id="moneyMgmt_Form">
 
-			<form name='_moneymgmtF' th:action="@{/saveAssessment}"
+	<div class="container">
+		<div id="disPhysical_Form">
+			<form name='_disPhyF' th:action="@{/saveAssessment}"
 				th:object="${resident}" method='POST' class="form-horizontal">
 				<input name="isNewAssessmentAllowed" type="hidden"
 					id="isNewAssessmentAllowed"
-					th:field="*{moneymgmtAssessmentAllowed}" /> <input
+					th:field="*{disPhysicalAssessmentAllowed}" /> <input
 					name="dateOfLatestAssessment" type="hidden"
 					id="dateOfLatestAssessment"
-					th:field="*{dateOfLatestMoneymgmtAssessment}" />
+					th:field="*{dateOfLatestDisPhysicalAssessment}" />
 				<div class="col-sm-12 myPanel">
 					<div class="row">
+
 						<div class="col-sm-10">
-							<h3 style="width: 400px;">MONEY MANAGEMENT</h3>
+							<h3 style="width:450px;">DISABILITY AND PHYSICAL HEALTH</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>
 						</div>
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 						</div>
-					</div>
 
+					</div>
 					<div class="row hideme print-only">
 						<div class="col-sm-6">
 							<span>Full Name:&nbsp;</span> <u><span
@@ -75,7 +75,7 @@
 								th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
 						</div>
 						<div class="col-sm-4">
-							<u><span id="_selectedDateMoneyMgmt">Date:</span></u>
+							<u><span id="_selectedDateDph">Date:</span></u>
 						</div>
 
 					</div>
@@ -109,10 +109,10 @@
 							<div class="col-sm-9">
 								<select class="form-control input-sm" id="_dates"
 									th:field="*{selectedDate}"
-									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'MONEY MANAGEMENT', '_moneyMgmt'); validateAndShowMessage();"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'DISABILITY AND PHYSICAL HEALTH', '_disPhy'); validateAndShowMessage();"
 									required>
 									<option value="NewAssessment">Start New Assessment</option>
-									<option th:each="assessmentDate : ${resident.moneymgmtDates}"
+									<option th:each="assessmentDate : ${resident.disPhysicalDates}"
 										th:value="${assessmentDate}" th:utext="${assessmentDate}" />
 								</select>
 							</div>
@@ -124,43 +124,42 @@
 					<div class="row col-sm-12">
 
 						<div class="col-sm-6">
-							<div th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
+							<div th:each="disPhyMgmt, iStat: *{disabilityPhysicalQuestionnaire}">
 
 								<div th:if="${iStat.index} &lt; (${iStat.size}-1)/2">
 
-									<strong><span th:text="${moneymgmt.questionNumber}"></span></strong>
-									<span th:text="${moneymgmt.question}" /> <input type="hidden"
-										th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].questionId}" />
+									<strong><span th:text="${disPhyMgmt.questionNumber}"></span></strong>
+									<span th:text="${disPhyMgmt.question}" /> <input type="hidden"
+										th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].questionId}" />
 									<ul>
-										<span th:each="radioChoice, stat : ${moneymgmt.choices}">
+										<span th:each="radioChoice, stat : ${disPhyMgmt.choices}">
 											<input type="radio"
-											th:id="'_moneyMgmtQuestionnaire_'+ ${moneymgmt.questionId} + '_' + ${radioChoice.choiceId}"
-											th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+											th:id="'_disPhyQuestionnaire_'+ ${disPhyMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateMoneyMgmtScore();"> <strong><label
+											> <strong><label
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
-
 								</div>
 							</div>
 						</div>
 
 						<div class="col-sm-6">
-							<div th:each="moneymgmt, iStat: *{moneyMgmtQuestionnaire}">
+							<div th:each="disPhyMgmt, iStat: *{disabilityPhysicalQuestionnaire}">
 
 								<div th:if="${iStat.index} &gt;= (${iStat.size}-1)/2">
 
-									<strong><span th:text="${moneymgmt.questionNumber}"></span></strong>
-									<span th:text="${moneymgmt.question}" /> <input type="hidden"
-										th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].questionId}" />
+									<strong><span th:text="${disPhyMgmt.questionNumber}"></span></strong>
+									<span th:text="${disPhyMgmt.question}" /> <input type="hidden"
+										th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].questionId}" />
 									<ul>
-										<span th:each="radioChoice, stat : ${moneymgmt.choices}">
+										<span th:each="radioChoice, stat : ${disPhyMgmt.choices}">
 											<input type="radio"
-											th:id="'_moneyMgmtQuestionnaire_'+ ${moneymgmt.questionId} + '_' + ${radioChoice.choiceId}"
-											th:field="*{moneyMgmtQuestionnaire[__${iStat.index}__].choiceId}"
+											th:id="'_disPhyQuestionnaire_'+ ${disPhyMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].choiceId}"
 											th:value="${radioChoice.choiceId}"
-											onclick="calculateMoneyMgmtScore();"> <strong><label
+											> <strong><lable
 													th:text="${radioChoice.choice}"> </label></strong>
 										</span>
 									</ul>
@@ -176,37 +175,29 @@
 						th:field="*{firstName}" /> <input type="hidden"
 						th:field="*{lastName}" /> <input type="hidden"
 						th:field="*{propertyId}" /> <input type="hidden"
-						th:field="*{refId}" /> <input type="hidden" id="_mmlifeDomain"
+						th:field="*{refId}" /> <input type="hidden" id="_lifeDomainDisPhy"
 						th:field="*{lifeDomain}" /> <input type="hidden"
-						id="currentMoneyMgmtGoal" th:field="*{goal}" /> <input
-						type="hidden" id="currentMoneyMgmtScore"
-						th:field="*{currentScore}" />
-						
-					<div class="row text-center col-sm-12">
+						id="currentDisPhyGoal" th:field="*{goal}" /> <input type="hidden"
+						id="currentDisPhyScore" th:field="*{currentScore}" />
+
+					<div class="row text-center bs-linebreak hidden-print">
 					
 						<div class="text-danger hidden-print hideme">
 							<span>There is already an assessment from today's Date, retrieve today's Assessment from dropdown above to view/modify. 
 								</span>
 						</div>
-
-						<input type="submit" id="_moneyMgmtSubmit"
-							class="btn btn-primary btn-lg hidden-print"
-							value="Save Money Management Assessment" onclick="jQuery('#_mmlifeDomain').val('MONEY MANAGEMENT');">
-
-						<div class="col-sm-6 text-right hideme">
-							<input type="button" id="_moneyMgmtSubmitAndNext"
-								class="btn btn-primary btn-lg hidden-print" value="Save and Next Assessment"
-								onclick="saveAndNextAssessment(this.form);">
-						</div>
+					
+						<input type="submit" class="btn btn-primary btn-lg hidden-print"
+							value="Save Disability and Physical Health Assessment" onclick="jQuery('#_lifeDomainDisPhy').val('DISABILITY AND PHYSICAL HEALTH');">
 					</div>
+
 
 				</div>
 			</form>
 
 			<div class="col-sm-12">
 
-				<table id="mmScoreTable"
-					class="table table-condensed table-bordered">
+				<table id="dphMgmtTable" class="table table-bordered">
 					<thead>
 						<th id="incrisis_head">In Crisis(1)</th>
 						<th id="vulnerable_head">Vulnerable (2)</th>
@@ -218,29 +209,17 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td id="incrisis_body">No knowledge or implementation of money
-								management skills; not aware of resources or supports.</td>
-							<td id="vulnerable_body">Has limited knowledge of budgeting and
-								money management; aware of resources to help; unprepared for any
-								financial emergency.</td>
-							<td id="safe_body">Understands importance of budgeting and
-								money management; uses monthly budget; unprepared for most
-								financial emergencies.</td>
-							<td id="buildingCapacity_body">Able to save sporadically; makes and
-								lives within monthly budget; unprepared for large financial
-								emergencies.</td>
-							<td id="empowered_body">Able to save consistently;
-								comprehensive knowledge and full implementation of money.</td>
+							<td id="incrisis_body">TBD</td>
+							<td id="vulnerable_body">TBD</td>
+							<td id="safe_body">TBD</td>
+							<td id="buildingCapacity_body">TBD</td>
+							<td id="empowered_body">TBD</td>
 							<td id="_score"></td>
 							<td id="_goal"></td>
-
 						</tr>
 					</tbody>
 				</table>
-
 			</div>
-
-
 		</div>
 	</div>
 
@@ -252,8 +231,8 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="/js/moment.js"></script>
 	<script src="/js/moment-timezone.js"></script>
+	<script src="/js/disabilityPhysical.js"></script>
 	<script src="/js/common.js"></script>
-	<script src="/js/moneyMgmt.js"></script>
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script

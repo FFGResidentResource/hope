@@ -297,10 +297,15 @@ function buildPieChartData(data) {
 	bindto : '#allResidentPieChart',
 	data : {
 	    columns : columns,
-	    type : 'donut'
+	    type : 'bar'
 	},
 	color: {
 	    pattern: ['#3296dc', '#719dd7', '#e29305', '#ffbb78', '#81923a', '#d3d093', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9']
+	},
+	donut:{
+		label: {
+      		format: function (value) { return value; }
+    	}
 	},
 	axis : {
 	    x : {
@@ -312,7 +317,7 @@ function buildPieChartData(data) {
 		min : 0,
 		tick: {
 	                format: function (d) {
-	                    return (parseInt(d) == d) ? d : null;
+	                   return (parseInt(d) == d) ? d : null; 						
 	                }
 	            }
 	    // Range includes padding, set 0 if no padding needed

@@ -139,6 +139,9 @@ public class Resident {
 	private List<ResidentAssessmentQuestionnaire> householdMgmtQuestionnaire;
 
 	@JsonView
+	private List<ResidentAssessmentQuestionnaire> disabilityPhysicalQuestionnaire;
+	
+	@JsonView
 	private List<ResidentScoreGoal> residentScoreGoalList;
 
 	@JsonView
@@ -153,6 +156,8 @@ public class Resident {
 	private List<String> netSupportDates;
 	@JsonView
 	private List<String> householdDates;
+	
+	private List<String> disPhysicalDates;
 
 	@JsonView
 	private List<String> actionPlanDates;
@@ -350,8 +355,16 @@ public class Resident {
     public String getDateOfLatestHouseholdAssessment(){
         return getEmptyStrOrLatestDateOfAssessment(this.getHouseholdDates());
     }
+    
     public boolean isHouseholdAssessmentAllowed(){
         return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getHouseholdDates());
+    }
+    
+    public String getDateOfLatestDisPhysicalAssessment(){
+        return getEmptyStrOrLatestDateOfAssessment(this.getDisPhysicalDates());
+    }
+    public boolean isDisPhysicalAssessmentAllowed(){
+        return ifLatestAssessmentExistsAndEarlierThanSixMonths(this.getDisPhysicalDates());
     }
 
 	/**

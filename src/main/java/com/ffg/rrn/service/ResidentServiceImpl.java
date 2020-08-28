@@ -70,6 +70,7 @@ public class ResidentServiceImpl {
 		List<ResidentAssessmentQuestionnaire> educationQuestionnaire = new ArrayList<ResidentAssessmentQuestionnaire>();
 		List<ResidentAssessmentQuestionnaire> netSupportQuestionnaire = new ArrayList<ResidentAssessmentQuestionnaire>();
 		List<ResidentAssessmentQuestionnaire> householdMgmtQuestionnaire = new ArrayList<ResidentAssessmentQuestionnaire>();
+		List<ResidentAssessmentQuestionnaire> disabilityPhysicalQuestionnaire = new ArrayList<ResidentAssessmentQuestionnaire>();
 
 		for (AssessmentQuestionnaire question : allQuestionnaireRef) {
 
@@ -122,6 +123,10 @@ public class ResidentServiceImpl {
 			case "HOUSEHOLD MANAGEMENT":
 				raq.setLifeDomain(question.getLifeDomain());
 				householdMgmtQuestionnaire.add(raq);
+				break;			
+			case "DISABILITY AND PHYSICAL HEALTH":
+				raq.setLifeDomain(question.getLifeDomain());
+				disabilityPhysicalQuestionnaire.add(raq);
 				break;
 			}
 		}
@@ -132,6 +137,7 @@ public class ResidentServiceImpl {
 		resident.setEducationQuestionnaire(educationQuestionnaire);
 		resident.setNetSupportQuestionnaire(netSupportQuestionnaire);
 		resident.setHouseholdMgmtQuestionnaire(householdMgmtQuestionnaire);
+		resident.setDisabilityPhysicalQuestionnaire(disabilityPhysicalQuestionnaire);
 
 		return resident;
 	}
@@ -187,6 +193,12 @@ public class ResidentServiceImpl {
 
 		return residentDao.updateResidentAssessmentQuestionnaire(selectedDate, raqs, lifeDomain);
 	}
+	
+	public long insertResidentAssessmentQuestionnaire(String selectedDate, ResidentAssessmentQuestionnaire raqs,
+			String lifeDomain) {		
+
+		return residentDao.saveResidentAssessmentQuestionnaire(raqs, lifeDomain);
+	}
 
 	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException {
 		return residentDao.updateResidentScoreGoal(resident, lifeDomain);
@@ -212,6 +224,10 @@ public class ResidentServiceImpl {
 	
 	public List<ResidentScoreGoal> getResidentScoreGoal(Long residentId) {
 		return residentDao.getResidentScoreGoal(residentId);
+	}
+	
+	public ResidentScoreGoal getResidentScoreGoalByDate(Long residentId, String onThisDate, String lifeDomain) {
+		return residentDao.getResidentScoreGoalByDate(residentId, onThisDate, lifeDomain);
 	}
 
 	public long saveCaseNotes(@Valid Resident resident) {
@@ -262,6 +278,10 @@ public class ResidentServiceImpl {
 
 	public Boolean isHouseholdComplete(Long residentId) {
 		return referralFormDao.isHouseholdComplete(residentId);
+	}
+	
+	public Boolean isDisPhysicalComplete(Long residentId) {
+		return referralFormDao.isDisPhysicalComplete(residentId);
 	}
 
 	public Dashboard pullDashboard(Dashboard dashboard) {

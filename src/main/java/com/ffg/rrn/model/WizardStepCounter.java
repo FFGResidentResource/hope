@@ -35,5 +35,7 @@ public class WizardStepCounter {
 	private Boolean educationComplete;
 	
 	private Boolean employmentComplete;
+	
+	private Boolean disPhysicalComplete;
 
 }

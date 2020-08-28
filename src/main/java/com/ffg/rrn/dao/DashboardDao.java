@@ -36,10 +36,19 @@ public class DashboardDao extends JdbcDaoSupport {
 	private static final String SQL_NEW_RESIDENT_TOTAL = "select count(*) from NEW_RESIDENT_VIEW";
 
 	private static final String SQL_ONGOING_RESIDENT_TOTAL = "select count(*) from ONGOING_RESIDENT_VIEW";
+	
+	private static final String SQL_DISTINCT_YEAR = "select distinct extract(year from date_added) as _year from resident order by _year desc";
 
 	@Autowired
 	public DashboardDao(DataSource dataSource) {
 		this.setDataSource(dataSource);
+	}
+	
+	public List<String> getAllYears(){
+		
+		return (List<String>)this.getJdbcTemplate().query(SQL_DISTINCT_YEAR, (rs, rowNum)-> {
+			return rs.getString(1);
+		});
 	}
 
 	public Dashboard pullDashboard(Dashboard dashboard) {

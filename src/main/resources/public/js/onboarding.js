@@ -119,6 +119,7 @@ jQuery(document).ready(function() {
 		    jQuery("#_eduScoreGoal").text('--/--');
 		    jQuery("#_nsScoreGoal").text('--/--');
 		    jQuery("#_hhScoreGoal").text('--/--');
+	 		jQuery("#_dphScoreGoal").text('--/--');
 		    
 		    jQuery('a[id^="_load"]').attr('disabled', true);
 		    jQuery('a[id^="_load"]').attr('onclick', 'return false;');
@@ -169,6 +170,8 @@ function getAllLatestScoreGoal(residentId){
 	    jQuery("#_eduScoreGoal").text((data["EDUCATION"] == '0 / 0') ? 'DK / DA' : data["EDUCATION"]);
 	    jQuery("#_nsScoreGoal").text((data["NETWORK SUPPORT"] == '0 / 0') ? 'DK / DA' : data["NETWORK SUPPORT"]);
 	    jQuery("#_hhScoreGoal").text((data["HOUSEHOLD MANAGEMENT"] == '0 / 0') ? 'DK / DA' : data["HOUSEHOLD MANAGEMENT"]);
+		jQuery("#_dphScoreGoal").text((data["DISABILITY AND PHYSICAL HEALTH"] == '0 / 0') ? 'DK / DA' : data["DISABILITY AND PHYSICAL HEALTH"]);
+
 	},
 	error : function(e) {
 	    console.log("ERROR retrieving Score and Goal: ", e);
@@ -247,6 +250,11 @@ function onboadingStepsStatus(residentId) {
 		jQuery("#_hhComplete").removeClass('hideme');		
 	    }else{
 		jQuery("#_hhComplete").removeClass('hideme').addClass('hideme');		
+	    }
+		if(data.disPhysicalComplete == true){
+		jQuery("#_dphComplete").removeClass('hideme');		
+	    }else{
+		jQuery("#_dphComplete").removeClass('hideme').addClass('hideme');		
 	    }
 	    
 	    

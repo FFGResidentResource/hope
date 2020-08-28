@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.model.AssessmentByDateAndScoreGoal;
 import com.ffg.rrn.model.Dashboard;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Resident;
@@ -85,7 +86,13 @@ public class RestAPIController {
 		if (!StringUtils.isEmpty(residentId) && !StringUtils.isEmpty(onThisDate) && !StringUtils.isEmpty(lifeDomain) && !StringUtils.equals("NewAssessment", onThisDate)) {
 			List<ResidentAssessmentQuestionnaire> historicalAssessmentByResidentIdAndLifeDomain = residentService
 					.getHistoricalAssessmentByResidentIdAndLifeDomain(Long.valueOf(residentId), onThisDate, lifeDomain);
-			return ResponseEntity.ok(historicalAssessmentByResidentIdAndLifeDomain);
+								
+			AssessmentByDateAndScoreGoal assessmentAndScoreGoal = new AssessmentByDateAndScoreGoal();
+			
+			assessmentAndScoreGoal.setRaqs(historicalAssessmentByResidentIdAndLifeDomain);
+			assessmentAndScoreGoal.setRsg(residentService.getResidentScoreGoalByDate(Long.valueOf(residentId), onThisDate, lifeDomain));
+			
+			return ResponseEntity.ok(assessmentAndScoreGoal);
 		}
 		return ResponseEntity.ok("");
 	}
@@ -103,6 +110,7 @@ public class RestAPIController {
 		wsc.setEducationComplete(residentService.isEducationComplete(residentId));
 		wsc.setNetSuppComplete(residentService.isNetSuppComplete(residentId));
 		wsc.setHouseholdComplete(residentService.isHouseholdComplete(residentId));
+		wsc.setDisPhysicalComplete(residentService.isDisPhysicalComplete(residentId));
 		wsc.setActionPlanComplete(residentService.isActionPlanComplete(residentId));
 		wsc.setContactNotesComplete(residentService.isContactNotesComplete(residentId));
 
@@ -144,6 +152,11 @@ public class RestAPIController {
 			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"HOUSEHOLD MANAGEMENT");			
 			if(!StringUtils.isEmpty(latestScoreGoal)) {
 				scoreGoalPerLifeDomain.put("HOUSEHOLD MANAGEMENT", latestScoreGoal);
+			}
+			
+			latestScoreGoal = residentService.getLatestScoreGoal(Long.valueOf(residentId),"DISABILITY AND PHYSICAL HEALTH");			
+			if(!StringUtils.isEmpty(latestScoreGoal)) {
+				scoreGoalPerLifeDomain.put("DISABILITY AND PHYSICAL HEALTH", latestScoreGoal);
 			}
 			
 		}

@@ -9,18 +9,40 @@ function getHistoricalAssessmentByResidentIdAndLifeDomain(that, residentId, life
 		timeout : 600000,
 		success : function(response) {
 			jQuery('#'+prefix+'Submit').val('Update Historical '+lifeDomain +' Assessment');
-			jQuery.each(response, function(idx, obj){				
+			jQuery.each(response.raqs, function(idx, obj){				
 				jQuery('#'+prefix+'Questionnaire_'+obj.questionId+'_'+obj.choiceId).prop('checked', true);
 			});
 			
-			calculateAllScores(lifeDomain);
+			//calculateAllScores(lifeDomain);
 			//TODO - populate other Score()
+			
+			
+				jQuery("[id$='_score']").text(response.rsg.score);
+				jQuery("[id$='_goal']").text(response.rsg.goal);
+				
+				if(response.rsg.score == 1){
+					jQuery("[id^='incrisis_']").removeClass("danger").addClass("danger");				
+				}
+				else if(response.rsg.score == 2){
+					jQuery("[id^='vulnerable_']").removeClass("warning").addClass("warning");				
+				}
+				else if(response.rsg.score == 3){
+					jQuery("[id^='safe_']").removeClass("info").addClass("info");				
+				}
+				else if(response.rsg.score == 4){
+					jQuery("[id^='buildingCapacity_']").removeClass("success").addClass("success");				
+				}
+				else if(response.rsg.score == 5){
+					jQuery("[id^='empowered_']").removeClass("success").addClass("success");				
+				}
+		
+			
 		},
 		error : function(){
 			jQuery('input[id^='+ prefix + 'Questionnaire_]:radio').prop('checked',false);			
 			jQuery('#'+prefix+'Submit').val('Save ' + lifeDomain + ' Assessment');
 			
-			calculateAllScores(lifeDomain);
+			//calculateAllScores(lifeDomain);
 			
 		}
 	});
@@ -100,6 +122,12 @@ function validateAndShowMessage(){
     });
     
     if(todaysAssessmentExists == true &&  jQuery("#_dates option:selected").val().indexOf('New') > -1){
+	
+	jQuery("[id$='_head']").removeAttr('class');
+	jQuery("[id$='_body']").removeAttr('class');
+	jQuery("[id$='_score']").text("");
+	jQuery("[id$='_goal']").text("");
+	
 	jQuery(".text-danger").removeClass('hideme');
 	jQuery("input[type='submit']").prop('disabled', true);
     }else{

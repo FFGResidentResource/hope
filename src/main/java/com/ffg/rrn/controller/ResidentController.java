@@ -192,7 +192,7 @@ public class ResidentController extends BaseController {
 						"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
 			}
 			if (StringUtils.isEmpty(resident.getHousingStability())) {
-				resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+				resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"Resolve lease violation\":\"false\"}");
 			}
 			if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
 				resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
@@ -261,7 +261,7 @@ public class ResidentController extends BaseController {
 					"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
 		}
 		if (StringUtils.isEmpty(resident.getHousingStability())) {
-			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"Resolve lease violation\":\"false\"}");
 		}
 		if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
 			resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
@@ -518,8 +518,12 @@ public class ResidentController extends BaseController {
 			break;
 		case AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT:
 			raqs = resident.getHouseholdMgmtQuestionnaire();
-			break;
+		break;		
+		case AppConstants.LIFE_DOMAIN_SERVICE_DISABILITY_PHYSICAL:	
+			raqs = resident.getDisabilityPhysicalQuestionnaire();
+		break;
 		}
+		
 		return raqs;
 	}
 
@@ -532,13 +536,17 @@ public class ResidentController extends BaseController {
 	 */
 	private void saveAssessmentAndScore(Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) {
 
+		long row = 0l;
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
-				residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
+				row = residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
 			}
 		}
-		residentService.saveResidentScoreGoal(resident, lifeDomain);
+		
+		if(row > 0) {
+			residentService.saveResidentScoreGoal(resident, lifeDomain);
+		}
 	}
 
 	/**
@@ -554,7 +562,11 @@ public class ResidentController extends BaseController {
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
-				residentService.updateResidentAssessmentQuestionnaire(resident.getSelectedDate(), residentAssessmentQuestionnaire, lifeDomain);
+				int row = residentService.updateResidentAssessmentQuestionnaire(resident.getSelectedDate(), residentAssessmentQuestionnaire, lifeDomain);
+				
+				if(row < 1) {
+					residentService.insertResidentAssessmentQuestionnaire(resident.getSelectedDate(), residentAssessmentQuestionnaire, lifeDomain);
+				}
 			}
 		}
 		residentService.updateResidentScoreGoal(resident, lifeDomain);

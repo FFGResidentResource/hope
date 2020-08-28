@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ffg.rrn.dao.DashboardDao;
 import com.ffg.rrn.model.Dashboard;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -26,6 +27,9 @@ public class DashboardController extends BaseController {
 
 	@Autowired
 	private ResidentServiceImpl residentService;
+	
+	@Autowired
+	private DashboardDao dashboardDao;
 
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET, RequestMethod.POST })
 	public String getDashboard(Model model, Principal principal) throws Exception {
@@ -38,9 +42,12 @@ public class DashboardController extends BaseController {
 		}
 
 		List<Property> allProperty = residentService.getAllProperty(getSessionUsername());
+		
+		
 
 		Dashboard dashboard = new Dashboard();
 		dashboard.setProperties(allProperty);
+		dashboard.setYearList(dashboardDao.getAllYears());
 
 		int total = 0;
 		if (!CollectionUtils.isEmpty(allProperty)) {

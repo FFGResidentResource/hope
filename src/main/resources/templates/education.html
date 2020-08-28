@@ -191,7 +191,7 @@
 						</div>
 
 						<input type="submit" id="_educationSubmit"
-							class="btn btn-primary btn-lg hidden-print" value="Save EDUCATION Assessment">
+							class="btn btn-primary btn-lg hidden-print" value="Save EDUCATION Assessment" onclick="jQuery('#_eduLifeDomain').val('EDUCATION');">
 
 						<div class="col-sm-6 text-right hideme">
 							<input type="button" id="_educationSubmitAndNext"
@@ -207,29 +207,29 @@
 
 				<table id="educationScoreTable" class="table table-bordered">
 					<thead>
-						<th id="edust_1_head">In Crisis(1)</th>
-						<th id="edust_2_head">Vulnerable (2)</th>
-						<th id="edust_3_head">Safe (3)</th>
-						<th id="edust_4_head">Building Capacity (4)</th>
-						<th id="edust_5_head">Empowered (5)</th>
-						<th id="edust_6_head">Score</th>
-						<th id="edust_7_head">Goal</th>
+						<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
 					</thead>
 					<tbody>
 						<tr>
-							<td id="edust_1_body">No HS diploma/GED and is not enrolled
+							<td id="incrisis_body">No HS diploma/GED and is not enrolled
 								in high school or a GED program.</td>
-							<td id="edust_2_body">No HS diploma/ GED, but the resident
+							<td id="vulnerable_body">No HS diploma/ GED, but the resident
 								is enrolled in high school or a GED program.</td>
-							<td id="edust_3_body">Resident has HS diploma/GED but is not
+							<td id="safe_body">Resident has HS diploma/GED but is not
 								seeking additional education/ training to benefit employment.</td>
-							<td id="edust_4_body">Resident has HS diploma/GED and is
+							<td id="buildingCapacity_body">Resident has HS diploma/GED and is
 								seeking additional education/training to benefit employment.</td>
-							<td id="edust_5_body">Resident has completed additional
+							<td id="empowered_body">Resident has completed additional
 								education/training beyond HS diploma/ GED (and is in a position
 								where s/he is employable).</td>
-							<td id="edust_6_body"></td>
-							<td id="edust_7_body"></td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
 
 						</tr>
 					</tbody>

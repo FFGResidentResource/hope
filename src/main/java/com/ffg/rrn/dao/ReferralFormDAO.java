@@ -210,5 +210,14 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 		}
 		return true;
 	}
+	
+	public Boolean isDisPhysicalComplete(Long residentId) {
+		try {
+			this.getJdbcTemplate().queryForObject(SQL_SELF_SUFF_COMPLETE, new Object[] { residentId, AppConstants.LIFE_DOMAIN_SERVICE_DISABILITY_PHYSICAL }, Long.class);
+		} catch (EmptyResultDataAccessException emp) {
+			return false;
+		}
+		return true;
+	}
 
 }

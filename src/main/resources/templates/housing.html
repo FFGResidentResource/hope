@@ -186,7 +186,7 @@
 						</div>
 						
 						<input type="submit" id="_housingSubmit"
-								class="btn btn-primary btn-lg hidden-print" value="Save Housing Assessment">
+								class="btn btn-primary btn-lg hidden-print" value="Save Housing Assessment"  onclick="jQuery('#_lifeDomain').val('HOUSING');">
 						<!-- Hiding - out of scope -->
 						<div class="col-sm-6 text-right hideme">
 							<input type="button" id="_housingSubmitAndNext"
@@ -200,28 +200,28 @@
 				<table id="housingScoreTable"
 					class="table table-condensed table-bordered">
 					<thead>
-						<th id="hst_1_head">In Crisis(1)</th>
-						<th id="hst_2_head">Vulnerable (2)</th>
-						<th id="hst_3_head">Safe (3)</th>
-						<th id="hst_4_head">Building Capacity (4)</th>
-						<th id="hst_5_head">Empowered (5)</th>
-						<th id="hst_6_head">Score</th>
-						<th id="hst_7_head">Goal</th>
+						<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
 					</thead>
 					<tbody>
 						<tr>
-							<td id="hst_1_body">Homeless or threatened with eviction.</td>
-							<td id="hst_2_body">In transitional, temporary, or
+							<td id="incrisis_body">Homeless or threatened with eviction.</td>
+							<td id="vulnerable_body">In transitional, temporary, or
 								substandard housing OR current rent/mortgage payment is
 								unaffordable (over 30% of income).</td>
-							<td id="hst_3_body">In stable housing that is only
+							<td id="safe_body">In stable housing that is only
 								marginally adequate.</td>
-							<td id="hst_4_body">Household is in adequate, subsidized
+							<td id="buildingCapacity_body">Household is in adequate, subsidized
 								housing.</td>
-							<td id="hst_5_body">Household is in adequate, unsubsidized
+							<td id="empowered_body">Household is in adequate, unsubsidized
 								housing.</td>
-							<td id="hst_6_body"></td>
-							<td id="hst_7_body"></td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
 						</tr>
 					</tbody>
 				</table>

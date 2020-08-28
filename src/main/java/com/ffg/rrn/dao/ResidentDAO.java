@@ -71,7 +71,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private final static String SQL_INSERT_RESIDENT_ASSESSMENT_QUES = "INSERT INTO RESIDENT_ASSESSMENT_QUESTIONNAIRE (RAQ_ID, RESIDENT_ID, QUESTION_ID, CHOICE_ID, LIFE_DOMAIN, ON_THIS_DATE) "
 			+ "VALUES (nextval('RAQ_SQ'), ?, ?, ?, ?, ?)";
-
+	
 	private final static String SQL_INSERT_RESIDENT_SCORE_GOAL = "INSERT INTO RESIDENT_SCORE_GOAL (RSG_ID, RESIDENT_ID, LIFE_DOMAIN, SCORE, GOAL, ON_THIS_DATE) "
 			+ "VALUES (nextval('RSG_SQ'), ?, ?, ?, ?, ?)";
 	
@@ -171,6 +171,11 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	public List<ResidentScoreGoal> getResidentScoreGoal(Long residentId) {
 		return this.getJdbcTemplate().query("SELECT * FROM RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ?", new Object[] { residentId },
+				new BeanPropertyRowMapper<ResidentScoreGoal>(ResidentScoreGoal.class));
+	}
+	
+	public ResidentScoreGoal getResidentScoreGoalByDate(Long residentId, String onThisDate, String lifeDomain) {
+		return this.getJdbcTemplate().queryForObject("SELECT * FROM RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ? AND ON_THIS_DATE = TO_DATE(?,'DD-MON-YYYY') AND LIFE_DOMAIN = ? LIMIT 1 ", new Object[] { residentId, onThisDate, lifeDomain },
 				new BeanPropertyRowMapper<ResidentScoreGoal>(ResidentScoreGoal.class));
 	}
 
@@ -325,6 +330,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 		resident.setNetSupportDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "NETWORK SUPPORT"));
 		resident.setHouseholdDates(
 				this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "HOUSEHOLD MANAGEMENT"));
+		resident.setDisPhysicalDates(this.getAssessmentDatesByResidentIdAndLifeDomain(residentId, "DISABILITY AND PHYSICAL HEALTH"));
 		
 		resident.setActionPlanDates(this.getActionPlanDates(residentId));
 		resident.setContactNoteDates(this.getContactNoteDates(residentId));
@@ -527,8 +533,36 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setDate(5, Date.valueOf(LocalDate.now()));
 		return ps;
 	}
+	
+	private void calculateScore(final Resident resident, String lifeDomain, String onThisDate) {
+		
+		//TODO - this if condition have to go away once all is coded in.
+				
+					//Calculate Score first with Algorithm in LIFE_DOMAIN_sCORE_GOAL_TABLE
+					try {
+						
+						if (onThisDate.equals("TODAY")) {
+							onThisDate = " current_date";
+						}else {
+							onThisDate = " TO_DATE('"+resident.getSelectedDate()+"','DD-MON-YYYY')";
+						}
+						Integer calculatedScore = this.getJdbcTemplate().queryForObject("select ldsg.score from life_domain_score_guide ldsg join resident_assessment_questionnaire raq on raq.life_domain = ldsg.life_domain and raq.question_id = ldsg.question_no and raq.choice_id = ldsg.choice_id where raq.resident_id = " + resident.getResidentId() +" and raq.on_this_date = "+ onThisDate +" order by ldsg.priority limit 1", Integer.class);
+						
+						if(null != calculatedScore) {
+							resident.setCurrentScore(calculatedScore);
+							resident.setGoal((calculatedScore == 5 ) ? 5 : calculatedScore + 1);
+						}
+					}
+					catch(EmptyResultDataAccessException ex){
+						resident.setCurrentScore(0);
+						resident.setGoal(0);
+					}
+	}
 
-	public long saveResidentScoreGoal(@Valid Resident resident, String lifeDomain) {
+	public long saveResidentScoreGoal(final @Valid Resident resident, String lifeDomain) {
+		
+		calculateScore(resident, lifeDomain, "TODAY");
+		
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] { "rsg_id" };
 		this.getJdbcTemplate().update(conn -> buildInsertResidentScoreGoalPS(conn, resident, pkColumnNames, lifeDomain),
@@ -576,8 +610,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setInt(8, raqs.getQuestionId());
 		return ps;
 	}
+	
 
-	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException{			
+
+	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException{
+		
+		calculateScore(resident, lifeDomain, resident.getSelectedDate());
+		
 		return this.getJdbcTemplate().update(conn -> {
 			try {
 				return buildUpateResidentScoreGoal(conn, resident, lifeDomain);
