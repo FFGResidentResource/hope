@@ -41,46 +41,33 @@ body {
 	<!-- Include _menu.html -->
 	<th:block th:include="../templates/_menu"></th:block>
 
-	<div class="container-fluid">
+	<div class="container">
 
-		<form name='_dashoardF' th:action="@{/saveDashboard}"
-			th:object="${dashboard}" method='POST' class="form-horizontal">
+		<form name='_dashoardF' th:object="${dashboard}" method='POST'
+			class="form-horizontal">
 
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="thumbnail">
-						<div class="caption">
-							<h3>Service Coordinator Report</h3>
-							<p>This Report is for Service Coordinator Quarterly
-								Performance for families</p>
-							<p>
-								<a href="#" class="btn btn-primary" role="button">Performance
-									Report Analysis</a>
-							</p>
+			<div class="row myPanel">
+
+				<div Class="col-sm-2">
+
+					<th:block th:each="y: *{yearList}">
+						<button class="btn btn-default btn-xs">
+							<span th:text="${y}"></span>
+						</button>
+					</th:block>
+
+				</div>
+
+				<div class="col-sm-10 borderleft">
+					<div th:each="pr, iStat: *{properties}">
+
+						<div class="col-sm-3">
+							<ul>
+								<button class="btn btn-primary btn-xs" onclick="addPropertyToReport(this); return false;" th:id="${pr.propertyId}" th:name="'_propId_'+${pr.propertyId}">									
+									<span th:text="${pr.propertyName}"></span>
+								</button>								
+							</ul>
 						</div>
-
-					</div>
-				</div>
-
-				<div class="col-sm-2">
-					<div class="thumbnail">
-						
-						<th:block th:each="y: *{yearList}">
-							<button class="btn btn-primary"><span th:text="${y}"></span></button>							
-						</th:block>
-
-					</div>
-				</div>
-				
-				<div class="col-sm-6">
-					<div class="thumbnail">
-						
-						<th:block th:each="pr: *{properties}">
-							<span class="btn-group">
-							<button class="btn btn-primary btn-xs"><div th:text="${pr.propertyName}"></div></button>
-							</span>							
-						</th:block>
-
 					</div>
 				</div>
 
@@ -88,6 +75,22 @@ body {
 
 			</div>
 
+			<div class="container-fluid">
+				<div class="col-sm-4">
+					<div class="thumbnail">
+						<div class="caption">
+							<h3>Service Coordinator Report</h3>
+							<p>This Report is for Service Coordinator Quarterly
+								Performance for families</p>
+							<p>
+								<a href="#" class="btn btn-default" role="button">Performance
+									Report Analysis</a>
+							</p>
+						</div>
+
+					</div>
+				</div>
+			</div>
 
 
 
