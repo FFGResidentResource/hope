@@ -69,14 +69,12 @@ function genderPercentage(){
 					    columns : dataArray,
 					    type : 'bar'
 					},
+					labels:{
+						 format:function (v, id, i, j) { return v + '%'; }
+					},
 					color: {
 					    pattern: [ '#75b3d5', '#c3d1e9']
-					},
-					donut:{
-						label: {
-				      		format: function (value) { return value; }
-				    	}
-					},
+					},					
 					axis : {
 					    x : {
 						tick : {
@@ -84,15 +82,18 @@ function genderPercentage(){
 						}
 					    },
 					    y : {
-						min : 0,
+						min : 5,
 						tick: {
-					                format: function (d) {
-					                   return (parseInt(d) == d) ? d : null; 						
-					                }
-					           }
-					    // Range includes padding, set 0 if no padding needed
-					    // padding: {top:0, bottom:0}
+					            format: function (d) {
+					               return (parseInt(d) == d) ? d + ' %' : null; 						
+					             }
+					          }
 					    }
+					},
+					tooltip: {
+  						format: {
+    						title: function (x, index) { return 'Male Female % '}
+  								}
 					}
 					
 				    });	
