@@ -5,6 +5,7 @@ package com.ffg.rrn.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.ffg.rrn.model.CategoryPercentage;
 import com.ffg.rrn.model.Dashboard;
@@ -52,7 +54,9 @@ public class DashboardDao extends JdbcDaoSupport {
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_MALE_FEMALE = "select gender as category, (count(gender)/ (select count(*) from resident)::float)*100 as percentage from resident where prop_id in (:properties) group by gender";
+		String SQL_MALE_FEMALE = "select 'Male' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and gender = 'Male' " + 
+				" union " + 
+				" select 'Female' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Female'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_MALE_FEMALE = SQL_MALE_FEMALE.replace(":properties", selectedProperties);
@@ -68,6 +72,24 @@ public class DashboardDao extends JdbcDaoSupport {
 				}
 			});
 		}
+		
+		else {
+			
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Female");
+			cp.setPercentage(0);
+			
+			cpList.add(cp);
+			
+			cp = new CategoryPercentage();
+			cp.setCategory("Male");
+			cp.setPercentage(0);
+			
+			cpList.add(cp);
+			
+		}
+		
+		
 
 		return cpList;
 	}

@@ -7,15 +7,19 @@ jQuery(document).ready(function() {
 	
 	jQuery(jQuery("[name^='_year_']")[0]).attr('checked','true'); //[0] will be always current year retrieved from DB in sort desc order
 		
-    jQuery("[name^='_propId_']").each(function (key, value){
+    jQuery("input[name^='_propId_']").each(function (key, value){
 		selectedProperties.push(value.id);
 	});
 	
-	jQuery("[name^='_propId_']").attr('checked',true);
+	jQuery("input[name^='_propId_']").prop('checked',true);
 	console.log(selectedProperties);
 	
 	// each graph one by one need to be called here, below is just first one - TODO
 	genderPercentage();	
+	
+	jQuery("input[name^='_propId_']").on('change', function () {
+		generateReport();
+	});
     
 });
 
@@ -23,7 +27,7 @@ jQuery(document).ready(function() {
 function generateReport(){
 	
 	selectedProperties = [];	
-	 jQuery("[name^='_propId_']").each(function (key, value){
+	 jQuery("input[name^='_propId_']").each(function (key, value){
 		console.log(value.checked);
 		if(value.checked){
 			selectedProperties.push(value.id);
