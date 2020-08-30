@@ -31,7 +31,7 @@
 </style>
 
 <script type="text/javascript">
-    var res = null;
+	var res = null;
 </script>
 
 </head>
@@ -53,29 +53,33 @@
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>
 						</div>
-						
+
 						<div class="col-sm-5">
-						<table class="table-responsive table-condensed hidden-print">
-							<tr><td>System of Record:</td><td><select class="form-control input-sm" id="_dates"
-									th:field="*{selectedDate}" onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
-									<option value="new">New Contact Note</option>
-									<option th:each="contactNotes : ${resident.contactNoteDates}"
-										th:value="${contactNotes}" th:utext="${contactNotes}" />
-							</select>	</td>
-							<td style="vertical-align: middle;"><span class="glyphicon glyphicon-arrow-right" style="color:crimson;"></span></td>
-							<td><a id="_loadCaseNotes" class="btn btn-default btn-sm"								
-								th:href="@{/getCaseNotes?entryPoint=onboarding}"> <span
-								class="glyphicon glyphicon-cloud-download" style="color: goldenrod;"
-								aria-hidden="true"></span> Retrieve
-							</a></td>
-							
-							</tr>
-						</table>	
-						
-						</div>					
-						
-						<div class="col-sm-3 hideme print-only">
+							<table class="table-responsive table-condensed hidden-print">
+								<tr>
+									<td>System of Record:</td>
+									<td><select class="form-control input-sm" id="_dates"
+										th:field="*{selectedDate}"
+										onchange="buildAchorTagForSelectedDate(this, jQuery('#_residentIdText').text()); validateAndShowMessage();">
+											<option value="new">New Contact Note</option>
+											<option th:each="contactNotes : ${resident.contactNoteDates}"
+												th:value="${contactNotes}" th:utext="${contactNotes}" />
+									</select></td>
+									<td style="vertical-align: middle;"><span
+										class="glyphicon glyphicon-arrow-right"
+										style="color: crimson;"></span></td>
+									<td><a id="_loadCaseNotes" class="btn btn-default btn-sm"
+										th:href="@{/getCaseNotes?entryPoint=onboarding}"> <span
+											class="glyphicon glyphicon-cloud-download"
+											style="color: goldenrod;" aria-hidden="true"></span> Retrieve
+									</a></td>
+
+								</tr>
+							</table>
+
 						</div>
+
+						<div class="col-sm-3 hideme print-only"></div>
 						<div class="col-sm-2 hideme print-only">
 							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
 						</div>
@@ -83,6 +87,7 @@
 
 					<h5>This form is to be used to document contacts with
 						residents.</h5>
+					<div class="hidden-print" style="color:blue;"><h5>It's always good to check "system of record" first for a given resident from right dropdown.</h5></div>
 
 					<table
 						class="table table-responsive table-bordered table-condensed text-center"
@@ -93,6 +98,7 @@
 							<th class="text-center">Property</th>
 							<th class="text-center">Address</th>
 							<th class="text-center">Phone Number</th>
+							<th class="text-center">No Shows</th>
 						</thead>
 						<tbody>
 							<tr>
@@ -105,18 +111,25 @@
 								<td><span th:text="*{propertyName}">&nbsp;</span></td>
 								<td><span th:text="*{address}">&nbsp;</span></td>
 								<td><span th:text="*{voiceMail}">&nbsp;</span></td>
+								<td><div class="radio">
+									<label class="col-sm-2"><input th:field="*{noShows}"
+										type="radio" name="noShow" value="FALSE" required />Yes</label>
+									<label class="col-sm-2"><input th:field="*{noShows}"
+										type="radio" name="noShow" value="TRUE" required />No</label>
+						</div>
+								</td>
 							</tr>
 						</tbody>
 					</table>
-				
+					
+
 					<div class="panel panel-default hidden-print">
 						<div class="panel-heading">Description (a factual
 							description of the interaction- the who, what, when, where, and
 							why)</div>
 						<div class="panel-body">
 							<textarea class="form-control" rows="5" id="_cnDesc"
-								th:field="*{description}"
-								th:value="*{description}"></textarea>
+								th:field="*{description}" th:value="*{description}"></textarea>
 						</div>
 					</div>
 
@@ -125,8 +138,7 @@
 							current status and progress)</div>
 						<div class="panel-body">
 							<textarea class="form-control" rows="5" id="_cnAssessment"
-								th:field="*{assessment}"
-								th:value="*{assessment}"></textarea>
+								th:field="*{assessment}" th:value="*{assessment}"></textarea>
 						</div>
 					</div>
 
@@ -135,11 +147,10 @@
 							happen next)</div>
 						<div class="panel-body">
 							<textarea class="form-control" rows="5" id="_cnPlan"
-								th:field="*{plan}"
-								th:value="*{plan}"></textarea>
+								th:field="*{plan}" th:value="*{plan}"></textarea>
 						</div>
 					</div>
-					
+
 					<div class="panel panel-default hideme print-only">
 						<div class="panel-heading">Description (a factual
 							description of the interaction- the who, what, when, where, and
@@ -164,7 +175,7 @@
 							<p id="_cnPlan_P"></p>
 						</div>
 					</div>
-					
+
 					<div class="row hideme print-only">
 
 						<div class="col-sm-6">
@@ -189,12 +200,13 @@
 					<div class="row text-center bs-linebreak hidden-print">
 						<!-- Following all passed to ResidentController upon Submit, please look onclick method of save for building each JSON String-->
 						<input type="hidden" th:field="*{serviceCoord}" /> <input
-							type="hidden" th:field="*{residentId}" /> 
-							<input
-							type="hidden" th:field="*{isResident}" /> 
-						
+							type="hidden" th:field="*{residentId}" /> <input type="hidden"
+							th:field="*{isResident}" />
+
 						<div class="text-danger hidden-print hideme">
-							<span>There is already Contact Notes from today's Date, retrieve today's Contact Notes from dropdown above to view/modify.</span>
+							<span>There is already Contact Notes from today's Date,
+								retrieve today's Contact Notes from dropdown above to
+								view/modify.</span>
 						</div>
 
 						<!-- Submit  -->

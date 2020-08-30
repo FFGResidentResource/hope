@@ -1,7 +1,8 @@
 window.onbeforeprint = function() {
 	$('#_cnDesc_P').text($('#_cnDesc').val());
 	$('#_cnAssessment_P').text($('#_cnAssessment').val());
-	$('#_cnPlan_P').text($('#_cnPlan').val());	
+	$('#_cnPlan_P').text($('#_cnPlan').val());
+	
 };
 
 

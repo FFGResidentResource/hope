@@ -19,7 +19,7 @@ DROP SEQUENCE if exists UR_SQ;
 DROP SEQUENCE if exists RP_SQ;
 DROP SEQUENCE IF EXISTS LDSG_SQ;
 
-
+drop view if exists GENDER_BY_PROPERTY_VIEW;
 DROP VIEW if exists AGENCY_RESIDENT_VIEW;
 DROP VIEW if exists ASSESSMENT_COMPLETED_VIEW;
 DROP VIEW if exists MOVING_DOWN_VIEW CASCADE;
@@ -681,6 +681,7 @@ CREATE TABLE CASE_NOTES(
 	DESCRIPTION		VARCHAR(2000),
 	ASSESSMENT		VARCHAR(2000),
 	PLAN			VARCHAR(2000),
+	NO_SHOWS		BOOLEAN DEFAULT FALSE,
 	RESIDENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	SERVICE_COORD	VARCHAR(50),
 	DATE_ADDED		DATE DEFAULT NOW(),		
@@ -973,8 +974,8 @@ INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_
 ,(nextval('REF_SQ'),25,false,NULL,'2020-04-30','2020-04-30','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"true","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Professor X class too long to take care of child','NA','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"true","Move to home ownership":"false","Other":""}','{"Avoid eviction":"true","Resolve lease violation":"false","Other":""}','{"Greater sense of satisfaction":"false","Greater sense of safety":"false","Greater sense of community/support":"true","Other":""}','Test Again','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
 ;
 
-INSERT INTO case_notes (case_notes_id,description,assessment,plan,resident_id,service_coord,date_added,date_modified) VALUES 
-(nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.',1,'dbadmin1','2020-08-26','2020-08-26')
+INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_shows,resident_id,service_coord,date_added,date_modified) VALUES 
+(nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.',TRUE, 1,'dbadmin1','2020-08-26','2020-08-26')
 ;
 
 INSERT INTO action_plan (action_plan_id,resident_id,active,plan_of_action,plan_details,referral_partner,anticipated_outcomes,anticipated_date,outcome_achieved,completion_date,achieved_ssm,followup_notes,date_added,date_modified,service_coord) VALUES 
@@ -1368,6 +1369,15 @@ select 'Utility Shut-off, scheduled for (Date):' as "REASON", extract (quarter f
 where referral_reason ->> 'Utility Shut-off, scheduled for (Date):' not in ('', 'false')) z
 JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
+
+
+CREATE VIEW GENDER_BY_PROPERTY_VIEW
+as
+select z.category as "GENDER", z.total as "TOTAL", z.property_name as "PROPERTY NAME" from (
+select 'Male' as category, count(r.prop_id) as total,  prop.prop_name as property_name from resident r join property prop on prop.prop_id = r.prop_id where  r.gender = 'Male' group by prop.prop_id
+union
+select 'Female' as category, count(r.prop_id) as total,  prop.prop_name as property_name from resident r join property prop on prop.prop_id = r.prop_id where  r.gender = 'Female' group by prop.prop_id)z
+order by z."category";
 
 
 
