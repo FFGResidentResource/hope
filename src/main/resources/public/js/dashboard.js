@@ -1,30 +1,108 @@
-var properties = [];
+var selectedProperties = [];
 var oneTimeToggle = false;
+var chart;
+var dataArray;
+
 jQuery(document).ready(function() {
+	
+	jQuery(jQuery("[name^='_year_']")[0]).attr('checked','true'); //[0] will be always current year retrieved from DB in sort desc order
 		
     jQuery("[name^='_propId_']").each(function (key, value){
-		properties.push(value.id);
+		selectedProperties.push(value.id);
 	});
-	console.log(properties);	
+	
+	jQuery("[name^='_propId_']").attr('checked',true);
+	console.log(selectedProperties);
+	
+	// each graph one by one need to be called here, below is just first one - TODO
+	genderPercentage();	
     
 });
 
-function addPropertyToReport(that){
+//Onchange of Property checkBoxes
+function generateReport(){
 	
-	if(oneTimeToggle == false){
-		jQuery("[name^='_propId_']").removeClass("btn-primary").addClass("btn-default");
-		oneTimeToggle = true;
-		properties = [];
-	}
+	selectedProperties = [];	
+	 jQuery("[name^='_propId_']").each(function (key, value){
+		console.log(value.checked);
+		if(value.checked){
+			selectedProperties.push(value.id);
+		}
+	});
 	
-	properties.push(that.id);
-	jQuery("#"+that.id).removeClass("btn-default").addClass("btn-primary");
-	return false;		
+	genderPercentage();		
 }
 
 
+function genderPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/genderPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage]
+						];
+						
+			if(chart != null){				
+				chart.load({
+					columns : dataArray					
+				})
+			}else{		
+					chart = c3.generate({
+					bindto : '#genderChart',
+					data : {
+					    columns : dataArray,
+					    type : 'bar'
+					},
+					color: {
+					    pattern: [ '#75b3d5', '#c3d1e9']
+					},
+					donut:{
+						label: {
+				      		format: function (value) { return value; }
+				    	}
+					},
+					axis : {
+					    x : {
+						tick : {
+						    values : [ '' ]
+						}
+					    },
+					    y : {
+						min : 0,
+						tick: {
+					                format: function (d) {
+					                   return (parseInt(d) == d) ? d : null; 						
+					                }
+					           }
+					    // Range includes padding, set 0 if no padding needed
+					    // padding: {top:0, bottom:0}
+					    }
+					}
+					
+				    });	
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+	
+}
 
 
+//will refactor below Later
 function pullDashboard(){    
    
     var checkString = '';    

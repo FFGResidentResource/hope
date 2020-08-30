@@ -41,53 +41,33 @@ body {
 	<!-- Include _menu.html -->
 	<th:block th:include="../templates/_menu"></th:block>
 
-	<div class="container">
+	<form name='_dashoardF' th:object="${dashboard}" 
+		class="form-horizontal">
 
-		<form name='_dashoardF' th:object="${dashboard}" method='POST'
-			class="form-horizontal">
+		<div class="container">
+
+
 
 			<div class="row myPanel">
 
 				<div Class="col-sm-2">
 
 					<th:block th:each="y: *{yearList}">
-						<button class="btn btn-default btn-xs">
-							<span th:text="${y}"></span>
-						</button>
+						<label> <input type="checkbox" th:id="${y}"
+							th:name="'_year_'+${y}">&nbsp;<span th:text="${y}"></span>
+						</label>
 					</th:block>
 
 				</div>
 
 				<div class="col-sm-10 borderleft">
 					<div th:each="pr, iStat: *{properties}">
-
-						<div class="col-sm-3">
-							<ul>
-								<button class="btn btn-primary btn-xs" onclick="addPropertyToReport(this); return false;" th:id="${pr.propertyId}" th:name="'_propId_'+${pr.propertyId}">									
-									<span th:text="${pr.propertyName}"></span>
-								</button>								
-							</ul>
+						<div class="col-md-3">
+							<label> <input type="checkbox" th:id="${pr.propertyId}"
+								th:name="'_propId_'+${pr.propertyId}">&nbsp;<span
+								th:text="${pr.propertyName}" onclick="generateReport();"></span>
+							</label>
 						</div>
-					</div>
-				</div>
-
-
-
-			</div>
-
-			<div class="container-fluid">
-				<div class="col-sm-4">
-					<div class="thumbnail">
-						<div class="caption">
-							<h3>Service Coordinator Report</h3>
-							<p>This Report is for Service Coordinator Quarterly
-								Performance for families</p>
-							<p>
-								<a href="#" class="btn btn-default" role="button">Performance
-									Report Analysis</a>
-							</p>
-						</div>
-
 					</div>
 				</div>
 			</div>
@@ -95,13 +75,23 @@ body {
 
 
 
-		</form>
+
+		</div>
 
 
 
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-2">
+					<div id="genderChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-6">
+					<!-- TODO -->
+				</div>
+			</div>
+		</div>
 
-
-	</div>
+	</form>
 
 
 

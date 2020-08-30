@@ -12,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.dao.DashboardDao;
 import com.ffg.rrn.model.AssessmentByDateAndScoreGoal;
+import com.ffg.rrn.model.CategoryPercentage;
 import com.ffg.rrn.model.Dashboard;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Resident;
@@ -40,6 +43,10 @@ public class RestAPIController {
 
 	@Autowired
 	private ServiceCoordinatorServiceImpl serviceCoordinatorService;
+	
+	@Autowired
+	private DashboardDao dashDao;
+	
 
 	@PostMapping("/getAllResidents")
 	public ResponseEntity<?> getAllResidents() {
@@ -68,6 +75,14 @@ public class RestAPIController {
 		List<Property> allProperty = residentService.getAllProperty(srvcCoord);
 
 		return ResponseEntity.ok(allProperty);
+	}
+	
+	@PostMapping("/genderPercentage")
+	public ResponseEntity<?> generateReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> genderPercentage = dashDao.getGenderPercentage(selectedProperties);
+
+		return ResponseEntity.ok(genderPercentage);
 	}
 
 	@PostMapping("/getAllServiceCoordinators")
