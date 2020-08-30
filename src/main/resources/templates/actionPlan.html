@@ -140,9 +140,7 @@ body {
 								<td><span th:text="*{actionPlanDateModified}">&nbsp;</span></td>
 							</tr>
 						</tbody>
-					</table>					
-
-					<hr class="solidline1">
+					</table>		
 
 					<table id="_currentSSMTable"
 						class="table table-responsive table-bordered table-condensed text-center"
@@ -203,11 +201,16 @@ body {
 								<td id="_householdSSM4">Building Capacity (4)</td>
 								<td id="_householdSSM5">Empowered (5)</td>
 							</tr>
+							<tr>
+								<td>Disability and Health</td>
+								<td id="_healthSSM1">In Crisis (1)</td>
+								<td id="_healthSSM2">Vulnerable (2)</td>
+								<td id="_healthSSM3">Stable (3)</td>
+								<td id="_healthSSM4">Building Capacity (4)</td>
+								<td id="_healthSSM5">Empowered (5)</td>
+							</tr>
 						</tbody>
 					</table>
-
-
-					<br />
 
 					<table id="_poa"
 						class="table table-responsive table-bordered table-condensed">
@@ -225,9 +228,7 @@ body {
 								<td id="_refReasons"></td>
 							</tr>
 						</tbody>
-					</table>
-					<br />				
-										
+					</table>										
 					
 					<table id="_poaTablePrint"
 						class="table table-responsive table-bordered table-condensed hideme print-only">
@@ -235,73 +236,102 @@ body {
 							<strong>Plan of Action for Each Domain of Focus</strong>
 						</caption>
 						<thead>
-							<th class="text-center">DOMAIN</th>
-							<th class="text-center">Plan Of Action</th>
-							<th class="text-center">Plan Details</th>
-							<th class="text-center">Referral Partner</th>
-							<th class="text-center">Anticipated Outcomes</th>
-							<th class="text-center">Anticipated Date</th>
+							<th class="text-center" style="width:25%">DOMAIN</th>
+							<th class="text-center" style="width:550px">DETAILS</th>							
 						</thead>
 						<tbody>
 							<tr>
 								<td>HOUSING</td>
-								<td id="_poActionHousingPrint"></td>
-								<td id="_planDetailHousingPrint"></td>
-								<td id="_referralPartnerHousingPrint"></td>
-								<td id="_aoHousingPrint"></td>
-								<td id="_aoDateHousingPrint"></td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionHousingPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailHousingPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerHousingPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoHousingPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateHousingPrint"></span></div>
+								</td>
+								
 							</tr>
 							<tr>
-								<td>MONEY MGMT.</td>
-								<td id="_poActionMMPrint"></td>
-								<td id="_planDetailMMPrint"></td>
-								<td id="_referralPartnerMMPrint"></td>
-								<td id="_aoMMPrint"></td>
-								<td id="_aoDateMMPrint"></td>
+								<td>MONEY MANAGEMENT</td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionMMPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailMMPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerMMPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoMMPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateMMPrint"></span></div>
+								</td>
+								
 							</tr>
 							<tr>
 								<td>EMPLOYMENT</td>
-								<td id="_poActionEmpPrint"></td>
-								<td id="_planDetailEmpPrint"></td>
-								<td id="_referralPartnerEmpPrint"></td>
-								<td id="_aoEmpPrint"></td>
-								<td id="_aoDateEmpPrint"></td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionEmpPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailEmpPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerEmpPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoEmpPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateEmpPrint"></span></div>
+								</td>
+								
 							</tr>
+							
 							<tr>
 								<td>EDUCATION</td>
-								<td id="_poActionEduPrint"></td>
-								<td id="_planDetailEduPrint"></td>
-								<td id="_referralPartnerEduPrint"></td>
-								<td id="_aoEduPrint"></td>
-								<td id="_aoDateEduPrint"></td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionEduPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailEduPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerEduPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoEduPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateEduPrint"></span></div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+								<td>NETWORK SUPPORT</td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionNSPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailNSPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerNSPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoNSPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateNSPrint"></span></div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+								<td>HOUSEHOLD MANAGEMENT</td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionHHPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailHHPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerHHPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoHHPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateHHPrint"></span></div>
+								</td>
+								
 							</tr>
 							<tr>
-								<td>NETWORK SUPP.</td>
-								<td id="_poActionNSPrint"></td>
-								<td id="_planDetailNSPrint"></td>
-								<td id="_referralPartnerNSPrint"></td>
-								<td id="_aoNSPrint"></td>
-								<td id="_aoDateNSPrint"></td>
+								<td>HEALTH</td>
+								<td>
+								<div><label>Plan of Action:</label><span id="_poActionDHPrint"></span></div>
+								<div><label>Plan Details:</label><span id="_planDetailDHPrint"></span></div>
+								<div><label>Referral Partner:</label><span id="_referralPartnerDHPrint"></span></div>
+								<div><label>Anticipated Outcome:</label><span id="_aoDHPrint"></span></div>
+								<div><label>Anticipate Outcome Date:</label><span id="_aoDateDHPrint"></span></div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+								<td >Resident's Signature:</td>
+								<td >Date:</td>								
 							</tr>
 							<tr>
-								<td>HOUSEHOLD MGMT.</td>
-								<td id="_poActionHHPrint"></td>
-								<td id="_planDetailHHPrint"></td>
-								<td id="_referralPartnerHHPrint"></td>
-								<td id="_aoHHPrint"></td>
-								<td id="_aoDateHHPrint"></td>
+								<td >Community Manager's Signature:</td>
+								<td >Date:</td>								
 							</tr>
 							<tr>
-								<td colspan="4">Resident's Signature:</td>
-								<td colspan="2">Date:</td>								
-							</tr>
-							<tr>
-								<td colspan="4">Community Manager's Signature:</td>
-								<td colspan="2">Date:</td>								
-							</tr>
-							<tr>
-								<td colspan="4">Service Corrdinator's Signature:</td>
-								<td colspan="2">Date:</td>								
+								<td >Service Corrdinator's Signature:</td>
+								<td >Date:</td>								
 							</tr>
 							
 						</tbody>
@@ -382,13 +412,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_aoHousing">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Rectify lease violation</option>
-										<option value="Eviction avoided">Avoid eviction</option>
-										<option value="Improved educational status">Improve educational status</option>
-										<option value="Obtained employment">Obtain employment</option>
-										<option value="Increased income">Increase income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Rectify lease violation">Rectify lease violation</option>
+										<option value="Remain housed overtime">Remain housed overtime</option>
+										<option value="Avoid moving out becuase of non-payment of rent">Avoid moving out becuase of non-payment of rent</option>
+										<option value="Avoid utility-shut off">Avoid utility-shut off</option>
+										<option value="Purchase a home">Purchase a home</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedHousing" maxlength="10" value=""
@@ -450,13 +479,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_aoMM">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Rectify lease violation</option>
-										<option value="Eviction avoided">Avoid eviction</option>
-										<option value="Improved educational status">Improve educational status</option>
-										<option value="Obtained employment">Obtain employment</option>
-										<option value="Increased income">Increase income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Increase gross income">Increase gross income(e.g., child support, gov't benefits)</option>
+										<option value="Establish a bank account">Establish a bank account</option>
+										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits (e.g., section 8, food stamps)</option>
+										<option value="Secure financial assistance">Secure financial assistance(e.g. for help with car repairs)</option>
+										<option value="Recieve financial literacy education">Recieve financial literacy education</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedMM" maxlength="10" value=""
@@ -518,13 +546,10 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_aoEmp">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Rectify lease violation</option>
-										<option value="Eviction avoided">Avoid eviction</option>
-										<option value="Improved educational status">Improve educational status</option>
-										<option value="Obtained employment">Obtain employment</option>
-										<option value="Increased income">Increase income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Increase employment income">Increase employment income</option>
+										<option value="Secured employment">Secured employment</option>
+										<option value="Remain employed for 90 days">Remain employed for 90 days</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedEmp" maxlength="10" value=""
@@ -586,13 +611,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_aoEdu">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Rectify lease violation</option>
-										<option value="Eviction avoided">Avoid eviction</option>
-										<option value="Improved educational status">Improve educational status</option>
-										<option value="Obtained employment">Obtain employment</option>
-										<option value="Increased income">Increase income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Enroll child(ren) in pre-k, head start, or other early education program">Enroll child(ren) in pre-k, head start, or other early education program</option>
+										<option value="Enroll child(ren) in school, afterschool, or other early education program">Enroll child(ren) in school, afterschool, or other early education program</option>
+										<option value="Enroll child(ren) in day care">Enroll child(ren) in day care</option>
+										<option value="Complete secondary education program">Complete secondary education program</option>
+										<option value="Complete vocational/job training program">Complete vocational/job training program</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedEdu" maxlength="10" value=""
@@ -654,13 +678,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_aoNS">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Rectify lease violation</option>
-										<option value="Eviction avoided">Avoid eviction</option>
-										<option value="Improved educational status">Improve educational status</option>
-										<option value="Obtained employment">Obtain employment</option>
-										<option value="Increased income">Increase income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Feel safe in own/building">Feel safe in own/building</option>
+										<option value="Feel safe insurrounding neighborhood">Feel safe in surrounding neighborhood</option>
+										<option value="Feel knowledgable about where to go for help">Feel knowledgable about where to go for help</option>
+										<option value="Register to vote">Register to vote</option>
+										<option value="Improve socialization or network of support">Improve socialization or network of support</option>										
+										<option value="Other">Other</option>
 								</select></td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedNS" maxlength="10" value=""
@@ -722,24 +745,88 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_aoHH">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Rectify lease violation</option>
-										<option value="Eviction avoided">Avoid eviction</option>
-										<option value="Improved educational status">Improve educational status</option>
-										<option value="Obtained employment">Obtain employment</option>
-										<option value="Increased income">Increase income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Improve housekeeping skills or conditions">Improve housekeeping skills or conditions</option>
+										<option value="Secure donated materials(e.g. clothes, school supplies, furniture)">Secure donated materials(e.g. clothes, school supplies, furniture)</option>										
+										<option value="Other">Other</option>
 								</select></td>
 								
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedHH" maxlength="10" value=""
 									placeholder="MM/DD/YYYY" /></td>
 							</tr>
-						</tbody>
-					</table>
+							<tr>
+								<td>DISABILITY AND HEALTH</td>
+								<td><select class="form-control input-sm setable"
+									id="_planOfActionDH">
+										<option value="">Select</option>
+										<option value="Advocacy">Advocacy</option>
+										<option value="Assessments">Assessments</option>
+										<option value="Benefits/Insurance">Benefits/Insurance</option>
+										<option value="Case Management">Case Management</option>
+										<option value="Child/day care">Child/day care</option>
+										<option value="Computer training">Computer training</option>
+										<option value="Conflct resolution">Conflct resolution</option>
+										<option value="Crisis intervention">Crisis
+											intervention</option>
+										<option value="Education program (GED, etc.)">Education
+											program (GED, etc.)</option>
+										<option value="Emergency assistance">Emergency
+											assistance</option>
+										<option value="Family support">Family support</option>
+										<option value="Finanicial management/literacy">Finanicial
+											management/literacy</option>
+										<option value="Financial aid">Financial aid</option>
+										<option value="Healthcare">Healthcare</option>
+										<option value="Home management">Home management</option>
+										<option value="Homemaker">Homemaker</option>
+										<option value="Home ownership">Home ownership</option>
+										<option value="Job readiness">Job readiness</option>
+										<option value="Lease intervention">Lease intervention</option>
+										<option value="Leagal assistance">Leagal assistance</option>
+										<option value="Meals">Meals</option>
+										<option value="Mental health">Mental health</option>
+										<option value="Monitoring">Monitoring</option>
+										<option value="Parenting">Parenting</option>
+										<option value="Prescriptions">Prescriptions</option>
+										<option value="School intervention">School
+											intervention</option>
+										<option value="Substance abuse">Substance abuse</option>
+										<option value="Transportation">Transportation</option>
+										<option value="Veteran services">Veteran services</option>
+										<option value="Vocational training">Vocational training</option>
+										<option value="Youth programs">Youth programs</option>
+										<option value="Other">Other</option>
 
-					<br />
-					<div class="pagebreak"></div>
+								</select></td>
+								<td><textarea class="form-control input-sm" rows="1"
+										id="_planDetailsDH" style="resize: none;"
+										onkeyup="validateInput(this)" draggable="false"></textarea></td>
+								<td><select class="form-control  input-sm" id="_referralPartnerDH">
+										<option value="">Select</option>
+										<option th:each="refPartner : ${resident.refPartners}"
+											th:value="${refPartner}"
+											th:utext="${refPartner}" />
+									</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_aoDH">
+										<option value="">Select</option>
+										<option value="Reduce use of hospital ER">Reduce use of hospital ER</option>
+										<option value="Identify a place to receive routine primary care services">Identify a place to receive routine primary care services</option>
+										<option value="Visit a healthcare provider for a routine checkup">Visit a healthcare provider for a routine checkup</option>
+										<option value="Enroll in or change health insurance">Enroll in or change health insurance</option>
+										<option value="Reduce food insecurity">Reduce food insecurity</option>
+										<option value="Improve ability to manage health/mental health condition">Improve ability to manage health/mental health condition</option>
+										<option value="Other">Other</option>
+										
+										
+								</select></td>
+								
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextAnticipatedDH" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
+							</tr>
+						</tbody>
+					</table>				
 					
 					<div class="row hidden-print">
 						<div class="col-sm-2  control-label">Follow-Up Notes</div>
@@ -811,6 +898,12 @@ body {
 								<td id="_inputDateTextHH_P"></td>
 							</tr>
 							<tr>
+								<td>HEALTH</td>
+								<td id="_outAchDH_P"></td>
+								<td id="_achGoalDH_P"></td>
+								<td id="_inputDateTextDH_P"></td>
+							</tr>
+							<tr>
 								<td colspan="3">Service Corrdinator's Signature:</td>
 								<td colspan="1">Date:</td>								
 							</tr>
@@ -834,13 +927,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_outAchHousing">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Lease violation rectified</option>
-										<option value="Eviction avoided">Eviction avoided</option>
-										<option value="Improved educational status">Improved educational status</option>
-										<option value="Obtained employment">Obtained employment</option>
-										<option value="Increased income">Increased income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Rectify lease violation">Rectify lease violation</option>
+										<option value="Remain housed overtime">Remain housed overtime</option>
+										<option value="Avoid moving out becuase of non-payment of rent">Avoid moving out becuase of non-payment of rent</option>
+										<option value="Avoid utility-shut off">Avoid utility-shut off</option>
+										<option value="Purchase a home">Purchase a home</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_achGoalHousing">
@@ -856,14 +948,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_outAchMM">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Lease violation rectified</option>
-										<option value="Eviction avoided">Eviction avoided</option>
-										<option value="Improved educational status">Improved educational status</option>
-										<option value="Obtained employment">Obtained employment</option>
-										<option value="Increased income">Increased income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
-
+										<option value="Increase gross income">Increase gross income(e.g., child support, gov't benefits)</option>
+										<option value="Establish a bank account">Establish a bank account</option>
+										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits (e.g., section 8, food stamps)</option>
+										<option value="Secure financial assistance">Secure financial assistance(e.g. for help with car repairs)</option>
+										<option value="Recieve financial literacy education">Recieve financial literacy education</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_achGoalMM">
@@ -879,14 +969,10 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_outAchEmp">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Lease violation rectified</option>
-										<option value="Eviction avoided">Eviction avoided</option>
-										<option value="Improved educational status">Improved educational status</option>
-										<option value="Obtained employment">Obtained employment</option>
-										<option value="Increased income">Increased income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
-
+										<option value="Increase employment income">Increase employment income</option>
+										<option value="Secured employment">Secured employment</option>
+										<option value="Remain employed for 90 days">Remain employed for 90 days</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_achGoalEmp">
@@ -902,14 +988,12 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_outAchEdu">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Lease violation rectified</option>
-										<option value="Eviction avoided">Eviction avoided</option>
-										<option value="Improved educational status">Improved educational status</option>
-										<option value="Obtained employment">Obtained employment</option>
-										<option value="Increased income">Increased income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
-
+										<option value="Enroll child(ren) in pre-k, head start, or other early education program">Enroll child(ren) in pre-k, head start, or other early education program</option>
+										<option value="Enroll child(ren) in school, afterschool, or other early education program">Enroll child(ren) in school, afterschool, or other early education program</option>
+										<option value="Enroll child(ren) in day care">Enroll child(ren) in day care</option>
+										<option value="Complete secondary education program">Complete secondary education program</option>
+										<option value="Complete vocational/job training program">Complete vocational/job training program</option>
+										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_achGoalEdu">
@@ -924,14 +1008,12 @@ body {
 								<td>NETWORK SUPPORT</td>
 								<td><select class="form-control setable" id="_outAchNS">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Lease violation rectified</option>
-										<option value="Eviction avoided">Eviction avoided</option>
-										<option value="Improved educational status">Improved educational status</option>
-										<option value="Obtained employment">Obtained employment</option>
-										<option value="Increased income">Increased income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
-
+										<option value="Feel safe in own/building">Feel safe in own/building</option>
+										<option value="Feel safe insurrounding neighborhood">Feel safe in surrounding neighborhood</option>
+										<option value="Feel knowledgable about where to go for help">Feel knowledgable about where to go for help</option>
+										<option value="Register to vote">Register to vote</option>
+										<option value="Improve socialization or network of support">Improve socialization or network of support</option>										
+										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_achGoalNS">
@@ -947,13 +1029,9 @@ body {
 								<td><select class="form-control input-sm setable"
 									id="_outAchHH">
 										<option value="">Select</option>
-										<option value="Lease violation rectified">Lease violation rectified</option>
-										<option value="Eviction avoided">Eviction avoided</option>
-										<option value="Improved educational status">Improved educational status</option>
-										<option value="Obtained employment">Obtained employment</option>
-										<option value="Increased income">Increased income</option>
-										<option value="Reduce reliance upon government benefits">Reduce reliance upon government benefits</option>
-										<option value="Savings to Wallick">Savings to Wallick</option>
+										<option value="Improve housekeeping skills or conditions">Improve housekeeping skills or conditions</option>
+										<option value="Secure donated materials(e.g. clothes, school supplies, furniture)">Secure donated materials(e.g. clothes, school supplies, furniture)</option>										
+										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
 									id="_achGoalHH">
@@ -963,6 +1041,29 @@ body {
 								</select></td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextHH" maxlength="10" value=""
+									placeholder="MM/DD/YYYY" /></td>
+							</tr>
+							<tr>
+								<td>DISABILITY AND HEALTH</td>
+								<td><select class="form-control input-sm setable"
+									id="_outAchDH">
+										<option value="">Select</option>
+										<option value="Reduce use of hospital ER">Reduce use of hospital ER</option>
+										<option value="Identify a place to receive routine primary care services">Identify a place to receive routine primary care services</option>
+										<option value="Visit a healthcare provider for a routine checkup">Visit a healthcare provider for a routine checkup</option>
+										<option value="Enroll in or change health insurance">Enroll in or change health insurance</option>
+										<option value="Reduce food insecurity">Reduce food insecurity</option>
+										<option value="Improve ability to manage health/mental health condition">Improve ability to manage health/mental health condition</option>
+										<option value="Other">Other</option>
+								</select></td>
+								<td><select class="form-control input-sm setable"
+									id="_achGoalDH">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+								</select></td>
+								<td><input class="form-control input-sm" type="text"
+									id="_inputDateTextDH" maxlength="10" value=""
 									placeholder="MM/DD/YYYY" /></td>
 							</tr>
 						</tbody>
