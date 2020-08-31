@@ -15,7 +15,8 @@ jQuery(document).ready(function() {
 	console.log(selectedProperties);
 	
 	// each graph one by one need to be called here, below is just first one - TODO
-	genderPercentage();	
+	genderPercentage();
+
 	
 	jQuery("input[name^='_propId_']").on('change', function () {
 		generateReport();
@@ -34,7 +35,7 @@ function generateReport(){
 		}
 	});
 	
-	genderPercentage();		
+	genderPercentage();
 }
 
 
@@ -55,7 +56,13 @@ function genderPercentage(){
 			
 			debugger;
 			dataArray = [[response[0].category,response[0].percentage],
-						 [response[1].category,response[1].percentage]
+						 [response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage]
 						];
 						
 			if(chart != null){				
@@ -73,7 +80,7 @@ function genderPercentage(){
 						 format:function (v, id, i, j) { return v + '%'; }
 					},
 					color: {
-					    pattern: [ '#75b3d5', '#c3d1e9']
+					    pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496']
 					},					
 					axis : {
 					    x : {
@@ -92,7 +99,7 @@ function genderPercentage(){
 					},
 					tooltip: {
   						format: {
-    						title: function (x, index) { return 'Male Female % '}
+    						title: function (x, index) { return 'Gender % '}
   								}
 					}
 					
@@ -104,6 +111,868 @@ function genderPercentage(){
 		}
     });
 	
+}
+
+function ethnicityPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/ethnicityPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#ethnicityChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Ethnicity % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function languagePercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/languagePercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#languageChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Language % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function maritalStatusPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/maritalStatusPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#maritalStatusChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Marital Status % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function racePercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/racePercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#raceChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496','#719dd7']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Race % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function householdPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/householdPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#householdChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Household % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function veteranPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/veteranPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#veteranChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Veteran % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function disabilityPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/disabilityPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#disabilityChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Disability % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function exOffenderPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/exOffenderPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#exOffenderChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe', '#e5bfd1', '#8a8084']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Ex Offender % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function ssiPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/ssiPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#ssiChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'SSI % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function ssdiPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/ssdiPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#ssdiChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [ '#75b3d5', '#c3d1e9','#ba8fbe']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'SSDI % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function healthPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/healthPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage],
+				[response[10].category,response[10].percentage],
+				[response[11].category,response[11].percentage],
+				[response[12].category,response[12].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#healthChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [  '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9', '#3296dc', '#ffbb78', '#d3d093']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Health % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function educationPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/educationPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage],
+				[response[10].category,response[10].percentage],
+				[response[11].category,response[11].percentage]
+			];
+
+			if(chart != null){
+				chart.load({
+					columns : dataArray
+				})
+			}else{
+				chart = c3.generate({
+					bindto : '#educationChart',
+					data : {
+						columns : dataArray,
+						type : 'bar'
+					},
+					labels:{
+						format:function (v, id, i, j) { return v + '%'; }
+					},
+					color: {
+						pattern: [  '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9', '#3296dc', '#ffbb78']
+					},
+					axis : {
+						x : {
+							tick : {
+								values : [ '' ]
+							}
+						},
+						y : {
+							min : 5,
+							tick: {
+								format: function (d) {
+									return (parseInt(d) == d) ? d + ' %' : null;
+								}
+							}
+						}
+					},
+					tooltip: {
+						format: {
+							title: function (x, index) { return 'Education % '}
+						}
+					}
+
+				});
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
 }
 
 

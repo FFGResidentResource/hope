@@ -54,9 +54,21 @@ public class DashboardDao extends JdbcDaoSupport {
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_MALE_FEMALE = "select 'Male' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and gender = 'Male' " + 
-				" union " + 
-				" select 'Female' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Female'";
+		String SQL_MALE_FEMALE = "select 'Male' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and gender = 'Male' " +
+				" union " +
+				" select 'Female' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Female'" +
+				" union " +
+				" select 'Transgendered Male to Female' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Transgendered Male to Female'"+
+				" union " +
+				" select 'Transgendered Female to Male' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Transgendered Female to Male'" +
+				" union " +
+				" select 'Other' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Other'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Information not collected'" +
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Individual does not know'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_MALE_FEMALE = SQL_MALE_FEMALE.replace(":properties", selectedProperties);
@@ -72,27 +84,973 @@ public class DashboardDao extends JdbcDaoSupport {
 				}
 			});
 		}
-		
+
 		else {
-			
+
 			CategoryPercentage cp = new CategoryPercentage();
 			cp.setCategory("Female");
 			cp.setPercentage(0);
-			
+
 			cpList.add(cp);
-			
+
 			cp = new CategoryPercentage();
 			cp.setCategory("Male");
 			cp.setPercentage(0);
-			
+
 			cpList.add(cp);
-			
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Transgendered Male to Female");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Transgendered Female to Male");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Other");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
 		}
-		
-		
+
+
 
 		return cpList;
 	}
+
+	public List<CategoryPercentage> getEthnicityPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ETHNICITY = "select 'Hispanic/Latino' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ethnicity = 'Hispanic/Latino' " +
+				" union " +
+				" select 'Not Hispanic/Latino' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ethnicity = 'Not Hispanic/Latino'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ethnicity = 'Information not collected'"+
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ethnicity = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ethnicity = 'Individual does not know'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ethnicity = 'Information not collected'";
+
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ETHNICITY = SQL_ETHNICITY.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_ETHNICITY, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Hispanic/Latino");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Not Hispanic/Latino");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getLanguagePercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_LANGUAGE = "select 'English' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and pri_language = 'English' " +
+				" union " +
+				" select 'Spanish' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and pri_language = 'Spanish'" +
+				" union " +
+				" select 'Other' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and pri_language = 'Other'";
+
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_LANGUAGE = SQL_LANGUAGE.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_LANGUAGE, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("English");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Spanish");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Other");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getMaritalStatusPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_MARITAL = "select 'Married' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and marital_status = 'Married' " +
+				" union " +
+				" select 'Single' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and marital_status = 'Single'" +
+				" union " +
+				" select 'Significant Other' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and marital_status = 'Significant Other'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_MARITAL = SQL_MARITAL.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_MARITAL, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Married");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Single");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Significant Other");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getRacePercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_RACE = "select 'American Indian or Alaska Native' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and race = 'American Indian or Alaska Native' " +
+				" union " +
+				" select 'Asian' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Asian'" +
+				" union " +
+				" select 'Black or African American' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Black or African American'"+
+				" union " +
+				" select 'Native Hawaiian or Other Pacific Islander' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Native Hawaiian or Other Pacific Islander'" +
+				" union " +
+				" select 'White' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'White'" +
+				" union " +
+				" select 'Mixed Race' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Mixed Race'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Information not collected'" +
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and race = 'Individual does not know'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_RACE = SQL_RACE.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_RACE, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("American Indian or Alaska Native");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Asian");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Black or African American");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Native Hawaiian or Other Pacific Islander");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("White");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Mixed Race");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getHouseholdPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_HOH = "select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and h_o_h = 'Yes' " +
+				" union " +
+				" select 'No' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'No'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Information not collected'" +
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Individual does not know'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_HOH = SQL_HOH.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_HOH, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("No");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getVeteranPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_VETERAN = "select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and veteran = 'Yes' " +
+				" union " +
+				" select 'No' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'No'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Information not collected'" +
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Individual does not know'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_VETERAN = SQL_VETERAN.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_VETERAN, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("No");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getDisabilityPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_DISABILITY = "select 'Yes, individual indicates a disability as defined in ADA' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and disability = 'Yes, individual indicates a disability as defined in ADA' " +
+				" union " +
+				" select 'No, individual indicates a disability as defined in ADA' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'No, individual indicates a disability as defined in ADA'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Information not collected'" +
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Individual does not know'" +
+				" union " +
+				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'N/A'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_DISABILITY = SQL_DISABILITY.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_DISABILITY, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes, individual indicates a disability as defined in ADA");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("No, individual indicates a disability as defined in ADA");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("N/A");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getReturningCitizenPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_CITIZEN = "select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and rc_or_ex_off = 'Yes' " +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and rc_or_ex_off = 'Information not collected'" +
+				" union " +
+				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and rc_or_ex_off = 'N/A'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_CITIZEN = SQL_CITIZEN.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_CITIZEN, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("N/A");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getSSIPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_SSI = "select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ssi = 'Yes' " +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssi = 'Information not collected'" +
+				" union " +
+				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssi = 'N/A'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_SSI = SQL_SSI.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_SSI, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("N/A");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getSSDIPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_SSDI = "select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ssdi = 'Yes' " +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssdi = 'Information not collected'" +
+				" union " +
+				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssdi = 'N/A'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_SSDI = SQL_SSDI.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_SSDI, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("N/A");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getHealthPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_HEALTH = "select 'Yes, covered through employer or union (current or former)' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and gender = 'Yes, covered through employer or union (current or former)' " +
+				" union " +
+				" select 'Yes, purchased insurance from insurance company\",\"Medicare\",\"Medicaid/Medical Assistant' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Yes, purchased insurance from insurance company\",\"Medicare\",\"Medicaid/Medical Assistant'" +
+				" union " +
+				" select 'TRICARE or other military health care' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'TRICARE or other military health care'"+
+				" union " +
+				" select 'VA health care' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'VA health care'" +
+				" union " +
+				" select 'Indian Health Service' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Indian Health Service'" +
+				" union " +
+				" select 'Other health insurance or health coverage plan' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Other health insurance or health coverage plan'" +
+				" union " +
+				" select 'No coverage' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'No coverage'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Information not collected'" +
+				" union " +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Individual refused'" +
+				" union " +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Individual does not know'" +
+				" union " +
+				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'N/A'" +
+				" union " +
+				" select 'Medicare' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Medicare'" +
+				" union " +
+				" select 'Medicaid/Medical Assistant' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Medicaid/Medical Assistant'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_HEALTH = SQL_HEALTH.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_HEALTH, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes, covered through employer or union (current or former)");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Yes, purchased insurance from insurance company");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("TRICARE or other military health care");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("VA health care");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Indian Health Service");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Other health insurance or health coverage plan");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("No coverage");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("N/A");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Medicare");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Medicaid/Medical Assistant");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getEducationPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_EDUCATION = "select 'No schooling completed, Nursery school, or Kindergarten' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and highest_edu = 'No schooling completed, Nursery school, or Kindergarten' " +
+				" union " +
+				" select '12th grade, no diploma' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = '12th grade, no diploma'" +
+				" union " +
+				" select 'High School Diploma' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'High School Diploma'"+
+				" union " +
+				" select 'Grade 1 GED or alternative credentials' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 1 GED or alternative credentials'" +
+				" union " +
+				" select 'Grade 2 Less than 1 year of college credit' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 2 Less than 1 year of college credit'" +
+				" union " +
+				" select 'Grade 3 One or more yearss of college dredit, no degree' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 3 One or more yearss of college dredit, no degree'" +
+				" union " +
+				" select 'Grade 4 Associate''s degree' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 4 Associate''s degree'" +
+				" union " +
+				" select 'Grade 5 Bachelor''s degree' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 5 Bachelor''s degree'" +
+				"union" +
+				"select 'Grade 6 Master''s degree' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and highest_edu = 'Grade 6 Master''s degree' " +
+				" union " +
+				" select 'Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)'" +
+				" union " +
+				" select 'Grade 8 Doctorate degree' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 8 Doctorate degree'"+
+				" union " +
+				" select 'Grade 9 Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 9 Individual refused'" +
+				" union " +
+				" select 'Grade 10Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 10Individual does not know'" +
+				" union " +
+				" select 'Grade 11 N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 11 N/A'" +
+				" union " +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Information not collected'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_EDUCATION = SQL_EDUCATION.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_EDUCATION, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("No schooling completed, Nursery school, or Kindergarten");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("12th grade, no diploma");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("High School Diploma");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 1 GED or alternative credentials");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 2 Less than 1 year of college credit");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 3 One or more yearss of college dredit, no degree");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 4 Associate's degree");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 5 Bachelor's degree");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 6 Master's degree");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 8 Doctorate degree");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 9 Individual refused");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 10Individual does not know");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Grade 11 N/A");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			cp = new CategoryPercentage();
+			cp.setCategory("Information not collected");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+
+
+		return cpList;
+	}
+
 
 	public List<String> getAllYears() {
 
