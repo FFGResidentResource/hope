@@ -129,6 +129,10 @@ jQuery(document).ready(
 	});
 
 
+function adminCheck(that){
+	jQuery("input[id^='_prop_']").prop('checked', false);
+	jQuery("input[id^='_prop_']").prop('disabled', jQuery(that).prop('checked'));
+}
 
 /**
  * 
