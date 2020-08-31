@@ -144,8 +144,7 @@
 						<div class="form-group">
 							<div class="col-sm-offset-4 col-sm-8">
 								<div class="checkbox">
-									<label> <input type="checkbox" th:field="*{admin}" id="_isAdmin"
-										onclick="jQuery('#_property').prop('disabled', jQuery(this).prop('checked')); jQuery('select').prop('selectedIndex', 0);">
+									<label> <input type="checkbox" th:field="*{admin}" id="_isAdmin">
 										Is Admin? (Admins have access to all Property)
 									</label>
 								</div>
@@ -153,15 +152,19 @@
 						</div>
 
 						<div class="form-group">
-							<label for="_property" class="col-sm-4 control-label">Property</label>
-							<div class="col-sm-8">
-								<select class="form-control setable" id="_property"
-									th:field="*{propertyId}">
-									<option value="">Select</option>
-									<option th:each="property : ${serviceCoordinator.propertyList}"
-										th:value="${property.propertyId}"
-										th:utext="${property.propertyName}" />
-								</select>
+						
+						<div th:each="property, iStat: *{propertyList}">
+
+								<div class="col-sm-3">
+								<label>
+								<input type="hidden"
+										th:field="*{propertyList[__${iStat.index}__].propertyId}" />
+								<input type="hidden"
+										th:field="*{propertyList[__${iStat.index}__].propertyName}" />
+								<input type="checkbox" th:id="_prop_+${property.propertyId}"											
+											th:field="*{propertyList[__${iStat.index}__].checked}"
+											th:value="${property.checked}"> &nbsp; <span th:text="${property.propertyName}"></span> </label>
+								</div>
 							</div>
 						</div>
 

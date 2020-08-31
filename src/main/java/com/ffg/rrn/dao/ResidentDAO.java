@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ import com.ffg.rrn.mapper.ReferralMapper;
 import com.ffg.rrn.mapper.ResidentMapper;
 import com.ffg.rrn.model.AssessmentQuestionnaire;
 import com.ffg.rrn.model.AssessmentType;
+import com.ffg.rrn.model.CategoryPercentage;
 import com.ffg.rrn.model.Child;
 import com.ffg.rrn.model.Choice;
 import com.ffg.rrn.model.Property;
@@ -191,9 +193,29 @@ public class ResidentDAO extends JdbcDaoSupport {
 			this.getJdbcTemplate().queryForObject("select role_name from service_coordinator sc join user_role ur on ur.user_id = sc.sc_id "
 				+ "join app_role ar on ar.role_id = ur.role_id and sc.user_name = ? and ar.role_name = 'ROLE_ADMIN'", new Object[] { serviceCoord }, String.class);
 		} catch (EmptyResultDataAccessException ex) {
+			
+			
+			List<Property> properties = new ArrayList<Property>();
 
-			PropertyMapper rowMapper = new PropertyMapper();
-			return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL_FOR_NON_ADMIN_SC, new Object[] { serviceCoord }, rowMapper);
+			properties = this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL_FOR_NON_ADMIN_SC, new Object[] { serviceCoord }, (rs, rowNumber) -> {
+				try {
+					Property p = new Property();	
+					
+					p.setPropertyId(rs.getInt("PROP_ID"));
+					p.setPropertyName(rs.getString("PROP_NAME"));
+					p.setUnit(rs.getInt("UNIT"));
+					p.setUnitFee(rs.getInt("UNIT_FEE"));
+					p.setActive(rs.getBoolean("ACTIVE"));
+					p.setNoOfResident(rs.getInt("TOTAL_RESIDENTS"));
+					p.setResidentCouncil(rs.getBoolean("RESIDENT_COUNCIL"));
+					
+					return p;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});	
+			
+			return properties;
 		}
 
 		PropertyMapper rowMapper = new PropertyMapper();

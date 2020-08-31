@@ -18,8 +18,8 @@ import com.ffg.rrn.model.ServiceCoordinator;
 public class ServiceCoordinatorMapper implements RowMapper<ServiceCoordinator> {
 	 
     public static final String BASE_SQL //
-			= "Select u.sc_Id, u.User_Name, u.Encrypted_Password, u.active, u.email, u.created_on, u.last_login, p.prop_id, p.prop_name From service_coordinator u "
-					+ " left join Property p on p.prop_id = u.prop_id";
+			= "Select u.sc_Id, u.User_Name, u.Encrypted_Password, u.active, u.email, u.created_on, u.last_login, u.assigned_property From service_coordinator u ";
+					
 
     @Override
     public ServiceCoordinator mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -30,11 +30,10 @@ public class ServiceCoordinatorMapper implements RowMapper<ServiceCoordinator> {
 		boolean active = rs.getBoolean("active");
         String email = rs.getString("email");
         Timestamp createdOn = rs.getTimestamp("created_on");
-        Timestamp lastLogin = rs.getTimestamp("last_login");		
-		Integer prop_id = rs.getInt("prop_id");
-		String prop_name = rs.getString("prop_name");
+        Timestamp lastLogin = rs.getTimestamp("last_login");
+        String assignedProperties = rs.getString("assigned_property");
  
-		return new ServiceCoordinator(scId, userName, encryptedPassword, active, email, createdOn, lastLogin, prop_id, prop_name);
+		return new ServiceCoordinator(scId, userName, encryptedPassword, active, email, createdOn, lastLogin, assignedProperties);
     }
  
 }

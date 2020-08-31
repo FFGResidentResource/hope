@@ -42,42 +42,8 @@ function getHistoricalAssessmentByResidentIdAndLifeDomain(that, residentId, life
 			jQuery('input[id^='+ prefix + 'Questionnaire_]:radio').prop('checked',false);			
 			jQuery('#'+prefix+'Submit').val('Save ' + lifeDomain + ' Assessment');
 			
-			//calculateAllScores(lifeDomain);
-			
 		}
 	});
-}
-
-
-/**
- * following method will populate score and goal when you select historical date under each Assessment
- * @param lifeDomain
- * @returns
- */
-function calculateAllScores(lifeDomain){
-    
-    if(lifeDomain == 'HOUSING'){
-	calculateHousingScore();	
-    }
-    if(lifeDomain == 'MONEY MANAGEMENT'){
-	calculateMoneyMgmtScore();    
-    }
-    
-    if(lifeDomain == 'EMPLOYMENT'){
-	calculateEmploymentScore();
-    }
-    
-    if(lifeDomain == 'EDUCATION'){
-	calculateEducationScore();
-    }
-    
-    if(lifeDomain == 'NETWORK SUPPORT'){
-	calculatNetworkSupportScore();
-    }
-    
-    if(lifeDomain == 'HOUSEHOLD MANAGEMENT'){
-	calculateHouseholdScore();
-    }
 }
 
 function saveAssessment(form){

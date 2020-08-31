@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -70,7 +72,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
 
@@ -88,6 +90,14 @@ public class ResidentController extends BaseController {
 			return "403Page";
 		}
 
+	}
+
+	private Property checkResidentPropertyBelongsToSC(Resident resident) {
+		
+		return resident.getPropertyList().stream()
+		.filter(x -> resident.getPropertyName().equals(x.getPropertyName()))
+		.findAny().orElse(null);
+		
 	}
 
 	@RequestMapping(value = "/onboarding", method = RequestMethod.GET)
@@ -145,7 +155,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
 
@@ -181,7 +191,7 @@ public class ResidentController extends BaseController {
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
 		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "referralForm");
 
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 			if (StringUtils.isEmpty(resident.getReferralReason())) {
 				resident.setReferralReason(
@@ -249,7 +259,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
 		resident.setMostRecentSSMDate(residentService.getMostRecentSSMDate(residentId));
@@ -361,7 +371,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");

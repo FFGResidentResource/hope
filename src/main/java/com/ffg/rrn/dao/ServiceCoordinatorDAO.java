@@ -8,7 +8,10 @@ import static java.lang.Math.toIntExact;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -20,6 +23,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ServiceCoordinatorMapper;
 import com.ffg.rrn.model.Property;
@@ -33,8 +39,8 @@ import com.ffg.rrn.model.ServiceCoordinator;
 @Transactional
 public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
-	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON, PROP_ID)"
-			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW(), ?)";
+	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON, ASSIGNED_PROPERTY)"
+			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW(), to_json(?::json))";
 	
 	private final static String INSERT_ADMIN_ROLE = "INSERT INTO USER_ROLE (ID, USER_ID, ROLE_ID) VALUES (nextval('UR_SQ'), ? , 1)";
 
@@ -47,7 +53,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 	private final static String UPDATE_SQL_SERVICECOORDINATOR_ADMIN = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
-	private final static String UPDATE_SQL_SERVICECOORDINATOR_NONADMIN = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , PROP_ID = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
+	private final static String UPDATE_SQL_SERVICECOORDINATOR_NONADMIN = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , DATE_MODIFIED = NOW(), to_json(?::json) where USER_NAME = ? ";
 
 	private final static String INACTIVATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET ACTIVE = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
@@ -75,7 +81,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		List<ServiceCoordinator> scList = this.getJdbcTemplate().query(ServiceCoordinatorMapper.BASE_SQL, rowMapper);
 
 		for (ServiceCoordinator serviceCoordinator : scList) {
-			serviceCoordinator.setAdmin((serviceCoordinator.getPropertyId() > 0) ? false : true);
+			serviceCoordinator.setAdmin((null!=serviceCoordinator.getAssignedProperties()) ? Boolean.FALSE : Boolean.TRUE);
 		}
 		return scList;
 	}
@@ -100,7 +106,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 	}
 
 	public Long saveServiceCoordinator(ServiceCoordinator sc) {
-
+				
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] { "sc_id" };
 
@@ -117,7 +123,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			this.getJdbcTemplate().update(conn -> buildInsertUserRolePS(conn, sc));
 
 			// for admins - default USER_ROLE needs to be inserted as well
-			if (sc.getPropertyId() == null) {
+			if (sc.getAdmin()) {
 				this.getJdbcTemplate().update(conn -> buildInsertDefaultUserRolePS(conn, sc));
 			}
 
@@ -130,7 +136,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			this.getJdbcTemplate().update(conn -> buildInsertUserRolePS(conn, sc));
 
 			// for admins - default USER_ROLE needs to be inserted as well
-			if (sc.getPropertyId() == null) {
+			if (sc.getAdmin()) {
 				this.getJdbcTemplate().update(conn -> buildInsertDefaultUserRolePS(conn, sc));
 			}
 
@@ -153,7 +159,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 	private PreparedStatement buildInsertUserRolePS(Connection conn, ServiceCoordinator sc) throws SQLException {
 
-		if (sc.getPropertyId() == null) {
+		if (sc.getAdmin()) {
 			PreparedStatement ps = conn.prepareStatement(INSERT_ADMIN_ROLE);
 			ps.setInt(1, sc.getScId());
 			return ps;
@@ -170,7 +176,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 		String sql = UPDATE_SQL_SERVICECOORDINATOR_NONADMIN;
 
-		if (sc.getPropertyId() == null) {
+		if (sc.getAdmin()) {
 			sql = UPDATE_SQL_SERVICECOORDINATOR_ADMIN;
 		}
 
@@ -179,19 +185,33 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		ps.setString(1, sc.getEmail());
 		ps.setString(2, sc.getEncrytedPassword());
 
-		if (sc.getPropertyId() != null) {
-			ps.setInt(3, sc.getPropertyId());
-			ps.setString(4, sc.getUserName());
-		} else {
+		if (sc.getAdmin()) {
 			ps.setString(3, sc.getUserName());
+		} else {			
+			ps.setString(3,buildJsonSelectedProperties(sc));
+			ps.setString(4, sc.getUserName());
 		}
 
 		return ps;
 	}
+	
+	private String buildJsonSelectedProperties(final ServiceCoordinator sc) {
+		
+		return "[" + sc.getPropertyList()
+        .stream()
+        .map(a -> {
+     	   if(a.getChecked()) {
+     		   return String.valueOf(a.getPropertyId());
+     	   }else {
+     		   return null;
+     	   }
+        }).filter(s -> s!=null).collect(Collectors.joining(",")) + "]";
+		
+	}
 
 	private PreparedStatement buildInsertServiceCoordinatorPreparedStatement(Connection connection, ServiceCoordinator sc, String[] pkColumnNames) throws SQLException {
 
-		if (sc.getPropertyId() == null) {
+		if (sc.getAdmin()) {
 			PreparedStatement ps = connection.prepareStatement(INSERTION_SQL_SERVICECOORDINATOR_ADMINS, pkColumnNames);
 			ps.setString(1, sc.getUserName());
 			ps.setString(2, sc.getEncrytedPassword());
@@ -202,7 +222,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			ps.setString(1, sc.getUserName());
 			ps.setString(2, sc.getEncrytedPassword());
 			ps.setString(3, sc.getEmail());
-			ps.setInt(4, sc.getPropertyId());
+			ps.setString(4, buildJsonSelectedProperties(sc));
 			return ps;
 		}
 

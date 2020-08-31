@@ -6,7 +6,7 @@ jQuery(document).ready(
 	    
 	    jQuery('a[id^="_load"]').attr('disabled', true);
 	    
-	    jQuery('#_property').prop('disabled', jQuery('#_isAdmin').prop('checked'));
+	    jQuery('input[id^="_prop_"]').prop('disabled', jQuery('#_isAdmin').prop('checked'));
 	    
 	    jQuery.ajax({
 		type : "POST",
@@ -78,7 +78,11 @@ jQuery(document).ready(
 			    jQuery('#inputPassword1').val('');
 			    jQuery('#inputPassword2').val('');
 			    jQuery('#_isAdmin').prop('checked', false);
-			    jQuery('#_property').prop('disabled', false);
+
+				
+				jQuery('input[id^="_prop_"]').prop('checked',false);
+				jQuery('input[id^="_prop_"]').prop('disabled', false);	
+
 			    
 			} else {
 			    
@@ -92,8 +96,18 @@ jQuery(document).ready(
 			    jQuery('#_property').prop('disabled', currentRow.admin);
 			    
 			    if(currentRow.admin == true){
-				jQuery('#_property').removeAttr('required');			
-			    }
+					jQuery('input[id^="_prop_"]').removeAttr('required');
+					jQuery('input[id^="_prop_"]').prop('checked',false);
+					jQuery('input[id^="_prop_"]').prop('disabled', true);			
+			    }else{
+				
+				jQuery('input[id^="_prop_"]').prop('checked',false);
+				jQuery('input[id^="_prop_"]').prop('disabled', false);
+				JSON.parse(currentRow.assignedProperties).forEach(function (value){
+   					jQuery("#_prop_"+value).prop('checked', true);
+				});
+				
+				}
 			    
 			    jQuery('a[id^="_load"]').attr('disabled', false);
 			    
