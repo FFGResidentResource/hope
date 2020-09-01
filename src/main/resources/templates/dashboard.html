@@ -41,7 +41,7 @@ body {
 	<!-- Include _menu.html -->
 	<th:block th:include="../templates/_menu"></th:block>
 
-	<form name='_dashoardF' th:object="${dashboard}" 
+	<form name='_dashoardF' th:object="${dashboard}"
 		class="form-horizontal">
 
 		<div class="container">
@@ -65,8 +65,7 @@ body {
 						<div class="col-md-3">
 							<label> <input type="checkbox" th:id="${pr.propertyId}"
 								th:name="'_propId_'+${pr.propertyId}">&nbsp;<span
-								th:text="${pr.propertyName}"
-								></span>
+								th:text="${pr.propertyName}"></span>
 							</label>
 						</div>
 					</div>
@@ -81,13 +80,46 @@ body {
 
 
 
-		<div class="container-fluid">
+		<div class="container" style="min-width:700px; overflow: auto;!important"> 
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-4">
 					<div id="genderChart" style="min-height: 400px;"></div>
 				</div>
-				<div class="col-sm-6">
-					<!-- TODO -->
+				<div class="col-sm-4">
+					<div id="ethnicityChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="raceChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="languageChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="maritalStatusChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="householdChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="veteranChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="disabilityChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="exOffenderChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="ssiChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="ssdiChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-12">
+					<div id="healthChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-12">
+					<div id="educationChart" style="min-height: 400px;"></div>
 				</div>
 			</div>
 		</div>

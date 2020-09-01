@@ -78,11 +78,110 @@ public class RestAPIController {
 	}
 	
 	@PostMapping("/genderPercentage")
-	public ResponseEntity<?> generateReport(@RequestBody String selectedProperties)  {
+	public ResponseEntity<?> generateGenderReport(@RequestBody String selectedProperties)  {
 		
-		List<CategoryPercentage> genderPercentage = dashDao.getGenderPercentage(selectedProperties);
+		List<CategoryPercentage> cp = dashDao.getGenderPercentage(selectedProperties);
 
-		return ResponseEntity.ok(genderPercentage);
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/ethnicityPercentage")
+	public ResponseEntity<?> generateEthinicityReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getEthnicityPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/racePercentage")
+	public ResponseEntity<?> generateRaceReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getRacePercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/languagePercentage")
+	public ResponseEntity<?> generateLanguageReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getLanguagePercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/healthPercentage")
+	public ResponseEntity<?> generateHealthReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getHealthPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/ssiPercentage")
+	public ResponseEntity<?> generateSsiReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getSSIPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/ssdiPercentage")
+	public ResponseEntity<?> generateSsdiReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getSSDIPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/educationPercentage")
+	public ResponseEntity<?> generateEducationReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getEducationPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	
+	@PostMapping("/exOffenderPercentage")
+	public ResponseEntity<?> generateExOffReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getReturningCitizenPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/veteranPercentage")
+	public ResponseEntity<?> generateVeteranReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getVeteranPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/disabilityPercentage")
+	public ResponseEntity<?> generateDisReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getDisabilityPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/householdPercentage")
+	public ResponseEntity<?> generateHouseholdReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getHouseholdPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	
+	
+	@PostMapping("/maritalStatusPercentage")
+	public ResponseEntity<?> generateMSReport(@RequestBody String selectedProperties)  {
+		
+		List<CategoryPercentage> cp = dashDao.getMaritalStatusPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
 	}
 
 	@PostMapping("/getAllServiceCoordinators")

@@ -1,6 +1,6 @@
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth   ;
 var dataArray;
 
 jQuery(document).ready(function() {
@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
 	console.log(selectedProperties);
 	
 	// each graph one by one need to be called here, below is just first one - TODO
-	genderPercentage();	
+	generateReport();	
 	
 	jQuery("input[name^='_propId_']").on('change', function () {
 		generateReport();
@@ -34,7 +34,78 @@ function generateReport(){
 		}
 	});
 	
-	genderPercentage();		
+	genderPercentage();
+	ethnicityPercentage();
+	languagePercentage();
+	maritalStatusPercentage();
+	racePercentage();
+	householdPercentage();
+	veteranPercentage(); 
+	disabilityPercentage();
+	exOffenderPercentage();
+	ssiPercentage();
+	ssdiPercentage();
+	healthPercentage();
+	educationPercentage();
+	
+}
+
+function generateChart(attachId, title){
+	
+	c3.generate({
+					bindto : attachId,
+					title: {
+        show: false,
+        text: title,
+        position: 'top-center',   // top-left, top-center and top-right
+        padding: {
+          top: 20,
+          right: 20,
+          bottom: 40,
+          left: 50
+        }
+		
+      },
+					data : {
+					    columns : dataArray,
+					    type : 'bar',
+						labels:{
+							 format:function (v, id, i, j) { return v + '%'; }
+						},
+					},
+					bar: {
+						
+        				width: {
+            				ratio: 0.25 // this makes bar width 50% of length between ticks
+        				}
+			        // or
+			        //width: 100 // this makes bar width 100px
+    				},
+					color: {
+	   					 pattern: ['#3296dc', '#719dd7', '#e29305', '#ffbb78', '#81923a', '#d3d093', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9']
+					},				
+					axis : {
+					    x : {
+						tick : {
+						    values : [ '' ]
+						}
+					    },
+					    y : {
+						min : 5,
+						tick: {
+					            format: function (d) {
+					               return (parseInt(d) == d) ? d + ' %' : null; 						
+					             }
+					          }
+					    }
+					},
+					tooltip: {
+  						format: {
+    						title: function (x, index) { return title+' % '}
+  								}
+					}					
+				    });	
+	
 }
 
 
@@ -55,7 +126,13 @@ function genderPercentage(){
 			
 			debugger;
 			dataArray = [[response[0].category,response[0].percentage],
-						 [response[1].category,response[1].percentage]
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage]
 						];
 						
 			if(chart != null){				
@@ -63,40 +140,8 @@ function genderPercentage(){
 					columns : dataArray					
 				})
 			}else{		
-					chart = c3.generate({
-					bindto : '#genderChart',
-					data : {
-					    columns : dataArray,
-					    type : 'bar'
-					},
-					labels:{
-						 format:function (v, id, i, j) { return v + '%'; }
-					},
-					color: {
-					    pattern: [ '#75b3d5', '#c3d1e9']
-					},					
-					axis : {
-					    x : {
-						tick : {
-						    values : [ '' ]
-						}
-					    },
-					    y : {
-						min : 5,
-						tick: {
-					            format: function (d) {
-					               return (parseInt(d) == d) ? d + ' %' : null; 						
-					             }
-					          }
-					    }
-					},
-					tooltip: {
-  						format: {
-    						title: function (x, index) { return 'Male Female % '}
-  								}
-					}
+					chart = generateChart("#genderChart", "Gender");
 					
-				    });	
 				}	
 		},		
 		error : function(e) {
@@ -105,6 +150,473 @@ function genderPercentage(){
     });
 	
 }
+
+function ethnicityPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/ethnicityPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chartEth != null){
+				chartEth.load({
+					columns : dataArray
+				})
+			}else{
+				chartEth = generateChart("#ethnicityChart", "Ethnicity");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function languagePercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/languagePercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+
+			];
+
+			if(chartLang != null){
+				chartLang.load({
+					columns : dataArray
+				})
+			}else{
+				chartLang = generateChart("#languageChart", "Language");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function maritalStatusPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/maritalStatusPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chartMS != null){
+				chartMS.load({
+					columns : dataArray
+				})
+			}else{
+				chartMS = generateChart("#maritalStatusChart", "MaritalStatus");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function racePercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/racePercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage]
+			];
+
+			if(chartRace != null){
+				chartRace.load({
+					columns : dataArray
+				})
+			}else{
+				chartRace = generateChart("#raceChart", "Race");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function householdPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/householdPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chartHouseHold != null){
+				chartHouseHold.load({
+					columns : dataArray
+				})
+			}else{
+				chartHouseHold = generateChart("#householdChart", "Household");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function veteranPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/veteranPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chartVeteran != null){
+				chartVeteran.load({
+					columns : dataArray
+				})
+			}else{
+				chartVeteran = generateChart("#veteranChart", "Veteran");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function disabilityPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/disabilityPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+			];
+
+			if(chartDis != null){
+				chartDis.load({
+					columns : dataArray
+				})
+			}else{
+				chartDis = generateChart("#disabilityChart", "Disability");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function exOffenderPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/exOffenderPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chartExOff != null){
+				chartExOff.load({
+					columns : dataArray
+				})
+			}else{
+				chartExOff = generateChart("#exOffenderChart", "Ex Off / Returning Citizen");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function ssiPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/ssiPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chartSsi != null){
+				chartSsi.load({
+					columns : dataArray
+				})
+			}else{
+				chartSsi = generateChart("#ssiChart", "SSI");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function ssdiPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/ssdiPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage]
+			];
+
+			if(chartSsdi != null){
+				chartSsdi.load({
+					columns : dataArray
+				})
+			}else{
+				chartSsdi = generateChart("#ssdiChart", "SSDI");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function healthPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/healthPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage],
+				[response[10].category,response[10].percentage],
+				[response[11].category,response[11].percentage],
+				[response[12].category,response[12].percentage]
+			];
+
+			if(chartHealth != null){
+				chartHealth.load({
+					columns : dataArray
+				})
+			}else{
+				chartHealth = generateChart("#healthChart", "Health");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function educationPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/educationPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage],
+				[response[10].category,response[10].percentage],
+				[response[11].category,response[11].percentage]
+			];
+
+			if(chartEdu != null){
+				chartEdu.load({
+					columns : dataArray
+				})
+			}else{
+				chartEdu = generateChart("#educationChart", "Education");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
 
 
 //will refactor below Later
