@@ -1018,7 +1018,7 @@ INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_
 
 INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_show_date,resident_id,service_coord,date_added,date_modified) VALUES 
 (nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.','08/31/2020', 1,'dbadmin1','2020-08-26','2020-08-26')
-(nextval('CN_SQ'),'New Description','New Assessment','New Plan','09/02/2020',1,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'New Description','New Assessment','New Plan','09/02/2020',1,'dbadmin1','2020-09-02','2020-09-02')
 ;
 
 INSERT INTO action_plan (action_plan_id,resident_id,active,plan_of_action,plan_details,referral_partner,anticipated_outcomes,anticipated_date,outcome_achieved,completion_date,achieved_ssm,followup_notes,date_added,date_modified,service_coord) VALUES 
