@@ -191,6 +191,70 @@ public class RestAPIController {
 
 		return ResponseEntity.ok(allServiceCoordinators);
 	}
+	
+	@PostMapping("/expFoodShortagePercentage")
+	public ResponseEntity<?> getExpFoodShortagePercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getFoodShortagesPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/modeOfTransportationPercentage")
+	public ResponseEntity<?> getModeOfTransportationPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getModeOfTransportationPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/internetAccessPercentage")
+	public ResponseEntity<?> getInternetAccessPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getInternetAccessPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/prefContactPercentage")
+	public ResponseEntity<?> getPrefContactPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.prefferedContactMethodPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/safeDayPercentage")
+	public ResponseEntity<?> getSafeDayPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.feeSafeDayPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/safeNightPercentage")
+	public ResponseEntity<?> getSafeNightPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.feeSafeNightPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/intResCouncilPercentage")
+	public ResponseEntity<?> getIntResCouncilPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getInterestResCouncil(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/occupancyLengthPercentage")
+	public ResponseEntity<?> getOccLengthPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.occupancyLengthPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
 
 	@PostMapping("/getHistoricalAssessmentByResidentIdAndLifeDomain")
 	public ResponseEntity<?> getHistoricalAssessmentByResidentIdAndLifeDomain(

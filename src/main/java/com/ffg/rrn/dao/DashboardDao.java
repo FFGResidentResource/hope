@@ -901,6 +901,485 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		return cpList;
 	}
+	
+	public List<CategoryPercentage> getFoodShortagesPercentage(String selectedProperties){
+		
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'No' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and EXP_FOOD_SHORT = 'Yes' " +
+				" union " +
+				" select 'Beginning of the Month' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'Beginning of the Month'" +
+				" union " +
+				" select 'Middle of the Month' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'Middle of the Month'" +
+				" union " +
+				" select 'End of the Month' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'End of the Month'";
+
+		
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("No");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Beginning of the Month");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Middle of the Month");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			
+			cp = new CategoryPercentage();
+			cp.setCategory("End of the Month");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+	
+public List<CategoryPercentage> feeSafeDayPercentage(String selectedProperties){
+		
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Somewhat safe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and SAFE_DAY = 'Somewhat safe' " +
+				" union " +
+				" select 'Somewhat unsafe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Somewhat unsafe'" +
+				" union " +
+				" select 'Very safe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Very safe'" +
+				" union " +
+				" select 'Very unsafe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Very unsafe'";
+
+		
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Somewhat safe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Somewhat unsafe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Very safe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			
+			cp = new CategoryPercentage();
+			cp.setCategory("Very unsafe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+public List<CategoryPercentage> feeSafeNightPercentage(String selectedProperties){
+	
+	selectedProperties = selectedProperties.replace("\"", "");
+	selectedProperties = selectedProperties.replace("[", "");
+	selectedProperties = selectedProperties.replace("]", "");
+
+	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+	String SQL_ = "select 'Somewhat safe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and SAFE_NIGHT = 'Somewhat safe' " +
+			" union " +
+			" select 'Somewhat unsafe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Somewhat unsafe'" +
+			" union " +
+			" select 'Very safe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Very safe'" +
+			" union " +
+			" select 'Very unsafe' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Very unsafe'";
+
+	
+	if (StringUtils.isNotBlank(selectedProperties)) {
+		SQL_ = SQL_.replace(":properties", selectedProperties);
+
+		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+			try {
+				CategoryPercentage cp = new CategoryPercentage();
+				cp.setCategory(rs.getString("category"));
+				cp.setPercentage(rs.getInt("percentage"));
+				return cp;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+	}
+
+	else {
+
+		CategoryPercentage cp = new CategoryPercentage();
+		cp.setCategory("Somewhat safe");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("Somewhat unsafe");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("Very safe");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+		
+		cp = new CategoryPercentage();
+		cp.setCategory("Very unsafe");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+	}
+
+	return cpList;
+}
+
+public List<CategoryPercentage> getInterestResCouncil(String selectedProperties){
+	
+	selectedProperties = selectedProperties.replace("\"", "");
+	selectedProperties = selectedProperties.replace("[", "");
+	selectedProperties = selectedProperties.replace("]", "");
+
+	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+	String SQL_ = "select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and INT_RES_COUNCIL = 'Yes' " +
+			" union " +
+			" select 'No' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INT_RES_COUNCIL = 'No'" ;
+			
+	
+	if (StringUtils.isNotBlank(selectedProperties)) {
+		SQL_ = SQL_.replace(":properties", selectedProperties);
+
+		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+			try {
+				CategoryPercentage cp = new CategoryPercentage();
+				cp.setCategory(rs.getString("category"));
+				cp.setPercentage(rs.getInt("percentage"));
+				return cp;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+	}
+
+	else {
+
+		CategoryPercentage cp = new CategoryPercentage();
+		cp.setCategory("Yes");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("No");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+	}
+
+	return cpList;
+}
+	
+public List<CategoryPercentage> getInternetAccessPercentage(String selectedProperties){
+		
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'No, but my phone has internet access' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and INTERNET_ACCESS = 'No, but my phone has internet access' " +
+				" union " +
+				" select 'No, I have no internet access' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INTERNET_ACCESS = 'No, I have no internet access'" +
+				" union " +
+				" select 'Yes' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INTERNET_ACCESS = 'Yes'";
+				
+		
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("No, but my phone has internet access");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("No, I have no internet access");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+		}
+
+		return cpList;
+	}
+
+public List<CategoryPercentage> prefferedContactMethodPercentage(String selectedProperties){
+	
+	selectedProperties = selectedProperties.replace("\"", "");
+	selectedProperties = selectedProperties.replace("[", "");
+	selectedProperties = selectedProperties.replace("]", "");
+
+	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+	String SQL_ = "select 'Email' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and via_email = true " + 
+			"				 union  " + 
+			"				 select 'Phone Call' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and via_voicemail = true " + 
+			"				 union  " + 
+			"				 select 'Text Message' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and via_text = true " + 
+			"				 union " + 
+			"				 select 'Mail' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ( via_text = false and via_email = false and via_voicemail =false) " ; 
+			
+			
+	
+	if (StringUtils.isNotBlank(selectedProperties)) {
+		SQL_ = SQL_.replace(":properties", selectedProperties);
+
+		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+			try {
+				CategoryPercentage cp = new CategoryPercentage();
+				cp.setCategory(rs.getString("category"));
+				cp.setPercentage(rs.getInt("percentage"));
+				return cp;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+	}
+
+	else {
+
+		CategoryPercentage cp = new CategoryPercentage();
+		cp.setCategory("Email");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("Phone Call");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("Text Message");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+		
+		cp = new CategoryPercentage();
+		cp.setCategory("Mail");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+	}
+
+	return cpList;
+}
+
+public List<CategoryPercentage> occupancyLengthPercentage(String selectedProperties){
+	
+	selectedProperties = selectedProperties.replace("\"", "");
+	selectedProperties = selectedProperties.replace("[", "");
+	selectedProperties = selectedProperties.replace("]", "");
+
+	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+	String SQL_ = "select 'Less than 1 Year' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and occupancy_length = 'Less than 1 Year' " + 
+			"				 union  " + 
+			"				 select '1-3 Years' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '1-3 Years' " + 
+			"				 union  " + 
+			"				 select '4-6 Years' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '4-6 Years' " + 
+			"				 union " + 
+			"				 select '7-9 Years' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '7-9 Years' " +
+			"				 union " + 
+			"				 select '10 or more Years' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '10 or more Years' " ; 
+			
+			
+	
+	if (StringUtils.isNotBlank(selectedProperties)) {
+		SQL_ = SQL_.replace(":properties", selectedProperties);
+
+		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+			try {
+				CategoryPercentage cp = new CategoryPercentage();
+				cp.setCategory(rs.getString("category"));
+				cp.setPercentage(rs.getInt("percentage"));
+				return cp;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+	}
+
+	else {
+
+		CategoryPercentage cp = new CategoryPercentage();
+		cp.setCategory("Less than 1 Year");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("1-3 Years");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("4-6 Years");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+		
+		cp = new CategoryPercentage();
+		cp.setCategory("7-9 Years");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+		
+		cp = new CategoryPercentage();
+		cp.setCategory("10 or more Years");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+	}
+
+	return cpList;
+}
+	
+public List<CategoryPercentage> getModeOfTransportationPercentage(String selectedProperties){
+		
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Bus' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and MODE_TRANSPORT = 'Bus' " +
+				" union " +
+				" select 'Personal Vehicle' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Personal Vehicle'" +
+				" union " +
+				" select 'Someone drives me' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Someone drives me'" +
+				" union " +
+				" select 'Walk/Bike' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Walk/Bike'";
+
+		
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Bus");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Personal vehicle");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Someone drives me");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			
+			cp = new CategoryPercentage();
+			cp.setCategory("Walk/Bike");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
 
 	public List<CategoryPercentage> getEducationPercentage(String selectedProperties) {
 
@@ -1042,6 +1521,8 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		return cpList;
 	}
+	
+	
 
 
 	public List<String> getAllYears() {

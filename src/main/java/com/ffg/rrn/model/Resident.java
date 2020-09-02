@@ -252,6 +252,14 @@ public class Resident {
 	public static final List<String> healthCoverageList = Arrays.asList("Yes, covered through employer or union (current or former)", "Yes, purchased insurance from insurance company","Medicare","Medicaid/Medical Assistant","TRICARE or other military health care","VA health care","Indian Health Service","Other health insurance or health coverage plan","No coverage","Information not collected","Individual refused","Individual does not know","N/A");
 	public static final List<String> highestEduList = Arrays.asList("No schooling completed, Nursery school, or Kindergarten","12th grade, no diploma", "High School Diploma", "Grade 1 GED or alternative credentials","Grade 2 Less than 1 year of college credit","Grade 3 One or more yearss of college dredit, no degree", "Grade 4 Associate's degree","Grade 5 Bachelor's degree","Grade 6 Master's degree","Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)","Grade 8 Doctorate degree","Grade 9 Individual refused","Grade 10Individual does not know", "Grade 11 N/A", "Information not collected");
 	
+	public static final List<String> safeUnsafeList = Arrays.asList("Somewhat safe", "Somewhat unsafe", "Very safe", "Very unsafe");
+	public static final List<String> occupancyLengthList = Arrays.asList("Less than 1 Year", "1-3 Years", "4-6 Years", "7-9 Years", "10 or more Years");
+	public static final List<String> yesNoList = Arrays.asList("Yes", "No");
+	public static final List<String> modeOfTransportList = Arrays.asList("Bus", "Personal Vehicle", "Someone drives me", "Walk/Bike");
+	public static final List<String> expFoodShortageList = Arrays.asList("No", "Beginning of the Month", "Middle of the Month", "End of the Month");
+	public static final List<String> headOfHHTypeList = Arrays.asList("No Children", "Single Parent", "Two Parent");
+	public static final List<String> internetAccessList = Arrays.asList("No, but my phone has internet access", "No, I have no internet access", "Yes");
+	
 	private String age;
 	private String gender;
 	private String primaryLanguage;
@@ -267,8 +275,15 @@ public class Resident {
 	private String healthCoverage;
 	private String highestEdu;
 	private String annualGross;
-	private Boolean safeDay;
-	private Boolean safeNight;
+	private String safeDuringDayChoice;
+	private String safeDuringNightChoice;
+	private String occupancyLength;
+	private String internetAccess;
+	private String modeOfTransportation;
+	private String experienceFoodShortage;
+	private String householdType;
+	private String interestInResCouncil;
+	
 	
 	public String getFullName() {
 		return StringUtils.normalizeSpace(this.firstName + " " + this.middle + " " + this.lastName);

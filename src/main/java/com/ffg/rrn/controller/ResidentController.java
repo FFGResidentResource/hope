@@ -56,6 +56,8 @@ public class ResidentController extends BaseController {
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION, AppConstants.LIFE_DOMAIN_URL_NETWORK_SUPPORT);
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT, AppConstants.LIFE_DOMAIN_URL_HOUSEHOLD);
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT, null);
+		
+		
 	}
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })

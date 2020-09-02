@@ -1,6 +1,17 @@
+window.onbeforeprint = function() {
+	
+	jQuery(selectedProperties).each(function (idx, val){	
+		console.log(val);
+		var str = '#'+Number(val) + ':checked';
+		if(jQuery(str)){
+			jQuery("#_propListPrint").append(val+ ". "+ jQuery(str).next('span').text() + "  ");
+		}		
+	});
+}
+
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth   ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL  ;
 var dataArray;
 
 jQuery(document).ready(function() {
@@ -47,6 +58,14 @@ function generateReport(){
 	ssdiPercentage();
 	healthPercentage();
 	educationPercentage();
+	foodShortagePercentage();
+	modTransPercentage();
+	internetAccessPercentage();
+	prefferedContactPercentage();
+	safeDayPercentage();
+	safeNightPercentage();
+	intResCouncilPercentage();
+	occLengthPercentage();
 	
 }
 
@@ -72,26 +91,14 @@ function generateChart(attachId, title){
 						labels:{
 							 format:function (v, id, i, j) { return v + '%'; }
 						},
-					},
-					bar: {
-						
-        				width: {
-            				ratio: 0.25 // this makes bar width 50% of length between ticks
-        				}
-			        // or
-			        //width: 100 // this makes bar width 100px
-    				},
-					color: {
-	   					 pattern: ['#3296dc', '#719dd7', '#e29305', '#ffbb78', '#81923a', '#d3d093', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9']
-					},				
+					},			
 					axis : {
 					    x : {
 						tick : {
 						    values : [ '' ]
 						}
 					    },
-					    y : {
-						min : 5,
+					    y : {						
 						tick: {
 					            format: function (d) {
 					               return (parseInt(d) == d) ? d + ' %' : null; 						
@@ -108,6 +115,301 @@ function generateChart(attachId, title){
 	
 }
 
+function intResCouncilPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/intResCouncilPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage]
+						];
+						
+			if(chartIRC != null){				
+				chartIRC.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartIRC= generateChart("#intResCouncilChart", "Interest in Resident Council");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function internetAccessPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/internetAccessPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage]
+						];
+						
+			if(chartIA != null){				
+				chartIA.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartIA = generateChart("#internetAccessChart", "Has Computer with Internet Access");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function prefferedContactPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/prefContactPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage]
+						];
+						
+			if(chartPC != null){				
+				chartPC.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartPC = generateChart("#prefContactChart", "Preferred Method of Contact");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function occLengthPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/occupancyLengthPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage]
+						];
+						
+			if(chartOL != null){				
+				chartOL.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartOL = generateChart("#occLengthChart", "Occupancy Length");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function safeDayPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/safeDayPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage]
+						];
+						
+			if(chartSD != null){				
+				chartSD.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartSD = generateChart("#safeDayChart", "Feels Safe at Home During the Day");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function safeNightPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/safeNightPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage]
+						];
+						
+			if(chartSN != null){				
+				chartSN.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartSN = generateChart("#safeNightChart", "Feels Safe at Home During the Night");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+
+
+function foodShortagePercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/expFoodShortagePercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage]
+						];
+						
+			if(chartFS != null){				
+				chartFS.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartFS = generateChart("#footShortageChart", "Experiences Food Shortage");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function modTransPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/modeOfTransportationPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage]
+						];
+						
+			if(chartMT != null){				
+				chartMT.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartMT = generateChart("#modTransChart", "Mode of Transportation");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
 
 function genderPercentage(){
 	

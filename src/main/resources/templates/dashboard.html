@@ -46,9 +46,7 @@ body {
 
 		<div class="container">
 
-
-
-			<div class="row myPanel">
+			<div class="row myPanel hidden-print">
 
 				<div Class="col-sm-2">
 
@@ -71,7 +69,17 @@ body {
 					</div>
 				</div>
 			</div>
+		
+			<div class="panel panel-info hideme print-only">
+				
+				<div class="panel-heading">Report for Following Properties: <img src="/images/rrnlogo_horz.png" style="float:right; width: 150px;" /> </div>
+  				<div class="panel-body" id="_propListPrint">
+    				
+  				</div>
+			</div>
 		</div>
+		
+		
 
 		<div class="container" style="min-width:700px; overflow: auto;!important"> 
 			<div class="row">
@@ -108,11 +116,43 @@ body {
 				<div class="col-sm-4">
 					<div id="ssdiChart" style="min-height: 400px;"></div>
 				</div>
+				<div class="col-sm-4">
+					<div id="footShortageChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="modTransChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="internetAccessChart" style="min-height: 400px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="prefContactChart" style="min-height: 400px;"></div>
+				</div>
 				<div class="col-sm-12">
 					<div id="healthChart" style="min-height: 400px;"></div>
 				</div>
 				<div class="col-sm-12">
 					<div id="educationChart" style="min-height: 400px;"></div>
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-4">
+					<div id="safeDayChart" style="min-height: 400px;"></div>
+					</div>
+					
+					<div class="col-sm-4">
+					<div id="safeNightChart" style="min-height: 400px;"></div>
+				</div>
+				
+				<div class="col-sm-4">
+					<div id="intResCouncilChart" style="min-height: 400px;"></div>
+				</div>
+				
+				<div class="col-sm-4">
+					<div id="occLengthChart" style="min-height: 400px;"></div>
+				</div>
+				
+				
 				</div>
 			</div>
 		</div>
