@@ -25,8 +25,8 @@ public class ResidentMapper implements RowMapper<Resident> {
 					+ " r.AGE, r.GENDER, r.PRI_LANGUAGE, r.MARITAL_STATUS,  r.ANNUAL_GROSS, r.ETHNICITY, r.RACE, r.H_O_H, r.VETERAN, r.DISABILITY, r.RC_OR_EX_OFF, r.SSI, r.SSDI, r.HEALTH_COVERAGE, r.HIGHEST_EDU, r.SAFE_DAY, r.SAFE_NIGHT, OCCUPANCY_LENGTH, MODE_TRANSPORT, EXP_FOOD_SHORT, INTERNET_ACCESS, HOH_TYPE, INT_RES_COUNCIL,   "
 					+ " (select string_agg(full_name || ' (' || PVR_FLAG || ')', ', ') from child where parent_id = r.resident_id) as children, "
 					+ " ap.referral_partner , ap.anticipated_date , ap.plan_of_action, ap.plan_details, ap.anticipated_outcomes,  ap.followup_notes, ap.outcome_achieved, ap.achieved_ssm, ap.completion_date, ap.date_added as apDateAdded, ap.date_modified as apDateModified, "
-					+ " cn.description, cn.assessment, cn.plan, cn.no_shows, cn.date_added as cnDateAdded, cn.date_modified as cnDateModified,"
-					+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.SELF_SUFFICIENCY, rf.RF_HOUSING_STABILITY, rf.SAFE_SUPPORTIVE_COMMUNITY, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED, rf.date_added as rfDateAdded, rf.date_modified as rfDateModified"
+					+ " cn.description, cn.assessment, cn.plan, cn.no_show_date, cn.date_added as cnDateAdded, cn.date_modified as cnDateModified,"
+					+ " rf.INTERPRETATION, rf.REFERRED_BY, rf.REFERRAL_REASON, rf.COMMENTS, rf.PREVIOUS_ATTEMPTS, rf.RF_FOLLOWUP_NOTES, rf.RES_APP_SCHEDULED, rf.date_added as rfDateAdded, rf.date_modified as rfDateModified"
 					+ " from Resident r join referral ref on ref.ref_id = r.ref_type"
 					+ " join property p on p.prop_id = r.prop_id"
 					+ " left join action_plan ap on ap.resident_id = r.resident_id"
@@ -109,7 +109,7 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setDescription(rs.getString("DESCRIPTION"));
 		r.setAssessment(rs.getString("ASSESSMENT"));
 		r.setPlan(rs.getString("PLAN"));
-		r.setNoShows(rs.getBoolean("NO_SHOWS"));
+		r.setNoShowDate(rs.getString("NO_SHOW_DATE"));
 		r.setCnDateAdded(rs.getDate("cnDateAdded"));
 		r.setCnDateModified(rs.getDate("cnDateModified"));
 
@@ -119,9 +119,6 @@ public class ResidentMapper implements RowMapper<Resident> {
 		r.setReferralReason(rs.getString("REFERRAL_REASON"));
 		r.setCommentsOrExplanation(rs.getString("COMMENTS"));
 		r.setPreviousAttempts(rs.getString("PREVIOUS_ATTEMPTS"));
-		r.setSelfSufficiency(rs.getString("SELF_SUFFICIENCY"));
-		r.setHousingStability(rs.getString("RF_HOUSING_STABILITY"));
-		r.setSafeSupportiveCommunity(rs.getString("SAFE_SUPPORTIVE_COMMUNITY"));
 		r.setRfFollowUpNotes(rs.getString("RF_FOLLOWUP_NOTES"));
 		r.setResidentAppointmentScheduled(rs.getString("RES_APP_SCHEDULED"));
 		r.setReferralFormDateAdded(rs.getDate("rfDateAdded"));

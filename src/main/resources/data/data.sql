@@ -566,7 +566,8 @@ CREATE table PROPERTY (
 	UNIT_FEE		INT,
 	ACTIVE			BOOLEAN DEFAULT TRUE,
 	TOTAL_RESIDENTS	INT,
-	RESIDENT_COUNCIL BOOLEAN DEFAULT FALSE
+	RESIDENT_COUNCIL BOOLEAN DEFAULT FALSE,
+	SERVICE_PROVIDER VARCHAR(50)
 );
 
 CREATE table SERVICE_COORDINATOR (
@@ -575,6 +576,7 @@ CREATE table SERVICE_COORDINATOR (
 	ENCRYPTED_PASSWORD 	VARCHAR(128) NOT NULL,
 	ACTIVE          	BOOLEAN DEFAULT FALSE,
 	EMAIL		   	 	VARCHAR (128) UNIQUE,
+	PHONE				VARCHAR(50),
 	CREATED_ON	    	TIMESTAMP DEFAULT NOW(),
 	LAST_LOGIN	    	TIMESTAMP,
 	DATE_MODIFIED		TIMESTAMP,
@@ -656,9 +658,6 @@ CREATE TABLE REFERRAL_FORM (
 	REFERRAL_REASON				JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
 	COMMENTS					VARCHAR(1000),
 	PREVIOUS_ATTEMPTS			VARCHAR(1000),
-	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false", "Other":"" }',
-	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "Resolve lease violation":"false", "Other":""}',
-	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false", "Other":""}',
 	RF_FOLLOWUP_NOTES			VARCHAR(1000),
 	RES_APP_SCHEDULED			JSON DEFAULT '{ "Resident Appointment Scheduled?":""}',
 	SERVICE_COORD				VARCHAR(50)
@@ -687,7 +686,7 @@ CREATE TABLE CASE_NOTES(
 	DESCRIPTION		VARCHAR(2000),
 	ASSESSMENT		VARCHAR(2000),
 	PLAN			VARCHAR(2000),
-	NO_SHOWS		BOOLEAN DEFAULT FALSE,
+	NO_SHOW_DATE	VARCHAR(20),
 	RESIDENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	SERVICE_COORD	VARCHAR(50),
 	DATE_ADDED		DATE DEFAULT NOW(),		
@@ -763,23 +762,56 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts','','','', 50, 1000, TRUE, 1200, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square','','','', 50, 1000, TRUE, 1300, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes II','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States','','','', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows','','','', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square','','','', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes','','','', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks','','','', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind','','','', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)','','','', 50, 1000, TRUE, 1100, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)','','','', 50, 900, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood','','','', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts','','','', 50, 1000, TRUE, 500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Almond Village','','','', 50, 1000, TRUE, 1200, TRUE, 'FSA');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ashland Village','','','', 50, 1000, TRUE, 1300, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Batavia Village','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Berwick Apartments','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Brooksville Court','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Burnett Manor','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cambridge Village','','','', 50, 1000, TRUE, 1000, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Chadwick Place','','','', 50, 1000, TRUE, 1000, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place1','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place2','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apartments','','','', 50, 1000, TRUE, 1500, FALSE, 'OTR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cypress Commons','','','', 50, 1000, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Daines Village','','','', 50, 1000, TRUE, 1100, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eco Village','','','', 50, 900, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park Apartments','','','', 50, 1000, TRUE, 1000, TRUE, 'ABCAP');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village Apartments','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes II','','','', 50, 1000, TRUE, 500, FALSE, 'WSOS');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Georgetown Senior Apartments','','','', 50, 1000, TRUE, 1200, TRUE, 'Sourcepoint');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glen Meadows','','','', 50, 1000, TRUE, 1300, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Haddon Hall Apartments','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Helen W. Evans (OH AME)','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Highpoint Apartments','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Hollister House','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Jerusalem Judson Meadows','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Judson Terrace','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Manor','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'ILCAO');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village','','','', 50, 1000, TRUE, 1500, TRUE, 'ILCAO');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrenceburg Village','','','', 50, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lima Apartments','','','', 50, 1000, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Meadows Apartments','','','', 50, 1000, TRUE, 1100, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Mechanicsburgh Village','','','', 50, 900, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Miamisburgh Manor','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Pleassant Valley Colony (Plain City)','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Princeton Village (Moraine Village)','','','', 50, 1000, TRUE, 500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Roosevelt Manor (Piqua Manor)','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rotary Manor','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rushville Commons','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Skybird Manor','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'St. Aloysius Apartments','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sturbridge Green','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sunnyview Square','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (1)','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (2,3,4)','','','', 50, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallicks (Schlarman)','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Union Square','','','', 50, 1000, TRUE, 1100, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Vandalia Village','','','', 50, 900, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill','','','', 50, 1000, TRUE, 1000, TRUE, 'Wallick');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Walter G. Sellers Sr. Apartments (First 202 Housing Corp)','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court House','','','', 50, 1000, TRUE, 500, FALSE, 'RRN');
+
 
 
 INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night, occupancy_length, internet_Access, mode_transport, EXP_FOOD_SHORT, hoh_type, int_res_council) VALUES 
@@ -973,19 +1005,20 @@ INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_th
 ;
 
 
-INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_by,date_added,date_modified,referral_reason,"comments",previous_attempts,self_sufficiency,rf_housing_stability,safe_supportive_community,rf_followup_notes,res_app_scheduled,service_coord) VALUES 
-(nextval('REF_SQ'),2,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"true","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Problem with Transportation','NA','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"false","Move to home ownership":"false","Other":""}','{"Avoid eviction":"false","Resolve lease violation":"false","Other":""}','{"Greater sense of satisfaction":"true","Greater sense of safety":"true","Greater sense of community/support":"true","Other":""}','will check back in december','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),30,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"true","Lease violation for:":"","Employment/job readiness":"true","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Shazam Reason','NA','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"false","Move to home ownership":"true","Other":""}','{"Avoid eviction":"false","Resolve lease violation":"true","Other":""}','{"Greater sense of satisfaction":"false","Greater sense of safety":"true","Greater sense of community/support":"true","Other":""}','Less Shazam activity next time','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),29,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"true","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Needs Education','NA','{"Improve knowledge of resources":"false","Improve educational status":"true","Obtain/maintain employment":"false","Move to home ownership":"false","Other":""}','{"Avoid eviction":"false","Resolve lease violation":"false","Other":""}','{"Greater sense of satisfaction":"false","Greater sense of safety":"false","Greater sense of community/support":"false","Other":""}','Ask him to read stories','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),1,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"true","Utility Shut-off, scheduled for (Date):":"08/01/2020","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','how not to miss rent','nil','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"false","Move to home ownership":"false","Other":""}','{"Avoid eviction":"true","Resolve lease violation":"true","Other":""}','{"Greater sense of satisfaction":"false","Greater sense of safety":"true","Greater sense of community/support":"false","Other":""}','re-meet in October','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),28,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"true","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Domestic interfere, Groot should in park instead of spreading branches in other homes','NA','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"false","Move to home ownership":"true","Other":""}','{"Avoid eviction":"false","Resolve lease violation":"false","Other":""}','{"Greater sense of satisfaction":"true","Greater sense of safety":"false","Greater sense of community/support":"true","Other":""}','Meet soon','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),25,false,NULL,'2020-04-30','2020-04-30','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"true","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Professor X class too long to take care of child','NA','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"true","Move to home ownership":"false","Other":""}','{"Avoid eviction":"true","Resolve lease violation":"false","Other":""}','{"Greater sense of satisfaction":"false","Greater sense of safety":"false","Greater sense of community/support":"true","Other":""}','Test Again','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),31,false,NULL,'2020-09-01','2020-09-01','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"Health","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"true","Healthcare/medical issues":"false","Other:":""}','better performance Healthwise','Referred her to Free clinic at Gahana','{"Improve knowledge of resources":"false","Improve educational status":"false","Obtain/maintain employment":"true","Move to home ownership":"true","Other":""}','{"Avoid eviction":"false","Resolve lease violation":"false","Other":""}','{"Greater sense of satisfaction":"true","Greater sense of safety":"true","Greater sense of community/support":"true","Other":"Test My outcome"}','Followup notes here','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_by,date_added,date_modified,referral_reason,"comments",previous_attempts,rf_followup_notes,res_app_scheduled,service_coord) VALUES 
+(nextval('REF_SQ'),2,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"true","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Problem with Transportation','NA','will check back in december','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),30,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"true","Lease violation for:":"","Employment/job readiness":"true","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Shazam Reason','NA','Less Shazam activity next time','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),29,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"true","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Needs Education','NA','Ask him to read stories','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),1,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"true","Utility Shut-off, scheduled for (Date):":"08/01/2020","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','how not to miss rent','nil','re-meet in October','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),28,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"true","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Domestic interfere, Groot should in park instead of spreading branches in other homes','NA','Meet soon','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),25,false,NULL,'2020-04-30','2020-04-30','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"true","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Professor X class too long to take care of child','NA','Test Again','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),31,false,NULL,'2020-09-01','2020-09-01','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"Health","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"true","Healthcare/medical issues":"false","Other:":""}','better performance Healthwise','Referred her to Free clinic at Gahana','Followup notes here','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
 ;
 
 
-INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_shows,resident_id,service_coord,date_added,date_modified) VALUES 
-(nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.',TRUE, 1,'dbadmin1','2020-08-26','2020-08-26')
+INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_show_date,resident_id,service_coord,date_added,date_modified) VALUES 
+(nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.','08/31/2020', 1,'dbadmin1','2020-08-26','2020-08-26')
+(nextval('CN_SQ'),'New Description','New Assessment','New Plan','09/02/2020',1,'dbadmin1','2020-09-02','2020-09-02')
 ;
 
 INSERT INTO action_plan (action_plan_id,resident_id,active,plan_of_action,plan_details,referral_partner,anticipated_outcomes,anticipated_date,outcome_achieved,completion_date,achieved_ssm,followup_notes,date_added,date_modified,service_coord) VALUES 

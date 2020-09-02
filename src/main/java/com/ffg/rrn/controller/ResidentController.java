@@ -369,6 +369,7 @@ public class ResidentController extends BaseController {
 			resident.setPlan(null);
 			resident.setDescription(null);
 			resident.setAssessment(null);
+			resident.setNoShowDate(null);
 		}
 
 		// Grants will never be null - either "All" or some Property

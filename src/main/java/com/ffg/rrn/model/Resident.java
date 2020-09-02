@@ -215,7 +215,7 @@ public class Resident {
 	private String description;
 	private String assessment;
 	private String plan;
-	private Boolean noShows;
+	private String noShowDate;
 	private Date cnDateAdded;
 	private Date cnDateModified;
 	// Case Notes Fields - End

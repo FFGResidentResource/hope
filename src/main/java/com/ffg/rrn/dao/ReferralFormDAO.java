@@ -31,9 +31,9 @@ import com.ffg.rrn.utils.AppConstants;
 @Transactional
 public class ReferralFormDAO extends JdbcDaoSupport {
 
-	private static final String SQL_INSERT_REFERRAL_FORM = "INSERT INTO REFERRAL_FORM (REFERRAL_FORM_ID, RESIDENT_ID, INTERPRETATION, REFERRED_BY, DATE_ADDED, REFERRAL_REASON, COMMENTS, PREVIOUS_ATTEMPTS, SELF_SUFFICIENCY, RF_HOUSING_STABILITY, SAFE_SUPPORTIVE_COMMUNITY, RF_FOLLOWUP_NOTES, RES_APP_SCHEDULED, SERVICE_COORD) VALUES (nextval('RF_SQ'),?,?,?, NOW(), to_json(?::json),?,?, to_json(?::json),to_json(?::json),to_json(?::json),?,to_json(?::json),?)";
+	private static final String SQL_INSERT_REFERRAL_FORM = "INSERT INTO REFERRAL_FORM (REFERRAL_FORM_ID, RESIDENT_ID, INTERPRETATION, REFERRED_BY, DATE_ADDED, REFERRAL_REASON, COMMENTS, PREVIOUS_ATTEMPTS,  RF_FOLLOWUP_NOTES, RES_APP_SCHEDULED, SERVICE_COORD) VALUES (nextval('RF_SQ'),?,?,?, NOW(), to_json(?::json),?,?,?,to_json(?::json),?)";
 
-	private static final String SQL_UPDATE_REFERRAL_FORM = "UPDATE REFERRAL_FORM SET INTERPRETATION =?, REFERRED_BY = ?, DATE_MODIFIED = NOW(), REFERRAL_REASON= to_json(?::json), COMMENTS= ?, PREVIOUS_ATTEMPTS= ?, SELF_SUFFICIENCY = to_json(?::json), RF_HOUSING_STABILITY = to_json(?::json), SAFE_SUPPORTIVE_COMMUNITY = to_json(?::json), RF_FOLLOWUP_NOTES= ?, RES_APP_SCHEDULED = to_json(?::json) WHERE RESIDENT_ID = ?";
+	private static final String SQL_UPDATE_REFERRAL_FORM = "UPDATE REFERRAL_FORM SET INTERPRETATION =?, REFERRED_BY = ?, DATE_MODIFIED = NOW(), REFERRAL_REASON= to_json(?::json), COMMENTS= ?, PREVIOUS_ATTEMPTS= ?, RF_FOLLOWUP_NOTES= ?, RES_APP_SCHEDULED = to_json(?::json) WHERE RESIDENT_ID = ?";
 
 	private static final String SQL_REF_FORM_COMPLETE = "select 1 from REFERRAL_FORM WHERE RESIDENT_ID = ?";
 	private static final String SQL_SIGNUP_COMPLETE = "select 1 from RESIDENT WHERE RESIDENT_ID = ? and ACK_PR = 'TRUE'";
@@ -84,12 +84,9 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 		ps.setString(3, resident.getReferralReason());
 		ps.setString(4, resident.getCommentsOrExplanation().trim());
 		ps.setString(5, resident.getPreviousAttempts().trim());
-		ps.setString(6, resident.getSelfSufficiency());
-		ps.setString(7, resident.getHousingStability());
-		ps.setString(8, resident.getSafeSupportiveCommunity());
-		ps.setString(9, resident.getRfFollowUpNotes().trim());
-		ps.setString(10, resident.getResidentAppointmentScheduled());
-		ps.setLong(11, resident.getResidentId());
+		ps.setString(6, resident.getRfFollowUpNotes().trim());
+		ps.setString(7, resident.getResidentAppointmentScheduled());
+		ps.setLong(8, resident.getResidentId());
 		return ps;
 	}
 
@@ -102,12 +99,9 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 		ps.setString(4, resident.getReferralReason());
 		ps.setString(5, resident.getCommentsOrExplanation().trim());
 		ps.setString(6, resident.getPreviousAttempts().trim());
-		ps.setString(7, resident.getSelfSufficiency());
-		ps.setString(8, resident.getHousingStability());
-		ps.setString(9, resident.getSafeSupportiveCommunity());
-		ps.setString(10, resident.getRfFollowUpNotes().trim());
-		ps.setString(11, resident.getResidentAppointmentScheduled());
-		ps.setString(12, resident.getServiceCoord());
+		ps.setString(7, resident.getRfFollowUpNotes().trim());
+		ps.setString(8, resident.getResidentAppointmentScheduled());
+		ps.setString(9, resident.getServiceCoord());
 		
 		return ps;
 	}

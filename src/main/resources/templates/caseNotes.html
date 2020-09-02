@@ -98,7 +98,7 @@
 							<th class="text-center">Property</th>
 							<th class="text-center">Address</th>
 							<th class="text-center">Phone Number</th>
-							<th class="text-center">No Shows</th>
+							<th class="text-center">No Shows On Date:</th>
 						</thead>
 						<tbody>
 							<tr>
@@ -111,13 +111,7 @@
 								<td><span th:text="*{propertyName}">&nbsp;</span></td>
 								<td><span th:text="*{address}">&nbsp;</span></td>
 								<td><span th:text="*{voiceMail}">&nbsp;</span></td>
-								<td><div class="radio">
-									<label class="col-sm-2"><input th:field="*{noShows}"
-										type="radio" name="noShow" value="FALSE" required />Yes</label>
-									<label class="col-sm-2"><input th:field="*{noShows}"
-										type="radio" name="noShow" value="TRUE" required />No</label>
-						</div>
-								</td>
+								<td><input class="form-control" placeholder="MM/DD/YYYY (/ comes automatically, just type numbers)" id="_cnNoShowDate" th:field="*{noShowDate}" /></td>
 							</tr>
 						</tbody>
 					</table>

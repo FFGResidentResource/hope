@@ -3,6 +3,10 @@ window.onbeforeprint = function() {
 	$('#_cnAssessment_P').text($('#_cnAssessment').val());
 	$('#_cnPlan_P').text($('#_cnPlan').val());
 	
+	if($('#_cnNoShowDate').val() == ""){
+		$('#_cnNoShowDate').removeAttr('placeholder');
+	}
+	
 };
 
 
@@ -62,3 +66,24 @@ function buildAchorTagForSelectedDate(that, residentId){
     }
     
 }
+
+var format = "MM/DD/YYYY";
+var match = new RegExp(format
+    .replace(/(\w+)\W(\w+)\W(\w+)/, "^\\s*($1)\\W*($2)?\\W*($3)?([0-9]*).*")
+    .replace(/M|D|Y/g, "\\d"));
+var replace = "$1/$2/$3$4"
+    .replace(/\//g, format.match(/\W/));
+
+function doFormat(target)
+{
+    target.value = target.value
+        .replace(/(^|\W)(?=\d\W)/g, "$10")   // padding
+        .replace(match, replace)             // fields
+        .replace(/(\W)+/g, "$1");            // remove repeats
+}
+
+jQuery("input[id^='_cnNoShowDate']").keyup(function(e) {
+   if(!e.ctrlKey && !e.metaKey && (e.keyCode == 32 || e.keyCode > 46))
+      doFormat(e.target)
+});
+
