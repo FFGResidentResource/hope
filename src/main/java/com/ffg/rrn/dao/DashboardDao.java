@@ -1186,6 +1186,59 @@ public List<CategoryPercentage> getInternetAccessPercentage(String selectedPrope
 		return cpList;
 	}
 
+public List<CategoryPercentage> getHouseholdType(String selectedProperties){
+	
+	selectedProperties = selectedProperties.replace("\"", "");
+	selectedProperties = selectedProperties.replace("[", "");
+	selectedProperties = selectedProperties.replace("]", "");
+
+	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+	String SQL_ = "select 'No Children' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and HOH_TYPE = 'No Children' " +
+			" union " +
+			" select 'One Parent' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and HOH_TYPE = 'One Parent'" +
+			" union " +
+			" select 'Two Parent' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and HOH_TYPE = 'Two Parent'";
+			
+	
+	if (StringUtils.isNotBlank(selectedProperties)) {
+		SQL_ = SQL_.replace(":properties", selectedProperties);
+
+		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+			try {
+				CategoryPercentage cp = new CategoryPercentage();
+				cp.setCategory(rs.getString("category"));
+				cp.setPercentage(rs.getInt("percentage"));
+				return cp;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}
+		});
+	}
+
+	else {
+
+		CategoryPercentage cp = new CategoryPercentage();
+		cp.setCategory("No Children");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("One Parent");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+
+		cp = new CategoryPercentage();
+		cp.setCategory("Two Parent");
+		cp.setPercentage(0);
+
+		cpList.add(cp);
+	}
+
+	return cpList;
+}
+
 public List<CategoryPercentage> prefferedContactMethodPercentage(String selectedProperties){
 	
 	selectedProperties = selectedProperties.replace("\"", "");

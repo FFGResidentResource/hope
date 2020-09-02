@@ -11,7 +11,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL  ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh ;
 var dataArray;
 
 jQuery(document).ready(function() {
@@ -66,6 +66,7 @@ function generateReport(){
 	safeNightPercentage();
 	intResCouncilPercentage();
 	occLengthPercentage();
+	hohTypePercentage();
 	
 }
 
@@ -149,6 +150,43 @@ function intResCouncilPercentage(){
 		}
     });
 }
+
+function hohTypePercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/hohTypePercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			debugger;
+			dataArray = [[response[0].category,response[0].percentage],
+						 [response[1].category,response[1].percentage],
+					[response[2].category,response[2].percentage]
+						];
+						
+			if(chartHoh != null){				
+				chartHoh.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartHoh = generateChart("#hohTypeChart", "Household Type");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
 
 function internetAccessPercentage(){
 	

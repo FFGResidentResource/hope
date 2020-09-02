@@ -255,6 +255,14 @@ public class RestAPIController {
 
 		return ResponseEntity.ok(cp);
 	}
+	
+	@PostMapping("/hohTypePercentage")
+	public ResponseEntity<?> getHohTypePercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getHouseholdType(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
 
 	@PostMapping("/getHistoricalAssessmentByResidentIdAndLifeDomain")
 	public ResponseEntity<?> getHistoricalAssessmentByResidentIdAndLifeDomain(

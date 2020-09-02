@@ -257,7 +257,7 @@ public class Resident {
 	public static final List<String> yesNoList = Arrays.asList("Yes", "No");
 	public static final List<String> modeOfTransportList = Arrays.asList("Bus", "Personal Vehicle", "Someone drives me", "Walk/Bike");
 	public static final List<String> expFoodShortageList = Arrays.asList("No", "Beginning of the Month", "Middle of the Month", "End of the Month");
-	public static final List<String> headOfHHTypeList = Arrays.asList("No Children", "Single Parent", "Two Parent");
+	public static final List<String> headOfHHTypeList = Arrays.asList("No Children", "One Parent", "Two Parent");
 	public static final List<String> internetAccessList = Arrays.asList("No, but my phone has internet access", "No, I have no internet access", "Yes");
 	
 	private String age;
