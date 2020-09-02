@@ -779,31 +779,31 @@ public class DashboardDao extends JdbcDaoSupport {
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_HEALTH = "select 'Yes, covered through employer or union (current or former)' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and gender = 'Yes, covered through employer or union (current or former)' " +
+		String SQL_HEALTH = "select 'Yes, covered through employer or union (current or former)' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and health_coverage = 'Yes, covered through employer or union (current or former)' " +
 				" union " +
-				" select 'Yes, purchased insurance from insurance company\",\"Medicare\",\"Medicaid/Medical Assistant' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Yes, purchased insurance from insurance company\",\"Medicare\",\"Medicaid/Medical Assistant'" +
+				" select 'Yes, purchased insurance from insurance company' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Yes, purchased insurance from insurance company'" +
 				" union " +
-				" select 'TRICARE or other military health care' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'TRICARE or other military health care'"+
+				" select 'TRICARE or other military health care' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'TRICARE or other military health care'"+
 				" union " +
-				" select 'VA health care' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'VA health care'" +
+				" select 'VA health care' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'VA health care'" +
 				" union " +
-				" select 'Indian Health Service' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Indian Health Service'" +
+				" select 'Indian Health Service' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Indian Health Service'" +
 				" union " +
-				" select 'Other health insurance or health coverage plan' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Other health insurance or health coverage plan'" +
+				" select 'Other health insurance or health coverage plan' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Other health insurance or health coverage plan'" +
 				" union " +
-				" select 'No coverage' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'No coverage'" +
+				" select 'No coverage' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'No coverage'" +
 				" union " +
-				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Information not collected'" +
+				" select 'Information not collected' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Information not collected'" +
 				" union " +
-				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Individual refused'" +
+				" select 'Individual refused' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Individual refused'" +
 				" union " +
-				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Individual does not know'" +
+				" select 'Individual does not know' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Individual does not know'" +
 				" union " +
-				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'N/A'" +
+				" select 'N/A' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'N/A'" +
 				" union " +
-				" select 'Medicare' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Medicare'" +
+				" select 'Medicare' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Medicare'" +
 				" union " +
-				" select 'Medicaid/Medical Assistant' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and gender = 'Medicaid/Medical Assistant'";
+				" select 'Medicaid/Medical Assistant' as category, (count(*) / (select count(*) from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Medicaid/Medical Assistant'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_HEALTH = SQL_HEALTH.replace(":properties", selectedProperties);
