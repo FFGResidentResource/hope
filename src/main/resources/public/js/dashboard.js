@@ -11,8 +11,8 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart ;
-var dataArray, dataArrayPerf;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart ;
+var dataArray;
 
 jQuery(document).ready(function() {
 	
@@ -83,15 +83,72 @@ function generateAllQuarterlyReport(){
 	//Quarterly Report - Begin
 	
 	noShowsQuarterly();
+	servicesQuarterly();
 }
+
+function servicesQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Advocacy'], ['Assessments'], ['Benefits/Insurance'],['Case Management'],['Child/day care'],['Computer training'],['Conflct resolution'],['Crisis intervention'],['Education program (GED, etc.)'],['Emergency assistance'],['Family support'],['Finanicial	management/literacy'],['Financial aid'],['Healthcare'],['Home management'],['Homemaker'],['Home ownership'],['Job readiness'],['Lease intervention'],['Leagal assistance'],['Meals'],['Mental health'],['Monitoring'],['Parenting'],['Prescriptions'],['School intervention'],['Substance abuse'],['Transportation'],['Veteran services'],['Vocational training'],['Youth programs'], ['Other']];
+	//var groupArray =  [['Advocacy'], ['Assessments']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Advocacy'], ['Assessments'], ['Benefits/Insurance'],['Case Management'],['Child/day care'],['Computer training'],['Conflct resolution'],['Crisis intervention'],['Education program (GED, etc.)'],['Emergency assistance'],['Family support'],['Finanicial management/literacy'],['Financial aid'],['Healthcare'],['Home management'],['Homemaker'],['Home ownership'],['Job readiness'],['Lease intervention'],['Leagal assistance'],['Meals'],['Mental health'],['Monitoring'],['Parenting'],['Prescriptions'],['School intervention'],['Substance abuse'],['Transportation'],['Veteran services'],['Vocational training'],['Youth programs'], ['Other']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	//dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Advocacy'], ['Assessments']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+			
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/serviceProvidedQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+		
+		jQuery(response).each(function(idx,val){
+			jQuery(groupArray).each(function(p,category){		
+				
+				if(val.category == category){
+					//if category matches then only check for each quarter
+					for(j = 1; j < 5; j++){
+					
+						// This shows on each quarter some Catory found
+						if(val.quarter == j ){									
+							dataArrayPerf[p+1][j] = 	val.count;												
+						}else{
+							dataArrayPerf[p+1][j] = 0;
+						}	
+					}
+				}		
+			});	
+						
+		});	
+			
+			if(servicesChart != null){				
+				servicesChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					servicesChart= generateCategoryChart("#servicesChart", "Services Provided by Category", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
 
 function noShowsQuarterly(){
 	
 	var selectedProps = JSON.stringify(selectedProperties);
 	dataArrayPerf = null;
 	
-	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],['No Shows']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
 	var groupArray =  [['No Shows']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
 	
 	jQuery.ajax({	
 		type : "POST",
@@ -122,7 +179,7 @@ function noShowsQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					noShowChart= generateCategoryChart("#noShowsChart", "No Shows", groupArray);
+					noShowChart= generateCategoryChart("#noShowsChart", "No Shows", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -132,7 +189,7 @@ function noShowsQuarterly(){
     });
 }
 
-function generateCategoryChart(id, title, groupArray){
+function generateCategoryChart(id, title, groupArray, dataArrayPerf){
 
 			c3.generate({
 			bindto : id,
@@ -224,7 +281,7 @@ function intResCouncilPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage]
 						];
@@ -259,7 +316,7 @@ function hohTypePercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage]
@@ -296,7 +353,7 @@ function internetAccessPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage]
@@ -332,7 +389,7 @@ function prefferedContactPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -369,7 +426,7 @@ function occLengthPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -407,7 +464,7 @@ function safeDayPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -444,7 +501,7 @@ function safeNightPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -483,7 +540,7 @@ function foodShortagePercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -520,7 +577,7 @@ function modTransPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -557,7 +614,7 @@ function genderPercentage(){
 		timeout : 60000,
 		success : function(response) {
 			
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
 					[response[2].category,response[2].percentage],
@@ -599,7 +656,7 @@ function ethnicityPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],
@@ -637,7 +694,7 @@ function languagePercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage]
@@ -674,7 +731,7 @@ function maritalStatusPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage]
@@ -710,7 +767,7 @@ function racePercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],
@@ -752,7 +809,7 @@ function householdPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],
@@ -790,7 +847,7 @@ function veteranPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],
@@ -828,7 +885,7 @@ function disabilityPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],
@@ -866,7 +923,7 @@ function exOffenderPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage]
@@ -902,7 +959,7 @@ function ssiPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage]
@@ -938,7 +995,7 @@ function ssdiPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage]
@@ -974,7 +1031,7 @@ function healthPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],
@@ -1020,7 +1077,7 @@ function educationPercentage(){
 		timeout : 60000,
 		success : function(response) {
 
-			debugger;
+			
 			dataArray = [[response[0].category,response[0].percentage],
 				[response[1].category,response[1].percentage],
 				[response[2].category,response[2].percentage],

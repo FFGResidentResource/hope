@@ -35,7 +35,7 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 
 	private static final String SQL_UPDATE_REFERRAL_FORM = "UPDATE REFERRAL_FORM SET INTERPRETATION =?, REFERRED_BY = ?, DATE_MODIFIED = NOW(), REFERRAL_REASON= to_json(?::json), COMMENTS= ?, PREVIOUS_ATTEMPTS= ?, RF_FOLLOWUP_NOTES= ?, RES_APP_SCHEDULED = to_json(?::json) WHERE RESIDENT_ID = ?";
 
-	private static final String SQL_REF_FORM_COMPLETE = "select 1 from REFERRAL_FORM WHERE RESIDENT_ID = ?";
+	private static final String SQL_REF_FORM_COMPLETE = "select 1 from REFERRAL_FORM WHERE RESIDENT_ID = ? LIMIT 1";
 	private static final String SQL_SIGNUP_COMPLETE = "select 1 from RESIDENT WHERE RESIDENT_ID = ? and ACK_PR = 'TRUE'";
 	private static final String SQL_SELF_SUFF_COMPLETE = "select 1 from RESIDENT_SCORE_GOAL WHERE RESIDENT_ID = ? and LIFE_DOMAIN = ? LIMIT 1";
 	private static final String SQL_ACTION_PLAN_COMPLETE = "select 1 from ACTION_PLAN WHERE RESIDENT_ID = ? LIMIT 1";
@@ -58,7 +58,7 @@ public class ReferralFormDAO extends JdbcDaoSupport {
 		String[] pkColumnNames = new String[] { "referral_form_id" };
 
 		try {
-			Long residentIdInReferralForm = this.getJdbcTemplate().queryForObject("select resident_id from REFERRAL_FORM where resident_id = ?", new Object[] { resident.getResidentId() }, Long.class);
+			Long residentIdInReferralForm = this.getJdbcTemplate().queryForObject("select resident_id from REFERRAL_FORM where resident_id = ? LIMIT 1", new Object[] { resident.getResidentId() }, Long.class);
 
 			if (residentIdInReferralForm != null) {
 				this.getJdbcTemplate().update(conn -> buildUpdateReferralForm(conn, resident, pkColumnNames), keyHolder);

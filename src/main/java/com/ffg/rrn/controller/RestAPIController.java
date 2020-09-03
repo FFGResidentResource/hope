@@ -273,6 +273,14 @@ public class RestAPIController {
 
 		return ResponseEntity.ok(cp);
 	}
+	
+	@PostMapping("/serviceProvidedQuarterly")
+	public ResponseEntity<?> getServiceProvidedQuarterly(@RequestBody HolderObj holderObj) {
+		
+		List<QuarterCount> cp = dashDao.getServicesProvidedQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
+
+		return ResponseEntity.ok(cp);
+	}
 
 	@PostMapping("/getHistoricalAssessmentByResidentIdAndLifeDomain")
 	public ResponseEntity<?> getHistoricalAssessmentByResidentIdAndLifeDomain(
