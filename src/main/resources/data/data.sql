@@ -1019,6 +1019,13 @@ INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_
 INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_show_date,resident_id,service_coord,date_added,date_modified) VALUES 
 (nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.','08/31/2020', 1,'dbadmin1','2020-08-26','2020-08-26')
 ,(nextval('CN_SQ'),'New Description','New Assessment','New Plan','09/02/2020',1,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Booked appointment but no show - Elastic Girl','','','09/02/2020',31,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Green Becomes Yellow and didn''t show up','','','05/01/2020',30,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Super girl busy fighting and didn;t show up','','','01/15/2020',29,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Black Cannary is lost and din;t show up','','','12/27/2019',28,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Groot couldn;t Groot and didn''t show up','','','08/26/2019',27,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Logan got other appointment and didn''t show up','','','04/30/2019',13,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Dare Devil couldn;t sense way to Service Coordinator and didn''t show up','','','02/01/2020',6,'dbadmin1','2020-09-02','2020-09-02')
 ;
 
 INSERT INTO action_plan (action_plan_id,resident_id,active,plan_of_action,plan_details,referral_partner,anticipated_outcomes,anticipated_date,outcome_achieved,completion_date,achieved_ssm,followup_notes,date_added,date_modified,service_coord) VALUES 
@@ -1421,6 +1428,18 @@ union
 select 'Female' as category, count(r.prop_id) as total,  prop.prop_name as property_name from resident r join property prop on prop.prop_id = r.prop_id where  r.gender = 'Female' group by prop.prop_id)z
 order by z."category";
 
+create or replace view CONTACT_NOTE_NO_SHOW_VIEW 
+as
+select z."ID", z."CNQ", z."CNY" from (
+select distinct date_part('quarter'::text , to_date(no_show_date,'MM/DD/YYYY')) as "CNQ", date_part('year'::text, to_date(no_show_date,'MM/DD/YYYY'))  as "CNY", resident_id as "ID" 
+from case_notes cn where no_show_date is not NULL) z;
+
+
+create or replace view CONTACT_NOTE_NO_SHOW_VIEW 
+as
+select z."ID", z."CNQ", z."CNY" from (
+select distinct date_part('quarter'::text , to_date(no_show_date,'MM/DD/YYYY')) as "CNQ", date_part('year'::text, to_date(no_show_date,'MM/DD/YYYY'))  as "CNY", resident_id as "ID" 
+from case_notes cn where no_show_date is not NULL) z;
 
 
 --Example for Questionnaire

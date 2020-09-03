@@ -5,7 +5,6 @@ package com.ffg.rrn.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import com.ffg.rrn.model.CategoryPercentage;
 import com.ffg.rrn.model.Dashboard;
@@ -45,6 +43,67 @@ public class DashboardDao extends JdbcDaoSupport {
 	@Autowired
 	public DashboardDao(DataSource dataSource) {
 		this.setDataSource(dataSource);
+	}
+	
+	public List<QuarterCount> getNoShowsQuarterly(String selectedProperties, String year ){
+		
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+		
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+		
+		String SQL_ = "select Count(\"ID\") as total, \"CNQ\" as quarter  from CONTACT_NOTE_NO_SHOW_VIEW cnv join Resident r on r.resident_id = \"ID\" and r.prop_id in (:properties) where \"CNY\" = :year group by \"CNY\", \"CNQ\" order by \"CNQ\"";
+		
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\''+year+'\'');
+		
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		
+		}else {
+			
+			QuarterCount qc = new QuarterCount();
+			
+			qc.setCount(0);
+			qc.setQuarter(1);
+			
+			qcs.add(qc);
+			
+			qc = new QuarterCount();
+			
+			qc.setCount(0);
+			qc.setQuarter(2);
+			
+			qcs.add(qc);
+			
+			qc = new QuarterCount();
+			
+			qc.setCount(0);
+			qc.setQuarter(3);
+			
+			qcs.add(qc);
+			
+			
+			qc = new QuarterCount();
+			
+			qc.setCount(0);
+			qc.setQuarter(4);
+			
+			qcs.add(qc);		
+			
+		}
+		
+		return qcs;
 	}
 
 	public List<CategoryPercentage> getGenderPercentage(String selectedProperties) {

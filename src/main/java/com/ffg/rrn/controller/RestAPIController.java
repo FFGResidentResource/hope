@@ -23,7 +23,9 @@ import com.ffg.rrn.dao.DashboardDao;
 import com.ffg.rrn.model.AssessmentByDateAndScoreGoal;
 import com.ffg.rrn.model.CategoryPercentage;
 import com.ffg.rrn.model.Dashboard;
+import com.ffg.rrn.model.HolderObj;
 import com.ffg.rrn.model.Property;
+import com.ffg.rrn.model.QuarterCount;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.model.ServiceCoordinator;
@@ -260,6 +262,14 @@ public class RestAPIController {
 	public ResponseEntity<?> getHohTypePercentage(@RequestBody String selectedProperties) {
 
 		List<CategoryPercentage> cp = dashDao.getHouseholdType(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/noShowsQuarterly")
+	public ResponseEntity<?> getNoShowsQuarterly(@RequestBody HolderObj holderObj) {
+		
+		List<QuarterCount> cp = dashDao.getNoShowsQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
 
 		return ResponseEntity.ok(cp);
 	}

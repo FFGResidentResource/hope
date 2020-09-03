@@ -11,12 +11,14 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh ;
-var dataArray;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart ;
+var dataArray, dataArrayPerf;
 
 jQuery(document).ready(function() {
 	
-	jQuery(jQuery("[name^='_year_']")[0]).attr('checked','true'); //[0] will be always current year retrieved from DB in sort desc order
+	
+	
+	jQuery(jQuery('input:radio')[0]).prop('checked',true); //[0] will be always current year retrieved from DB in sort desc order
 		
     jQuery("input[name^='_propId_']").each(function (key, value){
 		selectedProperties.push(value.id);
@@ -30,6 +32,10 @@ jQuery(document).ready(function() {
 	
 	jQuery("input[name^='_propId_']").on('change', function () {
 		generateReport();
+	});
+	
+	$('input:radio').change(function(){
+			generateAllQuarterlyReport();
 	});
     
 });
@@ -68,6 +74,93 @@ function generateReport(){
 	occLengthPercentage();
 	hohTypePercentage();
 	
+	generateAllQuarterlyReport();
+	
+}
+
+function generateAllQuarterlyReport(){
+	
+	//Quarterly Report - Begin
+	
+	noShowsQuarterly();
+}
+
+function noShowsQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArrayPerf = null;
+	
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],['No Shows']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	var groupArray =  [['No Shows']];
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/noShowsQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(noShowChart != null){				
+				noShowChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					noShowChart= generateCategoryChart("#noShowsChart", "No Shows", groupArray);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function generateCategoryChart(id, title, groupArray){
+
+			c3.generate({
+			bindto : id,
+			title: {
+		        show: false,
+		        text: title,
+		        position: 'top-center',   // top-left, top-center and top-right
+		        padding: {
+		          top: 20,
+		          right: 20,
+		          bottom: 40,
+		          left: 50
+		        }
+		
+      		},	
+    		data: {
+        		x : 'x',
+        		columns: dataArrayPerf,
+		        groups: groupArray,
+		        type: 'bar',
+		        labels: true
+			    },
+			    axis: {
+			        x: {
+			            type: 'category' // this needed to load string x value
+			        }
+			    }
+			});
 }
 
 function generateChart(attachId, title){

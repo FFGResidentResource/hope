@@ -11,13 +11,12 @@
 <link href="/css/c3.min.css" rel="stylesheet">
 
 <style>
-
-label{
-    display: inline-block;
-    max-width: 100%;
-    font-weight:normal;
-    max-width:none;
-    font-size: smaller;
+label {
+	display: inline-block;
+	max-width: 100%;
+	font-weight: normal;
+	max-width: none;
+	font-size: smaller;
 }
 
 body {
@@ -53,15 +52,18 @@ body {
 	<form name='_dashoardF' th:object="${dashboard}"
 		class="form-horizontal">
 
-		<div class="container">
+
+
+		<div class="container-fluid">
 
 			<div class="row myPanel hidden-print">
 
 				<div Class="col-sm-2">
 
 					<th:block th:each="y: *{yearList}">
-						<label> <input type="checkbox" th:id="${y}"
-							th:name="'_year_'+${y}">&nbsp;<span th:text="${y}"></span>
+						<label> <input type="radio" th:value="${y}"
+							th:field="*{year}" name="_year">&nbsp;<span
+							th:text="${y}"></span>
 						</label>
 					</th:block>
 
@@ -78,97 +80,115 @@ body {
 					</div>
 				</div>
 			</div>
-		
+
 			<div class="panel panel-info hideme print-only">
-				
-				<div class="panel-heading">Report for Following Properties: <img src="/images/rrnlogo_horz.png" style="float:right; width: 150px;" /> </div>
-  				<div class="panel-body" id="_propListPrint">
-    				
-  				</div>
+
+				<div class="panel-heading">
+					Report for Following Properties: <img
+						src="/images/rrnlogo_horz.png" style="float: right; width: 150px;" />
+				</div>
+				<div class="panel-body" id="_propListPrint"></div>
 			</div>
 		</div>
-		
-		
 
-		<div class="container" style="min-width:700px; overflow: auto;!important"> 
+
+
+		<div class="container-fluid">
+
+
+
+			<h3>Quarterly Performance Report</h3>
 			<div class="row">
 				<div class="col-sm-4">
-					<div id="genderChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="ethnicityChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="raceChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="languageChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="maritalStatusChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="householdChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="veteranChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="disabilityChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="exOffenderChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="ssiChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="ssdiChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="footShortageChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="modTransChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="internetAccessChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="prefContactChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-12">
-					<div id="healthChart" style="min-height: 400px;"></div>
-				</div>
-				<div class="col-sm-12">
-					<div id="educationChart" style="min-height: 400px;"></div>
-				</div>
-				
-				<div class="row">
-					<div class="col-sm-4">
-					<div id="safeDayChart" style="min-height: 400px;"></div>
-					</div>
-					
-					<div class="col-sm-4">
-					<div id="safeNightChart" style="min-height: 400px;"></div>
-				</div>
-				
-				<div class="col-sm-4">
-					<div id="intResCouncilChart" style="min-height: 400px;"></div>
-				</div>
-				
-				<div class="col-sm-4">
-					<div id="occLengthChart" style="min-height: 400px;"></div>
-				</div>
-				
-				<div class="col-sm-4">
-					<div id="hohTypeChart" style="min-height: 400px;"></div>
-				</div>
-				
-				
+					<div id="noShowsChart" style="min-height: 350px;"></div>
 				</div>
 			</div>
+			<hr class="solidline1">
+
+			<h3>Demographic Report</h3>
+			<div class="row">
+				<div class="col-sm-4">
+					<div id="genderChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="ethnicityChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="raceChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="languageChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="maritalStatusChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="householdChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="veteranChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="disabilityChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="exOffenderChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="ssiChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="ssdiChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="footShortageChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="modTransChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="internetAccessChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-4">
+					<div id="prefContactChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-12">
+					<div id="healthChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-12">
+					<div id="educationChart" style="min-height: 350px;"></div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-4">
+						<div id="safeDayChart" style="min-height: 350px;"></div>
+					</div>
+
+					<div class="col-sm-4">
+						<div id="safeNightChart" style="min-height: 350px;"></div>
+					</div>
+
+					<div class="col-sm-4">
+						<div id="intResCouncilChart" style="min-height: 350px;"></div>
+					</div>
+
+					<div class="col-sm-4">
+						<div id="occLengthChart" style="min-height: 350px;"></div>
+					</div>
+
+					<div class="col-sm-4">
+						<div id="hohTypeChart" style="min-height: 350px;"></div>
+					</div>
+
+
+				</div>
+
+
+
+			</div>
 		</div>
+
+
 
 	</form>
 
@@ -190,7 +210,7 @@ body {
 
 	<script src="/js/menu.js"></script>
 	<script src="/js/dashboard.js"></script>
-	
+
 </body>
 
 </html>
