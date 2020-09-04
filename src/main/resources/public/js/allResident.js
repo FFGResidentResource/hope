@@ -295,17 +295,29 @@ function buildPieChartData(data) {
 
     var chart = c3.generate({
 	bindto : '#allResidentPieChart',
+	title: {
+		        show: false,
+		        text: 'Referral By Site View',
+		        position: 'top-center',   // top-left, top-center and top-right
+		        padding: {
+		          top: 20,
+		          right: 20,
+		          bottom: 40,
+		          left: 50
+		        }					
+      		},
 	data : {
 	    columns : columns,
 	    type : 'bar'
-	},
-	color: {
-	    pattern: ['#3296dc', '#719dd7', '#e29305', '#ffbb78', '#81923a', '#d3d093', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9']
 	},
 	donut:{
 		label: {
       		format: function (value) { return value; }
     	}
+	},
+	
+	color: {
+	    pattern: ['#3296dc', '#719dd7', '#e29305', '#ffbb78', '#81923a', '#d3d093', '#ab5624', '#e4a896', '#7677bb', '#c1b4d5', '#83614f', '#c1a197', '#ba8fbe', '#e5bfd1', '#8a8084', '#d4c5ca', '#d8b52f', '#f1d496', '#75b3d5', '#c3d1e9']
 	},
 	axis : {
 	    x : {

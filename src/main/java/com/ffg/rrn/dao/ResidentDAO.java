@@ -569,8 +569,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	
 	private void calculateScore(final Resident resident, String lifeDomain, String onThisDate) {
 		
-		//TODO - this if condition have to go away once all is coded in.
-				
+						
 					//Calculate Score first with Algorithm in LIFE_DOMAIN_sCORE_GOAL_TABLE
 					try {
 						
@@ -579,7 +578,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 						}else {
 							onThisDate = " TO_DATE('"+resident.getSelectedDate()+"','DD-MON-YYYY')";
 						}
-						Integer calculatedScore = this.getJdbcTemplate().queryForObject("select ldsg.score from life_domain_score_guide ldsg join resident_assessment_questionnaire raq on raq.life_domain = ldsg.life_domain and raq.question_id = ldsg.question_no and raq.choice_id = ldsg.choice_id where raq.resident_id = " + resident.getResidentId() +" and raq.on_this_date = "+ onThisDate +" order by ldsg.priority limit 1", Integer.class);
+						Integer calculatedScore = this.getJdbcTemplate().queryForObject("select ldsg.score from life_domain_score_guide ldsg join resident_assessment_questionnaire raq on raq.life_domain = ldsg.life_domain and raq.question_id = ldsg.question_no and raq.choice_id = ldsg.choice_id where raq.resident_id = " + resident.getResidentId() +" and raq.on_this_date = "+ onThisDate +" and raq.life_domain = '"+ lifeDomain+"' order by ldsg.priority limit 1", Integer.class);
 						
 						if(null != calculatedScore) {
 							resident.setCurrentScore(calculatedScore);

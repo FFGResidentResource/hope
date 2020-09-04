@@ -11,7 +11,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart ;
 var dataArray;
 
 jQuery(document).ready(function() {
@@ -84,17 +84,167 @@ function generateAllQuarterlyReport(){
 	
 	noShowsQuarterly();
 	servicesQuarterly();
+	assessmentQuarterly();
+	serviceAgencyQuarterly();
+	refTypeQuarterly();
+	
+}
+
+function refTypeQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	
+	var groupArray =  [['Self(Resident)/Walk-In'], ['Property Mgmt (Includes Community Manager and Maintenance)'], ['Service Coordinator'],['Other Resident'],['Other']];
+	var dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Self(Resident)/Walk-In'], ['Property Mgmt (Includes Community Manager and Maintenance)'], ['Service Coordinator'],['Other Resident'],['Other']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+			
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/refTypeQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+		
+		jQuery(response).each(function(idx,val){
+			jQuery(groupArray).each(function(p,category){		
+				
+				if(val.category == category){
+					//if category matches then only check for each quarter
+					for(j = 1; j < 5; j++){
+					
+						// This shows on each quarter some Catory found
+						if(val.quarter == j ){									
+							dataArrayPerf[p+1][j] = 	val.count;												
+						}else{
+							dataArrayPerf[p+1][j] = 0;
+						}	
+					}
+				}		
+			});	
+						
+		});	
+			
+			if(refTypeChart != null){				
+				refTypeChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					refTypeChart= generateCategoryChart("#refTypeChart", "Resident Referred By", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function serviceAgencyQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident referred to Service Agency']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/serviceAgencyQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(saChart != null){				
+				saChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					saChart= generateCategoryChart("#serviceAgencyChart", "Referred to Service Agency", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function assessmentQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['All Assessment Completed']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/assessmentCompletedQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(aChart != null){				
+				aChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					aChart= generateCategoryChart("#assessmentChart", "All Assessment Completed", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 function servicesQuarterly(){
 	
 	var selectedProps = JSON.stringify(selectedProperties);
-	var dataArrayPerf = null;
 	
 	var groupArray =  [['Advocacy'], ['Assessments'], ['Benefits/Insurance'],['Case Management'],['Child/day care'],['Computer training'],['Conflct resolution'],['Crisis intervention'],['Education program (GED, etc.)'],['Emergency assistance'],['Family support'],['Finanicial	management/literacy'],['Financial aid'],['Healthcare'],['Home management'],['Homemaker'],['Home ownership'],['Job readiness'],['Lease intervention'],['Leagal assistance'],['Meals'],['Mental health'],['Monitoring'],['Parenting'],['Prescriptions'],['School intervention'],['Substance abuse'],['Transportation'],['Veteran services'],['Vocational training'],['Youth programs'], ['Other']];
-	//var groupArray =  [['Advocacy'], ['Assessments']];
-	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Advocacy'], ['Assessments'], ['Benefits/Insurance'],['Case Management'],['Child/day care'],['Computer training'],['Conflct resolution'],['Crisis intervention'],['Education program (GED, etc.)'],['Emergency assistance'],['Family support'],['Finanicial management/literacy'],['Financial aid'],['Healthcare'],['Home management'],['Homemaker'],['Home ownership'],['Job readiness'],['Lease intervention'],['Leagal assistance'],['Meals'],['Mental health'],['Monitoring'],['Parenting'],['Prescriptions'],['School intervention'],['Substance abuse'],['Transportation'],['Veteran services'],['Vocational training'],['Youth programs'], ['Other']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
-	//dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Advocacy'], ['Assessments']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	var dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Advocacy'], ['Assessments'], ['Benefits/Insurance'],['Case Management'],['Child/day care'],['Computer training'],['Conflct resolution'],['Crisis intervention'],['Education program (GED, etc.)'],['Emergency assistance'],['Family support'],['Finanicial management/literacy'],['Financial aid'],['Healthcare'],['Home management'],['Homemaker'],['Home ownership'],['Job readiness'],['Lease intervention'],['Leagal assistance'],['Meals'],['Mental health'],['Monitoring'],['Parenting'],['Prescriptions'],['School intervention'],['Substance abuse'],['Transportation'],['Veteran services'],['Vocational training'],['Youth programs'], ['Other']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
 			
 	jQuery.ajax({	
 		type : "POST",

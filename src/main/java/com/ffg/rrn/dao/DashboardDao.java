@@ -44,21 +44,21 @@ public class DashboardDao extends JdbcDaoSupport {
 	public DashboardDao(DataSource dataSource) {
 		this.setDataSource(dataSource);
 	}
-	
-	public List<QuarterCount> getNoShowsQuarterly(String selectedProperties, String year ){
-		
+
+	public List<QuarterCount> getServiceAgencyQuarterly(String selectedProperties, String year) {
+
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");
 		selectedProperties = selectedProperties.replace("]", "");
-		
+
 		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
-		
-		String SQL_ = "select Count(\"ID\") as total, \"CNQ\" as quarter  from CONTACT_NOTE_NO_SHOW_VIEW cnv join Resident r on r.resident_id = \"ID\" and r.prop_id in (:properties) where \"CNY\" = :year group by \"CNY\", \"CNQ\" order by \"CNQ\"";
-		
+
+		String SQL_ = "select count(*) as total, \"QUARTER\" as quarter from agency_resident_view acv where \"PROP_ID\" in (:properties) and \"YEAR\" = :year group by \"QUARTER\" ";
+
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
-			SQL_ = SQL_.replace(":year", '\''+year+'\'');
-		
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
 				try {
 					QuarterCount cp = new QuarterCount();
@@ -69,57 +69,176 @@ public class DashboardDao extends JdbcDaoSupport {
 					throw new RuntimeException("your error message", e); // or other unchecked exception here
 				}
 			});
-		
-		}else {
-			
+
+		} else {
+
 			QuarterCount qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(1);
-			
+
 			qcs.add(qc);
-			
+
 			qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(2);
-			
+
 			qcs.add(qc);
-			
+
 			qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(3);
-			
+
 			qcs.add(qc);
-			
-			
+
 			qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(4);
-			
-			qcs.add(qc);		
-			
+
+			qcs.add(qc);
+
 		}
-		
+
 		return qcs;
 	}
-	
-public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties, String year ){
-		
+
+	public List<QuarterCount> getAssessmentCompletedQuarterly(String selectedProperties, String year) {
+
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");
 		selectedProperties = selectedProperties.replace("]", "");
-		
+
 		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
-		
-		String SQL_ = "select COUNT(*) as total, \"QUARTER\" as quarter, \"SRVC_CAT\" as category from service_category_view scv join resident r on r.resident_id = \"RES_ID\" and r.prop_id in (:properties) where \"YEAR\"= :year group by \"SRVC_CAT\", \"QUARTER\" ";
-		
+
+		String SQL_ = "select count(*) as total, \"QUARTER\" as quarter from assessment_completed_view acv where \"PROP_ID\" in (:properties) and \"YEAR\" = :year group by \"QUARTER\" ";
+
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
-			SQL_ = SQL_.replace(":year", '\''+year+'\'');
-		
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
+	}
+
+	public List<QuarterCount> getNoShowsQuarterly(String selectedProperties, String year) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select Count(\"ID\") as total, \"CNQ\" as quarter  from CONTACT_NOTE_NO_SHOW_VIEW cnv join Resident r on r.resident_id = \"ID\" and r.prop_id in (:properties) where \"CNY\" = :year group by \"CNY\", \"CNQ\" order by \"CNQ\"";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
+	}
+
+	public List<QuarterCount> getRefTypeQuarterly(String selectedProperties, String year) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select COUNT(*) as total, \"QUARTER\" as quarter, \"REF_TYPE\" as category from RESIDENT_REF_TYPE_VIEW rrv join resident r on r.resident_id = \"RES_ID\" and r.prop_id in (:properties) where \"YEAR\"= :year group by \"REF_TYPE\", \"QUARTER\" ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
 				try {
 					QuarterCount cp = new QuarterCount();
@@ -131,43 +250,102 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 					throw new RuntimeException("your error message", e); // or other unchecked exception here
 				}
 			});
-		
-		}else {
-			
+
+		} else {
+
 			QuarterCount qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(1);
-			
+
 			qcs.add(qc);
-			
+
 			qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(2);
-			
+
 			qcs.add(qc);
-			
+
 			qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(3);
-			
+
 			qcs.add(qc);
-			
-			
+
 			qc = new QuarterCount();
-			
+
 			qc.setCount(0);
 			qc.setQuarter(4);
-			
-			qcs.add(qc);		
-			
+
+			qcs.add(qc);
+
 		}
-		
+
 		return qcs;
 	}
 
+	public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties, String year) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select COUNT(*) as total, \"QUARTER\" as quarter, \"SRVC_CAT\" as category from service_category_view scv join resident r on r.resident_id = \"RES_ID\" and r.prop_id in (:properties) where \"YEAR\"= :year group by \"SRVC_CAT\", \"QUARTER\" ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					cp.setCategory(rs.getString("category"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
+	}
 
 	public List<CategoryPercentage> getGenderPercentage(String selectedProperties) {
 
@@ -525,7 +703,7 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 
 		return cpList;
 	}
-	
+
 	public List<CategoryPercentage> getHouseholdPercentage(String selectedProperties) {
 
 		selectedProperties = selectedProperties.replace("\"", "");
@@ -533,15 +711,15 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_HOH = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and h_o_h = 'Yes' " +
-				" union " +
-				" select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'No'" +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Information not collected'" +
-				" union " +
-				" select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Individual refused'" +
-				" union " +
-				" select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Individual does not know'";
+		String SQL_HOH = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and h_o_h = 'Yes' "
+				+ " union "
+				+ " select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'No'"
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Information not collected'"
+				+ " union "
+				+ " select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Individual refused'"
+				+ " union "
+				+ " select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and h_o_h = 'Individual does not know'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_HOH = SQL_HOH.replace(":properties", selectedProperties);
@@ -600,15 +778,15 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_VETERAN = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and veteran = 'Yes' " +
-				" union " +
-				" select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'No'" +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Information not collected'" +
-				" union " +
-				" select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Individual refused'" +
-				" union " +
-				" select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Individual does not know'";
+		String SQL_VETERAN = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and veteran = 'Yes' "
+				+ " union "
+				+ " select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'No'"
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Information not collected'"
+				+ " union "
+				+ " select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Individual refused'"
+				+ " union "
+				+ " select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and veteran = 'Individual does not know'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_VETERAN = SQL_VETERAN.replace(":properties", selectedProperties);
@@ -667,17 +845,17 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_DISABILITY = "select 'Yes, individual indicates a disability as defined in ADA' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and disability = 'Yes, individual indicates a disability as defined in ADA' " +
-				" union " +
-				" select 'No, individual indicates a disability as defined in ADA' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'No, individual indicates a disability as defined in ADA'" +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Information not collected'" +
-				" union " +
-				" select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Individual refused'" +
-				" union " +
-				" select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Individual does not know'" +
-				" union " +
-				" select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'N/A'";
+		String SQL_DISABILITY = "select 'Yes, individual indicates a disability as defined in ADA' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and disability = 'Yes, individual indicates a disability as defined in ADA' "
+				+ " union "
+				+ " select 'No, individual indicates a disability as defined in ADA' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'No, individual indicates a disability as defined in ADA'"
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Information not collected'"
+				+ " union "
+				+ " select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Individual refused'"
+				+ " union "
+				+ " select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'Individual does not know'"
+				+ " union "
+				+ " select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and disability = 'N/A'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_DISABILITY = SQL_DISABILITY.replace(":properties", selectedProperties);
@@ -742,11 +920,11 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_CITIZEN = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and rc_or_ex_off = 'Yes' " +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and rc_or_ex_off = 'Information not collected'" +
-				" union " +
-				" select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and rc_or_ex_off = 'N/A'";
+		String SQL_CITIZEN = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and rc_or_ex_off = 'Yes' "
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and rc_or_ex_off = 'Information not collected'"
+				+ " union "
+				+ " select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and rc_or_ex_off = 'N/A'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_CITIZEN = SQL_CITIZEN.replace(":properties", selectedProperties);
@@ -795,11 +973,11 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_SSI = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ssi = 'Yes' " +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssi = 'Information not collected'" +
-				" union " +
-				" select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssi = 'N/A'";
+		String SQL_SSI = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ssi = 'Yes' "
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssi = 'Information not collected'"
+				+ " union "
+				+ " select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssi = 'N/A'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_SSI = SQL_SSI.replace(":properties", selectedProperties);
@@ -848,11 +1026,11 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_SSDI = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ssdi = 'Yes' " +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssdi = 'Information not collected'" +
-				" union " +
-				" select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssdi = 'N/A'";
+		String SQL_SSDI = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and ssdi = 'Yes' "
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssdi = 'Information not collected'"
+				+ " union "
+				+ " select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ssdi = 'N/A'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_SSDI = SQL_SSDI.replace(":properties", selectedProperties);
@@ -901,31 +1079,31 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_HEALTH = "select 'Yes, covered through employer or union (current or former)' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and health_coverage = 'Yes, covered through employer or union (current or former)' " +
-				" union " +
-				" select 'Yes, purchased insurance from insurance company' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Yes, purchased insurance from insurance company'" +
-				" union " +
-				" select 'TRICARE or other military health care' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'TRICARE or other military health care'"+
-				" union " +
-				" select 'VA health care' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'VA health care'" +
-				" union " +
-				" select 'Indian Health Service' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Indian Health Service'" +
-				" union " +
-				" select 'Other health insurance or health coverage plan' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Other health insurance or health coverage plan'" +
-				" union " +
-				" select 'No coverage' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'No coverage'" +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Information not collected'" +
-				" union " +
-				" select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Individual refused'" +
-				" union " +
-				" select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Individual does not know'" +
-				" union " +
-				" select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'N/A'" +
-				" union " +
-				" select 'Medicare' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Medicare'" +
-				" union " +
-				" select 'Medicaid/Medical Assistant' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Medicaid/Medical Assistant'";
+		String SQL_HEALTH = "select 'Yes, covered through employer or union (current or former)' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and health_coverage = 'Yes, covered through employer or union (current or former)' "
+				+ " union "
+				+ " select 'Yes, purchased insurance from insurance company' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Yes, purchased insurance from insurance company'"
+				+ " union "
+				+ " select 'TRICARE or other military health care' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'TRICARE or other military health care'"
+				+ " union "
+				+ " select 'VA health care' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'VA health care'"
+				+ " union "
+				+ " select 'Indian Health Service' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Indian Health Service'"
+				+ " union "
+				+ " select 'Other health insurance or health coverage plan' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Other health insurance or health coverage plan'"
+				+ " union "
+				+ " select 'No coverage' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'No coverage'"
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Information not collected'"
+				+ " union "
+				+ " select 'Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Individual refused'"
+				+ " union "
+				+ " select 'Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Individual does not know'"
+				+ " union "
+				+ " select 'N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'N/A'"
+				+ " union "
+				+ " select 'Medicare' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Medicare'"
+				+ " union "
+				+ " select 'Medicaid/Medical Assistant' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and health_coverage = 'Medicaid/Medical Assistant'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_HEALTH = SQL_HEALTH.replace(":properties", selectedProperties);
@@ -1019,27 +1197,24 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 
 		}
 
-
-
 		return cpList;
 	}
-	
-	public List<CategoryPercentage> getFoodShortagesPercentage(String selectedProperties){
-		
+
+	public List<CategoryPercentage> getFoodShortagesPercentage(String selectedProperties) {
+
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_ = "select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and EXP_FOOD_SHORT = 'Yes' " +
-				" union " +
-				" select 'Beginning of the Month' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'Beginning of the Month'" +
-				" union " +
-				" select 'Middle of the Month' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'Middle of the Month'" +
-				" union " +
-				" select 'End of the Month' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'End of the Month'";
+		String SQL_ = "select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and EXP_FOOD_SHORT = 'Yes' "
+				+ " union "
+				+ " select 'Beginning of the Month' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'Beginning of the Month'"
+				+ " union "
+				+ " select 'Middle of the Month' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'Middle of the Month'"
+				+ " union "
+				+ " select 'End of the Month' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and EXP_FOOD_SHORT = 'End of the Month'";
 
-		
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
 
@@ -1074,7 +1249,7 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 			cp.setPercentage(0);
 
 			cpList.add(cp);
-			
+
 			cp = new CategoryPercentage();
 			cp.setCategory("End of the Month");
 			cp.setPercentage(0);
@@ -1085,23 +1260,22 @@ public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties
 
 		return cpList;
 	}
-	
-public List<CategoryPercentage> feeSafeDayPercentage(String selectedProperties){
-		
+
+	public List<CategoryPercentage> feeSafeDayPercentage(String selectedProperties) {
+
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_ = "select 'Somewhat safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and SAFE_DAY = 'Somewhat safe' " +
-				" union " +
-				" select 'Somewhat unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Somewhat unsafe'" +
-				" union " +
-				" select 'Very safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Very safe'" +
-				" union " +
-				" select 'Very unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Very unsafe'";
+		String SQL_ = "select 'Somewhat safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and SAFE_DAY = 'Somewhat safe' "
+				+ " union "
+				+ " select 'Somewhat unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Somewhat unsafe'"
+				+ " union "
+				+ " select 'Very safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Very safe'"
+				+ " union "
+				+ " select 'Very unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_DAY = 'Very unsafe'";
 
-		
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
 
@@ -1136,7 +1310,7 @@ public List<CategoryPercentage> feeSafeDayPercentage(String selectedProperties){
 			cp.setPercentage(0);
 
 			cpList.add(cp);
-			
+
 			cp = new CategoryPercentage();
 			cp.setCategory("Very unsafe");
 			cp.setPercentage(0);
@@ -1148,127 +1322,124 @@ public List<CategoryPercentage> feeSafeDayPercentage(String selectedProperties){
 		return cpList;
 	}
 
-public List<CategoryPercentage> feeSafeNightPercentage(String selectedProperties){
-	
-	selectedProperties = selectedProperties.replace("\"", "");
-	selectedProperties = selectedProperties.replace("[", "");
-	selectedProperties = selectedProperties.replace("]", "");
+	public List<CategoryPercentage> feeSafeNightPercentage(String selectedProperties) {
 
-	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-	String SQL_ = "select 'Somewhat safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and SAFE_NIGHT = 'Somewhat safe' " +
-			" union " +
-			" select 'Somewhat unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Somewhat unsafe'" +
-			" union " +
-			" select 'Very safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Very safe'" +
-			" union " +
-			" select 'Very unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Very unsafe'";
-
-	
-	if (StringUtils.isNotBlank(selectedProperties)) {
-		SQL_ = SQL_.replace(":properties", selectedProperties);
-
-		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
-			try {
-				CategoryPercentage cp = new CategoryPercentage();
-				cp.setCategory(rs.getString("category"));
-				cp.setPercentage(rs.getInt("percentage"));
-				return cp;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-	}
-
-	else {
-
-		CategoryPercentage cp = new CategoryPercentage();
-		cp.setCategory("Somewhat safe");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("Somewhat unsafe");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("Very safe");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-		
-		cp = new CategoryPercentage();
-		cp.setCategory("Very unsafe");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-	}
-
-	return cpList;
-}
-
-public List<CategoryPercentage> getInterestResCouncil(String selectedProperties){
-	
-	selectedProperties = selectedProperties.replace("\"", "");
-	selectedProperties = selectedProperties.replace("[", "");
-	selectedProperties = selectedProperties.replace("]", "");
-
-	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-	String SQL_ = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and INT_RES_COUNCIL = 'Yes' " +
-			" union " +
-			" select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INT_RES_COUNCIL = 'No'" ;
-			
-	
-	if (StringUtils.isNotBlank(selectedProperties)) {
-		SQL_ = SQL_.replace(":properties", selectedProperties);
-
-		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
-			try {
-				CategoryPercentage cp = new CategoryPercentage();
-				cp.setCategory(rs.getString("category"));
-				cp.setPercentage(rs.getInt("percentage"));
-				return cp;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-	}
-
-	else {
-
-		CategoryPercentage cp = new CategoryPercentage();
-		cp.setCategory("Yes");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("No");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-	}
-
-	return cpList;
-}
-	
-public List<CategoryPercentage> getInternetAccessPercentage(String selectedProperties){
-		
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_ = "select 'No, but my phone has internet access' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and INTERNET_ACCESS = 'No, but my phone has internet access' " +
-				" union " +
-				" select 'No, I have no internet access' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INTERNET_ACCESS = 'No, I have no internet access'" +
-				" union " +
-				" select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INTERNET_ACCESS = 'Yes'";
-				
-		
+		String SQL_ = "select 'Somewhat safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and SAFE_NIGHT = 'Somewhat safe' "
+				+ " union "
+				+ " select 'Somewhat unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Somewhat unsafe'"
+				+ " union "
+				+ " select 'Very safe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Very safe'"
+				+ " union "
+				+ " select 'Very unsafe' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and SAFE_NIGHT = 'Very unsafe'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Somewhat safe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Somewhat unsafe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Very safe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Very unsafe");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getInterestResCouncil(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and INT_RES_COUNCIL = 'Yes' "
+				+ " union "
+				+ " select 'No' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INT_RES_COUNCIL = 'No'";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Yes");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("No");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getInternetAccessPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'No, but my phone has internet access' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and INTERNET_ACCESS = 'No, but my phone has internet access' "
+				+ " union "
+				+ " select 'No, I have no internet access' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INTERNET_ACCESS = 'No, I have no internet access'"
+				+ " union "
+				+ " select 'Yes' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and INTERNET_ACCESS = 'Yes'";
+
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
 
@@ -1308,207 +1479,201 @@ public List<CategoryPercentage> getInternetAccessPercentage(String selectedPrope
 		return cpList;
 	}
 
-public List<CategoryPercentage> getHouseholdType(String selectedProperties){
-	
-	selectedProperties = selectedProperties.replace("\"", "");
-	selectedProperties = selectedProperties.replace("[", "");
-	selectedProperties = selectedProperties.replace("]", "");
+	public List<CategoryPercentage> getHouseholdType(String selectedProperties) {
 
-	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-	String SQL_ = "select 'No Children' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and HOH_TYPE = 'No Children' " +
-			" union " +
-			" select 'One Parent' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and HOH_TYPE = 'One Parent'" +
-			" union " +
-			" select 'Two Parent' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and HOH_TYPE = 'Two Parent'";
-			
-	
-	if (StringUtils.isNotBlank(selectedProperties)) {
-		SQL_ = SQL_.replace(":properties", selectedProperties);
-
-		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
-			try {
-				CategoryPercentage cp = new CategoryPercentage();
-				cp.setCategory(rs.getString("category"));
-				cp.setPercentage(rs.getInt("percentage"));
-				return cp;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-	}
-
-	else {
-
-		CategoryPercentage cp = new CategoryPercentage();
-		cp.setCategory("No Children");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("One Parent");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("Two Parent");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-	}
-
-	return cpList;
-}
-
-public List<CategoryPercentage> prefferedContactMethodPercentage(String selectedProperties){
-	
-	selectedProperties = selectedProperties.replace("\"", "");
-	selectedProperties = selectedProperties.replace("[", "");
-	selectedProperties = selectedProperties.replace("]", "");
-
-	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-	String SQL_ = "select 'Email' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and via_email = true " + 
-			"				 union  " + 
-			"				 select 'Phone Call' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and via_voicemail = true " + 
-			"				 union  " + 
-			"				 select 'Text Message' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and via_text = true " + 
-			"				 union " + 
-			"				 select 'Mail' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ( via_text = false and via_email = false and via_voicemail =false) " ; 
-			
-			
-	
-	if (StringUtils.isNotBlank(selectedProperties)) {
-		SQL_ = SQL_.replace(":properties", selectedProperties);
-
-		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
-			try {
-				CategoryPercentage cp = new CategoryPercentage();
-				cp.setCategory(rs.getString("category"));
-				cp.setPercentage(rs.getInt("percentage"));
-				return cp;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-	}
-
-	else {
-
-		CategoryPercentage cp = new CategoryPercentage();
-		cp.setCategory("Email");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("Phone Call");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("Text Message");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-		
-		cp = new CategoryPercentage();
-		cp.setCategory("Mail");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-	}
-
-	return cpList;
-}
-
-public List<CategoryPercentage> occupancyLengthPercentage(String selectedProperties){
-	
-	selectedProperties = selectedProperties.replace("\"", "");
-	selectedProperties = selectedProperties.replace("[", "");
-	selectedProperties = selectedProperties.replace("]", "");
-
-	List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-	String SQL_ = "select 'Less than 1 Year' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and occupancy_length = 'Less than 1 Year' " + 
-			"				 union  " + 
-			"				 select '1-3 Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '1-3 Years' " + 
-			"				 union  " + 
-			"				 select '4-6 Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '4-6 Years' " + 
-			"				 union " + 
-			"				 select '7-9 Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '7-9 Years' " +
-			"				 union " + 
-			"				 select '10 or more Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '10 or more Years' " ; 
-			
-			
-	
-	if (StringUtils.isNotBlank(selectedProperties)) {
-		SQL_ = SQL_.replace(":properties", selectedProperties);
-
-		cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
-			try {
-				CategoryPercentage cp = new CategoryPercentage();
-				cp.setCategory(rs.getString("category"));
-				cp.setPercentage(rs.getInt("percentage"));
-				return cp;
-			} catch (SQLException e) {
-				throw new RuntimeException("your error message", e); // or other unchecked exception here
-			}
-		});
-	}
-
-	else {
-
-		CategoryPercentage cp = new CategoryPercentage();
-		cp.setCategory("Less than 1 Year");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("1-3 Years");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-
-		cp = new CategoryPercentage();
-		cp.setCategory("4-6 Years");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-		
-		cp = new CategoryPercentage();
-		cp.setCategory("7-9 Years");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-		
-		cp = new CategoryPercentage();
-		cp.setCategory("10 or more Years");
-		cp.setPercentage(0);
-
-		cpList.add(cp);
-	}
-
-	return cpList;
-}
-	
-public List<CategoryPercentage> getModeOfTransportationPercentage(String selectedProperties){
-		
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_ = "select 'Bus' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and MODE_TRANSPORT = 'Bus' " +
-				" union " +
-				" select 'Personal Vehicle' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Personal Vehicle'" +
-				" union " +
-				" select 'Someone drives me' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Someone drives me'" +
-				" union " +
-				" select 'Walk/Bike' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Walk/Bike'";
+		String SQL_ = "select 'No Children' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and HOH_TYPE = 'No Children' "
+				+ " union "
+				+ " select 'One Parent' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and HOH_TYPE = 'One Parent'"
+				+ " union "
+				+ " select 'Two Parent' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and HOH_TYPE = 'Two Parent'";
 
-		
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("No Children");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("One Parent");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Two Parent");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> prefferedContactMethodPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Email' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and via_email = true "
+				+ "				 union  "
+				+ "				 select 'Phone Call' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and via_voicemail = true "
+				+ "				 union  "
+				+ "				 select 'Text Message' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and via_text = true "
+				+ "				 union "
+				+ "				 select 'Mail' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and ( via_text = false and via_email = false and via_voicemail =false) ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Email");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Phone Call");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Text Message");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("Mail");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> occupancyLengthPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Less than 1 Year' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and occupancy_length = 'Less than 1 Year' "
+				+ "				 union  "
+				+ "				 select '1-3 Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '1-3 Years' "
+				+ "				 union  "
+				+ "				 select '4-6 Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '4-6 Years' "
+				+ "				 union "
+				+ "				 select '7-9 Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '7-9 Years' "
+				+ "				 union "
+				+ "				 select '10 or more Years' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and occupancy_length = '10 or more Years' ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Less than 1 Year");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("1-3 Years");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("4-6 Years");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("7-9 Years");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+
+			cp = new CategoryPercentage();
+			cp.setCategory("10 or more Years");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+		}
+
+		return cpList;
+	}
+
+	public List<CategoryPercentage> getModeOfTransportationPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Bus' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and MODE_TRANSPORT = 'Bus' "
+				+ " union "
+				+ " select 'Personal Vehicle' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Personal Vehicle'"
+				+ " union "
+				+ " select 'Someone drives me' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Someone drives me'"
+				+ " union "
+				+ " select 'Walk/Bike' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and MODE_TRANSPORT = 'Walk/Bike'";
+
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
 
@@ -1543,7 +1708,7 @@ public List<CategoryPercentage> getModeOfTransportationPercentage(String selecte
 			cp.setPercentage(0);
 
 			cpList.add(cp);
-			
+
 			cp = new CategoryPercentage();
 			cp.setCategory("Walk/Bike");
 			cp.setPercentage(0);
@@ -1555,7 +1720,6 @@ public List<CategoryPercentage> getModeOfTransportationPercentage(String selecte
 		return cpList;
 	}
 
-
 	public List<CategoryPercentage> getEducationPercentage(String selectedProperties) {
 
 		selectedProperties = selectedProperties.replace("\"", "");
@@ -1563,35 +1727,35 @@ public List<CategoryPercentage> getModeOfTransportationPercentage(String selecte
 		selectedProperties = selectedProperties.replace("]", "");
 
 		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
-		String SQL_EDUCATION = "select 'No schooling completed, Nursery school, or Kindergarten' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and highest_edu = 'No schooling completed, Nursery school, or Kindergarten' " +
-				" union " +
-				" select '12th grade, no diploma' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = '12th grade, no diploma'" +
-				" union " +
-				" select 'High School Diploma' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'High School Diploma'"+
-				" union " +
-				" select 'Grade 1 GED or alternative credentials' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 1 GED or alternative credentials'" +
-				" union " +
-				" select 'Grade 2 Less than 1 year of college credit' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 2 Less than 1 year of college credit'" +
-				" union " +
-				" select 'Grade 3 One or more yearss of college dredit, no degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 3 One or more yearss of college dredit, no degree'" +
-				" union " +
-				" select 'Grade 4 Associate''s degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 4 Associate''s degree'" +
-				" union " +
-				" select 'Grade 5 Bachelor''s degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 5 Bachelor''s degree'" +
-				" union" +
-				" select 'Grade 6 Master''s degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and highest_edu = 'Grade 6 Master''s degree' " +
-				" union " +
-				" select 'Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)'" +
-				" union " +
-				" select 'Grade 8 Doctorate degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 8 Doctorate degree'"+
-				" union " +
-				" select 'Grade 9 Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 9 Individual refused'" +
-				" union " +
-				" select 'Grade 10Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 10Individual does not know'" +
-				" union " +
-				" select 'Grade 11 N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 11 N/A'" +
-				" union " +
-				" select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Information not collected'";
+		String SQL_EDUCATION = "select 'No schooling completed, Nursery school, or Kindergarten' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and highest_edu = 'No schooling completed, Nursery school, or Kindergarten' "
+				+ " union "
+				+ " select '12th grade, no diploma' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = '12th grade, no diploma'"
+				+ " union "
+				+ " select 'High School Diploma' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'High School Diploma'"
+				+ " union "
+				+ " select 'Grade 1 GED or alternative credentials' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 1 GED or alternative credentials'"
+				+ " union "
+				+ " select 'Grade 2 Less than 1 year of college credit' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 2 Less than 1 year of college credit'"
+				+ " union "
+				+ " select 'Grade 3 One or more yearss of college dredit, no degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 3 One or more yearss of college dredit, no degree'"
+				+ " union "
+				+ " select 'Grade 4 Associate''s degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 4 Associate''s degree'"
+				+ " union "
+				+ " select 'Grade 5 Bachelor''s degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 5 Bachelor''s degree'"
+				+ " union"
+				+ " select 'Grade 6 Master''s degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where prop_id in (:properties) and highest_edu = 'Grade 6 Master''s degree' "
+				+ " union "
+				+ " select 'Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 7 Professional degree (e.g. MD, DDS, DVM, LLB, JD)'"
+				+ " union "
+				+ " select 'Grade 8 Doctorate degree' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 8 Doctorate degree'"
+				+ " union "
+				+ " select 'Grade 9 Individual refused' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 9 Individual refused'"
+				+ " union "
+				+ " select 'Grade 10Individual does not know' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 10Individual does not know'"
+				+ " union "
+				+ " select 'Grade 11 N/A' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Grade 11 N/A'"
+				+ " union "
+				+ " select 'Information not collected' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where  prop_id in (:properties) and highest_edu = 'Information not collected'";
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_EDUCATION = SQL_EDUCATION.replace(":properties", selectedProperties);
@@ -1692,13 +1856,8 @@ public List<CategoryPercentage> getModeOfTransportationPercentage(String selecte
 
 		}
 
-
-
 		return cpList;
 	}
-	
-	
-
 
 	public List<String> getAllYears() {
 
