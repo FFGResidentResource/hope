@@ -1581,7 +1581,7 @@ CREATE OR REPLACE VIEW RESIDENT_REF_TYPE_VIEW
 AS 
 SELECT P."REF_TYPE" AS "REF_TYPE", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", P."RES_ID" as "RES_ID" from (
 select rf.ref_value as "REF_TYPE" , extract(quarter from date_added) as "QUARTER",  extract (year from date_added) as "YEAR", r.prop_id  as "PROP_ID", r.resident_id as "RES_ID" from resident r join referral rf on rf.ref_id = r.ref_type 
-)P
+)P;
 
 
 --Example for Questionnaire

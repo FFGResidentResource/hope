@@ -1,3 +1,6 @@
+//Some of the Graphs are not purely database driven, if you add something in html e.g. a new resident outcome achieved category then you have to add that in actionPlan.html and then you have to add it here in this file under OutcomeAchievedQuarterly Method
+// Charting and Graphing is completely based on C3 D3 JS chart Library. All we doing is massaging javaScript Data what we get from database via Jquery Ajax Calls
+
 window.onbeforeprint = function() {
 	
 	jQuery(selectedProperties).each(function (idx, val){	
@@ -11,7 +14,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart ;
 var dataArray;
 
 jQuery(document).ready(function() {
@@ -87,7 +90,125 @@ function generateAllQuarterlyReport(){
 	assessmentQuarterly();
 	serviceAgencyQuarterly();
 	refTypeQuarterly();
+	outcomeQuarterly();
 	
+	
+}
+
+function outcomeQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	
+	var groupArray =  [["Rectify lease violation"], ["Remain housed overtime"], ["Avoid moving out becuase of non-payment of rent"],["Avoid utility-shut off"],["Purchase a home"],
+						["Increase gross income(e.g., child support, gov't benefits)"],["Establish a bank account"],["Reduce reliance upon government benefits (e.g., section 8, food stamps)"],["Secure financial assistance(e.g. for help with car repairs)"],["Recieve financial literacy education"],
+						["Increase employment income"],["Secured employment"],["Remain employed for 90 days"],
+						["Enroll child(ren) in pre-k, head start, or other early education program"],["Enroll child(ren) in school, afterschool, or other early education program"],["Enroll child(ren) in day care"],["Complete secondary education program"],["Complete vocational/job training program"],
+						["Feel safe in own/building"],["Feel safe in surrounding neighborhood"],["Feel knowledgable about where to go for help"],["Register to vote"],["Improve socialization or network of support"],
+						["Improve housekeeping skills or conditions"],["Secure donated materials(e.g. clothes, school supplies, furniture)"],
+						["Reduce use of hospital ER"],["Identify a place to receive routine primary care services"],["Visit a healthcare provider for a routine checkup"],["Enroll in or change health insurance"],["Reduce food insecurity"],["Improve ability to manage health/mental health condition"]];
+	var dataArrayPerf = [["x", "Q1", "Q2", "Q3", "Q4"], ["Rectify lease violation"], ["Remain housed overtime"], ["Avoid moving out becuase of non-payment of rent"],["Avoid utility-shut off"],["Purchase a home"],
+						["Increase gross income(e.g., child support, gov't benefits)"],["Establish a bank account"],["Reduce reliance upon government benefits (e.g., section 8, food stamps)"],["Secure financial assistance(e.g. for help with car repairs)"],["Recieve financial literacy education"],
+						["Increase employment income"],["Secured employment"],["Remain employed for 90 days"],
+						["Enroll child(ren) in pre-k, head start, or other early education program"],["Enroll child(ren) in school, afterschool, or other early education program"],["Enroll child(ren) in day care"],["Complete secondary education program"],["Complete vocational/job training program"],
+						["Feel safe in own/building"],["Feel safe in surrounding neighborhood"],["Feel knowledgable about where to go for help"],["Register to vote"],["Improve socialization or network of support"],
+						["Improve housekeeping skills or conditions"],["Secure donated materials(e.g. clothes, school supplies, furniture)"],
+						["Reduce use of hospital ER"],["Identify a place to receive routine primary care services"],["Visit a healthcare provider for a routine checkup"],["Enroll in or change health insurance"],["Reduce food insecurity"],["Improve ability to manage health/mental health condition"]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+			
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/outcomesAchievedQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+		
+		jQuery(response).each(function(idx,val){
+			jQuery(groupArray).each(function(p,category){		
+				
+				if(val.category == category){
+					//if category matches then only check for each quarter
+					for(j = 1; j < 5; j++){
+					
+						// This shows on each quarter some Catory found
+						if(val.quarter == j ){									
+							dataArrayPerf[p+1][j] = 	val.count;												
+						}else{
+							dataArrayPerf[p+1][j] = 0;
+						}	
+					}
+				}		
+			});	
+						
+		});	
+			
+			if(outAchChart != null){				
+				outAchChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					outAchChart= generateCategoryChart("#outAchChart", "Outcomes Achieved Chart (You can click on individual x axis category to turn off category result from chart)", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function refTypeQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	
+	var groupArray =  [['Self(Resident)/Walk-In'], ['Property Mgmt (Includes Community Manager and Maintenance)'], ['Service Coordinator'],['Other Resident'],['Other']];
+	var dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'], ['Self(Resident)/Walk-In'], ['Property Mgmt (Includes Community Manager and Maintenance)'], ['Service Coordinator'],['Other Resident'],['Other']]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+			
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/refTypeQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+		
+		jQuery(response).each(function(idx,val){
+			jQuery(groupArray).each(function(p,category){		
+				
+				if(val.category == category){
+					//if category matches then only check for each quarter
+					for(j = 1; j < 5; j++){
+					
+						// This shows on each quarter some Catory found
+						if(val.quarter == j ){									
+							dataArrayPerf[p+1][j] = 	val.count;												
+						}else{
+							dataArrayPerf[p+1][j] = 0;
+						}	
+					}
+				}		
+			});	
+						
+		});	
+			
+			if(refTypeChart != null){				
+				refTypeChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					refTypeChart= generateCategoryChart("#refTypeChart", "Resident Referred By", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 function refTypeQuarterly(){

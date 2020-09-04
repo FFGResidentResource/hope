@@ -285,6 +285,67 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		return qcs;
 	}
+	
+	public List<QuarterCount> getOutcomeAchievedQuarterly(String selectedProperties, String year) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select COUNT(*) as total, \"QUARTER\" as quarter, \"OUTCOMES\" as category from OUTCOMES_ACHIEVED_VIEW OAV join resident r on r.resident_id = \"RES_ID\" and r.prop_id in (:properties) where \"YEAR\"= :year group by \"OUTCOMES\", \"QUARTER\" ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					cp.setCategory(rs.getString("category"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
+	}
 
 	public List<QuarterCount> getServicesProvidedQuarterly(String selectedProperties, String year) {
 
