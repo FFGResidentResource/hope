@@ -14,7 +14,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart ;
 var dataArray;
 var reset = 0;
 
@@ -123,6 +123,7 @@ function generateAllQuarterlyReport(){
 	refTypeQuarterly();
 	outcomeQuarterly();
 	resServedQuarterly();
+	refReasonsQuarterly();
 	
 	
 }
@@ -208,6 +209,63 @@ function resServedQuarterly(){
 			}else{		
 					resServedChart= generateCategoryChart("#resServedChart", "Resident Served", groupArray, dataArrayPerf);
 					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function refReasonsQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	
+	var groupArray =  [["Non/late payment of rent"], ["Utility Shut-off, scheduled for (Date):"], ["Housekeeping/home management"],["Lease violation for:"],["Employment/job readiness"],
+						["Education/job training"],["Noticeable change in:"],["Resident-to-resident conflict issues"],["Suspected abuse/domestic violence/exploitation"],["Childcare/afterschool care"],
+						["Transportation"],["Safety"],["Healthcare/medical issues"],
+						["Other:"]];
+	var dataArrayPerf = [["x", "Q1", "Q2", "Q3", "Q4"], ["Non/late payment of rent"], ["Utility Shut-off, scheduled for (Date):"], ["Housekeeping/home management"],["Lease violation for:"],["Employment/job readiness"],
+						["Education/job training"],["Noticeable change in:"],["Resident-to-resident conflict issues"],["Suspected abuse/domestic violence/exploitation"],["Childcare/afterschool care"],
+						["Transportation"],["Safety"],["Healthcare/medical issues"],
+						["Other:"]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+			
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/refReasonQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+		
+		jQuery(response).each(function(idx,val){
+			jQuery(groupArray).each(function(p,category){		
+				
+				if(val.category == category){
+					//if category matches then only check for each quarter
+					for(j = 1; j < 5; j++){
+					
+						// This shows on each quarter some Catory found
+						if(val.quarter == j ){									
+							dataArrayPerf[p+1][j] = 	val.count;												
+						}else{
+							dataArrayPerf[p+1][j] = 0;
+						}	
+					}
+				}		
+			});	
+						
+		});	
+			
+			if(refReasonChart != null){				
+				refReasonChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					refReasonChart= generateCategoryChart("#refReasonsChart", "Referral Reason", groupArray, dataArrayPerf);					
 				}			
 		},		
 		error : function(e) {

@@ -322,6 +322,14 @@ public class RestAPIController {
 		return ResponseEntity.ok(cp);
 	}
 	
+	@PostMapping("/refReasonQuarterly")
+	public ResponseEntity<?> getRefReasonsQuarterly(@RequestBody HolderObj holderObj) {
+		
+		List<QuarterCount> cp = dashDao.getReferralReasonQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
+
+		return ResponseEntity.ok(cp);
+	}
+	
 	@PostMapping("/ongoingResidents")
 	public ResponseEntity<?> getOngoingResidents() {
 		
