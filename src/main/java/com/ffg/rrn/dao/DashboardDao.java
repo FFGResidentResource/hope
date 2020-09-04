@@ -44,6 +44,74 @@ public class DashboardDao extends JdbcDaoSupport {
 	public DashboardDao(DataSource dataSource) {
 		this.setDataSource(dataSource);
 	}
+	
+	public List<QuarterCount> getResidentServedQuarterly(String selectedProperties, String year){
+		
+
+		
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select count(*) as total, 1 as quarter from resident_served_view rsv where (\"RESQ\" = 1 or \"SSMQ\" = 1 or \"CNQ\" = 1 or \"APQ\" = 1) and (\"RESY\" = :year or \"SSMY\" = :year or \"CNY\" = :year or \"APY\" = :year) and \"PROP_ID\" in (:properties) " + 
+				"		union " + 
+				"		select count(*) as total, 2 as quarter from resident_served_view rsv where (\"RESQ\" = 2 or \"SSMQ\" = 2 or \"CNQ\" = 2 or \"APQ\" = 2) and (\"RESY\" = :year or \"SSMY\" = :year or \"CNY\" = :year or \"APY\" = :year) and \"PROP_ID\" in (:properties) " + 
+				"		union " + 
+				"		select count(*) as total, 3 as quarter from resident_served_view rsv where (\"RESQ\" = 3 or \"SSMQ\" = 3 or \"CNQ\" = 3 or \"APQ\" = 3) and (\"RESY\" = :year or \"SSMY\" = :year or \"CNY\" = :year or \"APY\" = :year) and \"PROP_ID\" in (:properties) " + 
+				"		union " + 
+				"		select count(*) as total, 4 as quarter from resident_served_view rsv where (\"RESQ\" = 4 or \"SSMQ\" = 4 or \"CNQ\" = 4 or \"APQ\" = 4) and (\"RESY\" = :year or \"SSMY\" = :year or \"CNY\" = :year or \"APY\" = :year) and \"PROP_ID\" in (:properties) ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
+	}
 
 	public List<QuarterCount> getServiceAgencyQuarterly(String selectedProperties, String year) {
 

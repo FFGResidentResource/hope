@@ -313,6 +313,26 @@ public class RestAPIController {
 
 		return ResponseEntity.ok(cp);
 	}
+	
+	@PostMapping("/residentServedQuarterly")
+	public ResponseEntity<?> getResidentServedQuarterly(@RequestBody HolderObj holderObj) {
+		
+		List<QuarterCount> cp = dashDao.getResidentServedQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/ongoingResidents")
+	public ResponseEntity<?> getOngoingResidents() {
+		
+		return ResponseEntity.ok(dashDao.getOngoingResidents());
+	}
+	
+	@PostMapping("/newResidents")
+	public ResponseEntity<?> getNewResidents() {
+		
+		return ResponseEntity.ok(dashDao.getNewResidents());
+	}
 
 	@PostMapping("/getHistoricalAssessmentByResidentIdAndLifeDomain")
 	public ResponseEntity<?> getHistoricalAssessmentByResidentIdAndLifeDomain(

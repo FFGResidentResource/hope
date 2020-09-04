@@ -14,7 +14,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart ;
 var dataArray;
 
 jQuery(document).ready(function() {
@@ -91,8 +91,98 @@ function generateAllQuarterlyReport(){
 	serviceAgencyQuarterly();
 	refTypeQuarterly();
 	outcomeQuarterly();
+	resServedQuarterly();
 	
 	
+}
+
+function ongoingResidents(that){
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/ongoingResidents",
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			jQuery("#_ongoingBadge").text(response);	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+	
+}
+
+function newResidents(that){
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/newResidents",
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			jQuery("#_newBadge").text(response);	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+	
+}
+
+
+function resServedQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident Served']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/residentServedQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(resServedChart != null){				
+				resServedChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					resServedChart= generateCategoryChart("#resServedChart", "Resident Served", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 function outcomeQuarterly(){
