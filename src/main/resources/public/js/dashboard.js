@@ -16,6 +16,7 @@ var selectedProperties = [];
 var oneTimeToggle = false;
 var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart ;
 var dataArray;
+var reset = 0;
 
 jQuery(document).ready(function() {
 	
@@ -33,15 +34,45 @@ jQuery(document).ready(function() {
 	// each graph one by one need to be called here, below is just first one - TODO
 	generateReport();	
 	
-	jQuery("input[name^='_propId_']").on('change', function () {
-		generateReport();
-	});
-	
 	$('input:radio').change(function(){
 			generateAllQuarterlyReport();
 	});
     
 });
+
+function citySelection(that){	
+	
+	if(reset < 1){
+		jQuery("input[name^='_propId_']").prop('checked',false);
+		reset = 1;
+	}
+	jQuery("input[name*='_City_"+jQuery(that).next().text()+"']").prop('checked',jQuery(that).prop('checked'));
+	generateReport();
+	
+}
+
+function countySelection(that){	
+	
+	if(reset < 1){
+		jQuery("input[name^='_propId_']").prop('checked',false);
+		reset = 1;
+	}
+	
+	jQuery("input[name*='_County_"+jQuery(that).next().text()+"']").prop('checked',jQuery(that).prop('checked'));
+	generateReport();
+	
+}
+
+function stateSelection(that){	
+
+	if(reset < 1){
+		jQuery("input[name^='_propId_']").prop('checked',false);
+		reset = 1;
+	}
+	
+	jQuery("input[name*='_State_"+jQuery(that).next().text()+"']").prop('checked',jQuery(that).prop('checked'));
+	generateReport();
+}
 
 //Onchange of Property checkBoxes
 function generateReport(){

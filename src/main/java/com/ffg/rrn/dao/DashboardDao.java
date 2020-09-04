@@ -45,9 +45,19 @@ public class DashboardDao extends JdbcDaoSupport {
 		this.setDataSource(dataSource);
 	}
 	
+	public List<String> getDistinctCounties(){		
+		return this.getJdbcTemplate().queryForList("select distinct county from property order by county", String.class);
+	}
+	
+	public List<String> getDistinctCity(){		
+		return this.getJdbcTemplate().queryForList("select distinct city from property order by city", String.class);
+	}
+	
+	public List<String> getDistinctState(){		
+		return this.getJdbcTemplate().queryForList("select distinct state from property order by state", String.class);
+	}
+	
 	public List<QuarterCount> getResidentServedQuarterly(String selectedProperties, String year){
-		
-
 		
 		selectedProperties = selectedProperties.replace("\"", "");
 		selectedProperties = selectedProperties.replace("[", "");

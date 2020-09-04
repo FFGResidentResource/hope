@@ -74,22 +74,84 @@ body {
 					<div th:each="pr, iStat: *{properties}">
 						<div class="col-md-3">
 							<label> <input type="checkbox" th:id="${pr.propertyId}"
-								th:name="'_propId_'+${pr.propertyId}">&nbsp;<span
+								th:name="'_propId_'+${pr.propertyId}+'_State_'+${pr.state}+'_City_'+${pr.city}+'_County_'+${pr.county}">&nbsp;<span
 								th:text="${pr.propertyName}"></span>
 							</label>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="panel panel-info hideme print-only">
-
-				<div class="panel-heading">
-					Report for Following Properties: <img
-						src="/images/rrnlogo_horz.png" style="float: right; width: 150px;" />
+				<div class="col-md-12">
+					<hr class="solidlinePrimary">
 				</div>
-				<div class="panel-body" id="_propListPrint"></div>
+
+				<div class="col-md-12">
+					<span><strong>County/City/State Filter: </strong></span>
+				</div>
+
+
+				<div class="col-md-12">
+					<div class="col-sm-1">
+						<label><strong><u>County</u></strong></label>
+					</div>
+					<div class="col-sm-11">
+						<span th:each="county, iStat: *{countyList}"> <label>
+								<input type="checkbox" th:id="'_cty_'+${county}"
+								onchange="countySelection(this);">&nbsp;<span
+								th:text="${county}"></span>
+						</label>
+
+						</span>
+					</div>
+				</div>
+
+				<div class="col-md-12">
+
+					<div class="col-sm-1">
+						<label><strong><u>City</u></strong></label>
+					</div>
+					<div class="col-sm-11">
+						<span th:each="city, iStat: *{cityList}"> <label> <input
+								type="checkbox" th:id="'_ct_'+${city}"
+								onchange="citySelection(this);">&nbsp;<span
+								th:text="${city}"></span>
+						</label>
+						</span>
+					</div>
+				</div>
+
+
+
+				<div class="col-md-12">
+					<div class="col-sm-1">
+						<label><strong><u>State</u></strong></label>
+					</div>
+					<div class="col-sm-10">
+						<span th:each="state, iStat: *{stateList}"> <label>
+								<input type="checkbox" th:id="'_st_'+${state}"
+								onchange="stateSelection(this);">&nbsp;<span
+								th:text="${state}"></span>
+						</label>
+						</span>
+					</div>
+					<div class="col-sm-1">
+						<label><strong><a class="btn btn-warning"
+								th:href="@{/dashboard}">Reset</a></strong></label>
+					</div>
+				</div>
+
 			</div>
+
+		</div>
+
+		<div class="panel panel-info hideme print-only">
+
+			<div class="panel-heading">
+				Report for Following Properties: <img src="/images/rrnlogo_horz.png"
+					style="float: right; width: 150px;" />
+			</div>
+			<div class="panel-body" id="_propListPrint"></div>
+		</div>
 		</div>
 
 
@@ -111,8 +173,8 @@ body {
 						Count New Residents <span id="_newBadge" class="badge"></span>
 					</button>
 				</div>
-				
-				
+
+
 			</div>
 
 			<div class="row">

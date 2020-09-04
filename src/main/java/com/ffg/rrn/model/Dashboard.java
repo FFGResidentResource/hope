@@ -26,6 +26,10 @@ public class Dashboard {
 	private Integer currentQuarter;
 
 	private List<Property> properties;
+	
+	private List<String> countyList;
+	private List<String> cityList;
+	private List<String> stateList;
 
 	private Integer q1ServiceHours;
 	private Integer q2ServiceHours;
