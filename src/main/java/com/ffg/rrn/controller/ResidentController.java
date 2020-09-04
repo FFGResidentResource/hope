@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
+import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -54,6 +56,8 @@ public class ResidentController extends BaseController {
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_EDUCATION, AppConstants.LIFE_DOMAIN_URL_NETWORK_SUPPORT);
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT, AppConstants.LIFE_DOMAIN_URL_HOUSEHOLD);
 		lifeDomainNextUrlMap.put(AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT, null);
+		
+		
 	}
 
 	@RequestMapping(value = "/getResidentById", method = { RequestMethod.GET, RequestMethod.POST })
@@ -70,7 +74,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
 
@@ -88,6 +92,14 @@ public class ResidentController extends BaseController {
 			return "403Page";
 		}
 
+	}
+
+	private Property checkResidentPropertyBelongsToSC(Resident resident) {
+		
+		return resident.getPropertyList().stream()
+		.filter(x -> resident.getPropertyName().equals(x.getPropertyName()))
+		.findAny().orElse(null);
+		
 	}
 
 	@RequestMapping(value = "/onboarding", method = RequestMethod.GET)
@@ -145,7 +157,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
 
@@ -181,7 +193,7 @@ public class ResidentController extends BaseController {
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
 		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "referralForm");
 
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 			if (StringUtils.isEmpty(resident.getReferralReason())) {
 				resident.setReferralReason(
@@ -192,7 +204,7 @@ public class ResidentController extends BaseController {
 						"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
 			}
 			if (StringUtils.isEmpty(resident.getHousingStability())) {
-				resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+				resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"Resolve lease violation\":\"false\"}");
 			}
 			if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
 				resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
@@ -249,7 +261,7 @@ public class ResidentController extends BaseController {
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
 		resident.setMostRecentSSMDate(residentService.getMostRecentSSMDate(residentId));
@@ -261,7 +273,7 @@ public class ResidentController extends BaseController {
 					"{\"Improve knowledge of resources\":\"false\", \"Improve educational status\":\"false\", \"Obtain/maintain employment\":\"false\", \"Move to home ownership\":\"false\" }");
 		}
 		if (StringUtils.isEmpty(resident.getHousingStability())) {
-			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"resolve lease violation\":\"false\"}");
+			resident.setHousingStability("{\"Avoid  eviction\":\"false\", \"Resolve lease violation\":\"false\"}");
 		}
 		if (StringUtils.isEmpty(resident.getSafeSupportiveCommunity())) {
 			resident.setSafeSupportiveCommunity("{\"Greater sense of satisfaction\":\"false\",\"Greater sense of safety\":\"false\", \"Greater sense of community/support\":\"false\"}");
@@ -357,11 +369,12 @@ public class ResidentController extends BaseController {
 			resident.setPlan(null);
 			resident.setDescription(null);
 			resident.setAssessment(null);
+			resident.setNoShowDate(null);
 		}
 
 		// Grants will never be null - either "All" or some Property
 		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
-		if (null != resident && null != resident.getResidentId() && (resident.getPropertyName().equalsIgnoreCase(grantOnProperty) || grantOnProperty.equalsIgnoreCase("All"))) {
+		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		model.addAttribute("resident", resident);
 		model.addAttribute("message", "Please select resident from All Resident Table first");
@@ -518,8 +531,12 @@ public class ResidentController extends BaseController {
 			break;
 		case AppConstants.LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT:
 			raqs = resident.getHouseholdMgmtQuestionnaire();
-			break;
+		break;		
+		case AppConstants.LIFE_DOMAIN_SERVICE_DISABILITY_PHYSICAL:	
+			raqs = resident.getDisabilityPhysicalQuestionnaire();
+		break;
 		}
+		
 		return raqs;
 	}
 
@@ -532,13 +549,17 @@ public class ResidentController extends BaseController {
 	 */
 	private void saveAssessmentAndScore(Resident resident, List<ResidentAssessmentQuestionnaire> questionnaireList, String lifeDomain) {
 
+		long row = 0l;
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
-				residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
+				row = residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
 			}
 		}
-		residentService.saveResidentScoreGoal(resident, lifeDomain);
+		
+		if(row > 0) {
+			residentService.saveResidentScoreGoal(resident, lifeDomain);
+		}
 	}
 
 	/**
@@ -554,7 +575,11 @@ public class ResidentController extends BaseController {
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
-				residentService.updateResidentAssessmentQuestionnaire(resident.getSelectedDate(), residentAssessmentQuestionnaire, lifeDomain);
+				int row = residentService.updateResidentAssessmentQuestionnaire(resident.getSelectedDate(), residentAssessmentQuestionnaire, lifeDomain);
+				
+				if(row < 1) {
+					residentService.insertResidentAssessmentQuestionnaire(resident.getSelectedDate(), residentAssessmentQuestionnaire, lifeDomain);
+				}
 			}
 		}
 		residentService.updateResidentScoreGoal(resident, lifeDomain);

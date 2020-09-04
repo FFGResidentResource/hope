@@ -9,6 +9,7 @@ public class AppConstants {
     public static final String LIFE_DOMAIN_SERVICE_EDUCATION = "EDUCATION";
     public static final String LIFE_DOMAIN_SERVICE_NETWORK_SUPPORT = "NETWORK SUPPORT";
     public static final String LIFE_DOMAIN_SERVICE_HOUSEHOLD_MANAGEMENT = "HOUSEHOLD MANAGEMENT";
+    public static final String LIFE_DOMAIN_SERVICE_DISABILITY_PHYSICAL = "DISABILITY AND PHYSICAL HEALTH";
     public static final String LIFE_DOMAIN_URL_HOUSING = "housing";
     public static final String LIFE_DOMAIN_URL_MONEY_MGMT = "moneyMgmt";
     public static final String LIFE_DOMAIN_URL_EMPLOYMENT = "employment";

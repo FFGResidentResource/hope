@@ -38,11 +38,8 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
-
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
+	<th:block th:include="../templates/_menu"></th:block>
+	
 	<div class="container">
 		<div id="moneyMgmt_Form">
 
@@ -194,7 +191,7 @@
 
 						<input type="submit" id="_moneyMgmtSubmit"
 							class="btn btn-primary btn-lg hidden-print"
-							value="Save Money Management Assessment">
+							value="Save Money Management Assessment" onclick="jQuery('#_mmlifeDomain').val('MONEY MANAGEMENT');">
 
 						<div class="col-sm-6 text-right hideme">
 							<input type="button" id="_moneyMgmtSubmitAndNext"
@@ -211,31 +208,31 @@
 				<table id="mmScoreTable"
 					class="table table-condensed table-bordered">
 					<thead>
-						<th id="mmst_1_head">In Crisis(1)</th>
-						<th id="mmst_2_head">Vulnerable (2)</th>
-						<th id="mmst_3_head">Safe (3)</th>
-						<th id="mmst_4_head">Building Capacity (4)</th>
-						<th id="mmst_5_head">Empowered (5)</th>
-						<th id="mmst_6_head">Score</th>
-						<th id="mmst_7_head">Goal</th>
+						<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
 					</thead>
 					<tbody>
 						<tr>
-							<td id="mmst_1_body">No knowledge or implementation of money
+							<td id="incrisis_body">No knowledge or implementation of money
 								management skills; not aware of resources or supports.</td>
-							<td id="mmst_2_body">Has limited knowledge of budgeting and
+							<td id="vulnerable_body">Has limited knowledge of budgeting and
 								money management; aware of resources to help; unprepared for any
 								financial emergency.</td>
-							<td id="mmst_3_body">Understands importance of budgeting and
+							<td id="safe_body">Understands importance of budgeting and
 								money management; uses monthly budget; unprepared for most
 								financial emergencies.</td>
-							<td id="mmst_4_body">Able to save sporadically; makes and
+							<td id="buildingCapacity_body">Able to save sporadically; makes and
 								lives within monthly budget; unprepared for large financial
 								emergencies.</td>
-							<td id="mmst_5_body">Able to save consistently;
+							<td id="empowered_body">Able to save consistently;
 								comprehensive knowledge and full implementation of money.</td>
-							<td id="mmst_6_body"></td>
-							<td id="mmst_7_body"></td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
 
 						</tr>
 					</tbody>

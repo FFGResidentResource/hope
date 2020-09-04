@@ -1,17 +1,18 @@
 <div id="addResident_Form">
 
 	<form name='_addResidentF' th:action="@{/saveResident}"
-		th:object="${resident}" method='POST' class="form-horizontal" onsubmit="return false;">
+		th:object="${resident}" method='POST' class="form-horizontal"
+		onsubmit="return false;">
 		<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
 			<ul>
-				<li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
-					<span th:text="${e.global}? '*' : ''">The field name</span>
-					<span th:text="${e.message}">The error message</span>
-				</li>
+				<li th:each="e : ${#fields.detailedErrors()}"
+					th:class="${e.global}? globalerr : fielderr"><span
+					th:text="${e.global}? '*' : ''">The field name</span> <span
+					th:text="${e.message}">The error message</span></li>
 			</ul>
 		</div>
 		<input name="residentId" type="hidden" id="residentId"
-			   th:field="*{residentId}" >
+			th:field="*{residentId}">
 		<div class="col-sm-12 myPanel">
 			<div class="row">
 
@@ -66,9 +67,9 @@
 					</p>
 
 					<p>
-						<h5>
-							<strong>I. <u>Right to Privacy</u></strong>
-						</h5>
+					<h5>
+						<strong>I. <u>Right to Privacy</u></strong>
+					</h5>
 					</p>
 
 					<p>
@@ -104,61 +105,62 @@
 
 					<table class="table table-bordered table-condensed">
 						<tr>
-							<td><label class="checkbox-inline" for="ackPR"> <input class="setable"
-									id="ackPR" type="checkbox" th:field="*{ackRightToPrivacy}">I
-									acknowledge that I was informed of my right to privacy.
-							</label>
-
+							<td><div class="row">
+									<div class="col-sm-6">
+										<label class="checkbox-inline" for="ackPR"> <input
+											class="setable" id="ackPR" type="checkbox"
+											th:field="*{ackRightToPrivacy}"><strong>I
+												acknowledge that I was informed of my right to privacy.</strong>
+										</label>
+									</div>
+									<div class="col-sm-6">
+										<label class="col-sm-3 control-label" for="unit">Is
+											Resident?: </label>
+										<div class="radio">
+											<label class="col-sm-2"><input
+												th:field="*{isResident}" type="radio" name="isResident"
+												value="TRUE" th:checked />Yes</label> <label class="col-sm-2"><input
+												th:field="*{isResident}" type="radio" name="isResident"
+												value="FALSE" />No</label>
+										</div>
+									</div>
+								</div>
 								<p>
 								<div class="hideme print-only">
 									<p>
 									<div class="row">
 										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Name:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
-												<span id="residentFullName" class="my-text-print"></span>
+											<div class="col-sm-3">
+												<strong>Name:</strong>
+												<div></div>
+												<span id="residentFullName" class="my-text-print"
+													th:text=*{fullName}></span>
 											</div>
 										</div>
-									</div>
-									</p>
-									<p>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Referral:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
+										<div class="col-sm-3">
+											<strong>Referral:</strong>
+											<div>
 												<span id="printreferralType" class="my-text-print"></span>
 											</div>
 										</div>
-									</div>
-									</p>
-									<p>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Property:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
+										<div class="col-sm-3">
+											<strong>Property:</strong>
+											<div>
 												<span id="printproperty" class="my-text-print"></span>
 											</div>
 										</div>
-									</div>
-									</p>
-									<p>
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-sm-1">
-												<strong>Address:&nbsp;</strong>
-											</div>
-											<div class="col-sm-10">
-												<span id="printaddress" class="my-text-print"></span>
+										<div class="col-sm-3">
+											<strong>Address:</strong>
+											<div>
+												<span id="printaddress" class="my-text-print"
+													th:text=*{address}></span>
 											</div>
 										</div>
+
 									</div>
-									</p>
+								</div>
+								</p>
+
 								</div>
 
 								<div class="row hidden-print">
@@ -172,8 +174,8 @@
 												required>
 										</div>
 										<div class="col-sm-2">
-											<input class="form-control setable" id="middle" th:field="*{middle}"
-												placeholder="middle">
+											<input class="form-control setable" id="middle"
+												th:field="*{middle}" placeholder="middle">
 										</div>
 										<div class="col-sm-4">
 											<input class="form-control setable" id="lastname"
@@ -210,28 +212,447 @@
 									</div>
 									<div class="col-sm-6">
 
-										<label class="col-sm-2 control-label" for="unit">Address:
+										<label class="col-sm-2 control-label" for="address">Address:
 										</label>
 										<div class="col-sm-10">
 											<input class="form-control setable" id="address"
 												th:field="*{address}" placeholder="No. and Street" required>
 										</div>
 									</div>
-									
-									<div class="col-sm-6">
 
-										<label class="col-sm-3 control-label" for="unit">Is Resident?:
+								</div>
+
+								<div class="row col-sm-12">
+									<h5>
+										<strong>Demographics</strong>
+									</h5>
+								</div>
+
+								<div class="hideme print-only">
+
+
+									<table class="table table-condensed"
+										style="border: solid 0px transparent;">
+										<tr>
+											<td><strong>Age:</strong>
+												<div>
+													<span id="printAge" class="my-text-print" th:text=*{age}></span>
+												</div></td>
+											<td><strong>Gender:</strong>
+												<div>
+													<span id="printGender" class="my-text-print"
+														th:text=*{gender}></span>
+												</div></td>
+											<td><strong>Language:</strong>
+												<div>
+													<span id="printLang" class="my-text-print"
+														th:text=*{primaryLanguage}></span>
+												</div></td>
+											<td><strong>Ethnicity:</strong>
+												<div>
+													<span id="printEthnicity" class="my-text-print"
+														th:text=*{ethnicity}></span>
+												</div></td>
+										</tr>
+										<tr>
+											<td><strong>Race:</strong>
+												<div>
+													<span id="printRace" class="my-text-print" th:text=*{race}></span>
+												</div></td>
+											<td><strong>Head of Household:</strong>
+												<div>
+													<span id="printhoh" class="my-text-print"
+														th:text=*{houseHold}></span>
+												</div></td>
+											<td><strong>Marital Status:</strong>
+												<div>
+													<span id="printMs" class="my-text-print"
+														th:text=*{maritalStatus}></span>
+												</div></td>
+											<td><strong>Veteran:</strong>
+												<div>
+													<span id="printVeteran" class="my-text-print"
+														th:text=*{veteran}></span>
+												</div></td>
+
+										</tr>
+										<tr>
+											<td><strong>Disability Status:</strong>
+												<div>
+													<span id="printds" class="my-text-print"
+														th:text=*{disabilityStatus}></span>
+												</div></td>
+											<td><strong>Returning Citizen/Ex Offender:</strong>
+												<div>
+													<span id="printrc" class="my-text-print"
+														th:text=*{rcOrExOff}></span>
+												</div></td>
+											<td><strong>Supplemental Security Income:</strong>
+												<div>
+													<span id="printssi" class="my-text-print" th:text=*{ssi}></span>
+												</div></td>
+											<td><strong>Social Security Disability
+													Insurance:</strong>
+												<div>
+													<span id="printssdi" class="my-text-print" th:text=*{ssdi}></span>
+												</div></td>
+										</tr>
+										<tr>
+											<td><strong>Health Coverage:</strong>
+												<div>
+													<span id="printhealthCoverage" class="my-text-print"
+														th:text=*{healthCoverage}></span>
+												</div></td>
+											<td><strong>Highest Education:</strong>
+												<div>
+													<span id="printhighestEdu" class="my-text-print"
+														th:text=*{highestEdu}></span>
+												</div></td>
+											<td><strong>Household Annual Gross Income
+													Amount:</strong>
+												<div>
+													<span id="printannual" class="my-text-print"
+														th:text=*{annualGross}></span>
+												</div></td>
+											<td></td>
+										</tr>
+										
+										<tr>
+											<td><strong>Feels safe at home during day:</strong>
+												<div>
+													<span id="printSafeDay" class="my-text-print"
+														th:text=*{safeDuringDayChoice}></span>
+												</div></td>
+											<td><strong>Feels safe at home during night:</strong>
+												<div>
+													<span id="printSafeNight" class="my-text-print"
+														th:text=*{safeDuringNightChoice}></span>
+												</div></td>
+											<td><strong>Occupancy Length:</strong>
+												<div>
+													<span id="printOcc" class="my-text-print"
+														th:text=*{occupancyLength}></span>
+												</div></td>
+											<td><strong>Has Computer with Internet Access:</strong>
+												<div>
+													<span id="printInternetAccess" class="my-text-print"
+														th:text=*{internetAccess}></span>
+												</div></td>
+										</tr>
+										<tr>
+											<td><strong>Mode of Transportation:</strong>
+												<div>
+													<span id="printModeTran" class="my-text-print"
+														th:text=*{safeDuringDayChoice}></span>
+												</div></td>
+											<td><strong>Experience Food Shortage:</strong>
+												<div>
+													<span id="printFoodShortage" class="my-text-print"
+														th:text=*{safeDuringNightChoice}></span>
+												</div></td>
+											<td><strong>Head of household type:</strong>
+												<div>
+													<span id="printHohType" class="my-text-print"
+														th:text=*{householdType}></span>
+												</div></td>
+											<td><strong>Interest in Resident Council:</strong>
+												<div>
+													<span id="printInterestCouncil" class="my-text-print"
+														th:text=*{interestInResCouncil}></span>
+												</div></td>
+										</tr>
+									</table>
+
+
+
+								</div>
+
+
+								<div class="row col-sm-12 hidden-print">
+								
+									<div class="col-sm-3">
+										<label class="control-label" for="age">Age: </label>
+										<div>
+											<input class="form-control setable " id="age"
+												th:field="*{age}" placeholder="Age">
+										</div>
+									</div>
+									<div class="col-sm-3">
+
+										<label class="control-label" for="_gender">Gender:</label>
+										<div>
+											<select class="form-control setable" id="_gender"
+												th:field="*{gender}">
+												<option th:each="gender : ${resident.genderList}"
+													th:value="${gender}" th:utext="${gender}" />
+											</select>
+										</div>
+
+									</div>
+									<div class="col-sm-3">
+
+										<label class="control-label" for="_priLang">Language:</label>
+										<div>
+											<select class="form-control setable" id="_priLang"
+												th:field="*{primaryLanguage}">
+												<option th:each="lang : ${resident.primaryLangList}"
+													th:value="${lang}" th:utext="${lang}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+
+										<label class="control-label" for="_ethnicity">Ethnicity:</label>
+										<div>
+											<select class="form-control setable" id="_ethnicity"
+												th:field="*{ethnicity}">
+												<option th:each="eth : ${resident.ethnicityList}"
+													th:value="${eth}" th:utext="${eth}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+
+										<label class="control-label" for="_race">Race:</label>
+										<div>
+											<select class="form-control setable" id="_race"
+												th:field="*{race}">
+												<option th:each="raceStr : ${resident.raceList}"
+													th:value="${raceStr}" th:utext="${raceStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+
+										<label class="control-label" for="_hoh">Head Of
+											Household:</label>
+										<div>
+											<select class="form-control setable" id="_hoh"
+												th:field="*{houseHold}">
+												<option th:each="hohStr : ${resident.houseHoldList}"
+													th:value="${hohStr}" th:utext="${hohStr}" />
+											</select>
+										</div>
+									</div>
+
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_maritalStatus">Marital
+											Status: </label>
+										<div>
+											<select class="form-control setable" id="_maritalStatus"
+												th:field="*{maritalStatus}">
+												<option th:each="msStr : ${resident.maritalStatusList}"
+													th:value="${msStr}" th:utext="${msStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_veteran">Veteran: </label>
+										<div>
+											<select class="form-control setable" id="_veteran"
+												th:field="*{veteran}">
+												<option th:each="vStr : ${resident.veteranList}"
+													th:value="${vStr}" th:utext="${vStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_veteran">Disability
+											Status: </label>
+										<div>
+											<select class="form-control setable" id="_disability"
+												th:field="*{disabilityStatus}">
+												<option th:each="dsStr : ${resident.disabilityStatusList}"
+													th:value="${dsStr}" th:utext="${dsStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_rcOrEx">Returning
+											Citizen/Ex Offender: </label>
+										<div>
+											<select class="form-control setable" id="_rcOrEx"
+												th:field="*{rcOrExOff}">
+												<option th:each="rcStr : ${resident.rcOrExOffList}"
+													th:value="${rcStr}" th:utext="${rcStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_ssi">Supplemental
+											Security Income: </label>
+										<div>
+											<select class="form-control setable" id="_ssi"
+												th:field="*{ssi}">
+												<option th:each="ssiStr : ${resident.ssiList}"
+													th:value="${ssiStr}" th:utext="${ssiStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_ssdi">Social
+											Security Disability Insurance: </label>
+										<div>
+											<select class="form-control setable" id="_ssdi"
+												th:field="*{ssdi}">
+												<option th:each="ssdiStr : ${resident.ssdiList}"
+													th:value="${ssdiStr}" th:utext="${ssdiStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_hcov">Health
+											Coverage: </label>
+										<div>
+											<select class="form-control setable" id="_hcov"
+												th:field="*{healthCoverage}">
+												<option th:each="hcStr : ${resident.healthCoverageList}"
+													th:value="${hcStr}" th:utext="${hcStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_hedu">Highest
+											Education: </label>
+										<div>
+											<select class="form-control setable" id="_hedu"
+												th:field="*{highestEdu}">
+												<option th:each="heduStr : ${resident.highestEduList}"
+													th:value="${heduStr}" th:utext="${heduStr}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label" for="_annualGross">Household
+											Annual Gross Income Amount: </label> <input
+											class="form-control setable " id="_annualGross"
+											th:field="*{annualGross}" placeholder="Annual Gross Income">
+									</div>
+
+									
+									
+								</div>
+								
+								<div class="row col-sm-12 hidden-print">
+									
+									<div class="col-sm-3">
+										<label class="control-label">Feels Safe at Home During
+											the Day: </label>
+										<div>
+											<select class="form-control input-sm" id="_safeDay" th:field="*{safeDuringDayChoice}">
+												<option value="">Select</option>
+												<option th:each="safeChoice : ${resident.safeUnsafeList}"
+													th:value="${safeChoice}" th:utext="${safeChoice}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Feels Safe at Home During
+											the Night: </label>
+										<div>
+											<select class="form-control  input-sm" id="_safeNight" th:field="*{safeDuringNightChoice}">
+												<option value="">Select</option>
+												<option th:each="safeChoice : ${resident.safeUnsafeList}"
+													th:value="${safeChoice}"
+													th:utext="${safeChoice}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Occupancy Length: </label>
+										<div>
+											<select class="form-control  input-sm" id="_occLength" th:field="*{occupancyLength}">
+												<option value="">Select</option>
+												<option
+													th:each="occLength : ${resident.occupancyLengthList}"
+													th:value="${occLength}" th:utext="${occLength}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Has Computer with Internet Access: </label>
+										<div>
+											<select class="form-control  input-sm" id="_internetAccess" th:field="*{internetAccess}">
+												<option value="">Select</option>
+												<option th:each="intAccess : ${resident.internetAccessList}"
+													th:value="${intAccess}" th:utext="${intAccess}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Mode Of Transportation: </label>
+										<div>
+											<select class="form-control  input-sm" id="_modeTranport" th:field="*{modeOfTransportation}" >
+												<option value="">Select</option>
+												<option th:each="mt : ${resident.modeOfTransportList}"
+													th:value="${mt}"
+													th:utext="${mt}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Experience Food Shortage:
 										</label>
-											<div class="radio">
-  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="TRUE" th:checked />Yes</label>
-  											    <label class="col-sm-2"><input th:field="*{isResident}" type="radio" name="isResident" value="FALSE" />No</label>
-    										</div>
+										<div>
+											<select class="form-control  input-sm" id="_foodShortage" th:field="*{experienceFoodShortage}">
+												<option value="">Select</option>
+												<option
+													th:each="foodShortage : ${resident.expFoodShortageList}"
+													th:value="${foodShortage}"
+													th:utext="${foodShortage}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Head of Household Type: </label>
+										<div>
+											<select class="form-control  input-sm" id="_hohType" th:field="*{householdType}">
+												<option value="">Select</option>
+												<option th:each="hohType : ${resident.headOfHHTypeList}"
+													th:value="${hohType}" th:utext="${hohType}" />
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label class="control-label">Interest in Resident
+											Council: </label>
+										<div>
+											<select class="form-control  input-sm" id="_intResCouncil" th:field="*{interestInResCouncil}">
+												<option value="">Select</option>
+												<option th:each="resCouncil : ${resident.yesNoList}"
+													th:value="${resCouncil}"
+													th:utext="${resCouncil}" />
+											</select>
+										</div>
 									</div>
 								</div>
 								</p></td>
 						</tr>
 
 					</table>
+
+					<div class="hideme print-only">
+						</br> </br> </br> </br> </br> </br> </br> 
+					</div>
 
 					<p>
 					<h5>
@@ -252,10 +673,12 @@
 							<td>
 
 								<p>
-									<label class="checkbox-inline" for="allowcontact"> <input class="setable"
-										id="allowcontact" type="checkbox" th:field="*{allowContact}" onchange="doNotContact()">
-										I am <strong>NOT interested</strong> in being contacted by a
-										Service Coordinator.
+									<label class="checkbox-inline" for="allowcontact"> <input
+										class="setable" id="allowcontact" type="checkbox"
+										th:field="*{allowContact}"> I am <strong>NOT
+											interested</strong> in being contacted by a Service Coordinator, but I
+										understand email/phone contact information is mandatory to
+										service coordinators, which i am providing below:
 									</label>
 								</p>
 								<p>
@@ -268,8 +691,8 @@
 									<p>
 									<div class="row">
 										<div class="col-sm-3">
-											<label class="checkbox-inline" for="printEmail"> <input class="setable"
-												id="printEmail" type="checkbox"><strong>Email:&nbsp;&nbsp;</strong>
+											<label class="checkbox-inline" for="printEmail"> <input
+												class="setable" id="printEmail" type="checkbox"><strong>Email:&nbsp;&nbsp;</strong>
 
 											</label>
 										</div>
@@ -294,8 +717,8 @@
 									<p>
 									<div class="row">
 										<div class="col-sm-3">
-											<label class="checkbox-inline" for="printtext"> <input class="setable" 
-											id="printtext" type="checkbox"><strong>Text:&nbsp;&nbsp;</strong>
+											<label class="checkbox-inline" for="printtext"> <input
+												class="setable" id="printtext" type="checkbox"><strong>Text:&nbsp;&nbsp;</strong>
 										</div>
 										<div class="col-sm-9">
 											<span id="printtxt" class="my-text-print"></span> </label>
@@ -306,9 +729,9 @@
 
 								<div class="form-group hidden-print">
 
-									<label class="col-sm-1 control-label" for="viaemail"> <input class="setable"
-										id="viaemail" type="checkbox" th:field="*{viaEmail}">
-										Email:
+									<label class="col-sm-1 control-label" for="viaemail"> <input
+										class="setable" id="viaemail" type="checkbox"
+										th:field="*{viaEmail}"> Email:
 									</label>
 									<div class="col-sm-3">
 										<input class="form-control setable" id="email" type="email"
@@ -322,26 +745,27 @@
 										<input class="form-control setable" id="voicemail"
 											th:field="*{voiceMail}" placeholder="voicemail">
 									</div>
-									<label class="col-sm-1 control-label" for="viatext"> <input class="setable"
-										id="viatext" type="checkbox" th:field="*{viaText}">
-										Text:
+									<label class="col-sm-1 control-label" for="viatext"> <input
+										class="setable" id="viatext" type="checkbox"
+										th:field="*{viaText}"> Text:
 									</label>
 									<div class="col-sm-2">
-										<input class="form-control setable" id="text" th:field="*{text}"
-											placeholder="cell phone">
+										<input class="form-control setable" id="text"
+											th:field="*{text}" placeholder="cell phone">
 									</div>
 								</div>
 								</p>
 
 								<p>
-									<label class="checkbox-inline" for="wantSurvey"> <input class="setable"
-										id="wantSurvey" type="checkbox" th:field="*{wantSurvey}">I
-										will <strong>complete a Household Survey within 10
-											days</strong> so that the Service Coordinator can better understand
-										what types of assistance I, or my family, may need.
+									<label class="checkbox-inline" for="wantSurvey"> <input
+										class="setable" id="wantSurvey" type="checkbox"
+										th:field="*{wantSurvey}">I will <strong>complete
+											a Household Survey within 10 days</strong> so that the Service
+										Coordinator can better understand what types of assistance I,
+										or my family, may need.
 									</label>
 								</p>
-								
+
 							</td>
 						</tr>
 					</table>
@@ -460,18 +884,21 @@
 
 
 					<div class="row text-center bs-linebreak hidden-print">
-						<input type="hidden" th:field="*{serviceCoord}" /> 
-						<input type="hidden" id="propertyString" th:value="${resident.propertyList}" />
-						<input type="hidden" th:field="*{active}" />
-						<input type="submit" id="btnSubmit" class="btn btn-primary btn-lg"
-							   th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
-							   onclick="saveOrUpdateResident(this.form);"/>
-						<input th:type="${resident.active}?'button':'hidden'" id="btnDeactivateResident" class="btn btn-primary btn-lg"
-							   value="Deactivate" th:title="*{active}"
-							   onclick="deactivateResident(this);"/>
-						<input th:type="${resident.residentId==null||resident.active==true}?'hidden':'button'" id="btnReactivateResident" class="btn btn-primary btn-lg"
-							   value="Reactivate" th:title="*{active}"
-							   onclick="reactivateResident(this);"/>						
+						<input type="hidden" th:field="*{serviceCoord}" /> <input
+							type="hidden" id="propertyString"
+							th:value="${resident.propertyList}" /> <input type="hidden"
+							th:field="*{active}" /> <input type="submit" id="btnSubmit"
+							class="btn btn-primary btn-lg"
+							th:value="${resident.residentId==null}?'Save Resident':'Update Resident'"
+							onclick="saveOrUpdateResident(this.form);" /> <input
+							th:type="${resident.active}?'button':'hidden'"
+							id="btnDeactivateResident" class="btn btn-primary btn-lg"
+							value="Deactivate" th:title="*{active}"
+							onclick="deactivateResident(this);" /> <input
+							th:type="${resident.residentId==null||resident.active==true}?'hidden':'button'"
+							id="btnReactivateResident" class="btn btn-primary btn-lg"
+							value="Reactivate" th:title="*{active}"
+							onclick="reactivateResident(this);" />
 					</div>
 				</div>
 			</div>

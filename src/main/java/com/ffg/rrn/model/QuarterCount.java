@@ -18,4 +18,6 @@ public class QuarterCount {
 	private Integer quarter;
 
 	private Integer count;
+	
+	private String category;
 }

@@ -40,7 +40,7 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+	<th:block th:include="../templates/_menu"></th:block>
 
 	<form name='_onboardingF' th:action="@{/saveResident}"
 		th:object="${resident}" method="POST" class="form-horizontal">
@@ -125,6 +125,14 @@
 								</div></td>
 						</tr>
 						<tr>
+							<td><label class="col-sm-2 control-label" for="_contact">Phone:
+							</label></td>
+							<td><div class="col-sm-10">
+									<input class="form-control  input-sm" id="_contact"
+										th:field="*{text}" placeholder="Enter cell number e.g. (614)-123-1234" required>
+								</div></td>
+						</tr>
+						<tr>
 							<td></td>
 							<td><label class="col-sm-5 control-label">Is
 									Resident?: </label>
@@ -157,6 +165,10 @@
 							<th>Property Name</th>
 							<th>Added On</th>
 							<th>Added By</th>
+							<th>Voicemail</th>
+							<th>Text</th>
+							<th>Email</th>
+							<th>Address</th>
 						</tr>
 					</thead>
 				</table>
@@ -165,11 +177,11 @@
 
 		<div class="container">
 
-			<div class="col-sm-12">
+			<div class="col-sm-12" style="background-color:#5cb85c3b">
 				<div class="page-header text-center">
 					<h4>
 						<caption>
-						 You are viewing: [ <span id="_selectedResident" class="text-danger"></span> ]
+						 <span style="color:blue;">You are viewing: [ </span><span id="_selectedResident" class="text-danger"></span> <span style="color:blue;">]</span>
 						</caption>
 					</h4>
 				</div>
@@ -177,7 +189,7 @@
 					<div class="col-sm-2">
 
 						<div class="caption">
-							<p><u><strong>Step 1</strong></u> <Span id="_refFormComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 1</h4> <Span id="_refFormComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
 							<p></p>
 							<a id="_loadReferralForm" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -191,7 +203,7 @@
 					</div>
 					<div class="col-sm-2">
 						<div class="caption">
-							<p><u><strong>Step 2</strong></u><Span id="_signUpComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 2</h4><Span id="_signUpComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
 							<p></p>
 							<a id="_loadResident" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -202,10 +214,31 @@
 						</div>
 					</div>	
 					
-					
-					<div class="col-sm-2 col-md-offset-4">
+					<div class="col-sm-3" style="background-color:#337ab729">
 						<div class="caption">
-							<p><u><strong>Step 4</strong></u><Span id="_actionPlanComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 3</h4></p>
+							<p></p>
+							<div class="caption">							
+							<p>
+								<span id="_hScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadHousing" class="btn btn-default btn-sm"								
+								th:href="@{/getCurrentAssessment?lifeDomain=housing}"> <span
+								class="glyphicon glyphicon-home" style="color: darkturquoise;"
+								aria-hidden="true"></span> 1. Housing
+							</a>
+							<p>
+								<Span id="_housingComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+						</div>
+					</div>
+					
+					
+					<div class="col-sm-2">
+						<div class="caption">
+							<p><h4>Step 4</h4><Span id="_actionPlanComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
 							<p></p>
 							<a id="_loadActionPlan" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -218,7 +251,7 @@
 
 					<div class="col-sm-2">
 						<div class="caption">
-							<p><u><strong>Step 5</strong></u><Span id="_contactNotesComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 5</h4><Span id="_contactNotesComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
 							<p></p>
 							<a id="_loadCaseNotes" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -229,43 +262,21 @@
 						</div>
 					</div>
 
-				</div>
+				</div>			
 				
-				<br/>
 
-				<div class="row text-center hidden-print">
-
-					<p>
-					<caption><h4><strong>Self Sufficiency Matrix - Step 3</strong></h4></caption>					
-					</p>				
-
+				<div class="row text-center hidden-print" style="background-color:#337ab729">
+					
 					<div class="col-sm-2">
-						<div class="caption">							
-							<p>
-								<span id="_hScoreGoal">--/--</span>
-							</p>
-							<p>(Score / Goal)</p>
-							<a id="_loadHousing" class="btn btn-default"								
-								th:href="@{/getCurrentAssessment?lifeDomain=housing}"> <span
-								class="glyphicon glyphicon-home" style="color: darkturquoise;"
-								aria-hidden="true"></span> Housing
-							</a>
-							<p>
-								<Span id="_housingComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
-							</p>
-						</div>
-					</div>
-
-					<div class="col-sm-2 borderleft">
 						<div class="caption">							
 							<p>
 								<span id="_mmScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadMoneyMgmt" class="btn btn-default"								
+							<a id="_loadMoneyMgmt" class="btn btn-default btn-sm"								
 								th:href="@{/getCurrentAssessment?lifeDomain=moneyMgmt}"> <span
 								class="glyphicon glyphicon-usd" style="color: green;"
-								aria-hidden="true"></span> Money Mgmt
+								aria-hidden="true"></span> 2. Money Mgmt
 							</a>
 							<p>
 								<Span id="_moneyMgmtComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
@@ -273,16 +284,16 @@
 						</div>
 					</div>
 
-					<div class="col-sm-2 borderleft">
+					<div class="col-sm-2">
 						<div class="caption">							
 							<p>
 								<span id="_empScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadEmployment" class="btn btn-default"								
+							<a id="_loadEmployment" class="btn btn-default btn-sm"								
 								th:href="@{/getCurrentAssessment?lifeDomain=employment}"> <span
 								class="glyphicon glyphicon-briefcase" style="color: indianred;"
-								aria-hidden="true"></span> Employment
+								aria-hidden="true"></span> 3. Employment
 							</a>
 							<p>
 								<Span id="_empComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
@@ -290,17 +301,17 @@
 						</div>
 					</div>
 
-					<div class="col-sm-2 borderleft">
+					<div class="col-sm-2">
 						<div class="caption">							
 							<p>
 								<span id="_eduScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadEducation" class="btn btn-default"								
+							<a id="_loadEducation" class="btn btn-default btn-sm"								
 								th:href="@{/getCurrentAssessment?lifeDomain=education}"> <span
 								class="glyphicon glyphicon-education"
 								style="color: darkgoldenrod;" aria-hidden="true"></span>
-								Education
+								4. Education
 							</a>
 							<p>
 								<Span id="_eduComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
@@ -308,16 +319,16 @@
 						</div>
 					</div>
 
-					<div class="col-sm-2 borderleft">
+					<div class="col-sm-2">
 						<div class="caption">							
 							<p>
 								<span id="_nsScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadNetSupport" class="btn btn-default"								
+							<a id="_loadNetSupport" class="btn btn-default btn-sm"								
 								th:href="@{/getCurrentAssessment?lifeDomain=networkSupport}">
 								<span class="glyphicon glyphicon-link" style="color: red;"
-								aria-hidden="true"></span> Network Supp
+								aria-hidden="true"></span> 5. Network Supp
 							</a>
 							<p>
 								<Span id="_netSuppComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
@@ -325,21 +336,41 @@
 						</div>
 					</div>
 
-					<div class="col-sm-2 borderleft">
+					<div class="col-sm-2">
 						<div class="caption">							
 							<p>
 								<span id="_hhScoreGoal">--/--</span>
 							</p>
 							<p>(Score / Goal)</p>
-							<a id="_loadHousehold" class="btn btn-default"								
+							<a id="_loadHousehold" class="btn btn-default btn-sm"								
 								th:href="@{/getCurrentAssessment?lifeDomain=household}"> <span
 								class="glyphicon glyphicon-leaf" style="color: darkgreen;"
-								aria-hidden="true"></span> Household
+								aria-hidden="true"></span> 6. Household
 							</a>
 							<p>
 								<Span id="_hhComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
 							</p>
 						</div>
+					</div>
+					
+					<div class="col-sm-2">
+						<div class="caption">							
+							<p>
+								<span id="_dphScoreGoal">--/--</span>
+							</p>
+							<p>(Score / Goal)</p>
+							<a id="_loadDph" class="btn btn-default btn-sm"								
+								th:href="@{/getCurrentAssessment?lifeDomain=disabilityPhysical}"> <span
+								class="glyphicon glyphicon-heart" style="color: red;"
+								aria-hidden="true"></span> 7. Dis. & Physical Health
+							</a>
+							<p>
+								<Span id="_dphComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span>
+							</p>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<p><h4>Self Sufficiency Assessments</h4></p>
 					</div>
 				</div>
 

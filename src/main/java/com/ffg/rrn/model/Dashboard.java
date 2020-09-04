@@ -16,6 +16,8 @@ import lombok.Data;
 @Data
 @JsonView
 public class Dashboard {
+	
+	private List<String> yearList;
 
 	private String year;
 

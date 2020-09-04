@@ -38,7 +38,7 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+	<th:block th:include="../templates/_menu"></th:block>
 
 	<div class="container">
 		<div id="household_Form">
@@ -188,7 +188,7 @@
 						</div>
 					
 						<input type="submit" class="btn btn-primary btn-lg hidden-print"
-							value="Save Household Assessment">
+							value="Save Household Assessment" onclick="jQuery('#_lifeDomainhh').val('HOUSEHOLD MANAGEMENT');">
 					</div>
 
 
@@ -199,28 +199,28 @@
 
 				<table id="houseHoldMgmtTable" class="table table-bordered">
 					<thead>
-						<th id="hhmst_1_head">In Crisis(1)</th>
-						<th id="hhmst_2_head">Vulnerable (2)</th>
-						<th id="hhmst_3_head">Safe (3)</th>
-						<th id="hhmst_4_head">Building Capacity (4)</th>
-						<th id="hhmst_5_head">Empowered (5)</th>
-						<th id="hhmst_6_head">Score</th>
-						<th id="hhmst_7_head">Goal</th>
+						<<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
 					</thead>
 					<tbody>
 						<tr>
-							<td id="hhmst_1_body">Unable to perform basic tasks
+							<td id="incrisis_body">Unable to perform basic tasks
 								(hygiene, meals, cleaning, etc.); home is unsafe/ unsanitary.</td>
-							<td id="hhmst_2_body">Unable to perform some basic household
+							<td id="vulnerable_body">Unable to perform some basic household
 								tasks; home has areas that are unsafe/ unsanitary.</td>
-							<td id="hhmst_3_body">Able to perform most basic tasks; home
+							<td id="safe_body">Able to perform most basic tasks; home
 								is moderately safe and maintained.</td>
-							<td id="hhmst_4_body">Can perform all basic household tasks;
+							<td id="buildingCapacity_body">Can perform all basic household tasks;
 								home is safe and maintained.</td>
-							<td id="hhmst_5_body">Can perform all basic tasks; home is
+							<td id="empowered_body">Can perform all basic tasks; home is
 								safe, healthy and well- maintained.</td>
-							<td id="hhmst_6_body"></td>
-							<td id="hhmst_7_body"></td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
 
 						</tr>
 					</tbody>

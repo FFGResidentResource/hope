@@ -38,11 +38,8 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
-
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
+	<th:block th:include="../templates/_menu"></th:block>
+	
 	<div class="container">
 		<div id="networkSupport_Form">
 
@@ -191,7 +188,7 @@
 
 						<input type="submit" id="_netSupportSubmit"
 							class="btn btn-primary btn-lg hidden-print"
-							value="Save NETWORK SUPPORT Assessment">
+							value="Save NETWORK SUPPORT Assessment"  onclick="jQuery('#_lifeDomain').val('NETWORK SUPPORT');">
 
 						<div class="col-sm-6 text-right hideme">
 							<input type="button" id="_netSupportSubmitAndNext"
@@ -206,35 +203,35 @@
 
 				<table id="netSupportScoreTable" class="table table-bordered">
 					<thead>
-						<th id="nsst_1_head">In Crisis(1)</th>
-						<th id="nsst_2_head">Vulnerable (2)</th>
-						<th id="nsst_3_head">Safe (3)</th>
-						<th id="nsst_4_head">Building Capacity (4)</th>
-						<th id="nsst_5_head">Empowered (5)</th>
-						<th id="nsst_6_head">Score</th>
-						<th id="nsst_7_head">Goal</th>
+						<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
 					</thead>
 					<tbody>
 						<tr>
-							<td id="nsst_1_body">Extended family or friends are
+							<td id="incrisis_body">Extended family or friends are
 								uninvolved, uninterested, or unmotivated to provide support;
 								unaware of community resources/supports.</td>
-							<td id="nsst_2_body">Extended family/ friends lack the
+							<td id="vulnerable_body">Extended family/ friends lack the
 								ability or resources to help (either financially, emotionally,
 								or materially) or provide negative support, but I know where to
 								go in the community for help.</td>
-							<td id="nsst_3_body">Receives some positive support
+							<td id="safe_body">Receives some positive support
 								(financial/ emotional/material) from extended family or friends;
 								may use community resources.</td>
-							<td id="nsst_4_body">Strong support from extended family or
+							<td id="buildingCapacity_body">Strong support from extended family or
 								friends; have at least one community support network (i.e.,
 								nonprofit, church, support group, etc.).</td>
-							<td id="nsst_5_body">extended family or friends; have at
+							<td id="empowered_body">extended family or friends; have at
 								least one community support network (i.e., nonprofit, church,
 								support group, etc.). Has an extensive support system of family,
 								friends and community resources/supports.</td>
-							<td id="nsst_6_body"></td>
-							<td id="nsst_7_body"></td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
 
 						</tr>
 					</tbody>

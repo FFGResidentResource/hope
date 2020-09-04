@@ -2,46 +2,58 @@
 -- Create table
 
 --FOLLOWING DROP only requires in NON-PROD Environments - BEGIN
-DROP SEQUENCE SC_SQ;
-DROP SEQUENCE PROP_SQ;
-DROP SEQUENCE RESIDENT_SQ;
-DROP SEQUENCE CHILD_SQ;
-DROP SEQUENCE REF_SQ;
-DROP SEQUENCE CHOICE_SQ;
-DROP SEQUENCE SCORE_SQ;
-DROP SEQUENCE RAQ_SQ;
-DROP SEQUENCE RSG_SQ;
-DROP SEQUENCE AQ_SQ;
-DROP SEQUENCE AP_SQ;
-DROP SEQUENCE CN_SQ;
-DROP SEQUENCE RF_SQ;
-DROP SEQUENCE UR_SQ;
-DROP SEQUENCE RP_SQ;
+DROP SEQUENCE if exists SC_SQ;
+DROP SEQUENCE if exists PROP_SQ;
+DROP SEQUENCE if exists RESIDENT_SQ;
+DROP SEQUENCE if exists CHILD_SQ;
+DROP SEQUENCE if exists REF_SQ;
+DROP SEQUENCE if exists CHOICE_SQ;
+DROP SEQUENCE if exists SCORE_SQ;
+DROP SEQUENCE if exists RAQ_SQ;
+DROP SEQUENCE if exists RSG_SQ;
+DROP SEQUENCE if exists AQ_SQ;
+DROP SEQUENCE if exists AP_SQ;
+DROP SEQUENCE if exists CN_SQ;
+DROP SEQUENCE if exists RF_SQ;
+DROP SEQUENCE if exists UR_SQ;
+DROP SEQUENCE if exists RP_SQ;
+DROP SEQUENCE IF EXISTS LDSG_SQ;
 
-DROP MATERIALIZED VIEW SERVICE_CATEGORY_VW;
-DROP MATERIALIZED VIEW NEW_RESIDENT_VW;
-DROP MATERIALIZED VIEW ONGOING_RESIDENT_VW;
+drop view if exists GENDER_BY_PROPERTY_VIEW;
+DROP VIEW if exists AGENCY_RESIDENT_VIEW;
+DROP VIEW if exists ASSESSMENT_COMPLETED_VIEW;
+DROP VIEW if exists MOVING_DOWN_VIEW CASCADE;
+DROP VIEW if exists MOVING_UP_VIEW CASCADE;
+DROP VIEW if exists NEW_RESIDENT_VIEW;
+DROP VIEW if exists ONGOING_RESIDENT_VIEW;
+DROP VIEW if exists OUTCOMES_ACHIEVED_VIEW;
+DROP VIEW if exists RESIDENT_ACTION_PLAN_VIEW;
+DROP VIEW if exists RESIDENT_SERVED_VIEW;
+DROP VIEW if exists SERVICE_CATEGORY_VIEW;
+DROP VIEW if exists REFERRAL_REASON_VIEW;
 
-DROP TABLE REFERRAL_FORM;
-DROP TABLE ACTION_PLAN;
-DROP TABLE CASE_NOTES;
-DROP TABLE RESIDENT_SCORE_GOAL;
-DROP TABLE QUESTION_CHOICE;
-DROP TABLE RESIDENT_ASSESSMENT_QUESTIONNAIRE;
-DROP TABLE CHILD;
-DROP TABLE RESIDENT;
-DROP TABLE ASSESSMENT_TYPE;
-DROP TABLE ASSESSMENT_QUESTIONNAIRE;
-DROP TABLE REFERRAL;
-DROP TABLE REFERRAL_PARTNER;
+DROP TABLE if exists LIFE_DOMAIN_SCORE_GUIDE;
+DROP TABLE if exists REFERRAL_FORM;
+DROP TABLE if exists ACTION_PLAN CASCADE;
+DROP TABLE if exists CASE_NOTES CASCADE;
+DROP TABLE if exists RESIDENT_SCORE_GOAL CASCADE;
+DROP TABLE if exists QUESTION_CHOICE;
+DROP TABLE if exists RESIDENT_ASSESSMENT_QUESTIONNAIRE;
+DROP TABLE if exists CHILD;
+DROP TABLE if exists RESIDENT;
+DROP TABLE if exists ASSESSMENT_TYPE;
+DROP TABLE if exists ASSESSMENT_QUESTIONNAIRE;
+DROP TABLE if exists REFERRAL;
+DROP TABLE if exists REFERRAL_PARTNER;
 
-DROP TABLE SCORE;
-DROP TABLE CHOICE;
-DROP TABLE Persistent_Logins;
-DROP TABLE USER_ROLE;
-DROP TABLE APP_ROLE;
-DROP TABLE SERVICE_COORDINATOR;
-DROP TABLE PROPERTY;
+DROP TABLE if exists SCORE;
+DROP TABLE if exists CHOICE;
+DROP TABLE if exists Persistent_Logins;
+DROP TABLE if exists USER_ROLE;
+DROP TABLE if exists APP_ROLE;
+DROP TABLE if exists SERVICE_COORDINATOR;
+DROP TABLE if exists PROPERTY;
+
 
 --FOLLOWING DROP only requires in NON-PROD Environments - END
 
@@ -78,11 +90,79 @@ CREATE SEQUENCE UR_SQ START 1;
 
 CREATE SEQUENCE RP_SQ START 1;
 
+CREATE SEQUENCE LDSG_SQ START 1;
+
 CREATE TABLE REFERRAL_PARTNER (
 	REF_PAR_ID INT 				PRIMARY KEY NOT NULL,
 	REFERRAL_PARTNER_NAME 		VARCHAR(500),
 	ACTIVE						BOOLEAN DEFAULT TRUE
 );
+
+CREATE TABLE LIFE_DOMAIN_SCORE_GUIDE (
+	LDSG_ID INT	PRIMARY KEY NOT NULL,
+	LIFE_DOMAIN	VARCHAR(100),
+	QUESTION_NO INT,
+	CHOICE_ID INT,
+	SCORE INT,
+	PRIORITY INT
+);
+
+--Algorithm to calculate "In crisis", "Vulnerable", "Safe", "Building Capacity", "Empowered"
+INSERT INTO LIFE_DOMAIN_SCORE_GUIDE VALUES 
+(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 52,12,1,1) --Question number 52 is highest priority here which is why last value is 1
+,(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 52,13,2,1)
+,(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 52,14,3,1)
+,(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 52,15,4,2)
+,(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 51,1,4,3) -- question number 50,51 is lowest priority here which is why last value is 3
+,(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 50,1,4,3)
+,(NEXTVAL('LDSG_SQ'), 'DISABILITY AND PHYSICAL HEALTH', 49,2,5,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 40,1,1,1)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 42,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 43,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 44,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 45,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 46,2,3,3)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 47,2,4,4)
+,(NEXTVAL('LDSG_SQ'), 'HOUSEHOLD MANAGEMENT', 47,1,5,4)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 33,2,1,1)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 33,1,2,2)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 34,1,2,2)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 39,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 35,1,3,3)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 36,1,3,3)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 37,1,3,3)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 39,1,4,4)
+,(NEXTVAL('LDSG_SQ'), 'NETWORK SUPPORT', 38,1,5,5)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 27,2,1,1)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 28,1,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 29,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 29,1,3,3)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 30,2,3,3)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 31,2,4,4)
+,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 31,1,5,5)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 21,2,1,1)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 22,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 26,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 23,2,3,3)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 24,2,3,3)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 25,2,4,4)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 26,1,5,5)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 14,2,1,1)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 16,1,2,2)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 17,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,1,3,3)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,2,4,4)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,1,5,5)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 1,2,1,1)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 2,1,1,1)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 4,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 5,1,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 6,1,2,2)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 7,2,3,3)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 8,1,4,4)
+,(NEXTVAL('LDSG_SQ'), 'HOUSING', 8,2,5,5)
+;
+
 
 INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'ABC Company');
 INSERT INTO REFERRAL_PARTNER values (nextval('RP_SQ'),'Dental Associates Ohio');
@@ -103,58 +183,66 @@ CREATE TABLE ASSESSMENT_QUESTIONNAIRE(
 );
 
 
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Are you currently housed?', 'HOUSING', 1);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Are you at immediate risk of losing your housing?', 'HOUSING', 2);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Are you obtaining rental assistance or rent subsidy (e.g., housing choice voucher)?', 'HOUSING',3);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Can you continue living in your current residence for as long as you would like?', 'HOUSING', 4);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Do you - or whoever is responsible for paying for your housing - spend more than 30% of your income on jousting related expenses?', 'HOUSING',5);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Do you have any safety concerns or accessibility concerns with respect to the physical structure of your housing?', 'HOUSING',6);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Do you consider your housing to be adequate and meeting your needs?', 'HOUSING',7);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Is the resident currently housed?', 'HOUSING', 1);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Is the resident at immediate risk of losing housing?', 'HOUSING', 2);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Is the resident obtaining rental assistance or rent subsidy (e.g., housing choice voucher)?', 'HOUSING',3);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Can the resident continue living in their current residence for as long as they like?', 'HOUSING', 4);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Does the resident - or whoever is responsible for paying for the resident''s housing - spend more than 30% of their income on housing related expenses?', 'HOUSING',5);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Does the resident have any safety concerns or accessibility concerns with respect to the physical structure of their housing?', 'HOUSING',6);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Does the resident consider their housing to be adequate and meeting their needs?', 'HOUSING',7);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Is the housing subsidized, low-income housing, a subsidized co-op, or some other type of government-supported housing?', 'HOUSING',8);
 --MONEY MANAGEMENT
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Do you know how to use a budget and use it on a regular basis?', 'MONEY MANAGEMENT',9);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Do you know whether or not you have monthly deficit or surplus?', 'MONEY MANAGEMENT',10);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Are you able to track expenses?', 'MONEY MANAGEMENT',11);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Can you prioritize your expenses?', 'MONEY MANAGEMENT',12);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Do you organize your bills and other financial paperwork?', 'MONEY MANAGEMENT',13);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Are you able to pay bills on time?', 'MONEY MANAGEMENT',14);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Do you feel you understand your debts and have control over them?', 'MONEY MANAGEMENT',15);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Are you currently experiencing garnishments?', 'MONEY MANAGEMENT',16);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 9,'Do you have savings or checking account?', 'MONEY MANAGEMENT',17);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 10,'Are you able to save money? if yes, is it sporadically or on a consistent basis?', 'MONEY MANAGEMENT',18);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Does the resident know how to use a budget and use it on a regular basis?', 'MONEY MANAGEMENT',9);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Does the resident know whether or not have monthly deficit or surplus?', 'MONEY MANAGEMENT',10);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Is resident able to track expenses?', 'MONEY MANAGEMENT',11);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Can resident prioritize expenses?', 'MONEY MANAGEMENT',12);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Does the resident organize bills and other financial paperwork?', 'MONEY MANAGEMENT',13);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Is the resident able to pay bills on time?', 'MONEY MANAGEMENT',14);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Does the resident feel and understand debts and have control over them?', 'MONEY MANAGEMENT',15);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Is resident currently experiencing garnishments?', 'MONEY MANAGEMENT',16);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 9,'Does the resident have savings or checking account?', 'MONEY MANAGEMENT',17);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 10,'Is resident able to save money? if yes, is it sporadically or on a consistent basis?', 'MONEY MANAGEMENT',18);
 --EMPLOYMENT
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'How old are you?', 'EMPLOYMENT',19);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Do you have a job?', 'EMPLOYMENT',20);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Do you work full time(32+ hours a week)?', 'EMPLOYMENT',21);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Does the job allow you to pay for all your basic needs (i.e., food, clothing, shelter)?', 'EMPLOYMENT',22);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'How old is the resident?', 'EMPLOYMENT',19);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Does the resident have a job?', 'EMPLOYMENT',20);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Does the resident work full time(32+ hours a week)? Note: If the resident works at least 32 hours a week across mutiple jobs, they should be considered to be working full-time.', 'EMPLOYMENT',21);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Does the job pay a living wage? Note: For residents who work at least 32 hours a week accorss multiple jobs, all of their job must pay a living wage to go on to the next question', 'EMPLOYMENT',22);
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Does the job offer health insurance options, paid time off, and some type of retirement plan?', 'EMPLOYMENT',23);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Have you been employed at the current workplace for at least three months?', 'EMPLOYMENT',24);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Can you remain at the current job for as long as you like?', 'EMPLOYMENT',25);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Has the resident been employed at the current workplace for at least three months?', 'EMPLOYMENT',24);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Can the resident remain at the current job for as long as they like?', 'EMPLOYMENT',25);
 --EDUCATION
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Do you have a high school diploma or GED?', 'EDUCATION',26);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Are you enrolled in high school, GED program, or an alternative education program?', 'EDUCATION',27);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Do you have any special education needs or other accommodations that are not being met?', 'EDUCATION',28);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Do you regularly attend the classes you are enrolled in?', 'EDUCATION',29);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Have you completed additional training or education beyond receiving a high school diploma or GED(an received a degree or vocational certification?', 'EDUCATION',30);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Are you currently getting additional training or education to help you job opportunities or to earn more money?', 'EDUCATION',31);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Does the resident have a high school diploma or GED?', 'EDUCATION',26);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Is resident enrolled in high school, GED program, or an alternative education program?', 'EDUCATION',27);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Does the resident have any special education needs or other accommodations that are not being met?', 'EDUCATION',28);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Is resident regularly attend the classes he/she enrolled in?', 'EDUCATION',29);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Has the resident completed additional training or education beyond receiving a high school diploma or GED(an received a degree or vocational certification?', 'EDUCATION',30);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Is the resident currently getting additional training or education to help job opportunities or to earn more money?', 'EDUCATION',31);
 --NETWORK_SUPPORT
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Do you receive any type of support (emotional, financial, or material) from your extended family, friends, or other members of your social circle?', 'NETWORK SUPPORT',32);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Does your extended family or friends want to provide support?', 'NETWORK SUPPORT',33);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Does your extended family or friends tend to be demanding, critical, or a bad influence?', 'NETWORK SUPPORT',34);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'When or if necessary, would you be able to rely on someone among your extended family/friends to provide Emotional Support?', 'NETWORK SUPPORT',35);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'When or if necessary, would you be able to rely on someone among your extended family/friends to provide Financial support?', 'NETWORK SUPPORT',36);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'When or if necessary, would you be able to rely on someone among your extended family/friends to provide  Material support, such as a place to stay, food, or clothing?', 'NETWORK SUPPORT',37);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Is your support network growing?', 'NETWORK SUPPORT',38);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Are you aware of where to go in the community for help?', 'NETWORK SUPPORT',39);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Does the resident receive any type of support (emotional, financial, or material) from their extended family, friends, or other members of their social circle?', 'NETWORK SUPPORT',32);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Do the resident''s extended family or friends want to provide support?', 'NETWORK SUPPORT',33);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Do the resident''s extended family or friends tend to be demanding, critical, or a bad influence?', 'NETWORK SUPPORT',34);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'When or if necessary, would resident be able to rely on someone among their extended family/friends to provide Emotional Support?', 'NETWORK SUPPORT',35);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'When or if necessary, would resident be able to rely on someone among their extended family/friends to provide Financial support?', 'NETWORK SUPPORT',36);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'When or if necessary, would resident be able to rely on someone among their extended family/friends to provide  Material support, such as a place to stay, food, or clothing?', 'NETWORK SUPPORT',37);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Is the resident''s support network growing?', 'NETWORK SUPPORT',38);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Is the resident aware of where to go in the community for help?', 'NETWORK SUPPORT',39);
 --HOSUEHOLD_MANAGEMENT
 INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Has the resident received a notification in the past 6 months regarding the cleanliness or condition of their home?', 'HOUSEHOLD MANAGEMENT',40);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Are you able to keep your home clean and organized?', 'HOUSEHOLD MANAGEMENT',41);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Are you able to do laundry and have clean clothes available for your family members?', 'HOUSEHOLD MANAGEMENT',42);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Do you do the dishes after each meal and keep the kitchen clean?', 'HOUSEHOLD MANAGEMENT',43);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Do you regularly take out the trash and recycle?', 'HOUSEHOLD MANAGEMENT',44);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Are you able to plan and prepare meals on a regular basis?', 'HOUSEHOLD MANAGEMENT',45);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Are you able to replenish household supplies before you run out (i.e., laundry detergent, toilet paper, etc.)?', 'HOUSEHOLD MANAGEMENT',46);
-INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Are you able to maintain the outside of your home, if required (i.e., yard, sidewalks, etc.)?', 'HOUSEHOLD MANAGEMENT',47);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Is the resident able to keep their home clean and oraganized with minimal wear and tear?', 'HOUSEHOLD MANAGEMENT',41);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Is the resident able to do laundry and have clean clothes available for their family members?', 'HOUSEHOLD MANAGEMENT',42);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Does the resident do the dishes after each meal and keep the kitchen clean?', 'HOUSEHOLD MANAGEMENT',43);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'Does the resident regularly take out the trash and recycle?', 'HOUSEHOLD MANAGEMENT',44);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 6,'Is resident able to plan and prepare meals on a regular basis?', 'HOUSEHOLD MANAGEMENT',45);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 7,'Is resident able to replenish household supplies before they run out (i.e., laundry detergent, toilet paper, etc.)?', 'HOUSEHOLD MANAGEMENT',46);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 8,'Is resident able to maintain the outside of their home, if required (i.e., yard, sidewalks, etc.)?', 'HOUSEHOLD MANAGEMENT',47);
+
+--HOSUEHOLD_MANAGEMENT
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 1,'Does the resident have any identified physical, developmental, or learning disabilities?', 'DISABILITY AND PHYSICAL HEALTH',48);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 2,'Does the resident have any physical health issues or concerns (including pregnancy)?', 'DISABILITY AND PHYSICAL HEALTH',49);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 3,'Has the resident''s disabilities and current health issues appropriately managed by services or medication?', 'DISABILITY AND PHYSICAL HEALTH',50);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 4,'Has the resident''s disabilities or current health issues ever interfered with their housing arrangements, employment, or social interactions?', 'DISABILITY AND PHYSICAL HEALTH',51);
+INSERT INTO ASSESSMENT_QUESTIONNAIRE VALUES(nextval('AQ_SQ'), 5,'When was the last time the resident''s disability or current health issues interfered with their housing arrangements, employment, or social interactions?', 'DISABILITY AND PHYSICAL HEALTH',52);
+
 
 CREATE TABLE CHOICE(
 	CHOICE_ID INT PRIMARY KEY NOT NULL,
@@ -173,6 +261,11 @@ INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '18-25', 8);
 INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '26-35', 9);
 INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '36-50', 10);
 INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '+50', 11);
+INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), 'within last month', 12);
+INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '< 6 months', 13);
+INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '6 to 12 months', 14);
+INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), '+ 1 year', 15);
+INSERT INTO CHOICE VALUES(nextval('CHOICE_SQ'), 'N/A', 16);
 
 CREATE TABLE QUESTION_CHOICE(
 	QUESTION_ID INT REFERENCES ASSESSMENT_QUESTIONNAIRE(QUESTION_ID) NOT NULL,
@@ -415,6 +508,21 @@ INSERT INTO QUESTION_CHOICE VALUES (47, 2);
 INSERT INTO QUESTION_CHOICE VALUES (47, 3);
 INSERT INTO QUESTION_CHOICE VALUES (47, 4);
 
+INSERT INTO QUESTION_CHOICE VALUES (48, 1);
+INSERT INTO QUESTION_CHOICE VALUES (48, 2);
+INSERT INTO QUESTION_CHOICE VALUES (49, 1);
+INSERT INTO QUESTION_CHOICE VALUES (49, 2);
+INSERT INTO QUESTION_CHOICE VALUES (50, 1);
+INSERT INTO QUESTION_CHOICE VALUES (50, 2);
+INSERT INTO QUESTION_CHOICE VALUES (51, 1);
+INSERT INTO QUESTION_CHOICE VALUES (51, 2);
+INSERT INTO QUESTION_CHOICE VALUES (52, 12);
+INSERT INTO QUESTION_CHOICE VALUES (52, 13);
+INSERT INTO QUESTION_CHOICE VALUES (52, 14);
+INSERT INTO QUESTION_CHOICE VALUES (52, 15);
+INSERT INTO QUESTION_CHOICE VALUES (52, 16);
+
+
 CREATE TABLE SCORE(
 	SCORE_ID		INT PRIMARY KEY NOT NULL,
 	SCORE_VALUE		VARCHAR(50)
@@ -451,28 +559,34 @@ INSERT INTO REFERRAL values(nextval('REF_SQ'), 'Other');
 CREATE table PROPERTY (
 	PROP_ID			INT PRIMARY KEY NOT NULL,
 	PROP_NAME		VARCHAR(128) UNIQUE NOT NULL,
+	CITY			VARCHAR(50),
+	STATE			VARCHAR(50),
+	COUNTY			VARCHAR(20), 
 	UNIT			INT,
 	UNIT_FEE		INT,
 	ACTIVE			BOOLEAN DEFAULT TRUE,
 	TOTAL_RESIDENTS	INT,
-	RESIDENT_COUNCIL BOOLEAN DEFAULT FALSE
+	RESIDENT_COUNCIL BOOLEAN DEFAULT FALSE,
+	SERVICE_PROVIDER VARCHAR(50)
 );
 
 CREATE table SERVICE_COORDINATOR (
 	SC_ID				INT PRIMARY KEY NOT NULL,
-	PROP_ID             INT REFERENCES PROPERTY(PROP_ID),
 	USER_NAME       	VARCHAR(50) NOT NULL UNIQUE,
 	ENCRYPTED_PASSWORD 	VARCHAR(128) NOT NULL,
 	ACTIVE          	BOOLEAN DEFAULT FALSE,
 	EMAIL		   	 	VARCHAR (128) UNIQUE,
+	PHONE				VARCHAR(50),
 	CREATED_ON	    	TIMESTAMP DEFAULT NOW(),
 	LAST_LOGIN	    	TIMESTAMP,
 	DATE_MODIFIED		TIMESTAMP,
-	MODIFIED_BY			VARCHAR(50)
+	MODIFIED_BY			VARCHAR(50),
+	ASSIGNED_PROPERTY   JSON
 	
 );
 
 CREATE table RESIDENT (
+	
 	RESIDENT_ID		BIGINT PRIMARY KEY NOT NULL,
 	ACTIVE			BOOLEAN DEFAULT TRUE,
 	IS_RESIDENT 	BOOLEAN DEFAULT TRUE,
@@ -486,7 +600,7 @@ CREATE table RESIDENT (
 	VIA_EMAIL		BOOLEAN DEFAULT FALSE,
 	VOICEMAIL_NO	VARCHAR(20),
 	TEXT_NO			VARCHAR(20),
-	EMAIL			VARCHAR(256) UNIQUE,
+	EMAIL			VARCHAR(256),
 	ADDRESS			VARCHAR(256),
 	ACK_PR			BOOLEAN DEFAULT FALSE,
 	ALLOW_CONTACT	BOOLEAN DEFAULT FALSE,
@@ -497,14 +611,36 @@ CREATE table RESIDENT (
 	MODIFIED_BY		VARCHAR(50),
 	SERVICE_COORD	VARCHAR(50),
 	A_TYPE			INT REFERENCES ASSESSMENT_TYPE(A_ID),
-	A_DATE			DATE
+	A_DATE			DATE,
+	AGE				VARCHAR(3),
+	PRI_LANGUAGE	VARCHAR(128) DEFAULT 'English',
+	MARITAL_STATUS	VARCHAR(128) DEFAULT 'Married',
+	ANNUAL_GROSS 	VARCHAR(128),
+	GENDER			VARCHAR(128) DEFAULT 'Information not collected',
+	ETHNICITY		VARCHAR(128) DEFAULT 'Information not collected',
+	RACE			VARCHAR(128) DEFAULT 'Information not collected',
+	H_O_H			VARCHAR(128) DEFAULT 'Information not collected',
+	VETERAN			VARCHAR(128) DEFAULT 'Information not collected',
+	DISABILITY		VARCHAR(128) DEFAULT 'Information not collected',
+	RC_OR_EX_OFF	VARCHAR(128) DEFAULT 'Information not collected',
+	SSI				VARCHAR(128) DEFAULT 'Information not collected',
+	SSDI			VARCHAR(128) DEFAULT 'Information not collected',
+	HEALTH_COVERAGE	VARCHAR(128) DEFAULT 'Information not collected',
+	HIGHEST_EDU		VARCHAR(128) DEFAULT 'Information not collected',
+	SAFE_DAY		VARCHAR(50),
+	SAFE_NIGHT 		VARCHAR(50),
+	OCCUPANCY_LENGTH	VARCHAR(50),
+	INT_RES_COUNCIL VARCHAR(10),
+	MODE_TRANSPORT	VARCHAR(50),
+	EXP_FOOD_SHORT	VARCHAR(50),
+	INTERNET_ACCESS VARCHAR(50),
+	HOH_TYPE		VARCHAR(50)
+	
 );
 
 alter table RESIDENT
   add constraint RESIDENT_UK unique (FIRST_NAME, LAST_NAME, PROP_ID, ADDRESS);
   
-alter table RESIDENT drop constraint resident_email_key;
-
 CREATE table CHILD (
 	CHILD_ID		BIGINT PRIMARY KEY NOT NULL,
 	FULL_NAME		VARCHAR(50),
@@ -522,9 +658,6 @@ CREATE TABLE REFERRAL_FORM (
 	REFERRAL_REASON				JSON DEFAULT '{ "Non/late payment of rent": "false", "Utility Shut-off, scheduled for (Date):":"", "Housekeeping/home management":"false", "Lease violation for:": "", "Employment/job readiness":"false", "Education/job training":"false", "Noticeable change in:":"", "Resident-to-resident conflict issues":"false", "Suspected abuse/domestic violence/exploitation":"false", "Childcare/afterschool care":"false", "Transportation":"false", "Safety":"false", "Healthcare/medical issues":"false", "Other:":"" }',
 	COMMENTS					VARCHAR(1000),
 	PREVIOUS_ATTEMPTS			VARCHAR(1000),
-	SELF_SUFFICIENCY			JSON DEFAULT '{ "Improve knowledge of resources":"false", "Improve educational status":"false", "Obtain/maintain employment":"false", "Move to home ownership":"false", "Other":"" }',
-	RF_HOUSING_STABILITY		JSON DEFAULT '{ "Avoid  eviction":"false", "resolve lease violation":"false", "Other":""}',
-	SAFE_SUPPORTIVE_COMMUNITY	JSON DEFAULT '{ "Greater sense of satisfaction":"false","Greater sense of safety":"false", "Greater sense of community/support":"false", "Other":""}',
 	RF_FOLLOWUP_NOTES			VARCHAR(1000),
 	RES_APP_SCHEDULED			JSON DEFAULT '{ "Resident Appointment Scheduled?":""}',
 	SERVICE_COORD				VARCHAR(50)
@@ -534,14 +667,14 @@ CREATE TABLE ACTION_PLAN(
     ACTION_PLAN_ID			BIGINT PRIMARY KEY NOT NULL,
 	RESIDENT_ID				BIGINT REFERENCES RESIDENT(RESIDENT_ID),	
     ACTIVE              	BOOLEAN DEFAULT TRUE,   
-	PLAN_OF_ACTION			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	PLAN_DETAILS			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	REFERRAL_PARTNER		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	ANTICIPATED_OUTCOMES	JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	ANTICIPATED_DATE		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	OUTCOME_ACHIEVED		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	COMPLETION_DATE			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
-	ACHIEVED_SSM			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }',
+	PLAN_OF_ACTION			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	PLAN_DETAILS			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	REFERRAL_PARTNER		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	ANTICIPATED_OUTCOMES	JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	ANTICIPATED_DATE		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	OUTCOME_ACHIEVED		JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	COMPLETION_DATE			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
+	ACHIEVED_SSM			JSON DEFAULT '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "", "DISABILITY AND PHYSICAL HEALTH": "" }',
 	FOLLOWUP_NOTES			VARCHAR(2000),
 	DATE_ADDED				DATE DEFAULT NOW(),
 	DATE_MODIFIED			DATE DEFAULT NOW(),
@@ -553,6 +686,7 @@ CREATE TABLE CASE_NOTES(
 	DESCRIPTION		VARCHAR(2000),
 	ASSESSMENT		VARCHAR(2000),
 	PLAN			VARCHAR(2000),
+	NO_SHOW_DATE	VARCHAR(20),
 	RESIDENT_ID		BIGINT REFERENCES RESIDENT(RESIDENT_ID),
 	SERVICE_COORD	VARCHAR(50),
 	DATE_ADDED		DATE DEFAULT NOW(),		
@@ -628,40 +762,440 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apts', 50, 1000, TRUE, 1200, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eastmoor Square', 50, 1000, TRUE, 1300, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glenview States', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Indian Meadows', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Kenmore Square', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ohio Townhomes', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Post Oaks', 50, 1000, TRUE, 1500, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rosewind', 50, 1000, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (CMHA)', 50, 1000, TRUE, 1100, FALSE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'The Meadows (Marrysville)', 50, 900, TRUE, 1500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Thornwood', 50, 1000, TRUE, 1000, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill', 50, 1000, TRUE, 500, TRUE);
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court Apts', 50, 1000, TRUE, 500, FALSE);
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Almond Village','','','', 50, 1000, TRUE, 1200, TRUE, 'FSA');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ashland Village','','','', 50, 1000, TRUE, 1300, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Batavia Village','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Berwick Apartments','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Brooksville Court','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Burnett Manor','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cambridge Village','','','', 50, 1000, TRUE, 1000, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Chadwick Place','','','', 50, 1000, TRUE, 1000, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place1','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place2','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apartments','','','', 50, 1000, TRUE, 1500, FALSE, 'OTR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cypress Commons','','','', 50, 1000, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Daines Village','','','', 50, 1000, TRUE, 1100, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eco Village','','','', 50, 900, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park Apartments','','','', 50, 1000, TRUE, 1000, TRUE, 'ABCAP');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village Apartments','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes II','','','', 50, 1000, TRUE, 500, FALSE, 'WSOS');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Georgetown Senior Apartments','','','', 50, 1000, TRUE, 1200, TRUE, 'Sourcepoint');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glen Meadows','','','', 50, 1000, TRUE, 1300, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Haddon Hall Apartments','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Helen W. Evans (OH AME)','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Highpoint Apartments','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Hollister House','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Jerusalem Judson Meadows','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Judson Terrace','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Manor','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'ILCAO');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village','','','', 50, 1000, TRUE, 1500, TRUE, 'ILCAO');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrenceburg Village','','','', 50, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lima Apartments','','','', 50, 1000, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Meadows Apartments','','','', 50, 1000, TRUE, 1100, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Mechanicsburgh Village','','','', 50, 900, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Miamisburgh Manor','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Pleassant Valley Colony (Plain City)','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Princeton Village (Moraine Village)','','','', 50, 1000, TRUE, 500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Roosevelt Manor (Piqua Manor)','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rotary Manor','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rushville Commons','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Skybird Manor','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'St. Aloysius Apartments','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sturbridge Green','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sunnyview Square','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (1)','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (2,3,4)','','','', 50, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallicks (Schlarman)','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Union Square','','','', 50, 1000, TRUE, 1100, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Vandalia Village','','','', 50, 900, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill','','','', 50, 1000, TRUE, 1000, TRUE, 'Wallick');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Walter G. Sellers Sr. Apartments (First 202 Housing Corp)','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court House','','','', 50, 1000, TRUE, 500, FALSE, 'RRN');
 
 
 
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night, occupancy_length, internet_Access, mode_transport, EXP_FOOD_SHORT, hoh_type, int_res_council) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'Hawk','','Eye',2,false,false,true,NULL,'614-111-1052','HawkEye@gmail.com','1234 Hawk st.',true,true,true,true,'2019-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'100','English','Significant Other','10000','Male','Information not collected','Aisan','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Somewhat safe','Very unsafe', 'Less than 1 Year', 'No, I have no internet access', 'Walk/Bike', 'Beginning of the Month', 'One Parent', 'No' )
+,(nextval('RESIDENT_SQ'),true,true,2,'Super','','Man',2,false,false,false,NULL,'614-111-1053','SuperMan@gmail.com','1234 super st.',true,true,true,true,'2020-08-25 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'29','English','Significant Other','10000','Male','Information not collected','Mixed Race','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Very safe','Very unsafe', 'Less than 1 Year', 'No, but my phone has internet access', 'Walk/Bike', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,3,'Black','','Panther',16,false,false,false,NULL,'614-111-1068','BlackPanther@gmail.com','1234 Panther st.',true,true,true,true,'2020-08-26 12:19:32.236',NULL,'dbadmin1','dbadmin1',NULL,NULL,'80','English','Significant Other','10000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Somewhat safe','Very unsafe', '1-3 Years', 'No, but my phone has internet access', 'Bus', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,4,'Ice','','Man',15,false,false,false,NULL,'614-111-1072','IceMan@gmail.com','1234 Ice st.',true,true,true,true,'2020-07-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'97','English','Significant Other','10000','Male','Information not collected','Black or African American','Yes','Yes','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Somewhat safe','Very unsafe', 'Less than 1 Year', 'No, but my phone has internet access', 'Someone drives me', 'Beginning of the Month', 'No Children', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,5,'Spider','','Man',1,false,true,true,NULL,'614-111-1030','SpiderMan@gmail.com','1234 spidy st',true,false,true,true,'2020-08-25 11:17:53.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'17','English','Significant Other','25000','Male','Individual does not know','Black or African American','Yes','No','N/A','N/A','N/A','N/A','Medicare','Information not collected','Somewhat safe','Very unsafe', '1-3 Years', 'No, but my phone has internet access', 'Walk/Bike', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,1,'Dare','','Devil',3,false,false,true,NULL,'614-111-1019','DareDevil@gmail.com','1234 Dare st.',true,true,true,true,'2020-01-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'48','English','Significant Other','10000','Male','Information not collected','White','No','No','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Very safe','Very safe', 'Less than 1 Year', 'Yes', 'Walk/Bike', 'Beginning of the Month', 'No Children', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,5,'Ant','','Man',4,false,false,false,NULL,'614-111-1038','AntMan@gmail.com','1234 Ant st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'55','English','Significant Other','10000','Male','Information not collected','Information not collected','Yes','Yes','N/A','N/A','N/A','N/A','N/A','Grade 6 Master''s Degree','Somewhat safe','Very unsafe', '10 or more Years', 'No, but my phone has internet access', 'Personal Vehicle', 'Beginning of the Month', 'No Children', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,2,'Dead','','Pool',4,false,false,false,NULL,'614-111-1016','DeadPool@gmail.com','1234 Dead st.',true,true,true,true,'2020-01-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'17','English','Significant Other','10000','Male','Information not collected','Information not collected','No','No','N/A','N/A','N/A','N/A','N/A','Grade 8 Doctorate Degree','Somewhat safe','Very unsafe', '7-9 Years', 'No, but my phone has internet access', 'Personal Vehicle', 'No', 'One Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,3,'Luke','','Cage',5,false,false,true,NULL,'614-111-1022','LukeCage@gmail.com','1234 Luke st.',true,true,true,true,'2020-01-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'96','English','Significant Other','10000','Male','Information not collected','Black or African American','No','No','N/A','N/A','N/A','N/A','N/A','12 grade, no diploma','Somewhat safe', 'Somewhat unsafe', '7-9 Years', 'No, but my phone has internet access', 'Someone drives me', 'No', 'One Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,4,'Captain','','America',9,false,false,true,NULL,'614-111-1031','CaptainAmerica@gmail.com','1234 America st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'32','English','Significant Other','10000','Male','Information not collected','Aisan','Yes','Yes','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Very unsafe','Very unsafe', '7-9 Years', 'Yes', 'Bus', 'Beginning of the Month', 'No Children', 'No')
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night, occupancy_length, internet_Access, mode_transport, EXP_FOOD_SHORT, hoh_type, int_res_council) VALUES
+(nextval('RESIDENT_SQ'),true,true,5,'Green','','Hulk',7,false,true,false,NULL,'614-111-1034','GreenHulk@gmail.com','1234 Hulk st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'5','English','Significant Other','10000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 4 Associate''s Degree','Very unsafe','Very unsafe', '7-9 Years', 'Yes', 'Bus', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Flash',11,false,false,false,NULL,'614-111-1083','TheFlash@gmail.com','1234 Flash st.',true,true,true,true,'2019-08-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'2','Other','Significant Other','10000','Male','Information not collected','Information not collected','Yes','Yes','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Very unsafe','Very unsafe', 'Less than 1 Year', 'Yes', 'Someone drives me', 'Beginning of the Month', 'Two Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,2,'Logan','','Wolverine',8,false,true,true,NULL,'614-111-1033','LoganWolverine@gmail.com','1234 Logan st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'63','English','Significant Other','10000','Male','Information not collected','Aisan','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 9 Individual refused','Very unsafe','Very unsafe', '7-9 Years', 'Yes', 'Bus', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,3,'The','','Thing',9,false,true,false,NULL,'614-111-1079','TheThing@gmail.com','1234 Thing st.',true,true,true,true,'2020-07-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'19','English','Significant Other','10000','Male','Information not collected','Information not collected','Yes','Yes','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very unsafe','Very unsafe', '7-9 Years', 'Yes', 'Bus', 'No', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,4,'Silver','','Surfer',6,false,false,false,NULL,'614-111-1086','SilverSurfer@gmail.com','1234 Silver st.',true,true,true,true,'2019-12-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'40','Spanish','Significant Other','10000','Male','Information not collected','Aisan','Yes','Yes','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Somewhat safe', 'Somewhat unsafe', '4-6 Years', 'No', 'Someone drives me', 'Beginning of the Month', 'One Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,5,'Aqua','','Man',17,false,false,false,NULL,'614-111-1071','AquaMan@gmail.com','1234 Aqua st.',true,true,true,true,'2020-07-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'55','English','Significant Other','10000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Somewhat safe','Very unsafe', '4-6 Years', 'No, but my phone has internet access', 'Someone drives me', 'Beginning of the Month', 'One Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,1,'Wonder','','Woman',12,false,false,false,NULL,'614-111-1093','WonderWoman@gmail.com','1234 Wonder st.',true,true,true,true,'2019-12-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'61','Spanish','Significant Other','10000','Female','Information not collected','Information not collected','Yes','Yes','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Somewhat safe','Very unsafe', 'Less than 1 Year', 'No, but my phone has internet access', 'Bus', 'Beginning of the Month', 'One Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,2,'Black','','Widow',14,false,false,true,NULL,'614-111-1045','BlackWidow@gmail.com','1234 Widow st.',true,true,true,true,'2020-08-26 12:19:32.236',NULL,'dbadmin1','dbadmin1',NULL,NULL,'23','English','Significant Other','10000','Female','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Very unsafe','Very unsafe', '4-6 Years', 'Yes', 'Walk/Bike', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,3,'Iron','','Man',5,false,true,true,NULL,'614-111-1047','IronMan@gmail.com','1234 Iron st.',true,true,true,true,'2020-08-26 12:19:32.236',NULL,'dbadmin1','dbadmin1',NULL,NULL,'8','English','Significant Other','63000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Very safe','Very safe', '4-6 Years', 'Yes', 'Bus', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,4,'The','','Shazam',13,false,false,true,NULL,'614-111-1049','TheShazam@gmail.com','1234 Shazam st.',true,true,true,true,'2020-08-26 12:19:32.236',NULL,'dbadmin1','dbadmin1',NULL,NULL,'28','English','Significant Other','66000','Male','Information not collected','Aisan','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Very safe','Very safe', '4-6 Years', 'Yes', 'Walk/Bike', 'Beginning of the Month', 'No Children', 'No')
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night, occupancy_length, internet_Access, mode_transport, EXP_FOOD_SHORT, hoh_type, int_res_council) VALUES
+(nextval('RESIDENT_SQ'),true,true,5,'Red','','Robin',12,false,NULL,false,NULL,'614-111-1050','RedRobin@gmail.com','1234 Robin st.',true,true,true,true,'2020-08-26 12:19:32.236',NULL,'dbadmin1','dbadmin1',NULL,NULL,'3','English','Significant Other','29000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Very safe','Very safe', 'Less than 1 Year', 'Yes', 'Bus', 'Beginning of the Month', 'No Children', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,1,'Bat','','Man',3,false,false,false,NULL,'614-111-1051','BatMan@gmail.com','1234 Bat st.',true,true,true,true,'2019-01-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'41','English','Significant Other','33000','Male','Information not collected','Aisan','Yes','Yes','N/A','N/A','N/A','N/A','N/A','Grade 11 N/A','Somewhat safe','Very unsafe', '4-6 Years', 'Yes', 'Bus', 'End of the Month', 'No Children', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,2,'Professor','','X',7,false,false,true,NULL,'614-111-1064','ProfessorX@gmail.com','1234 Professor st.',true,true,true,true,'2019-02-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'75','English','Significant Other','31000','Male','Information not collected','Information not collected','Yes','Yes','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Somewhat safe', 'Somewhat unsafe', 'Less than 1 Year', 'No, but my phone has internet access', 'Bus', 'Beginning of the Month', 'One Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,3,'The','','Thor',10,false,true,true,NULL,'614-111-1076','TheThor@gmail.com','1234 Thor st.',true,true,true,true,'2020-07-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'68','English','Significant Other','22000','Male','Information not collected','Black or African American','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Somewhat safe','Very unsafe', '4-6 Years', 'No, but my phone has internet access', 'Bus', 'Beginning of the Month', 'Two Parent', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,4,'Human','','Torch',1,false,false,false,NULL,'614-111-1081','HumanTorch@gmail.com','1234 Human st.',true,true,true,true,'2019-08-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'51','Other','Significant Other','10000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Somewhat safe','Very unsafe', '1-3 Years', 'No, but my phone has internet access', 'Personal Vehicle', 'Middle of the Month', 'Two Parent', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Wasp',10,false,true,false,NULL,'614-111-1085','TheWasp@gmail.com','1234 Wasp st.',true,true,true,true,'2019-12-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'20','Spanish','Significant Other','43000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Somewhat safe', 'Somewhat unsafe', '1-3 Years', 'No', 'Bus', 'Beginning of the Month', 'No Children', 'No')
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Groot',11,false,true,false,NULL,'614-111-1091','TheGroot@gmail.com','1234 Groot st.',true,true,true,true,'2019-08-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'42','Spanish','Significant Other','55000','Male','Information not collected','Aisan','Yes','No','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Very unsafe','Very unsafe', '10 or more Years', 'No', 'Personal Vehicle', 'Middle of the Month', 'No Children', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,2,'Black','','Canary',13,false,false,true,NULL,'614-111-1096','BlackCanary@gmail.com','1234 Black st.',true,true,true,true,'2019-12-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'12','Spanish','Significant Other','65000','Female','Information not collected','Black or African American','Yes','No','N/A','N/A','N/A','N/A','N/A','No schooling completed, Nursery or, kindergarten','Somewhat safe', 'Somewhat unsafe', '1-3 Years', 'No, but my phone has internet access', 'Bus', 'Middle of the Month', 'Two Parent', 'Yes')
+,(nextval('RESIDENT_SQ'),true,true,3,'Super','','Girl',6,false,false,true,NULL,'614-111-1014','SuperGirl@gmail.com','1234 Girl st.',true,true,true,true,'2020-01-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'71','English','Significant Other','70000','Male','Information not collected','Aisan','No','No','N/A','N/A','N/A','N/A','N/A','High School Diploma','Very safe','Very safe', '1-3 Years', 'No, I have no internet access', 'Personal Vehicle', 'Middle of the Month', 'Two Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,4,'Green','','Lantern',8,false,false,true,NULL,'614-111-1035','GreenLantern@gmail.com','1234 Lantern st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'10','English','Significant Other','40000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very safe','Very safe', '10 or more Years', 'No', 'Walk/Bike', 'End of the Month', 'Two Parent', 'No')
+,(nextval('RESIDENT_SQ'),true,true,2,'Elastic','','Girl',8,false,true,true,NULL,'614-111-1000','elastic@email.com','1234 elastic ave',true,false,true,true,'2020-09-01 23:55:42.484','2020-09-01 23:59:03.241','dbadmin1','dbadmin1',NULL,NULL,'','English','Married','9000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very safe','Very safe', '10 or more Years', 'No', 'Walk/Bike', 'End of the Month', 'Two Parent', 'No')
+;
 
+
+INSERT INTO child (child_id,full_name,parent_id,pvr_flag) VALUES 
+(nextval('CHILD_SQ'),'Spidy baby 1',1,true)
+,(nextval('CHILD_SQ'),'Spidy baby2',1,true)
+,(nextval('CHILD_SQ'),'Super baby1',2,false)
+,(nextval('CHILD_SQ'),'Super baby2',2,false)
+,(nextval('CHILD_SQ'),'Child 1',3,false)
+,(nextval('CHILD_SQ'),'Child 2',3,true)
+,(nextval('CHILD_SQ'),'Child 1',4,false)
+,(nextval('CHILD_SQ'),'Child 2',4,true)
+,(nextval('CHILD_SQ'),'Child 1',5,true)
+,(nextval('CHILD_SQ'),'Child 2',5,false)
+;
+INSERT INTO child (child_id,full_name,parent_id,pvr_flag) VALUES 
+(nextval('CHILD_SQ'),'Child 1',6,true)
+,(nextval('CHILD_SQ'),'Child 2',6,false)
+,(nextval('CHILD_SQ'),'Child 1',7,true)
+,(nextval('CHILD_SQ'),'Child 2',7,false)
+,(nextval('CHILD_SQ'),'Child 1',8,true)
+,(nextval('CHILD_SQ'),'Child 2',8,false)
+,(nextval('CHILD_SQ'),'Child 1',9,true)
+,(nextval('CHILD_SQ'),'Child 2',9,true)
+,(nextval('CHILD_SQ'),'Child 1',10,false)
+,(nextval('CHILD_SQ'),'Child 2',11,true)
+;
+INSERT INTO child (child_id,full_name,parent_id,pvr_flag) VALUES 
+(nextval('CHILD_SQ'),'Child 1',12,true)
+,(nextval('CHILD_SQ'),'Child 2',12,false)
+,(nextval('CHILD_SQ'),'Child 1',13,true)
+,(nextval('CHILD_SQ'),'Child 2',13,true)
+,(nextval('CHILD_SQ'),'Child 1',30,false)
+,(nextval('CHILD_SQ'),'Child 2',30,false)
+,(nextval('CHILD_SQ'),'Child 1',25,true)
+,(nextval('CHILD_SQ'),'Child 2',25,false)
+,(nextval('CHILD_SQ'),'Child 1',23,false)
+,(nextval('CHILD_SQ'),'Child 2',23,false)
+;
+
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),1,1,1,'HOUSING','2019-04-26')
+,(next_val('RAQ_SQ'),1,2,2,'HOUSING','2019-04-26')
+,(next_val('RAQ_SQ'),1,3,1,'HOUSING','2019-04-26')
+,(next_val('RAQ_SQ'),1,6,2,'HOUSING','2019-04-26')
+,(next_val('RAQ_SQ'),1,7,2,'HOUSING','2019-04-26')
+,(next_val('RAQ_SQ'),1,9,2,'MONEY MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,12,2,'MONEY MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,13,2,'MONEY MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,14,1,'MONEY MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,16,2,'MONEY MANAGEMENT','2019-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),1,17,2,'MONEY MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,19,9,'EMPLOYMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,20,2,'EMPLOYMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,26,2,'EDUCATION','2019-04-26')
+,(next_val('RAQ_SQ'),1,27,1,'EDUCATION','2019-04-26')
+,(next_val('RAQ_SQ'),1,28,2,'EDUCATION','2019-04-26')
+,(next_val('RAQ_SQ'),1,29,2,'EDUCATION','2019-04-26')
+,(next_val('RAQ_SQ'),1,32,2,'NETWORK SUPPORT','2019-04-26')
+,(next_val('RAQ_SQ'),1,33,2,'NETWORK SUPPORT','2019-04-26')
+,(next_val('RAQ_SQ'),1,40,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),1,41,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),1,42,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
+,(next_val('RAQ_SQ'),2,1,1,'HOUSING','2020-08-25')
+,(next_val('RAQ_SQ'),2,2,2,'HOUSING','2020-08-25')
+,(next_val('RAQ_SQ'),2,3,1,'HOUSING','2020-08-25')
+,(next_val('RAQ_SQ'),2,6,2,'HOUSING','2020-08-25')
+,(next_val('RAQ_SQ'),2,7,1,'HOUSING','2020-08-25')
+,(next_val('RAQ_SQ'),2,8,2,'HOUSING','2020-08-25')
+,(next_val('RAQ_SQ'),2,9,2,'MONEY MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,12,2,'MONEY MANAGEMENT','2020-08-25')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),2,13,2,'MONEY MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,14,1,'MONEY MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,16,2,'MONEY MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,17,2,'MONEY MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,19,9,'EMPLOYMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,20,3,'EMPLOYMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,21,2,'EMPLOYMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,26,2,'EDUCATION','2020-08-25')
+,(next_val('RAQ_SQ'),2,27,1,'EDUCATION','2020-08-25')
+,(next_val('RAQ_SQ'),2,28,2,'EDUCATION','2020-08-25')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),2,29,1,'EDUCATION','2020-08-25')
+,(next_val('RAQ_SQ'),2,30,3,'EDUCATION','2020-08-25')
+,(next_val('RAQ_SQ'),2,31,3,'EDUCATION','2020-08-25')
+,(next_val('RAQ_SQ'),2,32,2,'NETWORK SUPPORT','2020-08-25')
+,(next_val('RAQ_SQ'),2,33,2,'NETWORK SUPPORT','2020-08-25')
+,(next_val('RAQ_SQ'),2,40,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,41,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),2,42,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
+,(next_val('RAQ_SQ'),3,1,1,'HOUSING','2020-08-26')
+,(next_val('RAQ_SQ'),3,2,2,'HOUSING','2020-08-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),3,3,1,'HOUSING','2020-08-26')
+,(next_val('RAQ_SQ'),3,6,2,'HOUSING','2020-08-26')
+,(next_val('RAQ_SQ'),3,7,1,'HOUSING','2020-08-26')
+,(next_val('RAQ_SQ'),3,8,2,'HOUSING','2020-08-26')
+,(next_val('RAQ_SQ'),3,9,2,'MONEY MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,12,2,'MONEY MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,13,2,'MONEY MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,14,1,'MONEY MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,16,2,'MONEY MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,17,2,'MONEY MANAGEMENT','2020-08-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),3,19,9,'EMPLOYMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,20,3,'EMPLOYMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,21,2,'EMPLOYMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,26,2,'EDUCATION','2020-08-26')
+,(next_val('RAQ_SQ'),3,27,1,'EDUCATION','2020-08-26')
+,(next_val('RAQ_SQ'),3,28,2,'EDUCATION','2020-08-26')
+,(next_val('RAQ_SQ'),3,29,1,'EDUCATION','2020-08-26')
+,(next_val('RAQ_SQ'),3,30,3,'EDUCATION','2020-08-26')
+,(next_val('RAQ_SQ'),3,31,3,'EDUCATION','2020-08-26')
+,(next_val('RAQ_SQ'),3,32,2,'NETWORK SUPPORT','2020-08-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),3,33,2,'NETWORK SUPPORT','2020-08-26')
+,(next_val('RAQ_SQ'),3,40,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,41,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),3,42,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
+,(next_val('RAQ_SQ'),1,48,2,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(next_val('RAQ_SQ'),1,49,1,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(next_val('RAQ_SQ'),1,50,2,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(next_val('RAQ_SQ'),1,51,1,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(next_val('RAQ_SQ'),1,52,12,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(next_val('RAQ_SQ'),2,48,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),2,49,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(next_val('RAQ_SQ'),2,50,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(next_val('RAQ_SQ'),2,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(next_val('RAQ_SQ'),2,52,16,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(next_val('RAQ_SQ'),6,1,1,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,2,2,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,3,2,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,4,1,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,5,2,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,6,2,'HOUSING','2020-01-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),6,7,1,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,8,1,'HOUSING','2020-01-26')
+,(next_val('RAQ_SQ'),6,9,2,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,10,1,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,11,2,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,12,1,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,13,2,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,14,4,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,15,3,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,16,3,'MONEY MANAGEMENT','2020-01-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),6,17,3,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,18,5,'MONEY MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,19,10,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,20,1,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,21,1,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,22,1,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,23,2,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,24,1,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,25,1,'EMPLOYMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,26,1,'EDUCATION','2020-01-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),6,27,1,'EDUCATION','2020-01-26')
+,(next_val('RAQ_SQ'),6,28,2,'EDUCATION','2020-01-26')
+,(next_val('RAQ_SQ'),6,29,2,'EDUCATION','2020-01-26')
+,(next_val('RAQ_SQ'),6,30,1,'EDUCATION','2020-01-26')
+,(next_val('RAQ_SQ'),6,31,1,'EDUCATION','2020-01-26')
+,(next_val('RAQ_SQ'),6,32,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,33,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,34,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,35,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,36,1,'NETWORK SUPPORT','2020-01-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),6,37,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,38,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,39,1,'NETWORK SUPPORT','2020-01-26')
+,(next_val('RAQ_SQ'),6,40,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,41,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,42,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,43,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,44,2,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,45,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,46,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),6,47,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(next_val('RAQ_SQ'),6,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(next_val('RAQ_SQ'),6,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(next_val('RAQ_SQ'),6,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(next_val('RAQ_SQ'),6,52,16,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(next_val('RAQ_SQ'),7,1,4,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,2,4,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,3,4,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,4,4,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,5,1,'HOUSING','2020-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),7,6,1,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,7,1,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,8,1,'HOUSING','2020-04-26')
+,(next_val('RAQ_SQ'),7,9,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,10,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,11,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,12,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,13,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,14,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,15,4,'MONEY MANAGEMENT','2020-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),7,16,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,17,4,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,18,6,'MONEY MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,19,10,'EMPLOYMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,20,4,'EMPLOYMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,21,4,'EMPLOYMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,22,1,'EMPLOYMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,23,1,'EMPLOYMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,24,1,'EMPLOYMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,25,1,'EMPLOYMENT','2020-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),7,27,4,'EDUCATION','2020-04-26')
+,(next_val('RAQ_SQ'),7,28,4,'EDUCATION','2020-04-26')
+,(next_val('RAQ_SQ'),7,29,2,'EDUCATION','2020-04-26')
+,(next_val('RAQ_SQ'),7,30,2,'EDUCATION','2020-04-26')
+,(next_val('RAQ_SQ'),7,31,2,'EDUCATION','2020-04-26')
+,(next_val('RAQ_SQ'),7,33,2,'NETWORK SUPPORT','2020-04-26')
+,(next_val('RAQ_SQ'),7,37,2,'NETWORK SUPPORT','2020-04-26')
+,(next_val('RAQ_SQ'),7,38,2,'NETWORK SUPPORT','2020-04-26')
+,(next_val('RAQ_SQ'),7,39,1,'NETWORK SUPPORT','2020-04-26')
+,(next_val('RAQ_SQ'),7,40,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(next_val('RAQ_SQ'),7,41,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,42,1,'HOUSEHOLD MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,43,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
+,(next_val('RAQ_SQ'),7,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(next_val('RAQ_SQ'),7,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(next_val('RAQ_SQ'),7,50,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(next_val('RAQ_SQ'),7,51,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(next_val('RAQ_SQ'),7,52,15,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+;
+
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(next_val('RSG_SQ'),1,'HOUSING',3,4,'2019-04-26')
+,(next_val('RSG_SQ'),1,'MONEY MANAGEMENT',2,3,'2019-04-26')
+,(next_val('RSG_SQ'),1,'EMPLOYMENT',1,2,'2019-04-26')
+,(next_val('RSG_SQ'),1,'EDUCATION',2,3,'2019-04-26')
+,(next_val('RSG_SQ'),1,'NETWORK SUPPORT',1,2,'2019-04-26')
+,(next_val('RSG_SQ'),1,'HOUSEHOLD MANAGEMENT',2,3,'2019-04-26')
+,(next_val('RSG_SQ'),2,'HOUSING',5,5,'2020-08-25')
+,(next_val('RSG_SQ'),2,'MONEY MANAGEMENT',2,3,'2020-08-25')
+,(next_val('RSG_SQ'),2,'EMPLOYMENT',2,3,'2020-08-25')
+,(next_val('RSG_SQ'),2,'EDUCATION',3,4,'2020-08-25')
+;
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(next_val('RSG_SQ'),2,'NETWORK SUPPORT',1,2,'2020-08-25')
+,(next_val('RSG_SQ'),2,'HOUSEHOLD MANAGEMENT',2,3,'2020-08-25')
+,(next_val('RSG_SQ'),3,'HOUSING',5,5,'2020-08-26')
+,(next_val('RSG_SQ'),3,'MONEY MANAGEMENT',2,3,'2020-08-26')
+,(next_val('RSG_SQ'),3,'EMPLOYMENT',2,3,'2020-08-26')
+,(next_val('RSG_SQ'),3,'EDUCATION',3,4,'2020-08-26')
+,(next_val('RSG_SQ'),3,'NETWORK SUPPORT',1,2,'2020-08-26')
+,(next_val('RSG_SQ'),3,'HOUSEHOLD MANAGEMENT',2,3,'2020-08-26')
+,(next_val('RSG_SQ'),1,'DISABILITY AND PHYSICAL HEALTH',1,2,'2019-04-26')
+,(next_val('RSG_SQ'),2,'DISABILITY AND PHYSICAL HEALTH',4,5,'2020-09-03')
+;
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(next_val('RSG_SQ'),6,'HOUSING',1,2,'2020-01-26')
+,(next_val('RSG_SQ'),6,'MONEY MANAGEMENT',1,2,'2020-01-26')
+,(next_val('RSG_SQ'),6,'EMPLOYMENT',3,4,'2020-01-26')
+,(next_val('RSG_SQ'),6,'EDUCATION',2,3,'2020-01-26')
+,(next_val('RSG_SQ'),6,'NETWORK SUPPORT',2,3,'2020-01-26')
+,(next_val('RSG_SQ'),6,'HOUSEHOLD MANAGEMENT',2,3,'2020-01-26')
+,(next_val('RSG_SQ'),6,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-01-26')
+,(next_val('RSG_SQ'),7,'HOUSING',2,3,'2020-04-26')
+,(next_val('RSG_SQ'),7,'MONEY MANAGEMENT',0,0,'2020-04-26')
+,(next_val('RSG_SQ'),7,'EMPLOYMENT',0,0,'2020-04-26')
+;
+
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(next_val('RSG_SQ'),7,'EDUCATION',2,3,'2020-04-26')
+,(next_val('RSG_SQ'),7,'NETWORK SUPPORT',1,2,'2020-04-26')
+,(next_val('RSG_SQ'),7,'HOUSEHOLD MANAGEMENT',2,3,'2020-04-26')
+,(next_val('RSG_SQ'),7,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-04-26')
+;
+
+
+INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_by,date_added,date_modified,referral_reason,"comments",previous_attempts,rf_followup_notes,res_app_scheduled,service_coord) VALUES 
+(nextval('REF_SQ'),2,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"true","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Problem with Transportation','NA','will check back in december','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),30,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"true","Lease violation for:":"","Employment/job readiness":"true","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Shazam Reason','NA','Less Shazam activity next time','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),29,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"true","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Needs Education','NA','Ask him to read stories','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),1,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"true","Utility Shut-off, scheduled for (Date):":"08/01/2020","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','how not to miss rent','nil','re-meet in October','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),28,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"true","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Domestic interfere, Groot should in park instead of spreading branches in other homes','NA','Meet soon','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),25,false,NULL,'2020-04-30','2020-04-30','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"true","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Professor X class too long to take care of child','NA','Test Again','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('REF_SQ'),31,false,NULL,'2020-09-01','2020-09-01','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"Health","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"true","Healthcare/medical issues":"false","Other:":""}','better performance Healthwise','Referred her to Free clinic at Gahana','Followup notes here','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+;
+
+
+INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_show_date,resident_id,service_coord,date_added,date_modified) VALUES 
+(nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.','08/31/2020', 1,'dbadmin1','2020-08-26','2020-08-26')
+,(nextval('CN_SQ'),'New Description','New Assessment','New Plan','09/02/2020',1,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Booked appointment but no show - Elastic Girl','','','09/02/2020',31,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Green Becomes Yellow and didn''t show up','','','05/01/2020',30,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Super girl busy fighting and didn;t show up','','','01/15/2020',29,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Black Cannary is lost and din;t show up','','','12/27/2019',28,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Groot couldn;t Groot and didn''t show up','','','08/26/2019',27,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Logan got other appointment and didn''t show up','','','04/30/2019',13,'dbadmin1','2020-09-02','2020-09-02')
+,(nextval('CN_SQ'),'Dare Devil couldn;t sense way to Service Coordinator and didn''t show up','','','02/01/2020',6,'dbadmin1','2020-09-02','2020-09-02')
+;
+
+INSERT INTO action_plan (action_plan_id,resident_id,active,plan_of_action,plan_details,referral_partner,anticipated_outcomes,anticipated_date,outcome_achieved,completion_date,achieved_ssm,followup_notes,date_added,date_modified,service_coord) VALUES 
+(nextval('AP_SQ'),1,true,'{"HOUSING":"Advocacy","MONEY MANAGEMENT":"Finanicial management/literacy","EMPLOYMENT":"Crisis intervention","EDUCATION":"Education program (GED, etc.)","NETWORK SUPPORT":"Crisis intervention","HOUSEHOLD MANAGEMENT":"Family support","DISABILITY AND PHYSICAL HEALTH":"Healthcare"}','{"HOUSING":"Plan Details 1","MONEY MANAGEMENT":"Plan Details 2","EMPLOYMENT":"Plan Details 3","EDUCATION":"Plan Details 4","NETWORK SUPPORT":"Plan Details 5","HOUSEHOLD MANAGEMENT":"Plan Details 6","DISABILITY AND PHYSICAL HEALTH":"Plan Details 7"}','{"HOUSING":"ABC Company","MONEY MANAGEMENT":"ABC Company","EMPLOYMENT":"ABC Company","EDUCATION":"ABC Company","NETWORK SUPPORT":"ABC Company","HOUSEHOLD MANAGEMENT":"ABC Company","DISABILITY AND PHYSICAL HEALTH":"ABC Company"}','{"HOUSING":"Rectify lease violation","MONEY MANAGEMENT":"Increase gross income","EMPLOYMENT":"Secured employment","EDUCATION":"Enroll child(ren) in school, afterschool, or other early education program","NETWORK SUPPORT":"Feel safe insurrounding neighborhood","HOUSEHOLD MANAGEMENT":"Improve housekeeping skills or conditions","DISABILITY AND PHYSICAL HEALTH":"Reduce use of hospital ER"}','{"HOUSING":"12/01/2020","MONEY MANAGEMENT":"12/01/2020","EMPLOYMENT":"12/01/2020","EDUCATION":"12/01/2020","NETWORK SUPPORT":"12/01/2020","HOUSEHOLD MANAGEMENT":"12/01/2020","DISABILITY AND PHYSICAL HEALTH":"12/01/2020"}','{"HOUSING":"Rectify lease violation","MONEY MANAGEMENT":"Increase gross income","EMPLOYMENT":"Increase employment income","EDUCATION":"Enroll child(ren) in school, afterschool, or other early education program","NETWORK SUPPORT":"Feel safe insurrounding neighborhood","HOUSEHOLD MANAGEMENT":"Improve housekeeping skills or conditions","DISABILITY AND PHYSICAL HEALTH":"Reduce use of hospital ER"}','{"HOUSING":"08/30/2020","MONEY MANAGEMENT":"08/30/2020","EMPLOYMENT":"08/30/2020","EDUCATION":"08/30/2020","NETWORK SUPPORT":"08/30/2020","HOUSEHOLD MANAGEMENT":"08/30/2020","DISABILITY AND PHYSICAL HEALTH":"08/30/2020"}','{"HOUSING":"Yes","MONEY MANAGEMENT":"Yes","EMPLOYMENT":"Yes","EDUCATION":"Yes","NETWORK SUPPORT":"Yes","HOUSEHOLD MANAGEMENT":"Yes","DISABILITY AND PHYSICAL HEALTH":"Yes"}','Resident need help','2020-08-26','2020-08-30','dbadmin1')
+,(nextval('AP_SQ'),25,true,'{"HOUSING":"Assessments","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"Plan Details 1","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"Ohio Housing Board","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"Purchase a home","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"12/01/2020","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','Housing Score check','2020-09-03','2020-09-03','dbadmin1')
+,(nextval('AP_SQ'),27,true,'{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"Crisis intervention","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"Details 3","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"Employment Division","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"Remain employed for 90 days","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"12/01/2020","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','Emp Score cehck','2020-09-03','2020-09-03','dbadmin1')
+,(nextval('AP_SQ'),28,true,'{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"Parenting","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"Meal 1","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"Food Company","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"Improve socialization or network of support","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"12/01/2020","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','Network Support Score Check','2020-09-03','2020-09-03','dbadmin1')
+,(nextval('AP_SQ'),2,true,'{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"Benefits/Insurance"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"Health ins"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"ABC Company"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"Enroll in or change health insurance"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"12/01/2020"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','HOH Score Check','2020-09-03','2020-09-03','dbadmin1')
+,(nextval('AP_SQ'),26,true,'{"HOUSING":"","MONEY MANAGEMENT":"Financial aid","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"Details 1","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"Erie Money Management","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"Establish a bank account","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"12/01/2020","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','Money Management Score Check','2019-12-26','2019-12-26','dbadmin1')
+,(nextval('AP_SQ'),29,true,'{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"Parenting","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"TEst Me","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"ABC Company","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"Improve housekeeping skills or conditions","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"12/01/2020","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','HOH Score Check','2020-01-26','2020-01-26','dbadmin1')
+,(nextval('AP_SQ'),30,true,'{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"Substance abuse"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"test Details"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"XYZ Education Department"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"Reduce use of hospital ER"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":"12/01/2020"}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','{"HOUSING":"","MONEY MANAGEMENT":"","EMPLOYMENT":"","EDUCATION":"","NETWORK SUPPORT":"","HOUSEHOLD MANAGEMENT":"","DISABILITY AND PHYSICAL HEALTH":""}','Health sCore Check','2020-04-26','2020-04-26','dbadmin1')
+;
 --------------------------------------
  
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbadmin1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE,'dbadmin1@email.com');
 
-insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  PROP_ID)
-values (nextval('SC_SQ'), 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE, 'dbuser1@email.com', 1);
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  ASSIGNED_PROPERTY)
+values (nextval('SC_SQ'), 'dbuser1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE, 'dbuser1@email.com', to_json('[1,2,3]'::json));
 
-insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, PROP_ID)
-values (nextval('SC_SQ'), 'dbuser2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser2@email.com', 2);
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, ASSIGNED_PROPERTY)
+values (nextval('SC_SQ'), 'dbuser2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser2@email.com', to_json('[4,5,6]'::json));
 
-insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  PROP_ID)
-values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser3@email.com', 3);
+insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  ASSIGNED_PROPERTY)
+values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser3@email.com', to_json('[7,8,9]'::json));
 
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbadmin2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbadmin2@email.com');
@@ -699,76 +1233,72 @@ values (nextval('UR_SQ'), 5, 2);
 
 ---
 --
-CREATE VIEW SERVICE_CATEGORY_VIEW
+CREATE OR REPLACE VIEW SERVICE_CATEGORY_VIEW
 AS 
-SELECT P."SRVC_CAT"||'_'||P."QUARTER"||'_'||P."YEAR" AS "PRIMARY_CAT", P."SRVC_CAT" AS "SRVC_CAT", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", SUM(P."COUNT"::FLOAT) AS "COUNT" from (
+SELECT P."SRVC_CAT" AS "SRVC_CAT", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", P."RES_ID" as "RES_ID" from (
 SELECT
-    plan_of_action->>'HOUSING' AS "SRVC_CAT", 
-    count(plan_of_action->>'HOUSING') AS "COUNT",
+    plan_of_action->>'HOUSING' AS "SRVC_CAT",
     extract(quarter from date_Added) as "QUARTER",
  extract (year from date_added) as "YEAR",
- 'HOUSING' AS "LIFE_DOMAIN"
+ 'HOUSING' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
 FROM
     ACTION_PLAN where  plan_of_action->>'HOUSING' not in ('')
-GROUP BY
-     plan_of_action->>'HOUSING', extract(quarter from date_Added), extract (year from date_added)
 UNION 
 SELECT
-    plan_of_action->>'MONEY MANAGEMENT' AS "SRVC_CAT", 
-    count(plan_of_action->>'MONEY MANAGEMENT') AS "COUNT",
+    plan_of_action->>'MONEY MANAGEMENT' AS "SRVC_CAT",
     extract(quarter from date_Added) as "QUARTER",
  extract (year from date_added) as "YEAR",
- 'MONEY MANAGEMENT' AS "LIFE_DOMAIN"
+ 'MONEY MANAGEMENT' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
 FROM
     ACTION_PLAN where  plan_of_action->>'MONEY MANAGEMENT' not in ('')
-GROUP BY
-     plan_of_action->>'MONEY MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)
 UNION 
 SELECT
-    plan_of_action->>'EDUCATION' AS "SRVC_CAT", 
-    count(plan_of_action->>'EDUCATION') AS "COUNT",
+    plan_of_action->>'EDUCATION' AS "SRVC_CAT",
     extract(quarter from date_Added) as "QUARTER",
  extract (year from date_added) as "YEAR",
- 'EDUCATION' AS "LIFE_DOMAIN"
+ 'EDUCATION' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
 FROM
     ACTION_PLAN where  plan_of_action->>'EDUCATION' not in ('')
-GROUP BY
-     plan_of_action->>'EDUCATION', extract(quarter from date_Added), extract (year from date_added)
 UNION 
 SELECT
-    plan_of_action->>'EMPLOYMENT' AS "SRVC_CAT", 
-    count(plan_of_action->>'EMPLOYMENT') AS "COUNT",
+    plan_of_action->>'EMPLOYMENT' AS "SRVC_CAT",
     extract(quarter from date_Added) as "QUARTER",
  extract (year from date_added) as "YEAR",
- 'EMPLOYMENT' AS "LIFE_DOMAIN"
+ 'EMPLOYMENT' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
 FROM
     ACTION_PLAN where  plan_of_action->>'EMPLOYMENT' not in ('')
-GROUP BY
-     plan_of_action->>'EMPLOYMENT', extract(quarter from date_Added), extract (year from date_added)
 UNION
 SELECT
     plan_of_action->>'NETWORK SUPPORT' AS "SRVC_CAT", 
-    count(plan_of_action->>'NETWORK SUPPORT') AS "COUNT",
     extract(quarter from date_Added) as "QUARTER",
  extract (year from date_added) as "YEAR",
- 'NETWORK SUPPORT' AS "LIFE_DOMAIN"
+ 'NETWORK SUPPORT' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
 FROM
     ACTION_PLAN where  plan_of_action->>'NETWORK SUPPORT' not in ('')
-GROUP BY
-     plan_of_action->>'NETWORK SUPPORT', extract(quarter from date_Added), extract (year from date_added)
 UNION
 SELECT
-    plan_of_action->>'HOUSEHOLD MANAGEMENT' AS "SRVC_CAT", 
-    count(plan_of_action->>'HOUSEHOLD MANAGEMENT') AS "COUNT",
+    plan_of_action->>'HOUSEHOLD MANAGEMENT' AS "SRVC_CAT",
     extract(quarter from date_Added) as "QUARTER",
  extract (year from date_added) as "YEAR",
- 'HOUSEHOLD MANAGEMENT' AS "LIFE_DOMAIN"
+ 'HOUSEHOLD MANAGEMENT' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
 FROM
     ACTION_PLAN where  plan_of_action->>'HOUSEHOLD MANAGEMENT' not in ('')
-GROUP BY
-     plan_of_action->>'HOUSEHOLD MANAGEMENT', extract(quarter from date_Added), extract (year from date_added)) P
-GROUP BY P."SRVC_CAT", P."QUARTER", P."YEAR"
-ORDER BY P."SRVC_CAT"
+UNION
+SELECT
+    plan_of_action->>'DISABILITY AND PHYSICAL HEALTH' AS "SRVC_CAT",
+    extract(quarter from date_Added) as "QUARTER",
+ extract (year from date_added) as "YEAR",
+ 'DISABILITY AND PHYSICAL HEALTH' AS "LIFE_DOMAIN",
+ resident_id AS "RES_ID"
+FROM
+    ACTION_PLAN where  plan_of_action->>'DISABILITY AND PHYSICAL HEALTH' not in ('')
+) P
 ;
 
 
@@ -852,6 +1382,9 @@ select 1 from resident_score_goal where extract (year from on_this_date) = z."YE
 and exists (
 select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'HOUSEHOLD MANAGEMENT'
 )
+and exists (
+select 1 from resident_score_goal where extract (year from on_this_date) = z."YEAR" and extract (quarter from on_this_date) = z."QUARTER" and resident_id = z."RES_ID" and life_domain = 'DISABILITY AND PHYSICAL HEALTH'
+)
 group by z."RES_ID", z."QUARTER", z."YEAR", z."PROP_ID"
 ;
 
@@ -883,6 +1416,10 @@ union
 select referral_partner->>'HOUSEHOLD MANAGEMENT' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
 from action_plan ap
 where referral_partner->>'HOUSEHOLD MANAGEMENT' not in ('')
+union
+select referral_partner->>'DISABILITY AND PHYSICAL HEALTH' as "AGENCY", resident_id as "RES_ID", extract (quarter from DATE_MODIFIED) as "QUARTER", extract (year from DATE_MODIFIED) as "YEAR" 
+from action_plan ap
+where referral_partner->>'DISABILITY AND PHYSICAL HEALTH' not in ('')
  ) Z
 JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
@@ -934,6 +1471,9 @@ WHERE  OUTCOME_ACHIEVED ->> 'NETWORK SUPPORT' not in ('')
 UNION
 select OUTCOME_ACHIEVED ->> 'HOUSEHOLD MANAGEMENT' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
 WHERE  OUTCOME_ACHIEVED ->> 'HOUSEHOLD MANAGEMENT' not in ('')
+UNION
+select OUTCOME_ACHIEVED ->> 'DISABILITY AND PHYSICAL HEALTH' as "OUTCOMES", extract (quarter from date_modified) as "QUARTER", extract(year from date_modified) as "YEAR", RESIDENT_ID as "RES_ID" from ACTION_PLAN
+WHERE  OUTCOME_ACHIEVED ->> 'DISABILITY AND PHYSICAL HEALTH' not in ('')
 ) z
 JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID
@@ -959,7 +1499,11 @@ select RESIDENT_ID as "RES_ID",'NETWORK SUPPORT' as "LIFE_DOMAIN", plan_of_Actio
 where plan_of_Action ->>'NETWORK SUPPORT' not in ('')
 UNION ALL
 select RESIDENT_ID as "RES_ID",'HOUSEHOLD MANAGEMENT' as "LIFE_DOMAIN", plan_of_Action ->>'HOUSEHOLD MANAGEMENT' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
-where plan_of_Action ->>'HOUSEHOLD MANAGEMENT' not in ('')) z
+where plan_of_Action ->>'HOUSEHOLD MANAGEMENT' not in ('')
+UNION ALL
+select RESIDENT_ID as "RES_ID",'DISABILITY AND PHYSICAL HEALTH' as "LIFE_DOMAIN", plan_of_Action ->>'DISABILITY AND PHYSICAL HEALTH' as "PLAN_OF_ACTION", EXTRACT (QUARTER from date_modified) as "QUARTER", extract (year from date_modified) as "YEAR" from action_plan
+where plan_of_Action ->>'DISABILITY AND PHYSICAL HEALTH' not in ('')
+) z
 JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
 
@@ -1012,10 +1556,47 @@ JOIN RESIDENT R on R.RESIDENT_ID = Z."RES_ID"
 JOIN PROPERTY P on P.PROP_ID = R.PROP_ID;
 
 
+CREATE VIEW GENDER_BY_PROPERTY_VIEW
+as
+select z.category as "GENDER", z.total as "TOTAL", z.property_name as "PROPERTY NAME" from (
+select 'Male' as category, count(r.prop_id) as total,  prop.prop_name as property_name from resident r join property prop on prop.prop_id = r.prop_id where  r.gender = 'Male' group by prop.prop_id
+union
+select 'Female' as category, count(r.prop_id) as total,  prop.prop_name as property_name from resident r join property prop on prop.prop_id = r.prop_id where  r.gender = 'Female' group by prop.prop_id)z
+order by z."category";
+
+create or replace view CONTACT_NOTE_NO_SHOW_VIEW 
+as
+select z."ID", z."CNQ", z."CNY" from (
+select distinct date_part('quarter'::text , to_date(no_show_date,'MM/DD/YYYY')) as "CNQ", date_part('year'::text, to_date(no_show_date,'MM/DD/YYYY'))  as "CNY", resident_id as "ID" 
+from case_notes cn where no_show_date is not NULL) z;
+
+
+create or replace view CONTACT_NOTE_NO_SHOW_VIEW 
+as
+select z."ID", z."CNQ", z."CNY" from (
+select distinct date_part('quarter'::text , to_date(no_show_date,'MM/DD/YYYY')) as "CNQ", date_part('year'::text, to_date(no_show_date,'MM/DD/YYYY'))  as "CNY", resident_id as "ID" 
+from case_notes cn where no_show_date is not NULL) z;
+
+CREATE OR REPLACE VIEW RESIDENT_REF_TYPE_VIEW
+AS 
+SELECT P."REF_TYPE" AS "REF_TYPE", P."QUARTER" AS "QUARTER", P."YEAR" AS "YEAR", P."RES_ID" as "RES_ID" from (
+select rf.ref_value as "REF_TYPE" , extract(quarter from date_added) as "QUARTER",  extract (year from date_added) as "YEAR", r.prop_id  as "PROP_ID", r.resident_id as "RES_ID" from resident r join referral rf on rf.ref_id = r.ref_type 
+)P;
+
 
 --Example for Questionnaire
 --select aq.question_number, aq.question, c.choice from question_choice qc
 --join assessment_questionnaire aq on aq.question_id = qc.question_id and aq.life_domain = 'HOUSING'
 --join choice c on c.choice_id = qc.choice_id;
+
+CREATE OR REPLACE FUNCTION random_between(low INT ,high INT) 
+   RETURNS INT AS
+$$
+BEGIN
+   RETURN floor(random()* (high-low + 1) + low);
+END;
+$$ language 'plpgsql' STRICT;
+
+
 
 Commit;

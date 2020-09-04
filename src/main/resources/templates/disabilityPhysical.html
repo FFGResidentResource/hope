@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+    var res = null;
+</script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="../templates/_menu"></th:block>
+
+	<div class="container">
+		<div id="disPhysical_Form">
+			<form name='_disPhyF' th:action="@{/saveAssessment}"
+				th:object="${resident}" method='POST' class="form-horizontal">
+				<input name="isNewAssessmentAllowed" type="hidden"
+					id="isNewAssessmentAllowed"
+					th:field="*{disPhysicalAssessmentAllowed}" /> <input
+					name="dateOfLatestAssessment" type="hidden"
+					id="dateOfLatestAssessment"
+					th:field="*{dateOfLatestDisPhysicalAssessment}" />
+				<div class="col-sm-12 myPanel">
+					<div class="row">
+
+						<div class="col-sm-10">
+							<h3 style="width:450px;">DISABILITY AND PHYSICAL HEALTH</h3>
+							<span class="hidden-print" style="color: red; font-size: larger;"
+								th:if="*{firstName == null}" th:text="${message}"></span>
+						</div>
+						<div class="col-sm-2 hideme print-only">
+							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+						</div>
+
+					</div>
+					<div class="row hideme print-only">
+						<div class="col-sm-6">
+							<span>Full Name:&nbsp;</span> <u><span
+								th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+								<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+								<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+						</div>
+						<div class="col-sm-2">
+							<span>Resident Id:&nbsp;</span><u><span
+								th:if="*{firstName != null}" th:text="*{residentId}"></span></u>
+						</div>
+						<div class="col-sm-4">
+							<u><span id="_selectedDateDph">Date:</span></u>
+						</div>
+
+					</div>
+
+					<div class="row hidden-print">
+						<div class="col-sm-5">
+							<div class="col-sm-4">
+								<strong>Resident Name:</strong>
+							</div>
+							<div class="col-sm-6">
+								<u><span th:if="*{firstName != null}" th:text="*{firstName}">&nbsp;</span>
+									<span th:if="*{middle != null}" th:text="*{middle}">&nbsp;</span>
+									<span th:if="*{lastName != null}" th:text="*{lastName}"></span></u>
+							</div>
+						</div>
+
+						<div class="col-sm-3">
+							<div class="col-sm-6">
+								<strong>Resident Id:</strong>
+							</div>
+							<div class="col-sm-2">
+								<u><span th:if="*{firstName != null}" id="_residentIdText"
+									th:text="*{residentId}"></span></u>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="col-sm-3">
+								<strong>Date:</strong>
+							</div>
+							<div class="col-sm-9">
+								<select class="form-control input-sm" id="_dates"
+									th:field="*{selectedDate}"
+									onchange="getHistoricalAssessmentByResidentIdAndLifeDomain(this, jQuery('#_residentIdText').text(), 'DISABILITY AND PHYSICAL HEALTH', '_disPhy'); validateAndShowMessage();"
+									required>
+									<option value="NewAssessment">Start New Assessment</option>
+									<option th:each="assessmentDate : ${resident.disPhysicalDates}"
+										th:value="${assessmentDate}" th:utext="${assessmentDate}" />
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<hr class="solidline1">
+
+					<div class="row col-sm-12">
+
+						<div class="col-sm-6">
+							<div th:each="disPhyMgmt, iStat: *{disabilityPhysicalQuestionnaire}">
+
+								<div th:if="${iStat.index} &lt; (${iStat.size}-1)/2">
+
+									<strong><span th:text="${disPhyMgmt.questionNumber}"></span></strong>
+									<span th:text="${disPhyMgmt.question}" /> <input type="hidden"
+										th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].questionId}" />
+									<ul>
+										<span th:each="radioChoice, stat : ${disPhyMgmt.choices}">
+											<input type="radio"
+											th:id="'_disPhyQuestionnaire_'+ ${disPhyMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											> <strong><label
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div th:each="disPhyMgmt, iStat: *{disabilityPhysicalQuestionnaire}">
+
+								<div th:if="${iStat.index} &gt;= (${iStat.size}-1)/2">
+
+									<strong><span th:text="${disPhyMgmt.questionNumber}"></span></strong>
+									<span th:text="${disPhyMgmt.question}" /> <input type="hidden"
+										th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].questionId}" />
+									<ul>
+										<span th:each="radioChoice, stat : ${disPhyMgmt.choices}">
+											<input type="radio"
+											th:id="'_disPhyQuestionnaire_'+ ${disPhyMgmt.questionId} + '_' + ${radioChoice.choiceId}"
+											th:field="*{disabilityPhysicalQuestionnaire[__${iStat.index}__].choiceId}"
+											th:value="${radioChoice.choiceId}"
+											> <strong><lable
+													th:text="${radioChoice.choice}"> </label></strong>
+										</span>
+									</ul>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<input type="hidden" th:field="*{serviceCoord}" /> <input
+						type="hidden" th:field="*{residentId}" /> <input type="hidden"
+						th:field="*{firstName}" /> <input type="hidden"
+						th:field="*{lastName}" /> <input type="hidden"
+						th:field="*{propertyId}" /> <input type="hidden"
+						th:field="*{refId}" /> <input type="hidden" id="_lifeDomainDisPhy"
+						th:field="*{lifeDomain}" /> <input type="hidden"
+						id="currentDisPhyGoal" th:field="*{goal}" /> <input type="hidden"
+						id="currentDisPhyScore" th:field="*{currentScore}" />
+
+					<div class="row text-center bs-linebreak hidden-print">
+					
+						<div class="text-danger hidden-print hideme">
+							<span>There is already an assessment from today's Date, retrieve today's Assessment from dropdown above to view/modify. 
+								</span>
+						</div>
+					
+						<input type="submit" class="btn btn-primary btn-lg hidden-print"
+							value="Save Disability and Physical Health Assessment" onclick="jQuery('#_lifeDomainDisPhy').val('DISABILITY AND PHYSICAL HEALTH');">
+					</div>
+
+
+				</div>
+			</form>
+
+			<div class="col-sm-12">
+
+				<table id="dphMgmtTable" class="table table-bordered">
+					<thead>
+						<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="incrisis_body">TBD</td>
+							<td id="vulnerable_body">TBD</td>
+							<td id="safe_body">TBD</td>
+							<td id="buildingCapacity_body">TBD</td>
+							<td id="empowered_body">TBD</td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/js/moment.js"></script>
+	<script src="/js/moment-timezone.js"></script>
+	<script src="/js/disabilityPhysical.js"></script>
+	<script src="/js/common.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="/js/menu.js"></script>
+
+</body>
+
+</html>
+

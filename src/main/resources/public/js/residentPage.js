@@ -1,8 +1,8 @@
 window.onbeforeprint = function() {
-	$('#residentFullName').text($('#firstName').val() + " " + $('#middle').val() + " " + $('#lastname').val());
+	//$('#residentFullName').text($('#firstName').val() + " " + $('#middle').val() + " " + $('#lastname').val());
 	$('#printreferralType').text($('#_referral option:selected').text());
 	$('#printproperty').text($('#_property option:selected').text());
-	$('#printaddress').text($('#address').val());
+	//$('#printaddress').text($('#address').val());
 	if(!$('#allowcontact').prop("checked") && $('#viaemail').prop("checked")){
 		$('#printEmail').prop('checked', true);
 		$('#printEmailText').text($('#email').val());
@@ -45,18 +45,12 @@ window.onbeforeprint = function() {
 
 jQuery(document).ready(function() {
 	if($('#allowcontact').prop("checked")){
-		document.getElementById('viaemail').disabled = true
-		document.getElementById('email').disabled = true;
-		document.getElementById('viavoicemail').disabled = true;
-		document.getElementById('voicemail').disabled = true;
+		document.getElementById('viaemail').disabled = true;;
+		document.getElementById('viavoicemail').disabled = true;;
 		document.getElementById('viatext').disabled = true;
-		document.getElementById('text').disabled = true;
 		document.getElementById("viaemail").checked = false;
 		document.getElementById("viavoicemail").checked = false;
 		document.getElementById("viatext").checked = false;
-		document.getElementById('email').value = "";
-		document.getElementById('voicemail').value = "";
-		document.getElementById('text').value = "";
 		
 	};
 	
@@ -119,18 +113,12 @@ function reactivateResident(btn){
 
 document.getElementById('allowcontact').onchange = function() {
 	document.getElementById('viaemail').disabled = this.checked;
-	document.getElementById('email').disabled = this.checked;
 	document.getElementById('viavoicemail').disabled = this.checked;
-	document.getElementById('voicemail').disabled = this.checked;
 	document.getElementById('viatext').disabled = this.checked;
-	document.getElementById('text').disabled = this.checked;
 	if(this.checked){
 		document.getElementById("viaemail").checked = false;
 		document.getElementById("viavoicemail").checked = false;
-		document.getElementById("viatext").checked = false;
-		document.getElementById('email').value = "";
-		document.getElementById('voicemail').value = "";
-		document.getElementById('text').value = "";
+		document.getElementById("viatext").checked = false;		
 	}
 };
 

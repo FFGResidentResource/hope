@@ -12,6 +12,11 @@
 <link href="/css/c3.min.css" rel="stylesheet">
 
 <style>
+
+body {
+  -webkit-print-color-adjust: exact !important;
+}
+
 .bd-placeholder-img {
 	font-size: 1.125rem;
 	text-anchor: middle;
@@ -36,7 +41,7 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+	<th:block th:include="../templates/_menu"></th:block>
 
 	<div class="container-fluid">
 		<div class="row">
@@ -59,7 +64,7 @@
 						</div>
 						<div class="col-sm-8 hideme">
 							<div class="col-sm-2"></div>
-							
+
 							<div class="col-sm-2">
 								<button type="submit" id="_loadResident"
 									class="btn btn-default btn-sm" disabled>
@@ -125,6 +130,61 @@
 							</thead>
 						</table>
 					</div>
+					
+					<!-- This stub is used to populate subtable when + icon is clicked on All resident Page, refer allResident.js where this gets modified with actual value -->
+					
+					<table class="hideme" cellpadding="5" cellspacing="0" border="0"
+						style="padding-left: 50px;">
+						<tr>
+							<td><strong>Referral:</strong></td>
+							<td>d.refValue</td>
+							<td></td>
+							<td><strong>Gender:</strong></td>
+							<td>d.gender</td>
+							<td></td>
+							<td><strong>Language:</strong></td>
+							<td>d.primaryLanguage</td>
+							<td></td>
+							<td><strong>Veteran:</strong></td>
+							<td>d.veteran</td>
+							<td></td>
+							<td><strong>Health Coverage:</strong></td>
+							<td>d.healthCoverage</td>
+						</tr>
+						<tr>
+							<td><strong>Address:</strong></td>
+							<td>d.address</td>
+							<td></td>
+							<td><strong>Ethnicity:</strong></td>
+							<td>d.ethnicity</td>
+							<td></td>
+							<td><strong>Race:</strong></td>
+							<td>d.race</td>
+							<td></td>
+							<td><strong>Disability Status:</strong></td>
+							<td>d.disabilityStatus</td>
+							<td></td>
+							<td><strong>Highest Education:</strong></td>
+							<td>d.highestEdu</td>
+						</tr>
+						<tr>
+							<td><strong>Age:</strong></td>
+							<td>d.age</td>
+							<td></td>
+							<td><strong>Marital Status:</strong></td>
+							<td>d.maritalStatus</td>
+							<td></td>
+							<td><strong>Head of Household:</strong></td>
+							<td>d.houseHold</td>
+							<td></td>
+							<td><strong>Returning Citizen/Ex Offender:</strong></td>
+							<td>d.rcOrExOff</td>
+							<td></td>
+							<td><strong>Annual Gross Income:</strong></td>
+							<td>d.annualGross</td>
+						</tr>
+					</table>			
+					
 
 					<div class="col-sm-12 hideme">
 						<hr class="solidline1">
@@ -229,7 +289,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 	</form>
 
 	<!-- Bootstrap core JavaScript
@@ -245,7 +305,7 @@
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>
 	<script src="/js/c3.min.js"></script>
-	<script src="/js/d3-5.4.0.min.js"></script>
+	<script src="/js/d3-5.4.0.min.js" charset="utf-8"></script>
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	<script src="/js/menu.js"></script>

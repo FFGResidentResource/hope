@@ -2,11 +2,7 @@ window.onbeforeprint = function() {
 	$('#_commentsPrint').text($('#_commentsOrExplanation').val());
 	$('#_prevAttemptsPrint').text($('#_prevAttemps').val());
 	$('#_followupPrint').text($('#_rfFollowupNotes').val());
-	
-	$('#_ssOther_P').text($('#_ssOther').val());
-	$('#_hsOther_P').text($('#_hsOther').val());
-	$('#_safeSuppOther_P').text($('#_safeSuppOther').val());
-	
+		
 	if($('#_inputDateTextResAppSch').val() == ""){
 		$('#_inputDateTextResAppSch').removeAttr('placeholder');
 	}
@@ -27,9 +23,6 @@ window.onbeforeprint = function() {
 jQuery(document).ready(function() {
     
     populateReferralReasonsWithValues();
-    populateSelfSufficiencyWithValues();
-    populateHousingStabilityWithValues();
-    populateSafeSupportiveCommunitiesWithValues();
     populateResidentAppScheduledDate();
     
     // set current date
@@ -68,77 +61,6 @@ function populateReferralReasonsWithValues() {
 
     jQuery("#_refReasons").html(row);
 
-}
-
-function populateSelfSufficiencyWithValues(){
-    
-    selfSuff = JSON.parse(jQuery("#_selfSufficiency").val());   
-    var ssChkBoxes = '';
-    var chkBox = '';
-  
-
-    jQuery.each(selfSuff, function(idx, obj) {
-	
-	chkBox = '';
-	if(obj == 'true'){
-	    chkBox = 'checked';
-	}
-	
-	if(idx!='Other') {	
-	    ssChkBoxes = ssChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
-	}
-	
-    });
-
-    jQuery("#_ssColumn").html(ssChkBoxes);
-    jQuery("#_ssOther").val(selfSuff["Other"]);
-    
-}
-
-function populateHousingStabilityWithValues(){
-    
-    hs = JSON.parse(jQuery("#_housingStability").val());   
-    var hsChkBoxes = '';
-    var chkBox = '';
-  
-
-    jQuery.each(hs, function(idx, obj) {
-	
-	chkBox = '';
-	if(obj == 'true'){
-	    chkBox = 'checked';
-	}
-	if(idx!='Other') {
-	    hsChkBoxes = hsChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
-	}
-	
-    });
-
-    jQuery("#_hsColumn").html(hsChkBoxes);
-    jQuery("#_hsOther").val(hs["Other"]);
-}
-
-function populateSafeSupportiveCommunitiesWithValues(){
-    
-    var ssc = JSON.parse(jQuery("#_safeSupportiveCommunity").val());   
-    var ssCommChkBoxes = '';
-    var chkBox = '';
-  
-
-    jQuery.each(ssc, function(idx, obj) {
-	
-	chkBox = '';
-	if(obj == 'true'){
-	    chkBox = 'checked';
-	}
-	if(idx!='Other') {
-	    ssCommChkBoxes = ssCommChkBoxes + '<div style="display:inline">&nbsp;&nbsp;<input type="checkbox" '+chkBox+'>&nbsp;&nbsp;'+ idx +'</div><br/>';
-	}
-	
-    });   
-    
-    jQuery("#_safeSuppColumn").html(ssCommChkBoxes);
-    jQuery("#_safeSuppOther").val(ssc["Other"]);
 }
 
 function populateResidentAppScheduledDate(){

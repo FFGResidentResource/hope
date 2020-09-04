@@ -17,8 +17,8 @@
 			<ul class="nav navbar-nav navbar-right">
 
 				<li><a th:href="@{/allResident}">All Residents</a></li>
-				<li><a th:href="@{/onboarding}">Onboarding</a></li>				
-				<li><a th:href="@{/dashboard}">Dashboard</a></li>
+				<li><a th:href="@{/onboarding}">Onboarding & Modify</a></li>				
+				<li><a th:href="@{/dashboard}">Reports</a></li>
 				<li><a th:if="${isAdmin}" th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}"
 					th:href="@{/logout}">Logout</a></li>
@@ -29,7 +29,7 @@
 			
 				<h5 class="navbar-text">UserName:&nbsp;<span class="badge" id="_userName" th:text=${userName}></span></h5>
 				<h5 class="navbar-text">Is Admin? &nbsp;<span class="badge" th:text=${isAdmin}></span></h5>
-				<h5 class="navbar-text">Grants:&nbsp;<span class="badge" id="_propertyGrant" th:text=${grantOnProperty}></span></h5>				
+<!-- 				<h5 class="navbar-text">Grants:&nbsp;<span class="badge" id="_propertyGrant" th:text=${grantOnProperty}></span></h5>				 -->
 				
 			</ul>
 		</div>

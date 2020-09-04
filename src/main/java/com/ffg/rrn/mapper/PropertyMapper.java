@@ -17,7 +17,9 @@ import com.ffg.rrn.model.Property;
 public class PropertyMapper implements RowMapper<Property> {
 	
 	public static final String PROPERTY_SQL_FOR_NON_ADMIN_SC //
-			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL FROM  PROPERTY P JOIN SERVICE_COORDINATOR SC on P.ACTIVE = 'TRUE' and SC.PROP_ID = P.PROP_ID and SC.USER_NAME = ?";
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL " + 
+					"FROM  PROPERTY P where P.ACTIVE = 'TRUE' " + 
+					"and P.prop_id in ( select json_array_elements(assigned_property)::text::int from service_coordinator sc where json_typeof(assigned_property) != 'null' and SC.USER_NAME = ?)";
 
 	public static final String PROPERTY_SQL //
 			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";

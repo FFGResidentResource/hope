@@ -114,7 +114,9 @@ public class ActionPlanDAO extends JdbcDaoSupport {
 	private PreparedStatement buildInsertActionPlan(Connection connection, @Valid Resident resident, String[] pkColumnNames) throws SQLException {
 
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_ACTION_PLAN, pkColumnNames);
+		
 		ps.setLong(1, resident.getResidentId());
+		//Begin - These values will be never empty as actionPlan.js is filling these atleaset as '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }'
 		ps.setString(2, resident.getPlanOfAction());
 		ps.setString(3, resident.getPlanDetails());
 		ps.setString(4, resident.getReferralPartner());
@@ -123,6 +125,7 @@ public class ActionPlanDAO extends JdbcDaoSupport {
 		ps.setString(7, resident.getOutcomesAchieved());
 		ps.setString(8, resident.getAchievedGoals());
 		ps.setString(9, resident.getCompletionDates());
+		//End - These values will be never empty as actionPlan.js is filling these atleaset as '{ "HOUSING": "", "MONEY MANAGEMENT": "", "EMPLOYMENT": "", "EDUCATION": "", "NETWORK SUPPORT": "", "HOUSEHOLD MANAGEMENT": "" }'
 		ps.setString(10, resident.getFollowUpNotes().trim());
 		ps.setString(11, resident.getServiceCoord());
 		

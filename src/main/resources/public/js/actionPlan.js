@@ -36,6 +36,12 @@ window.onbeforeprint = function() {
     $("#_referralPartnerHHPrint").text($("#_referralPartnerHH").val());
     $("#_aoHHPrint").text($("#_aoHH").val());
     $("#_aoDateHHPrint").text($("#_inputDateTextAnticipatedHH").val());
+
+	$("#_poActionDHPrint").text($("#_planOfActionDH").val());
+    $("#_planDetailDHPrint").text($("#_planDetailsDH").val());
+    $("#_referralPartnerDHPrint").text($("#_referralPartnerDH").val());
+    $("#_aoDHPrint").text($("#_aoHH").val());
+    $("#_aoDateDHPrint").text($("#_inputDateTextAnticipatedDH").val());
     
     $("#_followUpNotesPrint").text($("#_followUpNotes").val());
     
@@ -62,6 +68,10 @@ window.onbeforeprint = function() {
     $("#_outAchHH_P").text($("#_outAchHH").val());
     $("#_achGoalHH_P").text($("#_achGoalHH").val());
     $("#_inputDateTextHH_P").text($("#_inputDateTextHH").val());
+
+	 $("#_outAchDH_P").text($("#_outAchDH").val());
+    $("#_achGoalDH_P").text($("#_achGoalDH").val());
+    $("#_inputDateTextDH_P").text($("#_inputDateTextDH").val());
     
     
     
@@ -141,6 +151,7 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_planOfActionEdu").val(planOfActionJson["EDUCATION"]);
 	jQuery("#_planOfActionNS").val(planOfActionJson["NETWORK SUPPORT"]);
 	jQuery("#_planOfActionHH").val(planOfActionJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_planOfActionDH").val(planOfActionJson["DISABILITY AND PHYSICAL HEALTH"]);
 
     }
     
@@ -154,6 +165,7 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_planDetailsEdu").val(planDetailsJson["EDUCATION"]);
 	jQuery("#_planDetailsNS").val(planDetailsJson["NETWORK SUPPORT"]);
 	jQuery("#_planDetailsHH").val(planDetailsJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_planDetailsDH").val(planDetailsJson["DISABILITY AND PHYSICAL HEALTH"]);
 	
     }
     
@@ -167,6 +179,8 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_referralPartnerEdu").val(planDetailsJson["EDUCATION"]);
 	jQuery("#_referralPartnerNS").val(planDetailsJson["NETWORK SUPPORT"]);
 	jQuery("#_referralPartnerHH").val(planDetailsJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_referralPartnerDH").val(planDetailsJson["DISABILITY AND PHYSICAL HEALTH"]);
+	
 	
     }
 
@@ -217,6 +231,13 @@ function populateEachActionPlanFromJsonData() {
 	    jQuery("#_aoHH").val(anticipatedOutcomeJson["HOUSEHOLD MANAGEMENT"]);
 	}
 	
+	if(jQuery("#_aoDH:has(option[value='"+anticipatedOutcomeJson["DISABILITY AND PHYSICAL HEALTH"]+"'])").length > 0 || anticipatedOutcomeJson["DISABILITY AND PHYSICAL HEALTH"] == ''){
+	    jQuery("#_aoDH").val(anticipatedOutcomeJson["DISABILITY AND PHYSICAL HEALTH"]);
+	}else{
+	    jQuery("#_aoDH").append(jQuery('<option></option>').attr("value", anticipatedOutcomeJson["DISABILITY AND PHYSICAL HEALTH"]).text(anticipatedOutcomeJson["DISABILITY AND PHYSICAL HEALTH"]));
+	    jQuery("#_aoDH").val(anticipatedOutcomeJson["DISABILITY AND PHYSICAL HEALTH"]);
+	}
+	
     }
     
     if (jQuery("#_anticipatedDateString").val() != '') {
@@ -228,6 +249,7 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_inputDateTextAnticipatedEdu").val(completionDateJson["EDUCATION"]);
 	jQuery("#_inputDateTextAnticipatedNS").val(completionDateJson["NETWORK SUPPORT"]);
 	jQuery("#_inputDateTextAnticipatedHH").val(completionDateJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_inputDateTextAnticipatedDH").val(completionDateJson["DISABILITY AND PHYSICAL HEALTH"]);
 
     }
 
@@ -240,6 +262,7 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_outAchEdu").val(outcomesAchievedJson["EDUCATION"]);
 	jQuery("#_outAchNS").val(outcomesAchievedJson["NETWORK SUPPORT"]);
 	jQuery("#_outAchHH").val(outcomesAchievedJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_outAchDH").val(outcomesAchievedJson["DISABILITY AND PHYSICAL HEALTH"]);
 
     }
     
@@ -252,6 +275,7 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_achGoalEdu").val(achievedGoalJson["EDUCATION"]);
 	jQuery("#_achGoalNS").val(achievedGoalJson["NETWORK SUPPORT"]);
 	jQuery("#_achGoalHH").val(achievedGoalJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_achGoalDH").val(achievedGoalJson["DISABILITY AND PHYSICAL HEALTH"]);
 
     }
     
@@ -264,6 +288,7 @@ function populateEachActionPlanFromJsonData() {
 	jQuery("#_inputDateTextEdu").val(completionDateJson["EDUCATION"]);
 	jQuery("#_inputDateTextNS").val(completionDateJson["NETWORK SUPPORT"]);
 	jQuery("#_inputDateTextHH").val(completionDateJson["HOUSEHOLD MANAGEMENT"]);
+	jQuery("#_inputDateTextDH").val(completionDateJson["DISABILITY AND PHYSICAL HEALTH"]);
 
     }
 
@@ -359,48 +384,60 @@ function highlightSSMGridAsPerCurrentScore(data) {
     } else if (data["HOUSEHOLD MANAGEMENT"][0] == '5') {
 	jQuery("#_householdSSM5").addClass('success');
     }
+
+	if (data["DISABILITY AND PHYSICAL HEALTH"][0] == '1') {
+	jQuery("#_healthSSM1").addClass('danger');
+    } else if (data["DISABILITY AND PHYSICAL HEALTH"][0] == '2') {
+	jQuery("#_healthSSM2").addClass('warning');
+    } else if (data["DISABILITY AND PHYSICAL HEALTH"][0] == '3') {
+	jQuery("#_healthSSM3").addClass('info');
+    } else if (data["DISABILITY AND PHYSICAL HEALTH"][0] == '4') {
+	jQuery("_healthSSM4").addClass('success');
+    } else if (data["DISABILITY AND PHYSICAL HEALTH"][0] == '5') {
+	jQuery("#_healthSSM5").addClass('success');
+    }
 }
 
 function buildEachJSONString() {   
 
     var planOfActionString = '{"HOUSING":"' + jQuery("#_planOfActionHousing  option:selected").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_planOfActionMM  option:selected").val().trim() + '",' + '"EMPLOYMENT":"'
 	    + jQuery("#_planOfActionEmp  option:selected").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_planOfActionEdu  option:selected").val().trim() + '",' + '"NETWORK SUPPORT":"' + jQuery("#_planOfActionNS  option:selected").val().trim()
-	    + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_planOfActionHH  option:selected").val().trim() + '"}';
+	    + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_planOfActionHH  option:selected").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_planOfActionDH  option:selected").val().trim() + '"}';
     jQuery("#_planOfActionString").val(planOfActionString);
     
     var planDetailsString = '{"HOUSING":"' + jQuery("#_planDetailsHousing").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_planDetailsMM").val().trim() + '",' + '"EMPLOYMENT":"'
     + jQuery("#_planDetailsEmp").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_planDetailsEdu").val().trim() + '",' + '"NETWORK SUPPORT":"' + jQuery("#_planDetailsNS").val().trim()
-    + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_planDetailsHH").val().trim() + '"}';
+    + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_planDetailsHH").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_planDetailsDH").val().trim() + '"}';
     jQuery("#_planDetailsString").val(planDetailsString);
     
     var referralPartnerString = '{"HOUSING":"' + jQuery("#_referralPartnerHousing").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_referralPartnerMM").val().trim() + '",' + '"EMPLOYMENT":"'
     + jQuery("#_referralPartnerEmp").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_referralPartnerEdu").val().trim() + '",' + '"NETWORK SUPPORT":"' + jQuery("#_referralPartnerNS").val().trim()
-    + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_referralPartnerHH").val().trim() + '"}';
+    + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_referralPartnerHH").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_referralPartnerDH").val().trim() + '"}';
     jQuery("#_referralPartnerString").val(referralPartnerString);
 
     var anticipatedOutcomeString = '{"HOUSING":"' + jQuery("#_aoHousing option:selected").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_aoMM option:selected").val().trim() + '",'
 	    + '"EMPLOYMENT":"' + jQuery("#_aoEmp option:selected").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_aoEdu option:selected").val().trim() + '",' + '"NETWORK SUPPORT":"'
-	    + jQuery("#_aoNS option:selected").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_aoHH option:selected").val().trim() + '"}';
+	    + jQuery("#_aoNS option:selected").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_aoHH option:selected").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_aoDH option:selected").val().trim() + '"}';
     jQuery("#_anticipatedOutcomeString").val(anticipatedOutcomeString);
     
     var anticipatedDateString = '{"HOUSING":"' + jQuery("#_inputDateTextAnticipatedHousing").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_inputDateTextAnticipatedMM").val().trim() + '",'
     + '"EMPLOYMENT":"' + jQuery("#_inputDateTextAnticipatedEmp").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_inputDateTextAnticipatedEdu").val().trim() + '",' + '"NETWORK SUPPORT":"'
-    + jQuery("#_inputDateTextAnticipatedNS").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_inputDateTextAnticipatedHH").val().trim() + '"}';
+    + jQuery("#_inputDateTextAnticipatedNS").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_inputDateTextAnticipatedHH").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_inputDateTextAnticipatedDH").val().trim() + '"}';
     jQuery("#_anticipatedDateString").val(anticipatedDateString);
 
     var outcomesAchievedString = '{"HOUSING":"' + jQuery("#_outAchHousing").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_outAchMM").val().trim() + '",'
 	    + '"EMPLOYMENT":"' + jQuery("#_outAchEmp").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_outAchEdu").val().trim() + '",' + '"NETWORK SUPPORT":"'
-	    + jQuery("#_outAchNS").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_outAchHH").val().trim() + '"}';
+	    + jQuery("#_outAchNS").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_outAchHH").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_outAchDH").val().trim() + '"}';
     jQuery("#_outcomesAchievedString").val(outcomesAchievedString);
     
     var achievedGoalString = '{"HOUSING":"' + jQuery("#_achGoalHousing  option:selected").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_achGoalMM  option:selected").val().trim() + '",'
     + '"EMPLOYMENT":"' + jQuery("#_achGoalEmp  option:selected").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_achGoalEdu option:selected").val().trim() + '",' + '"NETWORK SUPPORT":"'
-    + jQuery("#_achGoalNS  option:selected").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_achGoalHH  option:selected").val().trim() + '"}';
+    + jQuery("#_achGoalNS  option:selected").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_achGoalHH  option:selected").val().trim() + '",' + '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_achGoalDH  option:selected").val().trim() + '"}';
     jQuery("#_achievedGoalString").val(achievedGoalString);
     
     var completionDateString = '{"HOUSING":"' + jQuery("#_inputDateTextHousing").val().trim() + '",' + '"MONEY MANAGEMENT":"' + jQuery("#_inputDateTextMM").val().trim() + '",'
     + '"EMPLOYMENT":"' + jQuery("#_inputDateTextEmp").val().trim() + '",' + '"EDUCATION":"' + jQuery("#_inputDateTextEdu").val().trim() + '",' + '"NETWORK SUPPORT":"'
-    + jQuery("#_inputDateTextNS").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_inputDateTextHH").val().trim() + '"}';
+    + jQuery("#_inputDateTextNS").val().trim() + '",' + '"HOUSEHOLD MANAGEMENT":"' + jQuery("#_inputDateTextHH").val().trim() + '",'+ '"DISABILITY AND PHYSICAL HEALTH":"' + jQuery("#_inputDateTextDH").val().trim() + '"}';
 
     // These are all setting into hidden variables before saving Object   
     jQuery("#_completionDateString").val(completionDateString);

@@ -38,11 +38,8 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
-
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
+	<th:block th:include="../templates/_menu"></th:block>
+	
 	<div class="container">
 		<div id="employment_Form">
 
@@ -192,7 +189,7 @@
 						</div>
 					
 						<input type="submit" id="_employmentSubmit"
-							class="btn btn-primary btn-lg hidden-print" value="Save EMPLOYMENT Assessment">
+							class="btn btn-primary btn-lg hidden-print" value="Save EMPLOYMENT Assessment" onclick="jQuery('#_empLifeDomain').val('EMPLOYMENT');">
 
 						<div class="col-sm-6 text-right hideme">
 							<input type="button" id="_employmentSubmitAndNext"
@@ -207,27 +204,27 @@
 
 				<table id="employmentScoreTable" class="table table-bordered">
 					<thead>
-						<th id="empst_1_head">In Crisis(1)</th>
-						<th id="empst_2_head">Vulnerable (2)</th>
-						<th id="empst_3_head">Safe (3)</th>
-						<th id="empst_4_head">Building Capacity (4)</th>
-						<th id="empst_5_head">Empowered (5)</th>
-						<th id="empst_6_head">Score</th>
-						<th id="empst_7_head">Goal</th>
+						<th id="incrisis_head">In Crisis(1)</th>
+						<th id="vulnerable_head">Vulnerable (2)</th>
+						<th id="safe_head">Safe (3)</th>
+						<th id="buildingCapacity_head">Building Capacity (4)</th>
+						<th id="empowered_head">Empowered (5)</th>
+						<th id="disPhymst_6_head">Score</th>
+						<th id="disPhymst_7_head">Goal</th>
 					</thead>
 					<tbody>
 						<tr>
-							<td id="empst_1_body">No job.</td>
-							<td id="empst_2_body">Temporary, part-time, or seasonal job;
+							<td id="incrisis_body">No job.</td>
+							<td id="vulnerable_body">Temporary, part-time, or seasonal job;
 								inadequate pay and no benefits.</td>
-							<td id="empst_3_body">Employed full-time; inadequate pay;
+							<td id="safe_body">Employed full-time; inadequate pay;
 								few or no benefits.</td>
-							<td id="empst_4_body">Employed full-time; inadequate pay;
+							<td id="buildingCapacity_body">Employed full-time; inadequate pay;
 								few or no benefits.</td>
-							<td id="empst_5_body">Employed full-time with adequate pay
+							<td id="empowered_body">Employed full-time with adequate pay
 								and benefits.</td>
-							<td id="empst_6_body"></td>
-							<td id="empst_7_body"></td>
+							<td id="_score"></td>
+							<td id="_goal"></td>
 
 						</tr>
 					</tbody>

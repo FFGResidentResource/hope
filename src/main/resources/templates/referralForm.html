@@ -43,11 +43,8 @@
 <body>
 
 	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
-
-	<!-- <div class="container">
-		<th:block th:include="/_wizard"></th:block>
-	</div> -->
+	<th:block th:include="../templates/_menu"></th:block>
+	
 	<div class="container">
 		<div id="referralForm_Form">
 
@@ -151,28 +148,10 @@
 								th:field="*{previousAttempts}"
 								th:value="*{previousAttempts}"></textarea></td></tr>
 						</tbody>
-					</table>
+					</table>		
 					
-					<!-- Each Column will be populated by javaScript from referralForm.js -->
-					<table id="_desiredOutcomes" class="table table-responsive table-bordered table-condensed" style="background-color: ghostwhite;">
-						<caption><strong>Desired Outcomes</strong> (check at that reasonably apply)</caption>
-						<thead>
-							<tr><th class="text-center">Self Sufficiency</th><th class="text-center">Housing Stability</th><th class="text-center">Safer, More Supportive Communities</th></tr>
-						</thead>
-						<tbody>
-						<tr><td id="_ssColumn"></td><td id="_hsColumn"></td><td id="_safeSuppColumn"></td></tr>
-						<tr>
-						<td><textarea class="form-control hidden-print" rows="2" id="_ssOther" placeholder="Any Other type here:"></textarea></td>
-						<td><textarea class="form-control hidden-print" rows="2" id="_hsOther" placeholder="Any Other type here:"></textarea></td>
-						<td><textarea class="form-control hidden-print" rows="2" id="_safeSuppOther" placeholder="Any Other type here:"></textarea></td></tr>
-						<tr>
-						<td><p  id="_ssOther_P" class="hideme print-only"></p></td>
-						<td><p id="_hsOther_P" class="hideme print-only"></p></td>
-						<td><p  id="_safeSuppOther_P" class="hideme print-only"></p></td></tr>
-						</tbody>
-					</table>
 					
-					<table id="_comments" class="table table-responsive table-bordered table-condensed hidden-print">
+					<table id="_comments" class="table table-responsive table-bordered table-condensed">
 						<caption><strong>Follow-up Notes</strong></caption>
 						<tbody>
 						<tr><td>
