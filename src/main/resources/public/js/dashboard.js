@@ -14,7 +14,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart, movingUpChart, movingDownChart ;
 var dataArray;
 var reset = 0;
 
@@ -124,6 +124,8 @@ function generateAllQuarterlyReport(){
 	outcomeQuarterly();
 	resServedQuarterly();
 	refReasonsQuarterly();
+	movingUpQuarterly();
+	movingDownQuarterly();
 	
 	
 }
@@ -166,6 +168,102 @@ function newResidents(that){
 		}
     });
 	
+}
+
+function movingUpQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident Moving Up']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/movingUpQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(movingUpChart != null){				
+				movingUpChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					movingUpChart = generateCategoryChart("#movingUpChart", "Resident Moving Up", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function movingDownQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident Moving Down']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/movingDownQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(movingDownChart != null){				
+				movingDownChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					movingDownChart= generateCategoryChart("#movingDownChart", "Resident Moving Down", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 

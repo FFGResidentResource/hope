@@ -5,12 +5,17 @@ package com.ffg.rrn.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +33,7 @@ import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.QuarterCount;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
+import com.ffg.rrn.model.ResidentScoreGoal;
 import com.ffg.rrn.model.ServiceCoordinator;
 import com.ffg.rrn.model.WizardStepCounter;
 import com.ffg.rrn.service.ResidentServiceImpl;
@@ -48,6 +54,69 @@ public class RestAPIController {
 	
 	@Autowired
 	private DashboardDao dashDao;
+	
+	/**
+	 * We want to make structure as follows to publish Chart Easily:
+	 * 
+	 * ['x','2020-01-30', '2020-04-30', '2020-08-30']
+	 * ['HOUSING','2', '4', '1']
+	 * ...
+	 * ...
+	 * So on..
+	 * 
+	 * @param residentId
+	 * @return
+	 */
+	
+	@PostMapping("/getIndividualScoreCard")
+	public ResponseEntity<?> getIndividualScoreCard(@RequestBody String residentId){
+		
+		List<List<String>> strList = new ArrayList<>();
+		List<ResidentScoreGoal> rsgList = dashDao.getIndividualScoreCard(residentId);
+		
+		LinkedHashMap<String, List<String>> rsgMap = new LinkedHashMap<String, List<String>>();	
+		
+		List<String> dateList = new ArrayList<String>();
+		rsgMap.put("x", dateList);
+			
+			if(!CollectionUtils.isEmpty(rsgList)) {
+			
+				//First Fill "x" and all lifeDomain as key
+				rsgList.forEach(rsg -> {	
+					
+					
+					if(!dateList.contains(rsg.getOnThisDate().toString())) {
+						dateList.add(rsg.getOnThisDate().toString());
+					}
+					
+					if(!rsgMap.containsKey(rsg.getLifeDomain())) {
+						rsgMap.put(rsg.getLifeDomain(), new ArrayList<String>());
+					}	
+					
+				});	
+				
+				rsgMap.forEach((key, value) ->{			
+					rsgList.forEach(rsg -> {
+						
+						if(rsg.getLifeDomain().equals(key)) {
+							value.add(rsg.getScore().toString());
+						}				
+					});			
+				});			
+				
+				
+				rsgMap.forEach((key, value) ->{				
+					
+					LinkedList<String> innerList = new LinkedList<String>();
+					innerList.add(key);					
+					innerList.addAll(value);					
+					
+					strList.add(innerList);
+					
+				});	
+			}		
+		return ResponseEntity.ok(strList);
+	}
 	
 
 	@PostMapping("/getAllResidents")
@@ -326,6 +395,22 @@ public class RestAPIController {
 	public ResponseEntity<?> getRefReasonsQuarterly(@RequestBody HolderObj holderObj) {
 		
 		List<QuarterCount> cp = dashDao.getReferralReasonQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/movingUpQuarterly")
+	public ResponseEntity<?> getMovingUpQuarterly(@RequestBody HolderObj holderObj) {
+		
+		List<QuarterCount> cp = dashDao.getMovingUpQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/movingDownQuarterly")
+	public ResponseEntity<?> getMovingDownQuarterly(@RequestBody HolderObj holderObj) {
+		
+		List<QuarterCount> cp = dashDao.getMovingDownQuarterly(holderObj.getSelectedProperties(), holderObj.getYear());
 
 		return ResponseEntity.ok(cp);
 	}

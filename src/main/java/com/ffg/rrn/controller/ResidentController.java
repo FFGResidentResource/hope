@@ -553,7 +553,7 @@ public class ResidentController extends BaseController {
 		for (ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire : questionnaireList) {
 			if (residentAssessmentQuestionnaire.getQuestionId() != null && residentAssessmentQuestionnaire.getChoiceId() != null) {
 				residentAssessmentQuestionnaire.setResidentId(resident.getResidentId());
-				row = residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
+				row = residentService.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain, null);
 			}
 		}
 		

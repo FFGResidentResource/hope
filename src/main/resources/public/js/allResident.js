@@ -132,79 +132,48 @@ jQuery(document).ready(
 			return false;
 		    });
 
-		    /*jQuery('#residentTable tbody').on('click', 'tr', function() {
+		    	jQuery('#residentTable tbody').on('click', 'tr', function() {
 
-			var tr = $(this);
-			currentRow = table.row(this).data();
-
-			console.log(currentRow);
-
-			if ($(this).hasClass('selected')) {
-			    $(this).removeClass('selected');
-			    jQuery("#_loadResident").prop('disabled', true);
-
-			    jQuery('a[id^="_load"]').attr('disabled', true);
-
-			    jQuery("#_hScoreGoal").text('--/--');
-			    jQuery("#_mmScoreGoal").text('--/--');
-			    jQuery("#_empScoreGoal").text('--/--');
-			    jQuery("#_eduScoreGoal").text('--/--');
-			    jQuery("#_nsScoreGoal").text('--/--');
-			    jQuery("#_hhScoreGoal").text('--/--');
-			} else {
-			    jQuery('a[id^="_load"]').attr('disabled', false);
-			    jQuery("#_resId").val(currentRow.residentId);
-			    jQuery("#_loadResident").prop('disabled', false);
-
-			    table.$('tr.selected').removeClass('selected');
-			    $(this).addClass('selected');
-
-			    /*
-			     * Following code builds hyperlink for each
-			     * Assessment buttons when a row is clicked in all
-			     * Resident Table
-			     */
-			   
-		    /*var suffix = '&residentId=' + currentRow.residentId;
-			    var assessmentLinks = jQuery('a[id^="_load"]');
-
-			    jQuery.each(assessmentLinks, function(idx, obj) {
-				var currHref = jQuery(obj).attr('href');
-				var prefix = currHref.split('&');
-				jQuery(obj).attr('href', prefix[0] + suffix);
-			    });
-
-			    /*
-			     * Following code populates score and goal once a
-			     * row a clicked
-			     */
-			   
-		    /*jQuery.ajax({
-				type : "POST",
-				contentType : "application/json",
-				url : "/getAllLatestScoreGoal?residentId=" + currentRow.residentId,
-				dataType : 'json',
-				cache : false,
-				timeout : 600000,
-				success : function(data) {
-				    debugger;
-				    jQuery("#_hScoreGoal").text(data["HOUSING"]);
-				    jQuery("#_mmScoreGoal").text(data["MONEY MANAGEMENT"]);
-				    jQuery("#_empScoreGoal").text(data["EMPLOYMENT"]);
-				    jQuery("#_eduScoreGoal").text(data["EDUCATION"]);
-				    jQuery("#_nsScoreGoal").text(data["NETWORK SUPPORT"]);
-				    jQuery("#_hhScoreGoal").text(data["HOUSEHOLD MANAGEMENT"]);
-				},
-				error : function(e) {
-				    console.log("ERROR retrieving Score and Goal: ", e);
-				}
-			    });
+						var tr = $(this);
+						currentRow = table.row(this).data();
+			
+						console.log(currentRow);
+			
+						if ($(this).hasClass('selected')) {
+						    $(this).removeClass('selected');
+						   
+						} else {
+						   
+						    table.$('tr.selected').removeClass('selected');
+						    $(this).addClass('selected');
+			
+						    /*
+						     * Following code populates Score Card Chart for individual Resident
+						     */
+						   
+					    jQuery.ajax({
+							type : "POST",
+							contentType : "application/json",
+							url : "/getIndividualScoreCard",
+							dataType : 'json',
+							data: JSON.stringify(currentRow.residentId),
+							cache : false,
+							timeout : 600000,
+							success : function(data) {
+							   
+								buildScoreChart(data);
+							    
+							},
+							error : function(e) {
+							    console.log("ERROR retrieving Score and Goal: ", e);
+							}
+						    });
+						}
+		   		});
+			},
+			error : function(e) {
+			    console.log("ERROR : ", e);
 			}
-		    });*/
-		},
-		error : function(e) {
-		    console.log("ERROR : ", e);
-		}
 	    });
 	    _defaultActive();
 	});
@@ -261,6 +230,43 @@ function filterActives(dat) {
     } else {
 	table.columns(2).search('').draw();
     }
+}
+
+function buildScoreChart(data){
+	
+	var chart = c3.generate({
+	bindto:'#singleResidentChart',
+	title: {
+		        show: false,
+		        text: 'Selected Resident SelfSufficiency Progress',
+		        position: 'top-center',   // top-left, top-center and top-right
+		        padding: {
+		          top: 20,
+		          right: 20,
+		          bottom: 40,
+		          left: 50
+		        }
+		
+      		},
+    data: {
+        x: 'x',
+//        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
+        columns: data,
+		labels:true
+    },
+    axis: {
+        x: {
+            type: 'timeseries',
+            tick: {
+                format: '%Y-%m-%d'
+            }
+        },
+		y: {
+        tick : {values: [0,1,2,3,4,5]}
+   		 }
+    }
+});
+	d3.select('.c3-axis.c3-axis-x').attr('clip-path', "");
 }
 
 function buildPieChartData(data) {

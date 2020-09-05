@@ -22,6 +22,7 @@ import com.ffg.rrn.model.CategoryPercentage;
 import com.ffg.rrn.model.Dashboard;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.QuarterCount;
+import com.ffg.rrn.model.ResidentScoreGoal;
 
 /**
  * @author FFGRRNTeam
@@ -55,6 +56,150 @@ public class DashboardDao extends JdbcDaoSupport {
 	
 	public List<String> getDistinctState(){		
 		return this.getJdbcTemplate().queryForList("select distinct state from property order by state", String.class);
+	}
+	
+	public List<ResidentScoreGoal> getIndividualScoreCard(String residentId){
+		
+		List<ResidentScoreGoal> rsgList = new ArrayList<ResidentScoreGoal>();
+		String SQL_ = "select resident_id, life_domain, score, on_this_date from resident_score_goal rsg  where resident_id = ? order by on_this_date ";
+		
+		rsgList = this.getJdbcTemplate().query(SQL_, new Object[] {Long.valueOf(residentId)}, (rs, rowNumber)-> {
+			
+			try {
+				ResidentScoreGoal rsg = new ResidentScoreGoal();
+				rsg.setResidentId(rs.getLong("resident_id"));
+				rsg.setLifeDomain(rs.getString("life_domain"));
+				rsg.setScore(rs.getInt("score"));
+				rsg.setOnThisDate(rs.getDate("on_this_date"));
+				
+				return rsg;
+			} catch (SQLException e) {
+				throw new RuntimeException("your error message", e); // or other unchecked exception here
+			}		
+		});
+		
+		return rsgList;
+		
+	}
+	
+	public List<QuarterCount> getMovingUpQuarterly(String selectedProperties, String year) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select count(*) as total, \"QUARTER\" as quarter from moving_up_residents_view murv where \"PROP_ID\" in (:properties) and \"YEAR\" = :year group by \"QUARTER\" ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
+	}
+	
+	public List<QuarterCount> getMovingDownQuarterly(String selectedProperties, String year) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<QuarterCount> qcs = new ArrayList<QuarterCount>();
+
+		String SQL_ = "select count(*) as total, \"QUARTER\" as quarter from moving_down_residents_view murv where \"PROP_ID\" in (:properties) and \"YEAR\" = :year group by \"QUARTER\" ";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
+
+			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					QuarterCount cp = new QuarterCount();
+					cp.setCount(rs.getInt("total"));
+					cp.setQuarter(Integer.valueOf(rs.getString("quarter")));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+
+		} else {
+
+			QuarterCount qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(1);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(2);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(3);
+
+			qcs.add(qc);
+
+			qc = new QuarterCount();
+
+			qc.setCount(0);
+			qc.setQuarter(4);
+
+			qcs.add(qc);
+
+		}
+
+		return qcs;
 	}
 	
 	public List<QuarterCount> getReferralReasonQuarterly(String selectedProperties, String year) {
