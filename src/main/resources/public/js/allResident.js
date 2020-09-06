@@ -27,20 +27,34 @@ jQuery(document).ready(
 				    "orderable" : false,
 				    "data" : null,
 				    "defaultContent" : ''
-				}, {
+				}, 
+				{
 				    data : 'residentId'
-				}, {
+				}, 
+				{
 				    data : 'active',
 				    visible : false
-				}, {
+				}, 
+				{
 				    data : 'firstName',
 				    render : function(t, type, row) {
 					var spanStr = (row.viaVoicemail == false && row.viaText == false && row.viaEmail == false ) ? '&nbsp;<span class="glyphicon glyphicon-unchecked" style="color:red;"></span>' : '';					
 					return row.firstName + ' ' + row.middle + ' ' + row.lastName + spanStr ;
 				    }
-				}, {
+				},
+				{
+				   	data : 'ackRightToPrivacy',
+				    render : function(t, type, row) {
+					if (row.ackRightToPrivacy == true) {
+					    return '<span style="color:blue">Onboarded</span>';
+					}
+					return '<span style="color:crimson">Pending</span>';
+				    }
+				}, 				
+				{
 				    data : 'propertyName'
-				}, {
+				}, 
+				{
 				    data : 'voiceMail',
 				    render : function(t, type, row) {
 					if (row.viaVoicemail == true) {
@@ -48,7 +62,8 @@ jQuery(document).ready(
 					}
 					return row.voiceMail; 
 				    }
-				}, {
+				}, 
+				{
 				    data : 'text',
 				    render : function(t, type, row) {
 					if (row.viaText == true) {
@@ -56,7 +71,8 @@ jQuery(document).ready(
 					}
 					return row.text;
 				    }
-				}, {
+				}, 
+				{
 				    data : 'email',
 				    render : function(t, type, row) {
 					if (row.viaEmail == true) {
@@ -64,7 +80,8 @@ jQuery(document).ready(
 					}
 					return row.email;
 				    }
-				}, {
+				}, 
+				{
 				    data : 'photoRelease',
 				    render : function(t, type, row) {
 					if (row.photoRelease == true) {
@@ -72,7 +89,8 @@ jQuery(document).ready(
 					}
 					return '<span class="glyphicon glyphicon-remove"></span>';
 				    }
-				}, {
+				}, 
+				{
 				    data : 'dateAdded.time',
 				    render : {
 					_ : 'display',
@@ -81,16 +99,19 @@ jQuery(document).ready(
 				    render : function(t, type, row) {
 					return moment(row.dateAdded).format("MM/DD/YY");
 				    }
-				}, {
+				}, 
+				{
 				    data : 'serviceCoord'
-				}, {
+				}, 
+				{
 				    data : 'refValue',
 				    visible : false
-				}, {
+				}, 
+				{
 				    data : 'address',
 				    visible : false
 				} ],
-				"order" : [ [ 9, "desc" ] ],
+				"order" : [ [ 10, "desc" ] ],
 				pageLength : 8,
 				pagingType : "full_numbers",
 				"initComplete" : function(settings, json) {
