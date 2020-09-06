@@ -147,7 +147,7 @@ body {
 		<div class="panel panel-info hideme print-only">
 
 			<div class="panel-heading">
-				Report for Following Properties: <img src="/images/rrnlogo_horz.png"
+				Report By:&nbsp;<h4><span th:text=${userName}></span></h4> Service Coordinator assigned properties: <img src="/images/rrnlogo_horz.png"
 					style="float: right; width: 150px;" />
 			</div>
 			<div class="panel-body" id="_propListPrint"></div>
@@ -204,22 +204,15 @@ body {
 
 			<div class="row">
 
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<div id="servicesChart" style="min-height: 350px;"></div>
 				</div>
-			</div>
-
-			<hr class="solidline1">
-
-			<div class="row">
-
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<div id="refReasonsChart" style="min-height: 350px;"></div>
 				</div>
 			</div>
-			
 
-			<hr class="solidline1">
+			<hr class="solidline1">			
 
 			<div class="row">
 

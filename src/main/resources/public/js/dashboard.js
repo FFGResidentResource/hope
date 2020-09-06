@@ -3,6 +3,7 @@
 
 window.onbeforeprint = function() {
 	
+	jQuery("#_propListPrint").text('');
 	jQuery(selectedProperties).each(function (idx, val){	
 		console.log(val);
 		var str = '#'+Number(val) + ':checked';
