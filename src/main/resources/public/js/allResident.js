@@ -119,7 +119,7 @@ jQuery(document).ready(
 					    + ' <input type="radio" name="residents" value="true" onchange="filterActives(this);"> Active '
 					    + ' <input type="radio" name="residents" value="false" onchange="filterActives(this);"> Inactive </span>'						
 						+ ' &nbsp;&nbsp;&nbsp;&nbsp;<span> <strong><u>Legend:</u></strong> Blue Check (</span><span class="glyphicon glyphicon-check" style="color:blue;"></span><span>) icon = <strong>only contact me via:</strong></span>'
-						+ ' &nbsp;&nbsp;&nbsp;&nbsp;<span> Red Unchecked (</strong></span><span class="glyphicon glyphicon-unchecked" style="color:red;"></span><span>) icon = <strong>resident opt out to be contacted.</strong></span>';
+						+ ' &nbsp;&nbsp;&nbsp;&nbsp;<span> Red Unchecked (</strong></span><span class="glyphicon glyphicon-unchecked" style="color:red;"></span><span>) icon = <strong>resident opt out to be contacted OR intake pending</strong></span>';
 				    
 				   
 
