@@ -255,21 +255,10 @@ function filterActives(dat) {
 
 function buildScoreChart(data){
 	
-	var chart = c3.generate({
+
+	var chart2 = c3.generate({
 	bindto:'#singleResidentChart',
-	title: {
-		        show: false,
-		        text: 'Selected Resident SelfSufficiency Progress',
-		        position: 'top-center',   // top-left, top-center and top-right
-		        padding: {
-		          top: 20,
-		          right: 20,
-		          bottom: 40,
-		          left: 50
-		        }
-		
-      		},
-    data: {
+	data: {
         x: 'x',
 //        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
         columns: data,
@@ -279,18 +268,16 @@ function buildScoreChart(data){
         x: {
             type: 'timeseries',
             tick: {
-                format: '%Y-%m-%d'
+				fit:true,
+				rotate: -75,
+                format: "%e %b %y"
             }
-        },
-		y: {
-        tick : {values: [0,1,2,3,4,5]}
-   		 }
+        }
     }
 });
-	d3.select('.c3-axis.c3-axis-x').attr('clip-path', "");
 }
 
-function buildPieChartData(data) {
+function buildPieChartData(data) {	
 
     var columns = [];
     var arr = [];
