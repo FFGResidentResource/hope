@@ -4,11 +4,13 @@
 package com.ffg.rrn.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.assertj.core.util.Arrays;
@@ -123,20 +125,17 @@ public class RestAPIController {
 	public ResponseEntity<?> getAllResidents() {
 
 		List<Resident> allResident = residentService.getAllResident();
+		
+		final List<Resident> sortedList = allResident.stream().sorted(Comparator.comparingLong(Resident::getPropertyId).thenComparing(Resident::getFullName)).collect(Collectors.toList());
 
-		// Create a new ArrayList
-		ArrayList<Resident> newList = new ArrayList<Resident>();
-
-		// Traverse through the first list
-		for (Resident element : allResident) {
-
-			// If this element is not present in newList
-			// then add it
-			if (!newList.contains(element)) {
-				newList.add(element);
-			}
-		}
-
+		// Create a new ArrayList 
+		LinkedList<Resident> newList = new LinkedList<Resident>();
+		
+		  // Traverse through the first list 
+		for (Resident element : sortedList) {
+		// If this element is not present in newList // then add it 
+		if (!newList.contains(element)) { newList.add(element); } }
+		 
 		return ResponseEntity.ok(newList);
 	}
 

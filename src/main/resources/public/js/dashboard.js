@@ -18,6 +18,59 @@ var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran
 var dataArray;
 var reset = 0;
 
+var colors = ['#7B68EE',
+'#483D8B',
+'#000080',
+'#0000CD',
+'#0000FF',
+'#4169E1',
+'#4682B4',
+'#1E90FF',
+'#00BFFF',
+'#87CEFA',
+'#B0E0E6',
+'#006400',
+'#008000',
+'#2E8B57',
+'#3CB371',
+'#90EE90',
+'#00FF7F',
+'#6B8E23',
+'#808000',
+'#556B2F',
+'#FFE4B5',
+'#FFDAB9',
+'#EEE8AA',
+'#F0E68C',
+'#BDB76B',
+'#FFFF00',
+'#FF8C00',
+'#FFA500',
+'#FF7F50',
+'#FF6347',
+'#FF4500',
+'#FFD700',
+'#FFA07A',
+'#FA8072',
+'#E9967A',
+'#F08080',
+'#CD5C5C',
+'#DC143C',
+'#B22222',
+'#FF0000',
+'#8B0000',
+'#FF00FF',
+'#BA55D3',
+'#9370DB',
+'#8A2BE2',
+'#9400D3',
+'#9932CC',
+'#8B008B',
+'#E6E6FA',
+'#D8BFD8',
+'#DDA0DD'
+];
+
 jQuery(document).ready(function() {
 	
 	
@@ -752,7 +805,10 @@ function generateCategoryChart(id, title, groupArray, dataArrayPerf){
 		          left: 50
 		        }
 		
-      		},	
+      		},
+			color: {	    
+		 		pattern: colors
+			},		
     		data: {
         		x : 'x',
         		columns: dataArrayPerf,
@@ -790,7 +846,10 @@ function generateChart(attachId, title){
 						labels:{
 							 format:function (v, id, i, j) { return v + '%'; }
 						},
-					},			
+					},
+			color: {	    
+		 		pattern: colors
+			},				
 					axis : {
 					    x : {
 						tick : {

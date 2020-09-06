@@ -38,6 +38,10 @@ body {
 .navbar-brand {
 	padding: 0;
 }
+
+.c3-line {
+    stroke-width: 5px;
+}
 </style>
 
 </head>
@@ -49,10 +53,10 @@ body {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-6">
-				<div id="allResidentPieChart"></div>
+				<div id="allResidentPieChart" style="min-height:550px;"></div>
 			</div>
 			<div class="col-sm-6">
-				<div id="singleResidentChart"></div>
+				<div id="singleResidentChart" style="min-height:550px;"></div>
 			</div>
 		</div>
 	</div>
@@ -62,56 +66,7 @@ body {
 	<form th:action="@{/getResidentById}" method='POST'>
 		<div class="container-fluid hidden-print">
 			<div class="panel panel-info">
-				<div class="panel-heading">
-					<div class="row hiddent-print">
-						<div class="col-sm-4">
-							<span class="panel-title"><strong>All Residents</strong></span>
-						</div>
-						<div class="col-sm-8 hideme">
-							<div class="col-sm-2"></div>
-
-							<div class="col-sm-2">
-								<button type="submit" id="_loadResident"
-									class="btn btn-default btn-sm" disabled>
-									<span class=" glyphicon glyphicon-pencil"
-										style="color: dodgerblue;" aria-hidden="true"></span> Modify
-									Resident
-								</button>
-							</div>
-							<div class="col-sm-2">
-
-								<div class="caption">
-									<a id="_loadReferralForm" class="btn btn-default btn-sm"
-										th:href="@{/getReferralForm?entryPoint=allResident}"> <span
-										class="glyphicon glyphicon-paperclip" style="color: crimson;"
-										aria-hidden="true"></span> Referral Form
-									</a>
-								</div>
-							</div>
-							<div class="col-sm-2">
-
-								<div class="caption">
-									<a id="_loadActionPlan" class="btn btn-default btn-sm"
-										th:href="@{/getActionPlan?entryPoint=allResident}"> <span
-										class="glyphicon glyphicon-road" style="color: green;"
-										aria-hidden="true"></span> Action Plan
-									</a>
-								</div>
-							</div>
-							<div class="col-sm-2">
-
-								<div class="caption">
-									<a id="_loadCaseNotes" class="btn btn-default btn-sm"
-										th:href="@{/getCaseNotes?entryPoint=allResident}"> <span
-										class="glyphicon glyphicon-comment" style="color: orange;"
-										aria-hidden="true"></span> Contact Notes
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				
 				<div class="panel-body">
 					<div class="col-sm-12">
 						<table id="residentTable" class="display compact"
@@ -306,6 +261,7 @@ body {
 	<script src="/js/allResident.js"></script>
 	<script src="/js/moment.js"></script>
 	<script src="/js/moment-timezone.js"></script>
+	
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>
@@ -314,7 +270,6 @@ body {
 	<script
 		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
 	<script src="/js/menu.js"></script>
-
 </body>
 
 </html>

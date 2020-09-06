@@ -852,6 +852,47 @@ INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,
 ,(nextval('RESIDENT_SQ'),true,true,4,'Green','','Lantern',8,false,false,true,NULL,'614-111-1035','GreenLantern@gmail.com','1234 Lantern st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'10','English','Significant Other','40000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very safe','Very safe', '10 or more Years', 'No', 'Walk/Bike', 'End of the Month', 'Two Parent', 'No')
 ,(nextval('RESIDENT_SQ'),true,true,2,'Elastic','','Girl',8,false,true,true,NULL,'614-111-1000','elastic@email.com','1234 elastic ave',true,false,true,true,'2020-09-01 23:55:42.484','2020-09-01 23:59:03.241','dbadmin1','dbadmin1',NULL,NULL,'','English','Married','9000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very safe','Very safe', '10 or more Years', 'No', 'Walk/Bike', 'End of the Month', 'Two Parent', 'No')
 ;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,3,'Dr.','','Strange',18,false,false,false,NULL,'(614)-111-7777',NULL,'1234 strange st.',false,false,false,false,'2020-09-05 22:43:48.244','2020-09-05 22:43:48.244',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'Will','','Smith',19,false,false,false,NULL,'614-111-6666',NULL,'1234 will st.',false,false,false,false,'2020-09-05 22:44:19.742','2020-09-05 22:44:19.742',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Tarzan',20,false,false,false,NULL,'612-111-5555',NULL,'1234 tarzan st.',false,false,false,false,'2020-09-05 22:44:59.949','2020-09-05 22:44:59.949',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Mogli','','Boy',21,false,false,false,NULL,'614-111-4444',NULL,'1234 mogli st.',false,false,false,false,'2020-09-05 22:45:47.792','2020-09-05 22:45:47.792',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Cindrella',22,false,false,false,NULL,'614-111-3333',NULL,'1234 cindrella st.',false,false,false,false,'2020-09-05 22:46:27.753','2020-09-05 22:46:27.753',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Chacha','','Chaudri',23,false,false,false,NULL,'614-111-2222',NULL,'1234 chacha st.',false,false,false,false,'2020-09-05 22:47:49.864','2020-09-05 22:47:49.864',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Bakelal','','Bihari',24,false,false,false,NULL,'614-111-1111',NULL,'1234 bakelal st.',false,false,false,false,'2020-09-05 22:48:22.418','2020-09-05 22:48:22.418',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'Nagraj','','Man',25,false,false,false,NULL,'614-111-2211',NULL,'1234 nagraj st.',false,false,false,false,'2020-09-05 22:49:15.840','2020-09-05 22:49:15.840',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'Hollow','','Man',26,false,false,false,NULL,'614-111-1122',NULL,'1234 hollow st.',false,false,false,false,'2020-09-05 22:50:23.345','2020-09-05 22:50:23.345',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'The','','Punisher',27,false,false,false,NULL,'614-111-1027',NULL,'1234 punisher st.',false,false,false,false,'2020-09-05 22:53:45.043','2020-09-05 22:53:45.043',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'The','','Hercules',28,false,false,false,NULL,'614-111-1028',NULL,'1234 hercules st.',false,false,false,false,'2020-09-05 22:55:04.119','2020-09-05 22:55:04.119',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'Kyle','','Rayner',29,false,false,false,NULL,'614-111-1029',NULL,'1234 kyle st.',false,false,false,false,'2020-09-05 22:56:15.557','2020-09-05 22:56:15.557',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Storm',30,false,false,false,NULL,'614-111-1030',NULL,'1234 storm st.',false,false,false,false,'2020-09-05 22:56:43.423','2020-09-05 22:56:43.423',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'Ghost','','Rider',31,false,false,false,NULL,'614-111-1031',NULL,'1234 ghost st.',false,false,false,false,'2020-09-05 22:57:26.438','2020-09-05 22:57:26.438',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'The','','Skaar',32,false,false,false,NULL,'614-111-1032',NULL,'1234 skaar st.',false,false,false,false,'2020-09-05 22:58:10.404','2020-09-05 22:58:10.404',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'The','','Northstar',33,false,false,false,NULL,'614-111-1033',NULL,'1234 northstar st.',false,false,false,false,'2020-09-05 22:59:04.311','2020-09-05 22:59:04.311',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Wally','','West',34,false,false,false,NULL,'614-111-1034',NULL,'1234 wally st.',false,false,false,false,'2020-09-05 22:59:34.568','2020-09-05 22:59:34.568',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Elektra',35,false,false,false,NULL,'614-111-1035',NULL,'1234 elektra st.',false,false,false,false,'2020-09-05 23:00:22.212','2020-09-05 23:00:22.212',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Gamora',36,false,false,false,NULL,'614-111-1036',NULL,'1234 gamora st.',false,false,false,false,'2020-09-05 23:01:08.538','2020-09-05 23:01:08.538',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Blade',37,false,false,false,NULL,'614-111-1037',NULL,'1234 blade st.',false,false,false,false,'2020-09-05 23:01:39.959','2020-09-05 23:01:39.959',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'Emma','','Frost',38,false,false,false,NULL,'614-111-1038',NULL,'1234 emma st.',false,false,false,false,'2020-09-05 23:04:30.780','2020-09-05 23:04:30.780',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'Bart','','Allen',39,false,false,false,NULL,'614-111-1039',NULL,'1234 bart st.',false,false,false,false,'2020-09-05 23:05:20.500','2020-09-05 23:05:20.500',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Martian','Mm','Manhunter',40,false,false,false,NULL,'614-111-1040',NULL,'1234 martian st.',false,false,false,false,'2020-09-05 23:06:00.338','2020-09-05 23:06:00.338',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Thanos',41,false,false,false,NULL,'614-111-1041',NULL,'1234 thanos st.',false,false,false,false,'2020-09-05 23:06:24.306','2020-09-05 23:06:24.306',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'The','','Vision',42,false,false,false,NULL,'614-111-1042',NULL,'1234 vision st.',false,false,false,false,'2020-09-05 23:07:37.191','2020-09-05 23:07:37.191',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Cyborg',43,false,false,false,NULL,'614-111-1043',NULL,'1234 cyborg st.',false,false,false,false,'2020-09-05 23:07:59.490','2020-09-05 23:07:59.490',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'Barbara','','Gordon',44,false,false,false,NULL,'614-111-1044',NULL,'1234 barbara st.',false,false,false,false,'2020-09-05 23:08:51.415','2020-09-05 23:08:51.415',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'Stephnie','','Brown',45,false,false,false,NULL,'614-111-1045',NULL,'1234 brown st.',false,false,false,false,'2020-09-05 23:09:39.632','2020-09-05 23:09:39.632',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'Guy','','Gardner',46,false,false,false,NULL,'614-111-1046',NULL,'1234 guy st.',false,false,false,false,'2020-09-05 23:10:37.369','2020-09-05 23:10:37.369',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'Jean','','Gray',47,false,false,false,NULL,'614-111-1047',NULL,'1234 jean st.',false,false,false,false,'2020-09-05 23:11:27.012','2020-09-05 23:11:27.012',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'The','','Angel',48,false,false,false,NULL,'614-111-1048',NULL,'1234 angel st.',false,false,false,false,'2020-09-05 23:12:00.982','2020-09-05 23:12:00.982',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Scarlet','','Witch',49,false,false,false,NULL,'614-111-1049',NULL,'1234 witch st.',false,false,false,false,'2020-09-05 23:12:27.449','2020-09-05 23:12:27.449',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+
 
 
 INSERT INTO child (child_id,full_name,parent_id,pvr_flag) VALUES 
@@ -1105,6 +1146,70 @@ INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,ch
 ,(nextval('RAQ_SQ'),7,51,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
 ,(nextval('RAQ_SQ'),7,52,15,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
 ;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,5,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,6,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,7,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,8,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,19,9,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,20,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,21,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,22,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,1,1,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,2,2,'HOUSING','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,3,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,4,1,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,9,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,10,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,11,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,12,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,13,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,14,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,15,2,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,16,2,'MONEY MANAGEMENT','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,17,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,18,2,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,23,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,24,2,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,25,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,26,1,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,27,1,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,28,2,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,29,1,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,30,2,'EDUCATION','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,31,2,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,32,2,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,33,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,34,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,35,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,36,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,37,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,38,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,39,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,40,2,'HOUSEHOLD MANAGEMENT','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,41,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,42,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,43,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,44,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,45,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,46,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,47,2,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+,(nextval('RAQ_SQ'),7,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+,(nextval('RAQ_SQ'),7,50,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+,(nextval('RAQ_SQ'),7,52,13,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+;
 
 INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
 (nextval('RSG_SQ'),1,'HOUSING',3,4,'2019-04-26')
@@ -1138,16 +1243,24 @@ INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_th
 ,(nextval('RSG_SQ'),6,'NETWORK SUPPORT',2,3,'2020-01-26')
 ,(nextval('RSG_SQ'),6,'HOUSEHOLD MANAGEMENT',2,3,'2020-01-26')
 ,(nextval('RSG_SQ'),6,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-01-26')
-,(nextval('RSG_SQ'),7,'HOUSING',2,3,'2020-04-26')
+;
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(nextval('RSG_SQ'),7,'HOUSING',2,3,'2020-04-26')
 ,(nextval('RSG_SQ'),7,'MONEY MANAGEMENT',0,0,'2020-04-26')
 ,(nextval('RSG_SQ'),7,'EMPLOYMENT',0,0,'2020-04-26')
-;
-
-INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
-(nextval('RSG_SQ'),7,'EDUCATION',2,3,'2020-04-26')
+,(nextval('RSG_SQ'),7,'EDUCATION',2,3,'2020-04-26')
 ,(nextval('RSG_SQ'),7,'NETWORK SUPPORT',1,2,'2020-04-26')
 ,(nextval('RSG_SQ'),7,'HOUSEHOLD MANAGEMENT',2,3,'2020-04-26')
 ,(nextval('RSG_SQ'),7,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-04-26')
+,(nextval('RSG_SQ'),7,'HOUSING',3,4,'2020-09-04')
+,(nextval('RSG_SQ'),7,'MONEY MANAGEMENT',3,4,'2020-09-04')
+,(nextval('RSG_SQ'),7,'EMPLOYMENT',4,5,'2020-09-04')
+;
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(nextval('RSG_SQ'),7,'EDUCATION',3,4,'2020-09-04')
+,(nextval('RSG_SQ'),7,'NETWORK SUPPORT',2,3,'2020-09-04')
+,(nextval('RSG_SQ'),7,'HOUSEHOLD MANAGEMENT',4,5,'2020-09-04')
+,(nextval('RSG_SQ'),7,'DISABILITY AND PHYSICAL HEALTH',2,3,'2020-09-04')
 ;
 
 

@@ -238,7 +238,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	public List<Resident> getAllResident() {
 
-		ResidentMapper rowMapper = new ResidentMapper();
+		ResidentMapper rowMapper = new ResidentMapper();	
 		return this.getJdbcTemplate().query(ResidentMapper.RESIDENT_SQL, rowMapper);
 	}
 
