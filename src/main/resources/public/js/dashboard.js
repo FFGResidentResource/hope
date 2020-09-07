@@ -91,8 +91,18 @@ jQuery(document).ready(function() {
 	$('input:radio').change(function(){
 			generateAllQuarterlyReport();
 	});
+	
+	$("input[name^='_propId_']").change(function(){
+			generateReport();
+	});
     
 });
+
+function toggleProperties(that){
+	
+	jQuery("input[name^='_propId_']").prop('checked',!that.checked);
+	generateReport();
+}
 
 function citySelection(that){	
 	

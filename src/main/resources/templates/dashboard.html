@@ -58,16 +58,17 @@ body {
 
 			<div class="row myPanel hidden-print">
 
-				<div Class="col-sm-2">
-
+				<div Class="col-sm-1">
 					<th:block th:each="y: *{yearList}">
 						<label> <input type="radio" th:value="${y}"
 							th:field="*{year}" name="_year">&nbsp;<span
 							th:text="${y}"></span>
 						</label>
 					</th:block>
-
-
+				</div>
+				
+				<div Class="col-sm-1">
+					<label><input type="checkbox" onclick="toggleProperties(this);">Toggle Properties</label>					
 				</div>
 
 				<div class="col-sm-10 borderleft">
