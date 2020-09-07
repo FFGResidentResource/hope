@@ -1727,6 +1727,43 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		return cpList;
 	}
+	
+	public List<CategoryPercentage> getSignUpPercentage(String selectedProperties) {
+
+		selectedProperties = selectedProperties.replace("\"", "");
+		selectedProperties = selectedProperties.replace("[", "");
+		selectedProperties = selectedProperties.replace("]", "");
+
+		List<CategoryPercentage> cpList = new ArrayList<CategoryPercentage>();
+		String SQL_ = "select 'Sign Up Completed' as category, (count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100 as percentage from resident where ack_pr = true and prop_id  in (:properties)";
+
+		if (StringUtils.isNotBlank(selectedProperties)) {
+			SQL_ = SQL_.replace(":properties", selectedProperties);
+
+			cpList = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
+				try {
+					CategoryPercentage cp = new CategoryPercentage();
+					cp.setCategory(rs.getString("category"));
+					cp.setPercentage(rs.getInt("percentage"));
+					return cp;
+				} catch (SQLException e) {
+					throw new RuntimeException("your error message", e); // or other unchecked exception here
+				}
+			});
+		}
+
+		else {
+
+			CategoryPercentage cp = new CategoryPercentage();
+			cp.setCategory("Sign Up Completed");
+			cp.setPercentage(0);
+
+			cpList.add(cp);
+			
+		}
+
+		return cpList;
+	}
 
 	public List<CategoryPercentage> getInterestResCouncil(String selectedProperties) {
 

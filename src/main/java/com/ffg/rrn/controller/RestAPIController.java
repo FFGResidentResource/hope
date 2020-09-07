@@ -260,6 +260,14 @@ public class RestAPIController {
 		return ResponseEntity.ok(allServiceCoordinators);
 	}
 	
+	@PostMapping("/signUpPercentage")
+	public ResponseEntity<?> getSignUpPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getSignUpPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
 	@PostMapping("/expFoodShortagePercentage")
 	public ResponseEntity<?> getExpFoodShortagePercentage(@RequestBody String selectedProperties) {
 

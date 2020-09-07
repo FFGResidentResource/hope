@@ -15,7 +15,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart, movingUpChart, movingDownChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart, movingUpChart, movingDownChart, chartSignUP ;
 var dataArray;
 var reset = 0;
 
@@ -139,6 +139,7 @@ function generateReport(){
 		}
 	});
 	
+	signUpPercentage();
 	genderPercentage();
 	ethnicityPercentage();
 	languagePercentage();
@@ -872,6 +873,38 @@ function generateChart(attachId, title){
 					}					
 				    });	
 	
+}
+
+function signUpPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/signUpPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {			
+			
+			dataArray = [[response[0].category,response[0].percentage]];
+						
+			if(chartSignUP != null){				
+				chartSignUP.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartSignUP= generateChart("#signUpChart", "Engagement");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 function intResCouncilPercentage(){
