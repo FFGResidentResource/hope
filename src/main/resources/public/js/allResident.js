@@ -76,9 +76,11 @@ jQuery(document).ready(
 				    data : 'email',
 				    render : function(t, type, row) {
 					if (row.viaEmail == true) {
-					    return row.email + '&nbsp;<span class="glyphicon glyphicon-check" style="color:blue;"></span>';
+					    return '<a href="mailto:' + row.email + '">' + row.email +'</a>' + '&nbsp;<span class="glyphicon glyphicon-check" style="color:blue;"></span>';
+					}else if(row.email == null){
+						return '';
 					}
-					return row.email;
+					return '<a href="mailto:' + row.email + '">' + row.email +'</a>';
 				    }
 				}, 
 				{
