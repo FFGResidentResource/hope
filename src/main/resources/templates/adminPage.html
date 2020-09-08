@@ -129,11 +129,11 @@ label{
 								& User Name</label>
 							<div class="col-sm-4">
 								<input type="email" class="form-control" id="inputEmail1"
-									placeholder="Email" th:field="*{email}">
+									placeholder="Email" th:field="*{email}" required>
 							</div>
 							<div class="col-sm-4">
 								<input class="form-control" id="userName1"
-									placeholder="User Name" th:field="*{userName}">
+									placeholder="User Name" th:field="*{userName}" required>
 							</div>
 						</div>
 
@@ -142,11 +142,11 @@ label{
 								& Confirm</label>
 							<div class="col-sm-4">
 								<input type="password" class="form-control" id="inputPassword1"
-									placeholder="Password" th:field="*{password}">
+									placeholder="Password" th:field="*{password}" required>
 							</div>
 							<div class="col-sm-4">
 								<input type="password" class="form-control" id="inputPassword2"
-									placeholder="Confirm Password" th:field="*{confirmPassword}">
+									placeholder="Confirm Password" th:field="*{confirmPassword}" required>
 							</div>
 						</div>
 
@@ -183,15 +183,10 @@ label{
 								<input type="submit" id="_serviceCoordForm"
 									class="btn btn-primary btn-lg" value="Save Service Coordinator"
 									onclick="debugger; validateFields();">
+									<span style="color:blue">(Password is Mandatory always!)</span>
 							</div>
 						</div>
-
-
 					</div>
-
-
-
-
 				</div>
 			</div>
 		</form>

@@ -49,17 +49,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
 
 		GrantedAuthority authority = null;
-
-        if (roleNames != null) {
+		
+		if (roleNames != null) {
             for (String role : roleNames) {
                 // ROLE_USER, ROLE_ADMIN,..
 				authority = new SimpleGrantedAuthority(role);
                 grantList.add(authority);
+                
+                if(role.equals("ROLE_ADMIN")) {
+                	sc.setAdmin(true);
+                }               	
+                	
             }
         }
+        
+               	
+        sc = this.serviceCoordinatorDAO.calculateEngagementAndIntakePending(sc);
+        
 
-		authority = new SimpleGrantedAuthority("ROLE_" + sc.getPropName());
+        authority = new SimpleGrantedAuthority("EngagementPercentage=" + sc.getEngagementPercentage());
 		grantList.add(authority);
+		
+		 authority = new SimpleGrantedAuthority("IntakePending=" + sc.getIntakePending());
+			grantList.add(authority);
  
         UserDetails userDetails = (UserDetails) new User(sc.getUserName(), //
         		sc.getEncrytedPassword(), grantList);

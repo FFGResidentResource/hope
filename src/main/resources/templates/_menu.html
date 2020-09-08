@@ -12,26 +12,28 @@
 			<h4 class="navbar-text">Resident Resource Network</h4>
 		</div>
 
-		<div class="collapse navbar-collapse" id="navbar-brand-centered">			
-		
+		<div class="collapse navbar-collapse" id="navbar-brand-centered">
+
 			<ul class="nav navbar-nav navbar-right">
 
 				<li><a th:href="@{/allResident}">All Residents</a></li>
-				<li><a th:href="@{/onboarding}">Onboarding & Modify</a></li>				
+				<li><a th:href="@{/onboarding}">Onboarding & Modify</a></li>
 				<li><a th:href="@{/dashboard}">Reports</a></li>
 				<li><a th:if="${isAdmin}" th:href="@{/admin}">Admin</a></li>
 				<li><a th:if="${#request.userPrincipal != null}"
 					th:href="@{/logout}">Logout</a></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown">Stats<span class="caret"></span></a>
 
+					<div class="dropdown-menu">
+						<div class="dropdown-header">Logged In User:<b><u><span id="_userName" th:text=${userName}></span></u></b></div>
+						<div class="dropdown-divider"><hr class="solidline1"></hr></div>					
+						<div class="text-center">Engagement: <b><u><span id="_per" th:text=${engagementPercentage}></span><span>%</span></u></b></div>
+						<div class="text-center">Intake Pending: <b><u><span id="_inpending" th:text=${intakePending}></span></u></b></div></div>
+					</div></li>
 			</ul>
 
-			<ul class="nav navbar-nav navbar-right">
-			
-				<h5 class="navbar-text">UserName:&nbsp;<span class="badge" id="_userName" th:text=${userName}></span></h5>
-				<h5 class="navbar-text">Is Admin? &nbsp;<span class="badge" th:text=${isAdmin}></span></h5>
-<!-- 				<h5 class="navbar-text">Grants:&nbsp;<span class="badge" id="_propertyGrant" th:text=${grantOnProperty}></span></h5>				 -->
-				
-			</ul>
 		</div>
+
 	</div>
 </nav>

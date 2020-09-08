@@ -69,11 +69,48 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		Object[] params = new Object[] { userName };
 		ServiceCoordinatorMapper mapper = new ServiceCoordinatorMapper();
 		try {
-			ServiceCoordinator serviceCordInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+			ServiceCoordinator serviceCordInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);			
+			
 			return serviceCordInfo;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
+	}
+	
+	public ServiceCoordinator calculateEngagementAndIntakePending(final ServiceCoordinator serviceCordInfo) {
+		
+		if(null==serviceCordInfo.getAdmin()) {
+			
+			String engagementSql = "select round(count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where active = TRUE and prop_id  in (SELECT P.PROP_ID FROM  PROPERTY P where P.ACTIVE = 'TRUE' " 
+					+			" and P.prop_id in ( select json_array_elements(assigned_property)::text::int from service_coordinator sc where json_typeof(assigned_property) != 'null' and SC.USER_NAME = ? )))::float* 100) as percentage "
+					+ 			" from resident where active = TRUE and ack_pr = true and prop_id  in (SELECT P.PROP_ID FROM  PROPERTY P where P.ACTIVE = 'TRUE' "  
+					+ 			" and P.prop_id in ( select json_array_elements(assigned_property)::text::int from service_coordinator sc where json_typeof(assigned_property) != 'null' and SC.USER_NAME = ? )) ";
+			
+			Integer percentage = this.getJdbcTemplate().queryForObject(engagementSql, new Object[] {serviceCordInfo.getUserName(), serviceCordInfo.getUserName()}, Integer.class);
+			serviceCordInfo.setEngagementPercentage(percentage);
+			
+			String intakePendingSQL = "select count(*) from resident where active = TRUE and ack_pr = FALSE "
+					+ "and prop_id in ( select json_array_elements(assigned_property)::text::int from service_coordinator sc where json_typeof(assigned_property) != 'null' and SC.USER_NAME = ? ) ";
+			
+			Integer totalIntakePending = this.getJdbcTemplate().queryForObject(intakePendingSQL, new Object[] {serviceCordInfo.getUserName()}, Integer.class);
+			serviceCordInfo.setIntakePending(totalIntakePending);
+									
+		}else {
+			
+			String engagementSql = "select round(count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where active = TRUE)::float* 100) as percentage "
+					+ 			" from resident where active = TRUE and ack_pr = true ";
+			
+			Integer percentage = this.getJdbcTemplate().queryForObject(engagementSql, Integer.class);
+			serviceCordInfo.setEngagementPercentage(percentage);
+			
+			String intakePendingSQL = "select count(*) from resident where ack_pr = FALSE and active = TRUE";
+			
+			Integer totalIntakePending = this.getJdbcTemplate().queryForObject(intakePendingSQL, Integer.class);
+			serviceCordInfo.setIntakePending(totalIntakePending);	
+			
+		}
+		
+		return serviceCordInfo;
 	}
 
 	public List<ServiceCoordinator> getAllServiceCoordinators() {
