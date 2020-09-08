@@ -73,7 +73,7 @@ public class ResidentController extends BaseController {
 		Resident resident = residentService.getResidentById(residentId, serviceCoord, "new", "getResident");
 
 		// Grants will never be null - either "All" or some Property
-		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		
 		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
@@ -156,7 +156,7 @@ public class ResidentController extends BaseController {
 		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "currentAssessment");
 
 		// Grants will never be null - either "All" or some Property
-		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		
 		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
@@ -190,7 +190,7 @@ public class ResidentController extends BaseController {
 			}
 
 		// Grants will never be null - either "All" or some Property
-		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		
 		Resident resident = residentService.getResidentById(residentId, serviceCoord, onThisDate, "referralForm");
 
 		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
@@ -260,7 +260,7 @@ public class ResidentController extends BaseController {
 		}
 
 		// Grants will never be null - either "All" or some Property
-		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		
 		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		resident = residentService.getAllQuestionnaire(resident);
@@ -373,7 +373,7 @@ public class ResidentController extends BaseController {
 		}
 
 		// Grants will never be null - either "All" or some Property
-		String grantOnProperty = model.asMap().get("grantOnProperty").toString();
+		
 		if (null != resident && null != resident.getResidentId() && null != checkResidentPropertyBelongsToSC(resident)) {
 
 		model.addAttribute("resident", resident);
