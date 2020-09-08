@@ -40,7 +40,7 @@ DROP TABLE if exists RESIDENT_SCORE_GOAL CASCADE;
 DROP TABLE if exists QUESTION_CHOICE;
 DROP TABLE if exists RESIDENT_ASSESSMENT_QUESTIONNAIRE;
 DROP TABLE if exists CHILD;
-DROP TABLE if exists RESIDENT;
+DROP TABLE if exists RESIDENT CASCADE;
 DROP TABLE if exists ASSESSMENT_TYPE;
 DROP TABLE if exists ASSESSMENT_QUESTIONNAIRE;
 DROP TABLE if exists REFERRAL;
@@ -140,19 +140,19 @@ INSERT INTO LIFE_DOMAIN_SCORE_GUIDE VALUES
 ,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 30,2,3,3)
 ,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 31,2,4,4)
 ,(NEXTVAL('LDSG_SQ'), 'EDUCATION', 31,1,5,5)
-,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 21,2,1,1)
-,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 22,2,2,2)
-,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 26,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 20,2,1,1)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 21,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 25,2,2,2)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 22,2,3,3)
 ,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 23,2,3,3)
-,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 24,2,3,3)
-,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 25,2,4,4)
-,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 26,1,5,5)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 24,2,4,4)
+,(NEXTVAL('LDSG_SQ'), 'EMPLOYMENT', 25,1,5,5)
 ,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 14,2,1,1)
 ,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 16,1,2,2)
 ,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 17,2,2,2)
-,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,1,3,3)
-,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,2,4,4)
-,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,1,5,5)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,2,3,3)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,5,4,4)
+,(NEXTVAL('LDSG_SQ'), 'MONEY MANAGEMENT', 18,6,5,5)
 ,(NEXTVAL('LDSG_SQ'), 'HOUSING', 1,2,1,1)
 ,(NEXTVAL('LDSG_SQ'), 'HOUSING', 2,1,1,1)
 ,(NEXTVAL('LDSG_SQ'), 'HOUSING', 4,2,2,2)
@@ -614,7 +614,7 @@ CREATE table RESIDENT (
 	A_DATE			DATE,
 	AGE				VARCHAR(3),
 	PRI_LANGUAGE	VARCHAR(128) DEFAULT 'English',
-	MARITAL_STATUS	VARCHAR(128) DEFAULT 'Married',
+	MARITAL_STATUS	VARCHAR(128),
 	ANNUAL_GROSS 	VARCHAR(128),
 	GENDER			VARCHAR(128) DEFAULT 'Information not collected',
 	ETHNICITY		VARCHAR(128) DEFAULT 'Information not collected',
@@ -640,6 +640,17 @@ CREATE table RESIDENT (
 
 alter table RESIDENT
   add constraint RESIDENT_UK unique (FIRST_NAME, LAST_NAME, PROP_ID, ADDRESS);
+
+ --TODO - For Production IN this table more gazillions columns needs to be created as VARCHAR 
+ --and then for HUD_REPORTING select r.column1, r.cloumn2, hud.column1, hud.cloumn2..<more columns like that> from resident r join HUD_REPORTING hud on hud.resident_id = r.resident_id and then this can be extracted in excel sheet from DBeaver Tool.
+CREATE TABLE HUD_REPORTING (
+	HUD_ID BIGINT PRIMARY KEY NOT NULL,
+	RESIDENT_ID BIGINT REFERENCES RESIDENT(RESIDENT_ID)
+	-- Column3, 
+	-- column4,
+	-- so on... 
+);
+	
   
 CREATE table CHILD (
 	CHILD_ID		BIGINT PRIMARY KEY NOT NULL,
@@ -762,55 +773,56 @@ CREATE TABLE Persistent_Logins (
   
 commit;
 
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Almond Village','','','', 50, 1000, TRUE, 1200, TRUE, 'FSA');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ashland Village','','','', 50, 1000, TRUE, 1300, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Batavia Village','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'RRN');
+--TODO Need to put correct number of unit, unit fee and total Resident
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Almond Village','Dayton','OH','Montgomery', 50, 1000, TRUE, 1200, TRUE, 'FSA');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Ashland Village','Ashland','OH','Ashland', 50, 1000, TRUE, 1300, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Batavia Village','Batavia','OH','Clermont', 40, 1000, TRUE, 1500, FALSE, 'RRN');
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Berwick Apartments','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Brooksville Court','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Burnett Manor','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cambridge Village','','','', 50, 1000, TRUE, 1000, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Chadwick Place','','','', 50, 1000, TRUE, 1000, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Burnett Manor','Rockville','IN','Parke', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cambridge Village','Cambridge','OH','Guernsey', 50, 1000, TRUE, 1000, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Chadwick Place','Marion','OH','Marion', 50, 1000, TRUE, 1000, TRUE, 'RRN');
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place1','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place2','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apartments','','','', 50, 1000, TRUE, 1500, FALSE, 'OTR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cypress Commons','','','', 50, 1000, TRUE, 1500, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Daines Village','','','', 50, 1000, TRUE, 1100, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eco Village','','','', 50, 900, TRUE, 1500, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park Apartments','','','', 50, 1000, TRUE, 1000, TRUE, 'ABCAP');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village Apartments','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes II','','','', 50, 1000, TRUE, 500, FALSE, 'WSOS');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Georgetown Senior Apartments','','','', 50, 1000, TRUE, 1200, TRUE, 'Sourcepoint');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glen Meadows','','','', 50, 1000, TRUE, 1300, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Haddon Hall Apartments','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Helen W. Evans (OH AME)','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Highpoint Apartments','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Hollister House','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Jerusalem Judson Meadows','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Judson Terrace','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Clifton Place2','South Point','OH','Lawrence', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cutter Apartments','Cincinnati','OH','Hamilton', 50, 1000, TRUE, 1500, FALSE, 'OTR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Cypress Commons','Middletown','OH','Butler', 50, 1000, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Daines Village','London','OH','Madison', 50, 1000, TRUE, 1100, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Eco Village','Fostoria','OH','Seneca', 50, 900, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fair Park Apartments','Sardinia','OH','Brown', 50, 1000, TRUE, 1000, TRUE, 'ABCAP');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Faith Village Apartments','Columbus','OH','Franklin', 703, 1000, TRUE, 500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Fostoria Townhomes II','Fostoria','OH','Seneca', 50, 1000, TRUE, 500, FALSE, 'WSOS');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Georgetown Senior Apartments','Delaware','OH','Delaware', 50, 1000, TRUE, 1200, TRUE, 'Sourcepoint');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Glen Meadows','Cincinnati','OH','Hamilton', 50, 1000, TRUE, 1300, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Haddon Hall Apartments','Cincinnati','OH','Hamilton', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Helen W. Evans (OH AME)','Marysville','OH','Union', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Highpoint Apartments','Lodlow','KY','Kenton', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Hollister House','Cincinnati','OH','Hamilton', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Jerusalem Judson Meadows','Cincinnati','OH','Hamilton', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Judson Terrace','Cincinnati','OH','Hamilton', 50, 1000, TRUE, 1000, TRUE, 'NCR');
 INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Manor','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'ILCAO');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village','','','', 50, 1000, TRUE, 1500, TRUE, 'ILCAO');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrenceburg Village','','','', 50, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lima Apartments','','','', 50, 1000, TRUE, 1500, TRUE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Meadows Apartments','','','', 50, 1000, TRUE, 1100, FALSE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Mechanicsburgh Village','','','', 50, 900, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Miamisburgh Manor','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Pleassant Valley Colony (Plain City)','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Princeton Village (Moraine Village)','','','', 50, 1000, TRUE, 500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Roosevelt Manor (Piqua Manor)','Sardinia','OH','Brown', 40, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rotary Manor','Columbus','OH','Franklin', 144, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rushville Commons','Fostoria','OH','Seneca', 40, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Skybird Manor','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'St. Aloysius Apartments','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sturbridge Green','','','', 50, 1000, TRUE, 1000, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sunnyview Square','South Point','OH','Lawrence', 70, 1000, TRUE, 1000, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (1)','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (2,3,4)','','','', 50, 1000, TRUE, 1500, FALSE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallicks (Schlarman)','','','', 50, 1000, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Union Square','','','', 50, 1000, TRUE, 1100, FALSE, 'RRN');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Vandalia Village','','','', 50, 900, TRUE, 1500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill','','','', 50, 1000, TRUE, 1000, TRUE, 'Wallick');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Walter G. Sellers Sr. Apartments (First 202 Housing Corp)','Cincinnati','OH','Hamilton', 703, 1000, TRUE, 500, TRUE, 'NCR');
-INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court House','','','', 50, 1000, TRUE, 500, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrence Village','South Point','OH','Lawrence', 50, 1000, TRUE, 1500, TRUE, 'ILCAO');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lawrenceburg Village','Lawrenceburg','IN','Dearborn', 50, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Lima Apartments','Lima','OH','Allen', 50, 1000, TRUE, 1500, TRUE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Meadows Apartments','Marysville','OH','Union', 50, 1000, TRUE, 1100, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Mechanicsburgh Village','Mechanicsburg','OH','Champaign', 50, 900, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Miamisburgh Manor','Miamisburg','OH','Montgomery', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Pleassant Valley Colony (Plain City)','Plain City','OH','Madison', 703, 1000, TRUE, 500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Princeton Village (Moraine Village)','Milton','OH','Miami', 50, 1000, TRUE, 500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Roosevelt Manor (Piqua Manor)','Piqua','OH','Miami', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rotary Manor','Urbana','OH','Champaign', 144, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Rushville Commons','Rushville','IN','Rush', 40, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Skybird Manor','Greensburg','IN','Decatur', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'St. Aloysius Apartments','Covington','KY','Kenton', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sturbridge Green','Hilliard','OH','Franklin', 50, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Sunnyview Square','Delaware','OH','Delaware', 70, 1000, TRUE, 1000, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (1)','Peoria','IL','Peoria', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallick (2,3,4)','Peoria','IL','Peoria', 50, 1000, TRUE, 1500, FALSE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Peoria/TM Wallicks (Schlarman)','Peoria','IL','Peoria', 50, 1000, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Union Square','Medina','OH','Medina', 50, 1000, TRUE, 1100, FALSE, 'RRN');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Vandalia Village','Vandalia','OH','Montgomery', 50, 900, TRUE, 1500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Villages at Roll Hill','Cincinnati','OH','Hamilton', 50, 1000, TRUE, 1000, TRUE, 'Wallick');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Walter G. Sellers Sr. Apartments (First 202 Housing Corp)','Xenia','OH','Greene', 703, 1000, TRUE, 500, TRUE, 'NCR');
+INSERT INTO PROPERTY values (nextval('PROP_SQ'),'Washington Court House','Washington Court House','OH','Fayette', 50, 1000, TRUE, 500, FALSE, 'RRN');
 
 
 
@@ -851,6 +863,51 @@ INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,
 ,(nextval('RESIDENT_SQ'),true,true,4,'Green','','Lantern',8,false,false,true,NULL,'614-111-1035','GreenLantern@gmail.com','1234 Lantern st.',true,true,true,true,'2020-04-26 12:19:32.000',NULL,'dbadmin1','dbadmin1',NULL,NULL,'10','English','Significant Other','40000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very safe','Very safe', '10 or more Years', 'No', 'Walk/Bike', 'End of the Month', 'Two Parent', 'No')
 ,(nextval('RESIDENT_SQ'),true,true,2,'Elastic','','Girl',8,false,true,true,NULL,'614-111-1000','elastic@email.com','1234 elastic ave',true,false,true,true,'2020-09-01 23:55:42.484','2020-09-01 23:59:03.241','dbadmin1','dbadmin1',NULL,NULL,'','English','Married','9000','Male','Information not collected','Information not collected','Yes','No','N/A','N/A','N/A','N/A','N/A','Grade 5 Bachelor''s Degree','Very safe','Very safe', '10 or more Years', 'No', 'Walk/Bike', 'End of the Month', 'Two Parent', 'No')
 ;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,3,'Dr.','','Strange',18,false,false,false,NULL,'(614)-111-7777',NULL,'1234 strange st.',false,false,false,false,'2020-09-05 22:43:48.244','2020-09-05 22:43:48.244',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'Will','','Smith',19,false,false,false,NULL,'614-111-6666',NULL,'1234 will st.',false,false,false,false,'2020-09-05 22:44:19.742','2020-09-05 22:44:19.742',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Tarzan',20,false,false,false,NULL,'612-111-5555',NULL,'1234 tarzan st.',false,false,false,false,'2020-09-05 22:44:59.949','2020-09-05 22:44:59.949',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Mogli','','Boy',21,false,false,false,NULL,'614-111-4444',NULL,'1234 mogli st.',false,false,false,false,'2020-09-05 22:45:47.792','2020-09-05 22:45:47.792',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Cindrella',22,false,false,false,NULL,'614-111-3333',NULL,'1234 cindrella st.',false,false,false,false,'2020-09-05 22:46:27.753','2020-09-05 22:46:27.753',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Chacha','','Chaudri',23,false,false,false,NULL,'614-111-2222',NULL,'1234 chacha st.',false,false,false,false,'2020-09-05 22:47:49.864','2020-09-05 22:47:49.864',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Bakelal','','Bihari',24,false,false,false,NULL,'614-111-1111',NULL,'1234 bakelal st.',false,false,false,false,'2020-09-05 22:48:22.418','2020-09-05 22:48:22.418',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'Nagraj','','Man',25,false,false,false,NULL,'614-111-2211',NULL,'1234 nagraj st.',false,false,false,false,'2020-09-05 22:49:15.840','2020-09-05 22:49:15.840',NULL,'dbadmin1',NULL,NULL,NULL,'English','Significant Other',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'Hollow','','Man',26,false,false,false,NULL,'614-111-1122',NULL,'1234 hollow st.',false,false,false,false,'2020-09-05 22:50:23.345','2020-09-05 22:50:23.345',NULL,'dbadmin1',NULL,NULL,NULL,'English','Significant Other',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'The','','Punisher',27,false,false,false,NULL,'614-111-1027',NULL,'1234 punisher st.',false,false,false,false,'2020-09-05 22:53:45.043','2020-09-05 22:53:45.043',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'The','','Hercules',28,false,false,false,NULL,'614-111-1028',NULL,'1234 hercules st.',false,false,false,false,'2020-09-05 22:55:04.119','2020-09-05 22:55:04.119',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'Kyle','','Rayner',29,false,false,false,NULL,'614-111-1029',NULL,'1234 kyle st.',false,false,false,false,'2020-09-05 22:56:15.557','2020-09-05 22:56:15.557',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Storm',30,false,false,false,NULL,'614-111-1030',NULL,'1234 storm st.',false,false,false,false,'2020-09-05 22:56:43.423','2020-09-05 22:56:43.423',NULL,'dbadmin1',NULL,NULL,NULL,'English','Significant Other',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'Ghost','','Rider',31,false,false,false,NULL,'614-111-1031',NULL,'1234 ghost st.',false,false,false,false,'2020-09-05 22:57:26.438','2020-09-05 22:57:26.438',NULL,'dbadmin1',NULL,NULL,NULL,'English','Significant Other',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'The','','Skaar',32,false,false,false,NULL,'614-111-1032',NULL,'1234 skaar st.',false,false,false,false,'2020-09-05 22:58:10.404','2020-09-05 22:58:10.404',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'The','','Northstar',33,false,false,false,NULL,'614-111-1033',NULL,'1234 northstar st.',false,false,false,false,'2020-09-05 22:59:04.311','2020-09-05 22:59:04.311',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Wally','','West',34,false,false,false,NULL,'614-111-1034',NULL,'1234 wally st.',false,false,false,false,'2020-09-05 22:59:34.568','2020-09-05 22:59:34.568',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Elektra',35,false,false,false,NULL,'614-111-1035',NULL,'1234 elektra st.',false,false,false,false,'2020-09-05 23:00:22.212','2020-09-05 23:00:22.212',NULL,'dbadmin1',NULL,NULL,NULL,'English','Significant Other',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Gamora',36,false,false,false,NULL,'614-111-1036',NULL,'1234 gamora st.',false,false,false,false,'2020-09-05 23:01:08.538','2020-09-05 23:01:08.538',NULL,'dbadmin1',NULL,NULL,NULL,'English','Significant Other',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,5,'The','','Blade',37,false,false,false,NULL,'614-111-1037',NULL,'1234 blade st.',false,false,false,false,'2020-09-05 23:01:39.959','2020-09-05 23:01:39.959',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'Emma','','Frost',38,false,false,false,NULL,'614-111-1038',NULL,'1234 emma st.',false,false,false,false,'2020-09-05 23:04:30.780','2020-09-05 23:04:30.780',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'Bart','','Allen',39,false,false,false,NULL,'614-111-1039',NULL,'1234 bart st.',false,false,false,false,'2020-09-05 23:05:20.500','2020-09-05 23:05:20.500',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Martian','Mm','Manhunter',40,false,false,false,NULL,'614-111-1040',NULL,'1234 martian st.',false,false,false,false,'2020-09-05 23:06:00.338','2020-09-05 23:06:00.338',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Thanos',41,false,false,false,NULL,'614-111-1041',NULL,'1234 thanos st.',false,false,false,false,'2020-09-05 23:06:24.306','2020-09-05 23:06:24.306',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'The','','Vision',42,false,false,false,NULL,'614-111-1042',NULL,'1234 vision st.',false,false,false,false,'2020-09-05 23:07:37.191','2020-09-05 23:07:37.191',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'The','','Cyborg',43,false,false,false,NULL,'614-111-1043',NULL,'1234 cyborg st.',false,false,false,false,'2020-09-05 23:07:59.490','2020-09-05 23:07:59.490',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,3,'Barbara','','Gordon',44,false,false,false,NULL,'614-111-1044',NULL,'1234 barbara st.',false,false,false,false,'2020-09-05 23:08:51.415','2020-09-05 23:08:51.415',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'Stephnie','','Brown',45,false,false,false,NULL,'614-111-1045',NULL,'1234 brown st.',false,false,false,false,'2020-09-05 23:09:39.632','2020-09-05 23:09:39.632',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,2,'Guy','','Gardner',46,false,false,false,NULL,'614-111-1046',NULL,'1234 guy st.',false,false,false,false,'2020-09-05 23:10:37.369','2020-09-05 23:10:37.369',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,1,'Jean','','Gray',47,false,false,false,NULL,'614-111-1047',NULL,'1234 jean st.',false,false,false,false,'2020-09-05 23:11:27.012','2020-09-05 23:11:27.012',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'The','','Angel',48,false,false,false,NULL,'614-111-1048',NULL,'1234 angel st.',false,false,false,false,'2020-09-05 23:12:00.982','2020-09-05 23:12:00.982',NULL,'dbadmin1',NULL,NULL,NULL,'English','Married',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+,(nextval('RESIDENT_SQ'),true,true,4,'Scarlet','','Witch',49,false,false,false,NULL,'614-111-1049',NULL,'1234 witch st.',false,false,false,false,'2020-09-05 23:12:27.449','2020-09-05 23:12:27.449',NULL,'dbadmin1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+
+INSERT INTO resident (resident_id,active,is_resident,ref_type,first_name,middle,last_name,prop_id,via_voicemail,via_text,via_email,voicemail_no,text_no,email,address,ack_pr,allow_contact,wants_survey,photo_release,date_added,date_modified,modified_by,service_coord,a_type,a_date,age,pri_language,marital_status,annual_gross,gender,ethnicity,race,h_o_h,veteran,disability,rc_or_ex_off,ssi,ssdi,health_coverage,highest_edu,safe_day,safe_night,occupancy_length,int_res_council,mode_transport,exp_food_short,internet_access,hoh_type) VALUES 
+(nextval('RESIDENT_SQ'),true,true,1,'The','','Phantom',3,false,false,false,NULL,'614-111-1050',NULL,'1234 phantom st.',false,false,false,false,'2020-09-07 20:18:08.304','2020-09-07 20:18:08.304',NULL,'dbuser1',NULL,NULL,NULL,'English','Single',NULL,'Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected','Information not collected',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)
+;
+
 
 
 INSERT INTO child (child_id,full_name,parent_id,pvr_flag) VALUES 
@@ -891,275 +948,346 @@ INSERT INTO child (child_id,full_name,parent_id,pvr_flag) VALUES
 ;
 
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),1,1,1,'HOUSING','2019-04-26')
-,(next_val('RAQ_SQ'),1,2,2,'HOUSING','2019-04-26')
-,(next_val('RAQ_SQ'),1,3,1,'HOUSING','2019-04-26')
-,(next_val('RAQ_SQ'),1,6,2,'HOUSING','2019-04-26')
-,(next_val('RAQ_SQ'),1,7,2,'HOUSING','2019-04-26')
-,(next_val('RAQ_SQ'),1,9,2,'MONEY MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,12,2,'MONEY MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,13,2,'MONEY MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,14,1,'MONEY MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,16,2,'MONEY MANAGEMENT','2019-04-26')
+(nextval('RAQ_SQ'),1,1,1,'HOUSING','2019-04-26')
+,(nextval('RAQ_SQ'),1,2,2,'HOUSING','2019-04-26')
+,(nextval('RAQ_SQ'),1,3,1,'HOUSING','2019-04-26')
+,(nextval('RAQ_SQ'),1,6,2,'HOUSING','2019-04-26')
+,(nextval('RAQ_SQ'),1,7,2,'HOUSING','2019-04-26')
+,(nextval('RAQ_SQ'),1,9,2,'MONEY MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,12,2,'MONEY MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,13,2,'MONEY MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,14,1,'MONEY MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,16,2,'MONEY MANAGEMENT','2019-04-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),1,17,2,'MONEY MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,19,9,'EMPLOYMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,20,2,'EMPLOYMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,26,2,'EDUCATION','2019-04-26')
-,(next_val('RAQ_SQ'),1,27,1,'EDUCATION','2019-04-26')
-,(next_val('RAQ_SQ'),1,28,2,'EDUCATION','2019-04-26')
-,(next_val('RAQ_SQ'),1,29,2,'EDUCATION','2019-04-26')
-,(next_val('RAQ_SQ'),1,32,2,'NETWORK SUPPORT','2019-04-26')
-,(next_val('RAQ_SQ'),1,33,2,'NETWORK SUPPORT','2019-04-26')
-,(next_val('RAQ_SQ'),1,40,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
+(nextval('RAQ_SQ'),1,17,2,'MONEY MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,19,9,'EMPLOYMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,20,2,'EMPLOYMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,26,2,'EDUCATION','2019-04-26')
+,(nextval('RAQ_SQ'),1,27,1,'EDUCATION','2019-04-26')
+,(nextval('RAQ_SQ'),1,28,2,'EDUCATION','2019-04-26')
+,(nextval('RAQ_SQ'),1,29,2,'EDUCATION','2019-04-26')
+,(nextval('RAQ_SQ'),1,32,2,'NETWORK SUPPORT','2019-04-26')
+,(nextval('RAQ_SQ'),1,33,2,'NETWORK SUPPORT','2019-04-26')
+,(nextval('RAQ_SQ'),1,40,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),1,41,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),1,42,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
-,(next_val('RAQ_SQ'),2,1,1,'HOUSING','2020-08-25')
-,(next_val('RAQ_SQ'),2,2,2,'HOUSING','2020-08-25')
-,(next_val('RAQ_SQ'),2,3,1,'HOUSING','2020-08-25')
-,(next_val('RAQ_SQ'),2,6,2,'HOUSING','2020-08-25')
-,(next_val('RAQ_SQ'),2,7,1,'HOUSING','2020-08-25')
-,(next_val('RAQ_SQ'),2,8,2,'HOUSING','2020-08-25')
-,(next_val('RAQ_SQ'),2,9,2,'MONEY MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,12,2,'MONEY MANAGEMENT','2020-08-25')
+(nextval('RAQ_SQ'),1,41,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),1,42,2,'HOUSEHOLD MANAGEMENT','2019-04-26')
+,(nextval('RAQ_SQ'),2,1,1,'HOUSING','2020-08-25')
+,(nextval('RAQ_SQ'),2,2,2,'HOUSING','2020-08-25')
+,(nextval('RAQ_SQ'),2,3,1,'HOUSING','2020-08-25')
+,(nextval('RAQ_SQ'),2,6,2,'HOUSING','2020-08-25')
+,(nextval('RAQ_SQ'),2,7,1,'HOUSING','2020-08-25')
+,(nextval('RAQ_SQ'),2,8,2,'HOUSING','2020-08-25')
+,(nextval('RAQ_SQ'),2,9,2,'MONEY MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,12,2,'MONEY MANAGEMENT','2020-08-25')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),2,13,2,'MONEY MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,14,1,'MONEY MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,16,2,'MONEY MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,17,2,'MONEY MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,19,9,'EMPLOYMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,20,3,'EMPLOYMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,21,2,'EMPLOYMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,26,2,'EDUCATION','2020-08-25')
-,(next_val('RAQ_SQ'),2,27,1,'EDUCATION','2020-08-25')
-,(next_val('RAQ_SQ'),2,28,2,'EDUCATION','2020-08-25')
+(nextval('RAQ_SQ'),2,13,2,'MONEY MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,14,1,'MONEY MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,16,2,'MONEY MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,17,2,'MONEY MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,19,9,'EMPLOYMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,20,3,'EMPLOYMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,21,2,'EMPLOYMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,26,2,'EDUCATION','2020-08-25')
+,(nextval('RAQ_SQ'),2,27,1,'EDUCATION','2020-08-25')
+,(nextval('RAQ_SQ'),2,28,2,'EDUCATION','2020-08-25')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),2,29,1,'EDUCATION','2020-08-25')
-,(next_val('RAQ_SQ'),2,30,3,'EDUCATION','2020-08-25')
-,(next_val('RAQ_SQ'),2,31,3,'EDUCATION','2020-08-25')
-,(next_val('RAQ_SQ'),2,32,2,'NETWORK SUPPORT','2020-08-25')
-,(next_val('RAQ_SQ'),2,33,2,'NETWORK SUPPORT','2020-08-25')
-,(next_val('RAQ_SQ'),2,40,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,41,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),2,42,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
-,(next_val('RAQ_SQ'),3,1,1,'HOUSING','2020-08-26')
-,(next_val('RAQ_SQ'),3,2,2,'HOUSING','2020-08-26')
+(nextval('RAQ_SQ'),2,29,1,'EDUCATION','2020-08-25')
+,(nextval('RAQ_SQ'),2,30,3,'EDUCATION','2020-08-25')
+,(nextval('RAQ_SQ'),2,31,3,'EDUCATION','2020-08-25')
+,(nextval('RAQ_SQ'),2,32,2,'NETWORK SUPPORT','2020-08-25')
+,(nextval('RAQ_SQ'),2,33,2,'NETWORK SUPPORT','2020-08-25')
+,(nextval('RAQ_SQ'),2,40,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,41,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),2,42,2,'HOUSEHOLD MANAGEMENT','2020-08-25')
+,(nextval('RAQ_SQ'),3,1,1,'HOUSING','2020-08-26')
+,(nextval('RAQ_SQ'),3,2,2,'HOUSING','2020-08-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),3,3,1,'HOUSING','2020-08-26')
-,(next_val('RAQ_SQ'),3,6,2,'HOUSING','2020-08-26')
-,(next_val('RAQ_SQ'),3,7,1,'HOUSING','2020-08-26')
-,(next_val('RAQ_SQ'),3,8,2,'HOUSING','2020-08-26')
-,(next_val('RAQ_SQ'),3,9,2,'MONEY MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,12,2,'MONEY MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,13,2,'MONEY MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,14,1,'MONEY MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,16,2,'MONEY MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,17,2,'MONEY MANAGEMENT','2020-08-26')
+(nextval('RAQ_SQ'),3,3,1,'HOUSING','2020-08-26')
+,(nextval('RAQ_SQ'),3,6,2,'HOUSING','2020-08-26')
+,(nextval('RAQ_SQ'),3,7,1,'HOUSING','2020-08-26')
+,(nextval('RAQ_SQ'),3,8,2,'HOUSING','2020-08-26')
+,(nextval('RAQ_SQ'),3,9,2,'MONEY MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,12,2,'MONEY MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,13,2,'MONEY MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,14,1,'MONEY MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,16,2,'MONEY MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,17,2,'MONEY MANAGEMENT','2020-08-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),3,19,9,'EMPLOYMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,20,3,'EMPLOYMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,21,2,'EMPLOYMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,26,2,'EDUCATION','2020-08-26')
-,(next_val('RAQ_SQ'),3,27,1,'EDUCATION','2020-08-26')
-,(next_val('RAQ_SQ'),3,28,2,'EDUCATION','2020-08-26')
-,(next_val('RAQ_SQ'),3,29,1,'EDUCATION','2020-08-26')
-,(next_val('RAQ_SQ'),3,30,3,'EDUCATION','2020-08-26')
-,(next_val('RAQ_SQ'),3,31,3,'EDUCATION','2020-08-26')
-,(next_val('RAQ_SQ'),3,32,2,'NETWORK SUPPORT','2020-08-26')
+(nextval('RAQ_SQ'),3,19,9,'EMPLOYMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,20,3,'EMPLOYMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,21,2,'EMPLOYMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,26,2,'EDUCATION','2020-08-26')
+,(nextval('RAQ_SQ'),3,27,1,'EDUCATION','2020-08-26')
+,(nextval('RAQ_SQ'),3,28,2,'EDUCATION','2020-08-26')
+,(nextval('RAQ_SQ'),3,29,1,'EDUCATION','2020-08-26')
+,(nextval('RAQ_SQ'),3,30,3,'EDUCATION','2020-08-26')
+,(nextval('RAQ_SQ'),3,31,3,'EDUCATION','2020-08-26')
+,(nextval('RAQ_SQ'),3,32,2,'NETWORK SUPPORT','2020-08-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),3,33,2,'NETWORK SUPPORT','2020-08-26')
-,(next_val('RAQ_SQ'),3,40,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,41,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),3,42,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
-,(next_val('RAQ_SQ'),1,48,2,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
-,(next_val('RAQ_SQ'),1,49,1,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
-,(next_val('RAQ_SQ'),1,50,2,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
-,(next_val('RAQ_SQ'),1,51,1,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
-,(next_val('RAQ_SQ'),1,52,12,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
-,(next_val('RAQ_SQ'),2,48,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+(nextval('RAQ_SQ'),3,33,2,'NETWORK SUPPORT','2020-08-26')
+,(nextval('RAQ_SQ'),3,40,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,41,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),3,42,2,'HOUSEHOLD MANAGEMENT','2020-08-26')
+,(nextval('RAQ_SQ'),1,48,2,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(nextval('RAQ_SQ'),1,49,1,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(nextval('RAQ_SQ'),1,50,2,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(nextval('RAQ_SQ'),1,51,1,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(nextval('RAQ_SQ'),1,52,12,'DISABILITY AND PHYSICAL HEALTH','2019-04-26')
+,(nextval('RAQ_SQ'),2,48,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),2,49,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
-,(next_val('RAQ_SQ'),2,50,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
-,(next_val('RAQ_SQ'),2,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
-,(next_val('RAQ_SQ'),2,52,16,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
-,(next_val('RAQ_SQ'),6,1,1,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,2,2,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,3,2,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,4,1,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,5,2,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,6,2,'HOUSING','2020-01-26')
+(nextval('RAQ_SQ'),2,49,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(nextval('RAQ_SQ'),2,50,1,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(nextval('RAQ_SQ'),2,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(nextval('RAQ_SQ'),2,52,16,'DISABILITY AND PHYSICAL HEALTH','2020-09-03')
+,(nextval('RAQ_SQ'),6,1,1,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,2,2,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,3,2,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,4,1,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,5,2,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,6,2,'HOUSING','2020-01-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),6,7,1,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,8,1,'HOUSING','2020-01-26')
-,(next_val('RAQ_SQ'),6,9,2,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,10,1,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,11,2,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,12,1,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,13,2,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,14,4,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,15,3,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,16,3,'MONEY MANAGEMENT','2020-01-26')
+(nextval('RAQ_SQ'),6,7,1,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,8,1,'HOUSING','2020-01-26')
+,(nextval('RAQ_SQ'),6,9,2,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,10,1,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,11,2,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,12,1,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,13,2,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,14,4,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,15,3,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,16,3,'MONEY MANAGEMENT','2020-01-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),6,17,3,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,18,5,'MONEY MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,19,10,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,20,1,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,21,1,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,22,1,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,23,2,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,24,1,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,25,1,'EMPLOYMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,26,1,'EDUCATION','2020-01-26')
+(nextval('RAQ_SQ'),6,17,3,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,18,5,'MONEY MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,19,10,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,20,1,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,21,1,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,22,1,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,23,2,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,24,1,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,25,1,'EMPLOYMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,26,1,'EDUCATION','2020-01-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),6,27,1,'EDUCATION','2020-01-26')
-,(next_val('RAQ_SQ'),6,28,2,'EDUCATION','2020-01-26')
-,(next_val('RAQ_SQ'),6,29,2,'EDUCATION','2020-01-26')
-,(next_val('RAQ_SQ'),6,30,1,'EDUCATION','2020-01-26')
-,(next_val('RAQ_SQ'),6,31,1,'EDUCATION','2020-01-26')
-,(next_val('RAQ_SQ'),6,32,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,33,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,34,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,35,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,36,1,'NETWORK SUPPORT','2020-01-26')
+(nextval('RAQ_SQ'),6,27,1,'EDUCATION','2020-01-26')
+,(nextval('RAQ_SQ'),6,28,2,'EDUCATION','2020-01-26')
+,(nextval('RAQ_SQ'),6,29,2,'EDUCATION','2020-01-26')
+,(nextval('RAQ_SQ'),6,30,1,'EDUCATION','2020-01-26')
+,(nextval('RAQ_SQ'),6,31,1,'EDUCATION','2020-01-26')
+,(nextval('RAQ_SQ'),6,32,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,33,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,34,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,35,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,36,1,'NETWORK SUPPORT','2020-01-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),6,37,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,38,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,39,1,'NETWORK SUPPORT','2020-01-26')
-,(next_val('RAQ_SQ'),6,40,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,41,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,42,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,43,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,44,2,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,45,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,46,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
+(nextval('RAQ_SQ'),6,37,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,38,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,39,1,'NETWORK SUPPORT','2020-01-26')
+,(nextval('RAQ_SQ'),6,40,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,41,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,42,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,43,3,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,44,2,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,45,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,46,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),6,47,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
-,(next_val('RAQ_SQ'),6,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
-,(next_val('RAQ_SQ'),6,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
-,(next_val('RAQ_SQ'),6,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
-,(next_val('RAQ_SQ'),6,52,16,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
-,(next_val('RAQ_SQ'),7,1,4,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,2,4,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,3,4,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,4,4,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,5,1,'HOUSING','2020-04-26')
+(nextval('RAQ_SQ'),6,47,4,'HOUSEHOLD MANAGEMENT','2020-01-26')
+,(nextval('RAQ_SQ'),6,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(nextval('RAQ_SQ'),6,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(nextval('RAQ_SQ'),6,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(nextval('RAQ_SQ'),6,52,16,'DISABILITY AND PHYSICAL HEALTH','2020-01-26')
+,(nextval('RAQ_SQ'),7,1,4,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,2,4,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,3,4,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,4,4,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,5,1,'HOUSING','2020-04-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),7,6,1,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,7,1,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,8,1,'HOUSING','2020-04-26')
-,(next_val('RAQ_SQ'),7,9,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,10,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,11,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,12,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,13,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,14,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,15,4,'MONEY MANAGEMENT','2020-04-26')
+(nextval('RAQ_SQ'),7,6,1,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,7,1,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,8,1,'HOUSING','2020-04-26')
+,(nextval('RAQ_SQ'),7,9,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,10,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,11,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,12,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,13,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,14,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,15,4,'MONEY MANAGEMENT','2020-04-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),7,16,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,17,4,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,18,6,'MONEY MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,19,10,'EMPLOYMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,20,4,'EMPLOYMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,21,4,'EMPLOYMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,22,1,'EMPLOYMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,23,1,'EMPLOYMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,24,1,'EMPLOYMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,25,1,'EMPLOYMENT','2020-04-26')
+(nextval('RAQ_SQ'),7,16,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,17,4,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,18,6,'MONEY MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,19,10,'EMPLOYMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,20,4,'EMPLOYMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,21,4,'EMPLOYMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,22,1,'EMPLOYMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,23,1,'EMPLOYMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,24,1,'EMPLOYMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,25,1,'EMPLOYMENT','2020-04-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),7,27,4,'EDUCATION','2020-04-26')
-,(next_val('RAQ_SQ'),7,28,4,'EDUCATION','2020-04-26')
-,(next_val('RAQ_SQ'),7,29,2,'EDUCATION','2020-04-26')
-,(next_val('RAQ_SQ'),7,30,2,'EDUCATION','2020-04-26')
-,(next_val('RAQ_SQ'),7,31,2,'EDUCATION','2020-04-26')
-,(next_val('RAQ_SQ'),7,33,2,'NETWORK SUPPORT','2020-04-26')
-,(next_val('RAQ_SQ'),7,37,2,'NETWORK SUPPORT','2020-04-26')
-,(next_val('RAQ_SQ'),7,38,2,'NETWORK SUPPORT','2020-04-26')
-,(next_val('RAQ_SQ'),7,39,1,'NETWORK SUPPORT','2020-04-26')
-,(next_val('RAQ_SQ'),7,40,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
+(nextval('RAQ_SQ'),7,27,4,'EDUCATION','2020-04-26')
+,(nextval('RAQ_SQ'),7,28,4,'EDUCATION','2020-04-26')
+,(nextval('RAQ_SQ'),7,29,2,'EDUCATION','2020-04-26')
+,(nextval('RAQ_SQ'),7,30,2,'EDUCATION','2020-04-26')
+,(nextval('RAQ_SQ'),7,31,2,'EDUCATION','2020-04-26')
+,(nextval('RAQ_SQ'),7,33,2,'NETWORK SUPPORT','2020-04-26')
+,(nextval('RAQ_SQ'),7,37,2,'NETWORK SUPPORT','2020-04-26')
+,(nextval('RAQ_SQ'),7,38,2,'NETWORK SUPPORT','2020-04-26')
+,(nextval('RAQ_SQ'),7,39,1,'NETWORK SUPPORT','2020-04-26')
+,(nextval('RAQ_SQ'),7,40,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
 ;
 INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
-(next_val('RAQ_SQ'),7,41,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,42,1,'HOUSEHOLD MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,43,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
-,(next_val('RAQ_SQ'),7,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
-,(next_val('RAQ_SQ'),7,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
-,(next_val('RAQ_SQ'),7,50,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
-,(next_val('RAQ_SQ'),7,51,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
-,(next_val('RAQ_SQ'),7,52,15,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+(nextval('RAQ_SQ'),7,41,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,42,1,'HOUSEHOLD MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,43,2,'HOUSEHOLD MANAGEMENT','2020-04-26')
+,(nextval('RAQ_SQ'),7,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(nextval('RAQ_SQ'),7,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(nextval('RAQ_SQ'),7,50,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(nextval('RAQ_SQ'),7,51,1,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+,(nextval('RAQ_SQ'),7,52,15,'DISABILITY AND PHYSICAL HEALTH','2020-04-26')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,5,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,6,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,7,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,8,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,19,9,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,20,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,21,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,22,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,1,1,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,2,2,'HOUSING','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,3,2,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,4,1,'HOUSING','2020-09-04')
+,(nextval('RAQ_SQ'),7,9,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,10,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,11,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,12,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,13,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,14,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,15,2,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,16,2,'MONEY MANAGEMENT','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,17,1,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,18,2,'MONEY MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,23,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,24,2,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,25,1,'EMPLOYMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,26,1,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,27,1,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,28,2,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,29,1,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,30,2,'EDUCATION','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,31,2,'EDUCATION','2020-09-04')
+,(nextval('RAQ_SQ'),7,32,2,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,33,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,34,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,35,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,36,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,37,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,38,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,39,1,'NETWORK SUPPORT','2020-09-04')
+,(nextval('RAQ_SQ'),7,40,2,'HOUSEHOLD MANAGEMENT','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,41,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,42,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,43,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,44,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,45,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,46,1,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,47,2,'HOUSEHOLD MANAGEMENT','2020-09-04')
+,(nextval('RAQ_SQ'),7,48,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+,(nextval('RAQ_SQ'),7,49,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+,(nextval('RAQ_SQ'),7,50,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+;
+INSERT INTO resident_assessment_questionnaire (raq_id,resident_id,question_id,choice_id,life_domain,on_this_date) VALUES 
+(nextval('RAQ_SQ'),7,51,2,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
+,(nextval('RAQ_SQ'),7,52,13,'DISABILITY AND PHYSICAL HEALTH','2020-09-04')
 ;
 
 INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
-(next_val('RSG_SQ'),1,'HOUSING',3,4,'2019-04-26')
-,(next_val('RSG_SQ'),1,'MONEY MANAGEMENT',2,3,'2019-04-26')
-,(next_val('RSG_SQ'),1,'EMPLOYMENT',1,2,'2019-04-26')
-,(next_val('RSG_SQ'),1,'EDUCATION',2,3,'2019-04-26')
-,(next_val('RSG_SQ'),1,'NETWORK SUPPORT',1,2,'2019-04-26')
-,(next_val('RSG_SQ'),1,'HOUSEHOLD MANAGEMENT',2,3,'2019-04-26')
-,(next_val('RSG_SQ'),2,'HOUSING',5,5,'2020-08-25')
-,(next_val('RSG_SQ'),2,'MONEY MANAGEMENT',2,3,'2020-08-25')
-,(next_val('RSG_SQ'),2,'EMPLOYMENT',2,3,'2020-08-25')
-,(next_val('RSG_SQ'),2,'EDUCATION',3,4,'2020-08-25')
+(nextval('RSG_SQ'),1,'HOUSING',3,4,'2019-04-26')
+,(nextval('RSG_SQ'),1,'MONEY MANAGEMENT',2,3,'2019-04-26')
+,(nextval('RSG_SQ'),1,'EMPLOYMENT',1,2,'2019-04-26')
+,(nextval('RSG_SQ'),1,'EDUCATION',2,3,'2019-04-26')
+,(nextval('RSG_SQ'),1,'NETWORK SUPPORT',1,2,'2019-04-26')
+,(nextval('RSG_SQ'),1,'HOUSEHOLD MANAGEMENT',2,3,'2019-04-26')
+,(nextval('RSG_SQ'),2,'HOUSING',5,5,'2020-08-25')
+,(nextval('RSG_SQ'),2,'MONEY MANAGEMENT',2,3,'2020-08-25')
+,(nextval('RSG_SQ'),2,'EMPLOYMENT',2,3,'2020-08-25')
+,(nextval('RSG_SQ'),2,'EDUCATION',3,4,'2020-08-25')
 ;
 INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
-(next_val('RSG_SQ'),2,'NETWORK SUPPORT',1,2,'2020-08-25')
-,(next_val('RSG_SQ'),2,'HOUSEHOLD MANAGEMENT',2,3,'2020-08-25')
-,(next_val('RSG_SQ'),3,'HOUSING',5,5,'2020-08-26')
-,(next_val('RSG_SQ'),3,'MONEY MANAGEMENT',2,3,'2020-08-26')
-,(next_val('RSG_SQ'),3,'EMPLOYMENT',2,3,'2020-08-26')
-,(next_val('RSG_SQ'),3,'EDUCATION',3,4,'2020-08-26')
-,(next_val('RSG_SQ'),3,'NETWORK SUPPORT',1,2,'2020-08-26')
-,(next_val('RSG_SQ'),3,'HOUSEHOLD MANAGEMENT',2,3,'2020-08-26')
-,(next_val('RSG_SQ'),1,'DISABILITY AND PHYSICAL HEALTH',1,2,'2019-04-26')
-,(next_val('RSG_SQ'),2,'DISABILITY AND PHYSICAL HEALTH',4,5,'2020-09-03')
+(nextval('RSG_SQ'),2,'NETWORK SUPPORT',1,2,'2020-08-25')
+,(nextval('RSG_SQ'),2,'HOUSEHOLD MANAGEMENT',2,3,'2020-08-25')
+,(nextval('RSG_SQ'),3,'HOUSING',5,5,'2020-08-26')
+,(nextval('RSG_SQ'),3,'MONEY MANAGEMENT',2,3,'2020-08-26')
+,(nextval('RSG_SQ'),3,'EMPLOYMENT',2,3,'2020-08-26')
+,(nextval('RSG_SQ'),3,'EDUCATION',3,4,'2020-08-26')
+,(nextval('RSG_SQ'),3,'NETWORK SUPPORT',1,2,'2020-08-26')
+,(nextval('RSG_SQ'),3,'HOUSEHOLD MANAGEMENT',2,3,'2020-08-26')
+,(nextval('RSG_SQ'),1,'DISABILITY AND PHYSICAL HEALTH',1,2,'2019-04-26')
+,(nextval('RSG_SQ'),2,'DISABILITY AND PHYSICAL HEALTH',4,5,'2020-09-03')
 ;
 INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
-(next_val('RSG_SQ'),6,'HOUSING',1,2,'2020-01-26')
-,(next_val('RSG_SQ'),6,'MONEY MANAGEMENT',1,2,'2020-01-26')
-,(next_val('RSG_SQ'),6,'EMPLOYMENT',3,4,'2020-01-26')
-,(next_val('RSG_SQ'),6,'EDUCATION',2,3,'2020-01-26')
-,(next_val('RSG_SQ'),6,'NETWORK SUPPORT',2,3,'2020-01-26')
-,(next_val('RSG_SQ'),6,'HOUSEHOLD MANAGEMENT',2,3,'2020-01-26')
-,(next_val('RSG_SQ'),6,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-01-26')
-,(next_val('RSG_SQ'),7,'HOUSING',2,3,'2020-04-26')
-,(next_val('RSG_SQ'),7,'MONEY MANAGEMENT',0,0,'2020-04-26')
-,(next_val('RSG_SQ'),7,'EMPLOYMENT',0,0,'2020-04-26')
+(nextval('RSG_SQ'),6,'HOUSING',1,2,'2020-01-26')
+,(nextval('RSG_SQ'),6,'MONEY MANAGEMENT',1,2,'2020-01-26')
+,(nextval('RSG_SQ'),6,'EMPLOYMENT',3,4,'2020-01-26')
+,(nextval('RSG_SQ'),6,'EDUCATION',2,3,'2020-01-26')
+,(nextval('RSG_SQ'),6,'NETWORK SUPPORT',2,3,'2020-01-26')
+,(nextval('RSG_SQ'),6,'HOUSEHOLD MANAGEMENT',2,3,'2020-01-26')
+,(nextval('RSG_SQ'),6,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-01-26')
 ;
-
 INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
-(next_val('RSG_SQ'),7,'EDUCATION',2,3,'2020-04-26')
-,(next_val('RSG_SQ'),7,'NETWORK SUPPORT',1,2,'2020-04-26')
-,(next_val('RSG_SQ'),7,'HOUSEHOLD MANAGEMENT',2,3,'2020-04-26')
-,(next_val('RSG_SQ'),7,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-04-26')
+(nextval('RSG_SQ'),7,'HOUSING',2,3,'2020-04-26')
+,(nextval('RSG_SQ'),7,'MONEY MANAGEMENT',0,0,'2020-04-26')
+,(nextval('RSG_SQ'),7,'EMPLOYMENT',0,0,'2020-04-26')
+,(nextval('RSG_SQ'),7,'EDUCATION',2,3,'2020-04-26')
+,(nextval('RSG_SQ'),7,'NETWORK SUPPORT',1,2,'2020-04-26')
+,(nextval('RSG_SQ'),7,'HOUSEHOLD MANAGEMENT',2,3,'2020-04-26')
+,(nextval('RSG_SQ'),7,'DISABILITY AND PHYSICAL HEALTH',5,5,'2020-04-26')
+,(nextval('RSG_SQ'),7,'HOUSING',3,4,'2020-09-04')
+,(nextval('RSG_SQ'),7,'MONEY MANAGEMENT',3,4,'2020-09-04')
+,(nextval('RSG_SQ'),7,'EMPLOYMENT',4,5,'2020-09-04')
+;
+INSERT INTO resident_score_goal (rsg_id,resident_id,life_domain,score,goal,on_this_date) VALUES 
+(nextval('RSG_SQ'),7,'EDUCATION',3,4,'2020-09-04')
+,(nextval('RSG_SQ'),7,'NETWORK SUPPORT',2,3,'2020-09-04')
+,(nextval('RSG_SQ'),7,'HOUSEHOLD MANAGEMENT',4,5,'2020-09-04')
+,(nextval('RSG_SQ'),7,'DISABILITY AND PHYSICAL HEALTH',2,3,'2020-09-04')
 ;
 
 
 INSERT INTO referral_form (referral_form_id,resident_id,interpretation,referred_by,date_added,date_modified,referral_reason,"comments",previous_attempts,rf_followup_notes,res_app_scheduled,service_coord) VALUES 
-(nextval('REF_SQ'),2,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"true","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Problem with Transportation','NA','will check back in december','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),30,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"true","Lease violation for:":"","Employment/job readiness":"true","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Shazam Reason','NA','Less Shazam activity next time','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),29,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"true","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Needs Education','NA','Ask him to read stories','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),1,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"true","Utility Shut-off, scheduled for (Date):":"08/01/2020","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','how not to miss rent','nil','re-meet in October','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),28,false,NULL,'2020-08-26','2020-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"true","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Domestic interfere, Groot should in park instead of spreading branches in other homes','NA','Meet soon','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),25,false,NULL,'2020-04-30','2020-04-30','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"true","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Professor X class too long to take care of child','NA','Test Again','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
-,(nextval('REF_SQ'),31,false,NULL,'2020-09-01','2020-09-01','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"Health","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"true","Healthcare/medical issues":"false","Other:":""}','better performance Healthwise','Referred her to Free clinic at Gahana','Followup notes here','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+(nextval('RF_SQ'),2,false,NULL,'2020-08-25','2020-08-25','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"true","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Problem with Transportation','NA','will check back in december','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('RF_SQ'),30,false,NULL,'2020-04-26','2020-04-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"true","Lease violation for:":"","Employment/job readiness":"true","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Shazam Reason','NA','Less Shazam activity next time','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('RF_SQ'),29,false,NULL,'2020-01-26','2020-01-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"true","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Needs Education','NA','Ask him to read stories','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
+,(nextval('RF_SQ'),1,false,NULL,'2019-04-26','2019-04-26','{"Non/late payment of rent":"true","Utility Shut-off, scheduled for (Date):":"08/01/2020","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','how not to miss rent','nil','re-meet in October','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('RF_SQ'),28,false,NULL,'2019-12-26','2019-12-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"true","Childcare/afterschool care":"false","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Domestic interfere, Groot should in park instead of spreading branches in other homes','NA','Meet soon','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('RF_SQ'),25,false,NULL,'2019-08-26','2019-08-26','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"true","Transportation":"false","Safety":"false","Healthcare/medical issues":"false","Other:":""}','Professor X class too long to take care of child','NA','Test Again','{"Resident Appointment Scheduled?":"10/01/2020"}','dbadmin1')
+,(nextval('RF_SQ'),31,false,NULL,'2020-09-01','2020-09-01','{"Non/late payment of rent":"false","Utility Shut-off, scheduled for (Date):":"","Housekeeping/home management":"false","Lease violation for:":"","Employment/job readiness":"false","Education/job training":"false","Noticeable change in:":"Health","Resident-to-resident conflict issues":"false","Suspected abuse/domestic violence/exploitation":"false","Childcare/afterschool care":"false","Transportation":"false","Safety":"true","Healthcare/medical issues":"false","Other:":""}','better performance Healthwise','Referred her to Free clinic at Gahana','Followup notes here','{"Resident Appointment Scheduled?":"12/01/2020"}','dbadmin1')
 ;
-
 
 INSERT INTO case_notes (case_notes_id,description,assessment,plan,no_show_date,resident_id,service_coord,date_added,date_modified) VALUES 
 (nextval('CN_SQ'),'Wear red and blue, looks like spider man, met him hanging on wall','he is struggling in paying rent on time but service cordinator is following','Action plan is in place and continuous followup will be there.','08/31/2020', 1,'dbadmin1','2020-08-26','2020-08-26')
@@ -1195,7 +1323,7 @@ insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, E
 values (nextval('SC_SQ'), 'dbuser2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser2@email.com', to_json('[4,5,6]'::json));
 
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL,  ASSIGNED_PROPERTY)
-values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbuser3@email.com', to_json('[7,8,9]'::json));
+values (nextval('SC_SQ'), 'dbuser3', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE,'dbuser3@email.com', to_json('[45,46,47]'::json));
 
 insert into SERVICE_COORDINATOR (SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
 values (nextval('SC_SQ'), 'dbadmin2', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',FALSE,'dbadmin2@email.com');
@@ -1314,7 +1442,7 @@ left join case_notes cn on cn.resident_id = r.resident_id
 left join action_Plan ap on ap.resident_id = r.resident_id ) P 
 where ( p."ACK" = true or P."SSM_DATE" is not null or P."CN_DATE" is not null or P."AP_DATE" is not null)
 ) z 
-where (
+where ( --Resident / SelfSufficiency / CaseNotes / ActionPlan filled this Quarter
 	(	z."RESQ" = extract (quarter from now()) and z."RESY" = extract (year from now())) 
 	OR (z."SSMQ" = extract (quarter from now()) AND z."SSMY" = extract (year from now())) 
 	OR (z."CNQ"	 = extract (quarter from now()) AND z."CNY" = extract (year from now())) 

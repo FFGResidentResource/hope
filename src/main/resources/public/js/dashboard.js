@@ -3,6 +3,7 @@
 
 window.onbeforeprint = function() {
 	
+	jQuery("#_propListPrint").text('');
 	jQuery(selectedProperties).each(function (idx, val){	
 		console.log(val);
 		var str = '#'+Number(val) + ':checked';
@@ -14,8 +15,62 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart, movingUpChart, movingDownChart, chartSignUP ;
 var dataArray;
+var reset = 0;
+
+var colors = ['#7B68EE',
+'#483D8B',
+'#000080',
+'#0000CD',
+'#0000FF',
+'#4169E1',
+'#4682B4',
+'#1E90FF',
+'#00BFFF',
+'#87CEFA',
+'#B0E0E6',
+'#006400',
+'#008000',
+'#2E8B57',
+'#3CB371',
+'#90EE90',
+'#00FF7F',
+'#6B8E23',
+'#808000',
+'#556B2F',
+'#FFE4B5',
+'#FFDAB9',
+'#EEE8AA',
+'#F0E68C',
+'#BDB76B',
+'#FFFF00',
+'#FF8C00',
+'#FFA500',
+'#FF7F50',
+'#FF6347',
+'#FF4500',
+'#FFD700',
+'#FFA07A',
+'#FA8072',
+'#E9967A',
+'#F08080',
+'#CD5C5C',
+'#DC143C',
+'#B22222',
+'#FF0000',
+'#8B0000',
+'#FF00FF',
+'#BA55D3',
+'#9370DB',
+'#8A2BE2',
+'#9400D3',
+'#9932CC',
+'#8B008B',
+'#E6E6FA',
+'#D8BFD8',
+'#DDA0DD'
+];
 
 jQuery(document).ready(function() {
 	
@@ -33,15 +88,55 @@ jQuery(document).ready(function() {
 	// each graph one by one need to be called here, below is just first one - TODO
 	generateReport();	
 	
-	jQuery("input[name^='_propId_']").on('change', function () {
-		generateReport();
-	});
-	
 	$('input:radio').change(function(){
 			generateAllQuarterlyReport();
 	});
+	
+	$("input[name^='_propId_']").change(function(){
+			generateReport();
+	});
     
 });
+
+function toggleProperties(that){
+	
+	jQuery("input[name^='_propId_']").prop('checked',!that.checked);
+	generateReport();
+}
+
+function citySelection(that){	
+	
+	if(reset < 1){
+		jQuery("input[name^='_propId_']").prop('checked',false);
+		reset = 1;
+	}
+	jQuery("input[name*='_City_"+jQuery(that).next().text()+"']").prop('checked',jQuery(that).prop('checked'));
+	generateReport();
+	
+}
+
+function countySelection(that){	
+	
+	if(reset < 1){
+		jQuery("input[name^='_propId_']").prop('checked',false);
+		reset = 1;
+	}
+	
+	jQuery("input[name*='_County_"+jQuery(that).next().text()+"']").prop('checked',jQuery(that).prop('checked'));
+	generateReport();
+	
+}
+
+function stateSelection(that){	
+
+	if(reset < 1){
+		jQuery("input[name^='_propId_']").prop('checked',false);
+		reset = 1;
+	}
+	
+	jQuery("input[name*='_State_"+jQuery(that).next().text()+"']").prop('checked',jQuery(that).prop('checked'));
+	generateReport();
+}
 
 //Onchange of Property checkBoxes
 function generateReport(){
@@ -54,6 +149,7 @@ function generateReport(){
 		}
 	});
 	
+	signUpPercentage();
 	genderPercentage();
 	ethnicityPercentage();
 	languagePercentage();
@@ -91,8 +187,254 @@ function generateAllQuarterlyReport(){
 	serviceAgencyQuarterly();
 	refTypeQuarterly();
 	outcomeQuarterly();
+	resServedQuarterly();
+	refReasonsQuarterly();
+	movingUpQuarterly();
+	movingDownQuarterly();
 	
 	
+}
+
+function ongoingResidents(that){
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/ongoingResidents",
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			jQuery("#_ongoingBadge").text(response);	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+	
+}
+
+function newResidents(that){
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/newResidents",
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			jQuery("#_newBadge").text(response);	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+	
+}
+
+function movingUpQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident Moving Up']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/movingUpQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(movingUpChart != null){				
+				movingUpChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					movingUpChart = generateCategoryChart("#movingUpChart", "Resident Moving Up", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function movingDownQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident Moving Down']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/movingDownQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(movingDownChart != null){				
+				movingDownChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					movingDownChart= generateCategoryChart("#movingDownChart", "Resident Moving Down", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+
+function resServedQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	var dataArrayPerf = null;
+	
+	var groupArray =  [['Resident Served']];
+	dataArrayPerf = [['x', 'Q1', 'Q2', 'Q3', 'Q4'],groupArray[0]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/residentServedQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+			
+			for(i = 1; i < 5; i++){
+				
+				var countFound = false
+				jQuery(response).each(function(idx,val){					
+					if(Number(val.quarter) == i){						
+						countFound = true;
+						dataArrayPerf[1][i] = 	val.count;					
+					}				
+				})				
+				if(!countFound){					
+					dataArrayPerf[1][i] = 0;
+				}
+			}
+			
+			if(resServedChart != null){				
+				resServedChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					resServedChart= generateCategoryChart("#resServedChart", "Resident Served", groupArray, dataArrayPerf);
+					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+
+function refReasonsQuarterly(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	
+	var groupArray =  [["Non/late payment of rent"], ["Utility Shut-off, scheduled for (Date):"], ["Housekeeping/home management"],["Lease violation for:"],["Employment/job readiness"],
+						["Education/job training"],["Noticeable change in:"],["Resident-to-resident conflict issues"],["Suspected abuse/domestic violence/exploitation"],["Childcare/afterschool care"],
+						["Transportation"],["Safety"],["Healthcare/medical issues"],
+						["Other:"]];
+	var dataArrayPerf = [["x", "Q1", "Q2", "Q3", "Q4"], ["Non/late payment of rent"], ["Utility Shut-off, scheduled for (Date):"], ["Housekeeping/home management"],["Lease violation for:"],["Employment/job readiness"],
+						["Education/job training"],["Noticeable change in:"],["Resident-to-resident conflict issues"],["Suspected abuse/domestic violence/exploitation"],["Childcare/afterschool care"],
+						["Transportation"],["Safety"],["Healthcare/medical issues"],
+						["Other:"]]; //Q1, Q2,Q3,Q4 values will be filled by logic below
+	
+			
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/refReasonQuarterly",
+		data: JSON.stringify({'selectedProperties':selectedProps, 'year':jQuery("input:radio:checked").val()}),
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+		
+		jQuery(response).each(function(idx,val){
+			jQuery(groupArray).each(function(p,category){		
+				
+				if(val.category == category){
+					//if category matches then only check for each quarter
+					for(j = 1; j < 5; j++){
+					
+						// This shows on each quarter some Catory found
+						if(val.quarter == j ){									
+							dataArrayPerf[p+1][j] = 	val.count;												
+						}else{
+							dataArrayPerf[p+1][j] = 0;
+						}	
+					}
+				}		
+			});	
+						
+		});	
+			
+			if(refReasonChart != null){				
+				refReasonChart.load({
+					columns : dataArrayPerf					
+				})
+			}else{		
+					refReasonChart= generateCategoryChart("#refReasonsChart", "Referral Reason", groupArray, dataArrayPerf);					
+				}			
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 function outcomeQuarterly(){
@@ -475,7 +817,10 @@ function generateCategoryChart(id, title, groupArray, dataArrayPerf){
 		          left: 50
 		        }
 		
-      		},	
+      		},
+			color: {	    
+		 		pattern: colors
+			},		
     		data: {
         		x : 'x',
         		columns: dataArrayPerf,
@@ -513,7 +858,10 @@ function generateChart(attachId, title){
 						labels:{
 							 format:function (v, id, i, j) { return v + '%'; }
 						},
-					},			
+					},
+			color: {	    
+		 		pattern: colors
+			},				
 					axis : {
 					    x : {
 						tick : {
@@ -535,6 +883,38 @@ function generateChart(attachId, title){
 					}					
 				    });	
 	
+}
+
+function signUpPercentage(){
+	
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+	
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/signUpPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {			
+			
+			dataArray = [[response[0].category,response[0].percentage]];
+						
+			if(chartSignUP != null){				
+				chartSignUP.load({
+					columns : dataArray					
+				})
+			}else{		
+					chartSignUP= generateChart("#signUpChart", "Engagement");
+					
+				}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
 }
 
 function intResCouncilPercentage(){

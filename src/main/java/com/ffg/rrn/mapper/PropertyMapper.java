@@ -17,12 +17,12 @@ import com.ffg.rrn.model.Property;
 public class PropertyMapper implements RowMapper<Property> {
 	
 	public static final String PROPERTY_SQL_FOR_NON_ADMIN_SC //
-			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL " + 
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY " + 
 					"FROM  PROPERTY P where P.ACTIVE = 'TRUE' " + 
 					"and P.prop_id in ( select json_array_elements(assigned_property)::text::int from service_coordinator sc where json_typeof(assigned_property) != 'null' and SC.USER_NAME = ?)";
 
 	public static final String PROPERTY_SQL //
-			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";
 
 	@Override
 	public Property mapRow(ResultSet rs, int row) throws SQLException {
@@ -36,6 +36,9 @@ public class PropertyMapper implements RowMapper<Property> {
 		p.setActive(rs.getBoolean("ACTIVE"));
 		p.setNoOfResident(rs.getInt("TOTAL_RESIDENTS"));
 		p.setResidentCouncil(rs.getBoolean("RESIDENT_COUNCIL"));
+		p.setCity(rs.getString("CITY"));
+		p.setState(rs.getString("STATE"));
+		p.setCounty(rs.getString("COUNTY"));
 		
 		return p;
 	}

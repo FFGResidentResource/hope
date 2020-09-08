@@ -44,10 +44,14 @@ public class DashboardController extends BaseController {
 		List<Property> allProperty = residentService.getAllProperty(getSessionUsername());
 		
 		
+		
 
 		Dashboard dashboard = new Dashboard();
 		dashboard.setProperties(allProperty);
 		dashboard.setYearList(dashboardDao.getAllYears());
+		dashboard.setCountyList(dashboardDao.getDistinctCounties());
+		dashboard.setStateList(dashboardDao.getDistinctState());
+		dashboard.setCityList(dashboardDao.getDistinctCity());
 
 		int total = 0;
 		if (!CollectionUtils.isEmpty(allProperty)) {

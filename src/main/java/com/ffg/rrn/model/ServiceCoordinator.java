@@ -71,6 +71,10 @@ public class ServiceCoordinator {
 	private List<String> allTakenUserNames;
 	
 	private String assignedProperties;
+	
+	private Integer engagementPercentage;
+	
+	private Integer intakePending;
  
   
  

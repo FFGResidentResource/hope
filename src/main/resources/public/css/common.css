@@ -151,6 +151,13 @@ hr.solidline1{
 	margin-bottom:10px;
 }
 
+hr.solidlinePrimary{
+	border-top: 5px solid #31708f;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+
 td.details-control {
     background: url('../images/details_open.png') no-repeat center center;
     cursor: pointer;

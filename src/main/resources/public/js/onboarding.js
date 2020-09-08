@@ -40,9 +40,11 @@ jQuery(document).ready(function() {
 		    },
 		    render : function(t, type, row) {
 			return moment(row.dateAdded).format("MM/DD/YY HH:mm");
-		    }
+		    },
+			visible:false
 		}, {
-		    data : 'serviceCoord'
+		    data : 'serviceCoord',
+			visible: false
 		},
 		 {
 		    data : 'voiceMail',
@@ -62,7 +64,7 @@ jQuery(document).ready(function() {
 		} ],
 		"order" : [ [ 1, "desc" ] ],
 		pageLength : 8,
-		pagingType : "full_numbers"
+		pagingType : "full"
 	    });  
 	    
 	    //Step - CheckGrants	    

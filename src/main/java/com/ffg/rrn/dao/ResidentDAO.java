@@ -238,7 +238,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	public List<Resident> getAllResident() {
 
-		ResidentMapper rowMapper = new ResidentMapper();
+		ResidentMapper rowMapper = new ResidentMapper();	
 		return this.getJdbcTemplate().query(ResidentMapper.RESIDENT_SQL, rowMapper);
 	}
 
@@ -544,12 +544,20 @@ public class ResidentDAO extends JdbcDaoSupport {
 	}
 
 	public long saveResidentAssessmentQuestionnaire(
-			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
+			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain, String selectedDate) {
 
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		String[] pkColumnNames = new String[] { "raq_id" };
-		this.getJdbcTemplate().update(conn -> buildInsertResidentAssessmentQuestionnairePS(conn,
-				residentAssessmentQuestionnaire, pkColumnNames, lifeDomain), keyHolder);
+		this.getJdbcTemplate().update(conn -> {
+			try {
+				return buildInsertResidentAssessmentQuestionnairePS(conn,
+						residentAssessmentQuestionnaire, pkColumnNames, lifeDomain, selectedDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}, keyHolder);
 
 		long raqId = keyHolder.getKey().longValue();
 		return raqId;
@@ -557,13 +565,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 	private PreparedStatement buildInsertResidentAssessmentQuestionnairePS(Connection connection,
 			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String[] pkColumnNames,
-			String lifeDomain) throws SQLException {
+			String lifeDomain, String selectedDate) throws SQLException, ParseException {
 		PreparedStatement ps = connection.prepareStatement(SQL_INSERT_RESIDENT_ASSESSMENT_QUES, pkColumnNames);
 		ps.setLong(1, residentAssessmentQuestionnaire.getResidentId());
 		ps.setInt(2, residentAssessmentQuestionnaire.getQuestionId());
 		ps.setInt(3, residentAssessmentQuestionnaire.getChoiceId());
 		ps.setString(4, lifeDomain);
-		ps.setDate(5, Date.valueOf(LocalDate.now()));
+		ps.setDate(5, (StringUtils.isBlank(selectedDate))? Date.valueOf(LocalDate.now()) : parseMyDate(selectedDate));
 		return ps;
 	}
 	

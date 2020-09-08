@@ -175,8 +175,8 @@ public class ResidentServiceImpl {
 	}
 
 	public long saveResidentAssessmentQuestionnaire(
-			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain) {
-		return residentDao.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain);
+			final ResidentAssessmentQuestionnaire residentAssessmentQuestionnaire, String lifeDomain, String selectedDate) {
+		return residentDao.saveResidentAssessmentQuestionnaire(residentAssessmentQuestionnaire, lifeDomain, selectedDate);
 	}
 
 	public long saveResidentScoreGoal(final Resident resident, String lifeDomain) {
@@ -197,7 +197,7 @@ public class ResidentServiceImpl {
 	public long insertResidentAssessmentQuestionnaire(String selectedDate, ResidentAssessmentQuestionnaire raqs,
 			String lifeDomain) {		
 
-		return residentDao.saveResidentAssessmentQuestionnaire(raqs, lifeDomain);
+		return residentDao.saveResidentAssessmentQuestionnaire(raqs, lifeDomain, selectedDate);
 	}
 
 	public int updateResidentScoreGoal(@Valid Resident resident, String lifeDomain) throws SQLException {

@@ -36,22 +36,42 @@ public class WebUtils {
         return sb.toString();
     }
 
-	public static String grantOnProperty(User user) {
+	public static String engagementPercentageFromGrant(User user) {
 
 		Collection<GrantedAuthority> authorities = user.getAuthorities();
 		if (authorities != null && !authorities.isEmpty()) {
 
 			for (GrantedAuthority a : authorities) {
 
-				if (!("ROLE_USER".equals(a.getAuthority()) || "ROLE_ADMIN".equals(a.getAuthority()))) {
-					if (a.getAuthority() != null) {
+				if (a.getAuthority().contains("EngagementPercentage=")) {			
+					
+					
 						return a.getAuthority();
-					}
+					
 				}
 			}
 		}
 		return "";
 	}
+	
+	public static String intakePendingFromGrant(User user) {
+
+		Collection<GrantedAuthority> authorities = user.getAuthorities();
+		if (authorities != null && !authorities.isEmpty()) {
+
+			for (GrantedAuthority a : authorities) {
+
+				if (a.getAuthority().contains("IntakePending=")) {			
+					
+					
+						return a.getAuthority();
+				
+				}
+			}
+		}
+		return "";
+	}
+	
 
 	public static boolean isAdmin(User user) {
 

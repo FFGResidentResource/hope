@@ -18,9 +18,11 @@ public class BaseController {
         String serviceCordInfo = WebUtils.toString(loggedinUser);
         model.addAttribute("serviceCordInfo", serviceCordInfo);
 
-		String grantOnProperty = WebUtils.grantOnProperty(loggedinUser).replaceAll("ROLE_", "");
+		String engagementPercentage = WebUtils.engagementPercentageFromGrant(loggedinUser).replaceAll("EngagementPercentage=", "");
+		String intakePending = WebUtils.intakePendingFromGrant(loggedinUser).replaceAll("IntakePending=", "");
 
-		model.addAttribute("grantOnProperty", grantOnProperty.equals("null") ? "All" : grantOnProperty);
+		model.addAttribute("engagementPercentage", engagementPercentage);
+		model.addAttribute("intakePending",intakePending);
 		model.addAttribute("isAdmin", WebUtils.isAdmin(loggedinUser));
 		model.addAttribute("userName", loggedinUser.getUsername());
         return loggedinUser.getUsername();

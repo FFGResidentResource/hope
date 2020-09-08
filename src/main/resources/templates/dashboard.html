@@ -58,37 +58,101 @@ body {
 
 			<div class="row myPanel hidden-print">
 
-				<div Class="col-sm-2">
-
+				<div Class="col-sm-1">
 					<th:block th:each="y: *{yearList}">
 						<label> <input type="radio" th:value="${y}"
 							th:field="*{year}" name="_year">&nbsp;<span
 							th:text="${y}"></span>
 						</label>
 					</th:block>
-
 				</div>
+				
+				<!-- <div Class="col-sm-1">
+					<label><input type="checkbox" onclick="toggleProperties(this);">&nbsp;Toggle Properties</label>					
+				</div> -->
 
-				<div class="col-sm-10 borderleft">
+				<div class="col-sm-11 borderleft">
 					<div th:each="pr, iStat: *{properties}">
 						<div class="col-md-3">
 							<label> <input type="checkbox" th:id="${pr.propertyId}"
-								th:name="'_propId_'+${pr.propertyId}">&nbsp;<span
+								th:name="'_propId_'+${pr.propertyId}+'_State_'+${pr.state}+'_City_'+${pr.city}+'_County_'+${pr.county}">&nbsp;<span
 								th:text="${pr.propertyName}"></span>
 							</label>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="panel panel-info hideme print-only">
-
-				<div class="panel-heading">
-					Report for Following Properties: <img
-						src="/images/rrnlogo_horz.png" style="float: right; width: 150px;" />
+				<div class="col-md-12">
+					<hr class="solidlinePrimary">
 				</div>
-				<div class="panel-body" id="_propListPrint"></div>
+
+				<div class="col-md-12">
+					<span><strong>County/City/State Filter: </strong></span>
+				</div>
+
+
+				<div class="col-md-12">
+					<div class="col-sm-1">
+						<label><strong><u>County</u></strong></label>
+					</div>
+					<div class="col-sm-11">
+						<span th:each="county, iStat: *{countyList}"> <label>
+								<input type="checkbox" th:id="'_cty_'+${county}"
+								onchange="countySelection(this);">&nbsp;<span
+								th:text="${county}"></span>
+						</label>
+
+						</span>
+					</div>
+				</div>
+
+				<div class="col-md-12">
+
+					<div class="col-sm-1">
+						<label><strong><u>City</u></strong></label>
+					</div>
+					<div class="col-sm-11">
+						<span th:each="city, iStat: *{cityList}"> <label> <input
+								type="checkbox" th:id="'_ct_'+${city}"
+								onchange="citySelection(this);">&nbsp;<span
+								th:text="${city}"></span>
+						</label>
+						</span>
+					</div>
+				</div>
+
+
+
+				<div class="col-md-12">
+					<div class="col-sm-1">
+						<label><strong><u>State</u></strong></label>
+					</div>
+					<div class="col-sm-10">
+						<span th:each="state, iStat: *{stateList}"> <label>
+								<input type="checkbox" th:id="'_st_'+${state}"
+								onchange="stateSelection(this);">&nbsp;<span
+								th:text="${state}"></span>
+						</label>
+						</span>
+					</div>
+					<div class="col-sm-1">
+						<label><strong><a class="btn btn-warning"
+								th:href="@{/dashboard}">Reset</a></strong></label>
+					</div>
+				</div>
+
 			</div>
+
+		</div>
+
+		<div class="panel panel-info hideme print-only">
+
+			<div class="panel-heading">
+				Report By:&nbsp;<h4><span th:text=${userName}></span></h4> Service Coordinator assigned properties: <img src="/images/rrnlogo_horz.png"
+					style="float: right; width: 150px;" />
+			</div>
+			<div class="panel-body" id="_propListPrint"></div>
+		</div>
 		</div>
 
 
@@ -96,131 +160,177 @@ body {
 		<div class="container-fluid">
 
 
-
-			<h3>Quarterly Performance Report (Based on Year Selection)</h3>
 			<div class="row">
+				<div class="col-sm-8">
+					<h2>Quarterly Performance Report (Based on Year Selection)</h2>
+				</div>
 				<div class="col-sm-4">
-					<div id="noShowsChart" style="min-height: 350px;"></div>
+					<button class="btn btn-info" type="button"
+						onclick="ongoingResidents(this);">
+						Count Ongoing Resident <span id="_ongoingBadge" class="badge"></span>
+					</button>
+					<button class="btn btn-success" type="button"
+						onclick="newResidents(this);">
+						Count New Residents <span id="_newBadge" class="badge"></span>
+					</button>
 				</div>
-				
+
+
 			</div>
-			
+
 			<div class="row">
-				
-				<div class="col-sm-12">
-					<div id="servicesChart" style="min-height: 350px;"></div>
-				</div>
-			</div>
-			
-			<div class="row">
-				
 				<div class="col-sm-2">
-					<div id="assessmentChart" style="min-height: 350px;"></div>
+					<div id="noShowsChart" style="min-height: 250px;"></div>
 				</div>
-				
+
 				<div class="col-sm-2">
-					<div id="serviceAgencyChart" style="min-height: 350px;"></div>
+					<div id="resServedChart" style="min-height: 250px;"></div>
 				</div>
-				
-				<div class="col-sm-3">
-					<div id="refTypeChart" style="min-height: 350px;"></div>
+
+				<div class="col-sm-2">
+					<div id="assessmentChart" style="min-height: 250px;"></div>
 				</div>
+
+				<div class="col-sm-2">
+					<div id="serviceAgencyChart" style="min-height: 250px;"></div>
+				</div>
+
+				<div class="col-sm-4">
+					<div id="refTypeChart" style="min-height: 250px;"></div>
+				</div>
+
 			</div>
-			
-			<h5> Resident Outcome </h5>
-			<div class="row">
-				
-				<div class="col-sm-12">
-					<div id="outAchChart" style="min-height: 350px;"></div>
-				</div>
-			</div>
-			
+
 			<hr class="solidline1">
 
-			<h3>Demographic Report (Independent of Year Selection)</h3>
 			<div class="row">
-				<div class="col-sm-4">
+
+				<div class="col-sm-6">
+					<div id="servicesChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-6">
+					<div id="refReasonsChart" style="min-height: 350px;"></div>
+				</div>
+			</div>
+
+			<hr class="solidline1">			
+
+			<div class="row">
+
+				<div class="col-sm-12">
+					<div id="outAchChart" style="min-height: 300px;"></div>
+				</div>
+			</div>
+
+			<hr class="solidline1">
+			
+			<div class="row">
+
+				<div class="col-sm-2">
+					<div id="movingUpChart" style="min-height: 350px;"></div>
+				</div>		
+
+				<div class="col-sm-2">
+					<div id="movingDownChart" style="min-height: 350px;"></div>
+				</div>
+			</div>
+			
+			<hr class="solidlinePrimary">
+
+			<h2>Demographic Report (Independent of Year Selection)</h2>
+			<div class="row">
+				<div class="col-sm-3">
+					<div id="signUpChart" style="min-height: 350px;"></div>
+				</div>				
+				<div class="col-sm-3">
 					<div id="genderChart" style="min-height: 350px;"></div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<div id="ethnicityChart" style="min-height: 350px;"></div>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<div id="raceChart" style="min-height: 350px;"></div>
 				</div>
-				<div class="col-sm-4">
-					<div id="languageChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="maritalStatusChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="householdChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="veteranChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="disabilityChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="exOffenderChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="ssiChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="ssdiChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="footShortageChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="modTransChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
-					<div id="internetAccessChart" style="min-height: 350px;"></div>
-				</div>
-				<div class="col-sm-4">
+			</div>
+			<hr class="solidline1">
+
+			<div class="row">
+				<div class="col-sm-2">
 					<div id="prefContactChart" style="min-height: 350px;"></div>
 				</div>
-				<div class="col-sm-12">
+				<div class="col-sm-2">
+					<div id="languageChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="maritalStatusChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="householdChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="veteranChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="footShortageChart" style="min-height: 350px;"></div>
+				</div>
+			</div>
+			<hr class="solidline1">
+
+			<div class="row">
+				
+				<div class="col-sm-2">
+					<div id="disabilityChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="exOffenderChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="ssiChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="ssdiChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="modTransChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-2">
+					<div id="internetAccessChart" style="min-height: 350px;"></div>
+				</div>
+			</div>
+			<hr class="solidline1">		
+
+			<div class="row">
+				<div class="col-sm-6">
 					<div id="healthChart" style="min-height: 350px;"></div>
 				</div>
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<div id="educationChart" style="min-height: 350px;"></div>
 				</div>
+			</div>
+			<hr class="solidline1">
 
-				<div class="row">
-					<div class="col-sm-4">
-						<div id="safeDayChart" style="min-height: 350px;"></div>
-					</div>
-
-					<div class="col-sm-4">
-						<div id="safeNightChart" style="min-height: 350px;"></div>
-					</div>
-
-					<div class="col-sm-4">
-						<div id="intResCouncilChart" style="min-height: 350px;"></div>
-					</div>
-
-					<div class="col-sm-4">
-						<div id="occLengthChart" style="min-height: 350px;"></div>
-					</div>
-
-					<div class="col-sm-4">
-						<div id="hohTypeChart" style="min-height: 350px;"></div>
-					</div>
-
-
+			<div class="row">
+				<div class="col-sm-2">
+					<div id="safeDayChart" style="min-height: 350px;"></div>
 				</div>
 
+				<div class="col-sm-2">
+					<div id="safeNightChart" style="min-height: 350px;"></div>
+				</div>
 
+				<div class="col-sm-2">
+					<div id="intResCouncilChart" style="min-height: 350px;"></div>
+				</div>
 
+				<div class="col-sm-3">
+					<div id="occLengthChart" style="min-height: 350px;"></div>
+				</div>
+				<div class="col-sm-3">
+					<div id="hohTypeChart" style="min-height: 350px;"></div>
+				</div>
 			</div>
+
 		</div>
-
-
 
 	</form>
 

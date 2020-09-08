@@ -23,6 +23,11 @@ public class Property {
 	private Boolean active;
 	private int noOfResident;
 	private Boolean residentCouncil;
+	
+	private String city;
+	private String state;
+	private String county;
+	
 
 	private Boolean checked;
 
