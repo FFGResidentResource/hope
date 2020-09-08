@@ -67,11 +67,11 @@ body {
 					</th:block>
 				</div>
 				
-				<div Class="col-sm-1">
+				<!-- <div Class="col-sm-1">
 					<label><input type="checkbox" onclick="toggleProperties(this);">&nbsp;Toggle Properties</label>					
-				</div>
+				</div> -->
 
-				<div class="col-sm-10 borderleft">
+				<div class="col-sm-11 borderleft">
 					<div th:each="pr, iStat: *{properties}">
 						<div class="col-md-3">
 							<label> <input type="checkbox" th:id="${pr.propertyId}"
