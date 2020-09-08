@@ -640,6 +640,17 @@ CREATE table RESIDENT (
 
 alter table RESIDENT
   add constraint RESIDENT_UK unique (FIRST_NAME, LAST_NAME, PROP_ID, ADDRESS);
+
+ --TODO - For Production IN this table more gazillions columns needs to be created as VARCHAR 
+ --and then for HUD_REPORTING select r.column1, r.cloumn2, hud.column1, hud.cloumn2..<more columns like that> from resident r join HUD_REPORTING hud on hud.resident_id = r.resident_id and then this can be extracted in excel sheet from DBeaver Tool.
+CREATE TABLE HUD_REPORTING (
+	HUD_ID BIGINT PRIMARY KEY NOT NULL,
+	RESIDENT_ID BIGINT REFERENCES RESIDENT(RESIDENT_ID)
+	-- Column3, 
+	-- column4,
+	-- so on... 
+);
+	
   
 CREATE table CHILD (
 	CHILD_ID		BIGINT PRIMARY KEY NOT NULL,
