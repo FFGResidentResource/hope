@@ -66,12 +66,13 @@ public class ResidentDAO extends JdbcDaoSupport {
 			+ " REF_TYPE=?, VIA_VOICEMAIL=?, VIA_TEXT=?, VIA_EMAIL=? ,DATE_MODIFIED=?,MODIFIED_BY=?,IS_RESIDENT=?, "
 			+ " AGE=?, PRI_LANGUAGE=?, MARITAL_STATUS=?, ANNUAL_GROSS=?, GENDER=?, ETHNICITY=?, RACE=?, H_O_H=?, VETERAN=?, DISABILITY=?, "
 			+ " RC_OR_EX_OFF=?, SSI=?, SSDI=?, HEALTH_COVERAGE=?, HIGHEST_EDU=?, SAFE_DAY=?, SAFE_NIGHT=?, "
-			+ " OCCUPANCY_LENGTH= ? , INT_RES_COUNCIL = ?, MODE_TRANSPORT = ?, EXP_FOOD_SHORT = ?, INTERNET_ACCESS = ?, HOH_TYPE = ?  WHERE RESIDENT_ID=?";
+			+ " OCCUPANCY_LENGTH= ? , INT_RES_COUNCIL = ?, MODE_TRANSPORT = ?, EXP_FOOD_SHORT = ?, INTERNET_ACCESS = ?, HOH_TYPE = ?, UNEMP_REASON = ?, BARRIER_TO_EDU = ?, HEALTH_CONDITION = ?, PROGRAM_SRVC_YOUTH = ?, PROGRAM_SRVC_ADULT = ?  WHERE RESIDENT_ID=?";
 
 	private final static String SQL_CHANGE_STATUS_OF_RESIDENT = "UPDATE RESIDENT SET ACTIVE=?, DATE_MODIFIED=?, MODIFIED_BY=? "
 			+ " WHERE RESIDENT_ID=?";
 
 	private final static String SQL_INSERT_CHILD = "INSERT INTO CHILD (CHILD_ID, FULL_NAME, PARENT_ID, PVR_FLAG) VALUES (nextval('CHILD_SQ'), ?,?,?)";
+	
 	private final static String SQL_DELETE_CHILD = "DELETE FROM CHILD WHERE PARENT_ID=?";
 
 	private final static String SQL_INSERT_RESIDENT_ASSESSMENT_QUES = "INSERT INTO RESIDENT_ASSESSMENT_QUESTIONNAIRE (RAQ_ID, RESIDENT_ID, QUESTION_ID, CHOICE_ID, LIFE_DOMAIN, ON_THIS_DATE) "
@@ -527,9 +528,14 @@ public class ResidentDAO extends JdbcDaoSupport {
 		ps.setString(41, resident.getExperienceFoodShortage());
 		ps.setString(42, resident.getInternetAccess());
 		ps.setString(43, resident.getHouseholdType());
+		ps.setString(44, resident.getUnEmpReason());
+		ps.setString(45, resident.getBarrierToEducation());
+		ps.setString(46, resident.getHealthCondition());
+		ps.setString(47, resident.getProgramSrvcYouth());
+		ps.setString(48, resident.getProgramSrvcAdult());
 		
 		
-		ps.setLong(44, resident.getResidentId()); //where ? is 44th in number in SQL_UPDATE_RESIDENT		
+		ps.setLong(49, resident.getResidentId()); //where ? is 44th in number in SQL_UPDATE_RESIDENT		
 		return ps;
 	}
 

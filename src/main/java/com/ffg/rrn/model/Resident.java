@@ -260,6 +260,13 @@ public class Resident {
 	public static final List<String> headOfHHTypeList = Arrays.asList("No Children", "One Parent", "Two Parent");
 	public static final List<String> internetAccessList = Arrays.asList("No, but my phone has internet access", "No, I have no internet access", "Yes");
 	
+	public static final List<String> unEmpReasonList = Arrays.asList("Caregiver","Criminal record", "Disabled", "Health problems", "In school", "No child care", "No Driver's License", "No transportation", "Retired", "Stay at home parent");
+	public static final List<String> barrierToEduList = Arrays.asList("Criminal record", "FAFSA application", "Lack of childcare", "Lack of funding", "No HS diploma/GED", "Owe money to a school", "Poor Grades", "Transportation", "Unsure of a career field", "Work");
+	public static final List<String> healthConditionList = Arrays.asList("Asthma", "Cancer", "Diabetes", "High blood Pressure", "Heart Disease", "Mental health/depression", "Substance abuse", "Other");
+	public static final List<String> programSrvcYouthList = Arrays.asList("Arts and crafts","After school program", "Computer education", "Delinquency prevention", "Drug prevention", "Field trips", "GED/ESL", "Jobs", "Mentoring", "Music", "Sports", "Tutoring");
+	public static final List<String> programSrvcAdultList = Arrays.asList("College preparation","Counselling", "Emergency assist", "GED/ESL", "Home ownership education", "Jobs", "Small business dev", "Vocational education");
+	
+	
 	private String age;
 	private String gender;
 	private String primaryLanguage;
@@ -283,6 +290,11 @@ public class Resident {
 	private String experienceFoodShortage;
 	private String householdType;
 	private String interestInResCouncil;
+	private String unEmpReason;
+	private String barrierToEducation;
+	private String healthCondition;
+	private String programSrvcYouth;
+	private String programSrvcAdult;
 	
 	
 	public String getFullName() {

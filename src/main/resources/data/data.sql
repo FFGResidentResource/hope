@@ -634,15 +634,20 @@ CREATE table RESIDENT (
 	MODE_TRANSPORT	VARCHAR(50),
 	EXP_FOOD_SHORT	VARCHAR(50),
 	INTERNET_ACCESS VARCHAR(50),
-	HOH_TYPE		VARCHAR(50)
-	
+	HOH_TYPE		VARCHAR(50),
+	UNEMP_REASON	VARCHAR(100),
+	BARRIER_TO_EDU	VARCHAR(100),
+	HEALTH_CONDITION	VARCHAR(100),
+	PROGRAM_SRVC_YOUTH	VARCHAR(100),
+	PROGRAM_SRVC_ADULT	VARCHAR(100)	
 );
 
 alter table RESIDENT
   add constraint RESIDENT_UK unique (FIRST_NAME, LAST_NAME, PROP_ID, ADDRESS);
 
  --TODO - For Production IN this table more gazillions columns needs to be created as VARCHAR 
- --and then for HUD_REPORTING select r.column1, r.cloumn2, hud.column1, hud.cloumn2..<more columns like that> from resident r join HUD_REPORTING hud on hud.resident_id = r.resident_id and then this can be extracted in excel sheet from DBeaver Tool.
+ --and then for HUD_REPORTING select r.column1, r.cloumn2, hud.column1, hud.cloumn2..<more columns like that> from resident r join HUD_REPORTING hud on hud.resident_id = r.resident_id 
+ --and then this can be extracted in excel sheet from DBeaver Tool.
 CREATE TABLE HUD_REPORTING (
 	HUD_ID BIGINT PRIMARY KEY NOT NULL,
 	RESIDENT_ID BIGINT REFERENCES RESIDENT(RESIDENT_ID)
