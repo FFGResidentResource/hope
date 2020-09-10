@@ -15,7 +15,7 @@ window.onbeforeprint = function() {
 
 var selectedProperties = [];
 var oneTimeToggle = false;
-var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart, movingUpChart, movingDownChart, chartSignUP ;
+var chart, chartEth, chartLang, chartMS, chartHouseHold, chartRace, chartVeteran, chartDis, chartExOff, chartSsi, chartSsdi, chartEdu, chartHealth, chartIA, chartPC, chartFS, chartMT, chartSD, chartSN, chartIRC, chartOL , chartHoh, noShowChart, servicesChart, aChart, saChart, refTypeChart, outAchChart, resServedChart,refReasonChart, movingUpChart, movingDownChart, chartSignUP, chartHC, chartUnEmpReason, chartBarrierToEdu, chartPsy, chartPsa;
 var dataArray;
 var reset = 0;
 
@@ -172,6 +172,11 @@ function generateReport(){
 	intResCouncilPercentage();
 	occLengthPercentage();
 	hohTypePercentage();
+	hcPercentage();
+	unEmpReasonPercentage();
+	barrierToEduPercentage();
+	psyPercentage();
+	psaPercentage();
 	
 	generateAllQuarterlyReport();
 	
@@ -1043,8 +1048,7 @@ function prefferedContactPercentage(){
 			
 			dataArray = [[response[0].category,response[0].percentage],
 						 [response[1].category,response[1].percentage],
-					[response[2].category,response[2].percentage],
-				[response[3].category,response[3].percentage]
+					[response[2].category,response[2].percentage]
 						];
 						
 			if(chartPC != null){				
@@ -1749,6 +1753,221 @@ function educationPercentage(){
 				})
 			}else{
 				chartEdu = generateChart("#educationChart", "Education");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+
+function hcPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/hcPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage]
+			];
+
+			if(chartHC != null){
+				chartHC.load({
+					columns : dataArray
+				})
+			}else{
+				chartHC = generateChart("#hcChart", "Health Condition");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+
+function unEmpReasonPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/unEmpReasonPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage]
+			];
+
+			if(chartUnEmpReason != null){
+				chartUnEmpReason.load({
+					columns : dataArray
+				})
+			}else{
+				chartUnEmpReason = generateChart("#unEmpReasonChart", "Primary reason for Unemployment");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function barrierToEduPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/barrierToEduPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage]
+			];
+
+			if(chartBarrierToEdu != null){
+				chartBarrierToEdu.load({
+					columns : dataArray
+				})
+			}else{
+				chartBarrierToEdu = generateChart("#barrierToEduChart", "Primary Barrier to College/Job training ");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function psyPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/psyPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage],
+				[response[8].category,response[8].percentage],
+				[response[9].category,response[9].percentage],
+				[response[10].category,response[10].percentage],
+				[response[11].category,response[11].percentage]
+			];
+
+			if(chartPsy != null){
+				chartPsy.load({
+					columns : dataArray
+				})
+			}else{
+				chartPsy = generateChart("#psyChart", "Program and Services desired for Youth  ");
+			}
+		},
+		error : function(e) {
+			console.log("ERROR : ", e);
+		}
+	});
+
+}
+
+function psaPercentage(){
+
+	var selectedProps = JSON.stringify(selectedProperties);
+	dataArray = null;
+
+	jQuery.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "/psaPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {
+
+			
+			dataArray = [[response[0].category,response[0].percentage],
+				[response[1].category,response[1].percentage],
+				[response[2].category,response[2].percentage],
+				[response[3].category,response[3].percentage],
+				[response[4].category,response[4].percentage],
+				[response[5].category,response[5].percentage],
+				[response[6].category,response[6].percentage],
+				[response[7].category,response[7].percentage]
+			];
+
+			if(chartPsa != null){
+				chartPsa.load({
+					columns : dataArray
+				})
+			}else{
+				chartPsa = generateChart("#psaChart", "Program and Services desired for Adult  ");
 			}
 		},
 		error : function(e) {
