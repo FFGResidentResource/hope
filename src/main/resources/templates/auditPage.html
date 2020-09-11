@@ -40,33 +40,29 @@
 
 	<form th:action="@{/pullAuditReports}" method='POST'
 		th:object="${residentAudits}" class="form-horizontal">
+		
 		<div class="container">
-
-
-
-			<div class="row myPanel">
-				<div class="col-sm-6  hidden-print">
+		
+			<div class="row myPanel hidden-print">
+				<div class="col-sm-6">
 				<label>Input Resident ID:&nbsp;<input class="control-label"
 					th:field="*{resIdForAudit}"></label> <input
 					class="btn btn-lg btn-info" type="submit"
 					value="Pull Audit Report" /> 
 					</div>
-					<div class="col-sm-6  hidden-print"><span style="color: blue;"><i>*Rights
+					<div class="col-sm-6"><span style="color: blue;"><i>*Rights
 						to Privacy when acknowledged first, that becomes Resident intake
-						Date</i></span></div>
-						
-						<div class="col-sm-2 hideme print-only">
-							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
-						</div>
+						Date</i></span></div>				
 
 			</div>
-			
-			
-
-
 		</div>
 
 		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-2 hideme print-only">
+							<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+						</div>
+			</div>
 			<div clas="row">
 				<div class="col-sm-12">
 
