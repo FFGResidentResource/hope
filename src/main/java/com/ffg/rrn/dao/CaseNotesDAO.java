@@ -30,7 +30,7 @@ import com.ffg.rrn.model.Resident;
 @Transactional
 public class CaseNotesDAO extends JdbcDaoSupport {
 
-	private static final String SQL_INSERT_CASE_NOTES = "INSERT INTO CASE_NOTES (CASE_NOTES_ID, DESCRIPTION, ASSESSMENT, PLAN, NO_SHOW_DATE, RESIDENT_ID, SERVICE_COORD) VALUES (nextval('CN_SQ'),?,?,?,?,?,?)";
+	private static final String SQL_INSERT_CASE_NOTES = "INSERT INTO CASE_NOTES (DESCRIPTION, ASSESSMENT, PLAN, NO_SHOW_DATE, RESIDENT_ID, SERVICE_COORD) VALUES (?,?,?,?,?,?)";
 	private static final String SQL_UPDATE_CASE_NOTES = "UPDATE CASE_NOTES SET DESCRIPTION =?, ASSESSMENT = ?, PLAN = ?, NO_SHOW_DATE = ?, SERVICE_COORD = ?,  DATE_MODIFIED = NOW() WHERE RESIDENT_ID = ? and DATE_ADDED = ? ";
 
 	

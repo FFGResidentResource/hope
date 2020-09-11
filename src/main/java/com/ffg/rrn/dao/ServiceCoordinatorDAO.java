@@ -39,17 +39,17 @@ import com.ffg.rrn.model.ServiceCoordinator;
 @Transactional
 public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
-	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON, ASSIGNED_PROPERTY)"
-			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW(), to_json(?::json))";
+	private final static String INSERTION_SQL_SERVICECOORDINATOR = "INSERT INTO SERVICE_COORDINATOR " + "( USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON, ASSIGNED_PROPERTY)"
+			+ " VALUES ( ?,?,true,?, NOW(), to_json(?::json))";
 	
-	private final static String INSERT_ADMIN_ROLE = "INSERT INTO USER_ROLE (ID, USER_ID, ROLE_ID) VALUES (nextval('UR_SQ'), ? , 1)";
+	private final static String INSERT_ADMIN_ROLE = "INSERT INTO USER_ROLE ( USER_ID, ROLE_ID) VALUES ( ? , 1)";
 
-	private final static String INSERT_USER_ROLE = "INSERT INTO USER_ROLE (ID, USER_ID, ROLE_ID) VALUES (nextval('UR_SQ'), ? , 2)";
+	private final static String INSERT_USER_ROLE = "INSERT INTO USER_ROLE ( USER_ID, ROLE_ID) VALUES ( ? , 2)";
 
 	private final static String DELETE_ROLE = "DELETE FROM USER_ROLE WHERE USER_ID = ?";
 
-	private final static String INSERTION_SQL_SERVICECOORDINATOR_ADMINS = "INSERT INTO SERVICE_COORDINATOR " + "(SC_ID, USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON)"
-			+ " VALUES (nextval('SC_SQ'), ?,?,true,?, NOW())";
+	private final static String INSERTION_SQL_SERVICECOORDINATOR_ADMINS = "INSERT INTO SERVICE_COORDINATOR " + "( USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL, CREATED_ON)"
+			+ " VALUES ( ?,?,true,?, NOW())";
 
 	private final static String UPDATE_SQL_SERVICECOORDINATOR_ADMIN = "UPDATE SERVICE_COORDINATOR SET EMAIL = ?, ENCRYPTED_PASSWORD = ? , DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
