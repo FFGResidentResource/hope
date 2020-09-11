@@ -75,8 +75,10 @@ public class ServiceCoordinator {
 	private Integer engagementPercentage;
 	
 	private Integer intakePending;
- 
-  
+	
+	private Long resIdForAudit; 
+	
+	private List<ResidentAudit> residentAudits;
  
 	public ServiceCoordinator(Integer scId, String userName, String encrytedPassword, boolean active, String email, Timestamp createdOn, Timestamp lastLogin, String assignedProperties) {
         this.scId = scId;

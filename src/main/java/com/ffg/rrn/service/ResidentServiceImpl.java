@@ -29,6 +29,7 @@ import com.ffg.rrn.model.Referral;
 import com.ffg.rrn.model.Resident;
 import com.ffg.rrn.model.ResidentAssessmentQuestionnaire;
 import com.ffg.rrn.model.ResidentScoreGoal;
+import com.ffg.rrn.model.ResidentAudit;
 
 /**
  * @author FFGRRNTeam
@@ -307,6 +308,10 @@ public class ResidentServiceImpl {
 
 	public List<String> getAllReferralPartners() {
 		return residentDao.getAllReferralPartners();
+	}
+
+	public List<ResidentAudit> getResidentAudits(Long residentId) {
+		return residentDao.getResidentAudits(residentId);
 	}
 
 	}
