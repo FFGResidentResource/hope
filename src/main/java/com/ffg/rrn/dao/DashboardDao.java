@@ -5,6 +5,7 @@ package com.ffg.rrn.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,6 +96,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -155,6 +159,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -215,6 +222,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -282,6 +292,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -342,6 +355,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -402,6 +418,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -462,6 +481,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -522,6 +544,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -583,6 +608,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -644,6 +672,9 @@ public class DashboardDao extends JdbcDaoSupport {
 
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
+			if (null == year) {
+				year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+			}
 			SQL_ = SQL_.replace(":year", '\'' + year + '\'');
 
 			qcs = this.getJdbcTemplate().query(SQL_, (rs, rowNumber) -> {
@@ -1926,7 +1957,7 @@ public class DashboardDao extends JdbcDaoSupport {
 				+ "				 select 'Phone Call' as category, ROUND((count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100) as percentage from resident where  prop_id in (:properties) and via_voicemail = true "
 				+ "				 union  "
 				+ "				 select 'Text Message' as category, ROUND((count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where prop_id  in (:properties))::float)* 100) as percentage from resident where  prop_id in (:properties) and via_text = true ";
-		
+
 		if (StringUtils.isNotBlank(selectedProperties)) {
 			SQL_ = SQL_.replace(":properties", selectedProperties);
 
