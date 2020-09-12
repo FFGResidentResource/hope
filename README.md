@@ -67,8 +67,8 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 
 ### Project Screen Shots:
 
-![Admin vs Non Admin SC](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/AdminVsNonAdminSCView.png.png?raw=true)
-![AllResident](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/All_Resident.png?raw=true)
+![Admin vs Non Admin SC](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/AdminVsNonAdminSCView.png?raw=true)
+![AllResident](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/All_Resident.PNG?raw=true)
 ![onboardingModify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/OnboardingModify.png?raw=true)
 ![referralForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/referralform.png?raw=true)
 ![intakeForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeForm1.png?raw=true)
