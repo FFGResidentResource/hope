@@ -332,6 +332,48 @@ public class RestAPIController {
 		return ResponseEntity.ok(cp);
 	}
 	
+	@PostMapping("/unEmpReasonPercentage")
+	public ResponseEntity<?> getUnEmpReasonPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getUnEmpReasonPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/barrierToEduPercentage")
+	public ResponseEntity<?> getbarrierToEduPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getBarrierToEducationPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/psyPercentage")
+	public ResponseEntity<?> getPSYouthPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getPSyouthPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	
+	@PostMapping("/psaPercentage")
+	public ResponseEntity<?> getpsAdultPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getPSAdultPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	@PostMapping("/hcPercentage")
+	public ResponseEntity<?> getHcPercentage(@RequestBody String selectedProperties) {
+
+		List<CategoryPercentage> cp = dashDao.getHCPercentage(selectedProperties);
+
+		return ResponseEntity.ok(cp);
+	}
+	
+	
 	@PostMapping("/hohTypePercentage")
 	public ResponseEntity<?> getHohTypePercentage(@RequestBody String selectedProperties) {
 
@@ -339,6 +381,8 @@ public class RestAPIController {
 
 		return ResponseEntity.ok(cp);
 	}
+	
+	
 	
 	@PostMapping("/noShowsQuarterly")
 	public ResponseEntity<?> getNoShowsQuarterly(@RequestBody HolderObj holderObj) {

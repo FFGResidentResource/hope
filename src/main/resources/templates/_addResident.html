@@ -298,6 +298,11 @@
 												</div></td>
 										</tr>
 										<tr>
+											<td><strong>Health Condition:</strong>
+												<div>
+													<span id="printhealthCondition" class="my-text-print"
+														th:text=*{healthCondition}></span>
+												</div></td>
 											<td><strong>Health Coverage:</strong>
 												<div>
 													<span id="printhealthCoverage" class="my-text-print"
@@ -313,8 +318,7 @@
 												<div>
 													<span id="printannual" class="my-text-print"
 														th:text=*{annualGross}></span>
-												</div></td>
-											<td></td>
+												</div></td>											
 										</tr>
 										
 										<tr>
@@ -359,6 +363,28 @@
 												<div>
 													<span id="printInterestCouncil" class="my-text-print"
 														th:text=*{interestInResCouncil}></span>
+												</div></td>
+										</tr>
+										<tr>
+											<td><strong>Primary reason for unemployment:</strong>
+												<div>
+													<span id="printUnempReason" class="my-text-print"
+														th:text=*{unEmpReason}></span>
+												</div></td>
+											<td><strong>Primary Barrier to College/Job Training:</strong>
+												<div>
+													<span id="printBarrieToEdu" class="my-text-print"
+														th:text=*{barrierToEducation}></span>
+												</div></td>
+											<td><strong>Progam and Services Desired Youth:</strong>
+												<div>
+													<span id="printPsy" class="my-text-print"
+														th:text=*{programSrvcYouth}></span>
+												</div></td>
+											<td><strong>Progam and Services Desired Adult:</strong>
+												<div>
+													<span id="printPsa" class="my-text-print"
+														th:text=*{programSrvcAdult}></span>
 												</div></td>
 										</tr>
 									</table>
@@ -509,6 +535,19 @@
 											</select>
 										</div>
 									</div>
+									
+									<div class="col-sm-3">
+										<label class="control-label">Health Condition
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_healthCondition" th:field="*{healthCondition}">
+												<option value="">Select</option>
+												<option th:each="hc : ${resident.healthConditionList}"
+													th:value="${hc}"
+													th:utext="${hc}" />
+											</select>
+										</div>
+									</div>
 
 									<div class="col-sm-3">
 										<label class="control-label" for="_hcov">Health
@@ -641,6 +680,59 @@
 												<option th:each="resCouncil : ${resident.yesNoList}"
 													th:value="${resCouncil}"
 													th:utext="${resCouncil}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+										<label class="control-label">Primary Reason for Unemployment
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_unempReson" th:field="*{unEmpReason}">
+												<option value="">Select</option>
+												<option th:each="unEmpReason : ${resident.unEmpReasonList}"
+													th:value="${unEmpReason}"
+													th:utext="${unEmpReason}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+										<label class="control-label">Primary Barrier to College/Job Training
+											 </label>
+										<div>
+											<select class="form-control  input-sm" id="_barrierToEdu" th:field="*{barrierToEducation}">
+												<option value="">Select</option>
+												<option th:each="bEdu : ${resident.barrierToEduList}"
+													th:value="${bEdu}"
+													th:utext="${bEdu}" />
+											</select>
+										</div>
+									</div>					
+
+									
+									<div class="col-sm-3">
+										<label class="control-label">Program & Services Desired Youth
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_psy" th:field="*{programSrvcYouth}">
+												<option value="">Select</option>
+												<option th:each="psy : ${resident.programSrvcYouthList}"
+													th:value="${psy}"
+													th:utext="${psy}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+										<label class="control-label">Program & Services Desired Adult
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_psa" th:field="*{programSrvcAdult}">
+												<option value="">Select</option>
+												<option th:each="psa : ${resident.programSrvcAdultList}"
+													th:value="${psa}"
+													th:utext="${psa}" />
 											</select>
 										</div>
 									</div>

@@ -178,7 +178,7 @@
 		<div class="container">
 
 			<div class="col-sm-12" style="background-color:#5cb85c3b">
-				<div class="page-header text-center">
+				<div class="page-header text-center">					
 					<h4>
 						<caption>
 						 <span style="color:blue;">You are viewing: [ </span><span id="_selectedResident" class="text-danger"></span> <span style="color:blue;">]</span>
@@ -189,7 +189,7 @@
 					<div class="col-sm-2">
 
 						<div class="caption">
-							<p><h4>Step 1</h4> <Span id="_refFormComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 1 <Span id="_refFormComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></h4></p>
 							<p></p>
 							<a id="_loadReferralForm" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -203,7 +203,7 @@
 					</div>
 					<div class="col-sm-2">
 						<div class="caption">
-							<p><h4>Step 2</h4><Span id="_signUpComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 2 <Span id="_signUpComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></h4></p>
 							<p></p>
 							<a id="_loadResident" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -238,7 +238,7 @@
 					
 					<div class="col-sm-2">
 						<div class="caption">
-							<p><h4>Step 4</h4><Span id="_actionPlanComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 4 <Span id="_actionPlanComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></h4></p>
 							<p></p>
 							<a id="_loadActionPlan" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -251,7 +251,7 @@
 
 					<div class="col-sm-2">
 						<div class="caption">
-							<p><h4>Step 5</h4><Span id="_contactNotesComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></p>
+							<p><h4>Step 5 <Span id="_contactNotesComplete" class="glyphicon glyphicon-ok hideme" style="color:green;"></Span></h4></p>
 							<p></p>
 							<a id="_loadCaseNotes" class="btn btn-default btn-lg"
 								th:disabled="${resident.residentId==null}"
@@ -370,13 +370,15 @@
 						</div>
 					</div>
 					<div class="col-sm-12">
-						<p><h4>Self Sufficiency Assessments</h4></p>
+						<p><h4>Self Sufficiency Assessments (<strong><span class="text-danger">1 = In Crisis</span>, <span class="text-warning">2 = Vulnerable</span>, <span class="text-info">3 = Safe</span>, <span class="text-success">4 = Building Capacity</span>, <span class="text-success">5 = Empowered</span>)</strong></h4></p>
+						
 					</div>
 				</div>
 
 				
 
 			</div>
+			
 	</form>
 
 

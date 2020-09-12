@@ -15,9 +15,8 @@
 
 
 <style>
-
 body {
-  -webkit-print-color-adjust: exact !important;
+	-webkit-print-color-adjust: exact !important;
 }
 
 .bd-placeholder-img {
@@ -40,7 +39,7 @@ body {
 }
 
 .c3-line {
-    stroke-width: 2px;
+	stroke-width: 2px;
 }
 </style>
 
@@ -53,10 +52,10 @@ body {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-6">
-				<div id="allResidentPieChart" style="min-height:550px;"></div>
+				<div id="allResidentPieChart" style="min-height: 550px;"></div>
 			</div>
 			<div class="col-sm-6">
-				<div id="singleResidentChart" style="min-height:550px;"></div>
+				<div id="singleResidentChart" style="min-height: 550px;"></div>
 			</div>
 		</div>
 	</div>
@@ -66,7 +65,7 @@ body {
 	<form th:action="@{/getResidentById}" method='POST'>
 		<div class="container-fluid hidden-print">
 			<div class="panel panel-info">
-				
+
 				<div class="panel-body">
 					<div class="col-sm-12">
 						<table id="residentTable" class="display compact"
@@ -91,9 +90,9 @@ body {
 							</thead>
 						</table>
 					</div>
-					
+
 					<!-- This stub is used to populate subtable when + icon is clicked on All resident Page, refer allResident.js where this gets modified with actual value -->
-					
+
 					<table class="hideme" cellpadding="5" cellspacing="0" border="0"
 						style="padding-left: 50px;">
 						<tr>
@@ -144,107 +143,27 @@ body {
 							<td><strong>Annual Gross Income:</strong></td>
 							<td>d.annualGross</td>
 						</tr>
-					</table>			
-					
+					</table>
+
 
 					<div class="col-sm-12 hideme">
 						<hr class="solidline1">
 					</div>
 
-					<div class="container hideme">
 
-						<div class="row text-center hidden-print">
-							<input type="hidden" id="_resId" name="residentId" value="" />
 
-							<div class="col-sm-2">
-								<div class="caption">
-									<p>
-										<span id="_hScoreGoal">--/--</span>
-									</p>
-									<p>(Score / Goal)</p>
-									<a id="_loadHousing" class="btn btn-default"
-										th:href="@{/getCurrentAssessment?lifeDomain=housing}"> <span
-										class="glyphicon glyphicon-home" style="color: darkturquoise;"
-										aria-hidden="true"></span> Housing
-									</a>
-								</div>
-							</div>
+					<div class="row text-center hidden-print">
+						<input type="hidden" id="_resId" name="residentId" value="" />
 
-							<div class="col-sm-2 borderleft">
-								<div class="caption">
-									<p>
-										<span id="_mmScoreGoal">--/--</span>
-									</p>
-									<p>(Score / Goal)</p>
-									<a id="_loadMoneyMgmt" class="btn btn-default"
-										th:href="@{/getCurrentAssessment?lifeDomain=moneyMgmt}"> <span
-										class="glyphicon glyphicon-usd" style="color: green;"
-										aria-hidden="true"></span> Money Mgmt
-									</a>
-								</div>
-							</div>
+						<div id="_onboardingDiv" class="hideme hidden-print">
 
-							<div class="col-sm-2 borderleft">
-								<div class="caption">
-									<p>
-										<span id="_empScoreGoal">--/--</span>
-									</p>
-									<p>(Score / Goal)</p>
-									<a id="_loadEmployment" class="btn btn-default"
-										th:href="@{/getCurrentAssessment?lifeDomain=employment}">
-										<span class="glyphicon glyphicon-briefcase"
-										style="color: indianred;" aria-hidden="true"></span>
-										Employment
-									</a>
-								</div>
-							</div>
-
-							<div class="col-sm-2 borderleft">
-								<div class="caption">
-									<p>
-										<span id="_eduScoreGoal">--/--</span>
-									</p>
-									<p>(Score / Goal)</p>
-									<a id="_loadEducation" class="btn btn-default"
-										th:href="@{/getCurrentAssessment?lifeDomain=education}"> <span
-										class="glyphicon glyphicon-education"
-										style="color: darkgoldenrod;" aria-hidden="true"></span>
-										Education
-									</a>
-								</div>
-							</div>
-
-							<div class="col-sm-2 borderleft">
-								<div class="caption">
-									<p>
-										<span id="_nsScoreGoal">--/--</span>
-									</p>
-									<p>(Score / Goal)</p>
-									<a id="_loadNetSupport" class="btn btn-default"
-										th:href="@{/getCurrentAssessment?lifeDomain=networkSupport}">
-										<span class="glyphicon glyphicon-link" style="color: red;"
-										aria-hidden="true"></span> Network Supp
-									</a>
-								</div>
-							</div>
-
-							<div class="col-sm-2 borderleft">
-								<div class="caption">
-									<p>
-										<span id="_hhScoreGoal">--/--</span>
-									</p>
-									<p>(Score / Goal)</p>
-									<a id="_loadHousehold" class="btn btn-default"
-										th:href="@{/getCurrentAssessment?lifeDomain=household}"> <span
-										class="glyphicon glyphicon-leaf" style="color: darkgreen;"
-										aria-hidden="true"></span> Household
-									</a>
-								</div>
-							</div>
-
+							<a id="_onboarding" class="btn btn-info"
+								th:href="@{/onboarding?residentId=}"> <span
+								class="glyphicon glyphicon-wrench" style="color: White;"
+								aria-hidden="true"></span> Select Row and Modify
+							</a>
 
 						</div>
-
 
 					</div>
 				</div>
@@ -262,7 +181,7 @@ body {
 	<script src="/js/allResident.js"></script>
 	<script src="/js/moment.js"></script>
 	<script src="/js/moment-timezone.js"></script>
-	
+
 	<script
 		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
 	<script src="/js/datatables.min.js"></script>

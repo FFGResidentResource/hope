@@ -128,7 +128,8 @@ jQuery(document).ready(
 				    // This prints all radio Options on
 				    // AllResident DataTables.
 				    var pre = jQuery('.dataTables_length').html();
-				    jQuery('.dataTables_length').html(pre + radioHtml);
+					var post = jQuery("#_onboardingDiv").html();
+				    jQuery('.dataTables_length').html(pre + radioHtml + post);
 
 				}
 			    });
@@ -169,7 +170,9 @@ jQuery(document).ready(
 						   
 						    table.$('tr.selected').removeClass('selected');
 						    $(this).addClass('selected');
-			
+		
+							var aHref = jQuery("#_onboarding").attr('href') + currentRow.residentId;
+							jQuery("#_onboarding").attr('href', aHref);
 						    /*
 						     * Following code populates Score Card Chart for individual Resident
 						     */

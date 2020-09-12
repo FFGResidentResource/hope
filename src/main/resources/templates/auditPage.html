@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Resident Resource Network</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/datatables.min.css" rel="stylesheet">
+<link href="/css/c3.min.css" rel="stylesheet">
+
+<style>
+.highlightChange {
+	color: crimson;
+}
+
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+.navbar-brand>img {
+	height: 100%;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+</style>
+
+</head>
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="../templates/_menu"></th:block>
+
+	<form th:action="@{/pullAuditReports}" method='POST'
+		th:object="${residentAudits}" class="form-horizontal">
+
+		<div class="container">
+
+			<div class="row myPanel hidden-print">
+				<div class="col-sm-6">
+					<label>Input Resident ID:&nbsp;<input class="control-label"
+						th:field="*{resIdForAudit}"></label> <input
+						class="btn btn-lg btn-info" type="submit"
+						value="Pull Audit Report" />
+				</div>
+				<div class="col-sm-6">
+					<span style="color: blue;"><i>*Rights to Privacy when
+							acknowledged first, that becomes Resident intake Date</i></span>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-2 hideme print-only">
+					<img src="/images/rrnlogo_horz.png" style="width: 150px;" />
+				</div>
+			</div>
+			<div clas="row">
+				<div class="col-sm-12">
+
+					<table id="auditTable"
+						class="table table-responsive table-bordered table-condensed"
+						style="background-color: ghostwhite;">
+						<caption>
+							<strong>Audit History: Each time resident is modified</strong>
+						</caption>
+
+						<thead>
+							<tr>
+
+								<th><b>Audit Date &amp; Status</b></th>
+								<th><b>Rights to Privacy:</b></th>
+								<th><b>Full Name</b></th>
+								<th><b>Ref Type</b></th>
+								<th><b>Prop Id</b></th>
+								<th><b>Contact Method</b></th>
+								<th><b>Address:</b></th>
+								<th><b>Choices:</b></th>
+								<th><b>Modified By:</b></th>								
+								<th><b>Demographics:</b></th>
+								<th><b>Demographics (Contd..):</b></th>
+
+							</tr>
+
+						</thead>
+
+
+						<tr th:each="au, iStat: ${residentAudits.auditListPerResident}">
+							<td><span th:id="_auditDate-__${iStat.index}__"
+								th:text="${au.auditDate}"></span> <span
+								th:id="_active-__${iStat.index}__"
+								th:text="${au.active} ? '(Active)' : '(Deactivated)'"></span> <span
+								th:id="_isResident-__${iStat.index}__"
+								th:text="${au.isResident} ? '(Resident)' : '(NonResident)'"></span>
+							</td>
+							<td><span th:id="_ackpr-__${iStat.index}__"
+								th:text="${au.ackRightsToPrivacy} ? '(Acknowledged)' : '(Pending)' "></span>
+
+							</td>
+							<td><span th:id="_fullName-__${iStat.index}__"
+								th:text="${au.firstName}+' '+${au.middle}+' '+${au.lastName}"></span>
+							</td>
+							<td><span th:id="_refType-__${iStat.index}__"
+								th:text="${au.refType}"></span></td>
+							<td><span th:id="_propId-__${iStat.index}__"
+								th:text="${au.propId}"></span></td>
+							<td>
+								<div>
+									<span th:id="_voicemail-__${iStat.index}__"
+										th:text="'vm: '+${au.voicemail}"></span> <span
+										th:id="_viaVoicemail-__${iStat.index}__"
+										th:text="'('+${au.viaVoicemail} + ')'"></span>
+								</div> <span th:id="_text-__${iStat.index}__"
+								th:text="'text: '+ ${au.text}"></span><span
+								th:id="_viaText-__${iStat.index}__"
+								th:text="'('+ ${au.viaText} + ')'"></span>
+								<div>
+									<span th:id="_email-__${iStat.index}__"
+										th:text="'email:'+${au.email}"></span><span
+										th:id="_viaEmail-__${iStat.index}__"
+										th:text="'('+${au.viaEmail} + ')' "></span>
+								</div>
+							</td>
+							<td><span th:id="_address-__${iStat.index}__"
+								th:text="${au.address}"></span></td>
+
+							<td>
+								<div>
+									<span th:id="_allowContact-__${iStat.index}__"
+										th:text="'AllowContact: ('+${au.allowContact}+')'"></span>
+								</div> <span th:id="_surveyChoice-__${iStat.index}__"
+								th:text="'Survey Choice: ('+ ${au.wantsSurvey} +')'"></span>
+
+								<div>
+									<span th:id="_pvr-__${iStat.index}__"
+										th:text="'PhotoRelease: ('+${au.photoRelease} + ')'"></span>
+								</div>
+							</td>
+
+							<td><span th:id="_mdf-__${iStat.index}__"
+								th:text="${au.modifiedBy}"></span></td>
+
+
+							<td>
+								<div>
+									<b>Age:</b> <span th:id="_age-__${iStat.index}__"
+										th:text="${au.age}"></span>
+								</div>
+								<div>
+									<b>Language:</b><span th:id="_lang-__${iStat.index}__"
+										th:text="${au.primaryLanguage}"></span>
+								</div>
+
+								<div>
+									<b>Marital Status:</b><span th:id="_ms-__${iStat.index}__"
+										th:text="${au.maritalStatus}"></span>
+								</div>
+
+								<div>
+									<b>Gender:</b><span th:id="_gender-__${iStat.index}__"
+										th:text="${au.gender}"></span>
+								</div>
+
+								<div>
+									<b>Ethnicity:</b><span th:id="_ethn-__${iStat.index}__"
+										th:text="${au.ethnicity}"></span>
+								</div>
+
+								<div>
+									<b>Race:</b><span th:id="_race-__${iStat.index}__"
+										th:text="${au.race}"></span>
+								</div>
+
+								<div>
+									<b>Head Household:</b><span th:id="_hoh-__${iStat.index}__"
+										th:text="${au.hoh}"></span>
+								</div>
+
+								<div>
+									<b>Veteran:</b><span th:id="_vet-__${iStat.index}__"
+										th:text="${au.veteran}"></span>
+								</div>
+
+								<div>
+									<b>Health Coverage:</b><span th:id="_hc-__${iStat.index}__"
+										th:text="${au.healthCoverage}"></span>
+								</div>
+
+								<div>
+									<b>Highest Edu:</b><span th:id="_hedu-__${iStat.index}__"
+										th:text="${au.highestEdu}"></span>
+								</div>
+
+								<div>
+									<b>Disability:</b><span th:id="_dis-__${iStat.index}__"
+										h:text="${au.disability}"></span>
+								</div>
+
+								<div>
+									<b>Returning Ctizen/Offender:</b><span
+										th:id="_exoff-__${iStat.index}__"
+										th:text="${au.returningCzOrExOffender}"></span>
+								</div>
+
+								<div>
+									<b>SSI:</b><span th:id="_ssi-__${iStat.index}__"
+										th:text="${au.ssi}"></span>
+								</div>
+
+								<div>
+									<b>SSDI:</b><span th:id="_ssdi-__${iStat.index}__"
+										th:text="${au.ssdi}"></span>
+								</div>
+
+
+
+							</td>
+
+							<td>
+								<div>
+									<b>AnnualGross:</b><span th:id="_income-__${iStat.index}__"
+										th:text="${au.annualGross}"></span>
+								</div>
+								<div>
+									<b>Feels Safe during Day:</b><span
+										th:id="_sday-__${iStat.index}__" th:text=" ${au.safeDay}"></span>
+								</div>
+
+								<div>
+									<b>Feels Safe during Night:</b><span
+										th:id="_snight-__${iStat.index}__" th:text=" ${au.safeNight}"></span>
+								</div>
+
+								<div>
+									<b>OccupancyLength:</b><span
+										th:id="_occlength-__${iStat.index}__"
+										th:text=" ${au.occupancyLength}"></span>
+								</div>
+
+								<div>
+									<b>Interested in Res. Council:</b><span
+										th:id="_intres-__${iStat.index}__"
+										th:text=" ${au.interestedInResCouncil}"></span>
+								</div>
+
+								<div>
+									<b>Mode of Transport:</b><span
+										th:id="_mdTran-__${iStat.index}__"
+										th:text=" ${au.modeOfTransport}"></span>
+								</div>
+
+								<div>
+									<b>Experiencing food Shortage:</b><span
+										th:id="_expfood-__${iStat.index}__"
+										th:text=" ${au.experiencingFoodShortage}"></span>
+								</div>
+
+								<div>
+									<b>Internet Access:</b><span
+										th:id="_intAccess-__${iStat.index}__"
+										th:text=" ${au.internetAccess}"></span>
+								</div>
+
+								<div>
+									<b>HOH Type:</b><span th:id="_hohType-__${iStat.index}__"
+										th:text=" ${au.hohType}"></span>
+								</div>
+
+								<div>
+									<b>Unemployment Reason:</b><span
+										th:id="_unEmpReason-__${iStat.index}__"
+										th:text=" ${au.unempReason}"></span>
+								</div>
+
+								<div>
+									<b>Barrier To Education:</b><span
+										th:id="_bedu-__${iStat.index}__"
+										th:text=" ${au.barrierToEducation}"></span>
+								</div>
+
+								<div>
+									<b>Health Condition:</b><span th:id="_hcond-__${iStat.index}__"
+										th:text=" ${au.healthCondition}"></span>
+								</div>
+
+								<div>
+									<b>Program Services Youth:</b><span
+										th:id="_psdy-__${iStat.index}__" th:text=" ${au.psdyouth}"></span>
+								</div>
+
+								<div>
+									<b>Program Services Adult:</b><span
+										th:id="_psda-__${iStat.index}__" th:text=" ${au.psdadult}"></span>
+								</div>
+
+							</td>
+						</tr>
+
+
+
+
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+	</form>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script
+		src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+	<script
+		src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+	<script src="/js/auditPage.js"></script>
+	<script src="/js/menu.js"></script>
+
+
+
+</body>
+
+</html>

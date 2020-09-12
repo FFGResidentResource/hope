@@ -14,6 +14,10 @@ jQuery(document).ready(function() {
 	jQuery("a[href='/caseNotes']").parent().addClass('active');
     } else if (path == '/dashboard') {
 	jQuery("a[href='/dashboard']").parent().addClass('active');
+    }else if (path == '/audits') {
+	jQuery("a[href='/audits']").parent().addClass('active');
+    }else if (path == '/pullAuditReports') {
+	jQuery("a[href='/audits']").parent().addClass('active');
     }
 
 });

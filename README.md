@@ -1,4 +1,95 @@
-# <ins>*Resident Resource Network - Hope* </ins>
+# <ins>*Resident Resource Network - Hope *  </ins>
+
+### Project Architecture
+
+![Architecture](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/architecture.png?raw=true)
+
+### * First time users for local setup please jump to * <ins> Software Download and Setup Step </ins>
+
+### Technological Stack for this Project
+
+> - Java 1.8 or higher 
+> - Spring Boot 2.x or higher (see version in pom.xml) - spring boot comes with embedded tomcat
+> - Thymeleaf for UI bindings to Backing bean
+> - Bootstrap Css for styling
+> - jQuery for browser scripting and traversing
+> - PostgreSQL for database - our database can be hosted online like in elephantsql platform
+> - Datatables.net API for all tabular presentation
+> - C3 D3 Js for all Charting in reports Tab.
+
+Java / spring - Intermediate knowledge is required
+Others (thymeleaf/ bootstrap / jquery/ etc..) - Beginners knowledge should be enough to maintain project.
+PostgreSql - Good to have SQL knowledge that should be enough.
+
+ 
+### Production Deployment and prerequisites
+
+In order to deploy to production, please see database-setup-prod.dml.sql you need to modify this file and add few things: (look for all "TODO" in this file) and add accordingly
+
+> - Cross check Property Table and validate each insert statements to see if properties names, county , state , city all looks correct 
+> - Create Insert Statements for REFERRAL_PARTNER TABLE - (basically All Agencies names)
+> - Insert row into Service coordinator table. <ins> Remember to always insert Encrypted password in DB not direct password </ins>
+> - how to Encrypt Password - see image below
+
+ ![encryptPassword](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/How-to-EncryptPassword.png?raw=true)
+ 
+> - use this encrypted password for your given password and go to section writeup insert into service_coordinator dml (refer example in data.sql for same)
+
+> - once you do this you have to write up insert into user_role table as well (user_id , role_id ) is must. user_id = sc_id from service_coordinator table. ROLE_Id = 1 or 2 (1 = ROLE_ADMIN and 2 = ROLE_USER) - Look for TODO in this .dml.sql file.
+
+> - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents and run in production Schema (this is one time task) - once SC started using website - <ins> *DO NOT run contents of this file as it will overwrite database.* </ins>
+
+> - This concludes Database setup
+
+### Deploy to Cloud - May have to look Microsoft Azure Spring boot deployment and <ins> how routing <ins> is done. (we have shown in past how to deploy with Pivotal Cloud Foundry)
+	
+	> - routing is nothing but global load balancer url or host url of the project that is connected to source IP of the system
+	> - Memory instance and all have to be defined as per Azure documentation.
+
+
+### Database Management
+
+> - If you go with ElephantSQL, have their own database backup so you not going to loose any data in case of disaster.
+> - Once resident is in System he/she should be always in system and should never be deleted from the System.
+> - Quarterly and Demographics Report includes Inactive and Active Resident both to produce accurate number of resident served for a given year.
+> - Action Plan, Contact Notes and all 7 life domain assessment maintains system of record by "on_this_date" so you will find this field in these table.
+> - There may be scenario like in 10 years if there are tons of assessment per resident and you want to archive those you should only archive these table - Action Plan / Contact Notes and Resident Assessment Questionnaire but System should be performant enough to handle data quantity easily.
+> - Its good idea to go over database-setup-prod.dml.sql to understand database in depth and then also understand how views are written.
+
+ ![ERDiagram](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/ER-Diagram.png?raw=true)
+
+> - we extracted ER Diagram from DBeaver tool and then saved as PNG in repo, if more tables are created in future ER Diagram needs to be recreated and export as PNG.
+
+<ins> *hint:* </ins> please see which dataTaype is json , date, number, varchar etc to look closely how data is getting stored in each
+
+> - Views are created to make data extract from json field easy based on per life domain and so on.
+
+
+### Project Screen Shots:
+
+![Admin vs Non Admin SC](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/AdminVsNonAdminSCView.png?raw=true)
+![AllResident](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/All_Resident.PNG?raw=true)
+![onboardingModify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/OnboardingModify.PNG?raw=true)
+![referralForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/referralform.PNG?raw=true)
+![intakeForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeForm1.PNG?raw=true)
+![intakeCont...](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeform2.PNG?raw=true)
+![Housing Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Housing.PNG?raw=true)
+![Money Mgmt Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_MoneyManagement.PNG?raw=true)
+![Employment Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Employment.PNG?raw=true)
+![Education Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Education.PNG?raw=true)
+![NetworkSupport Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_NetworkSupport.PNG?raw=true)
+![Household Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Household.PNG?raw=true)
+![DisabilityPhysicalHealth Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_DisabilityHealth.PNG?raw=true)
+![actionPlan](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Action_Plan1.PNG?raw=true)
+![actionPlan Contd..](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Action_Plan2.PNG?raw=true)
+![Contact notes](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/ContactNotes.PNG?raw=true)
+![Report1](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports1.PNG?raw=true)
+![Report2](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports2.PNG?raw=true)
+![Report3](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports3.PNG?raw=true)
+![Report4](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Report4.PNG?raw=true)
+![Report5](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Report5.PNG?raw=true)
+
+
 
 ### Software Download and Setup
 
@@ -107,3 +198,10 @@
 > Together with name, property search we have also enable email, text, voicemail, address search as well. Please see screen shot below:
 
  ![onboarding modify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-use-onboarding-modify.png?raw=true)
+ 
+
+
+
+
+
+

@@ -20,14 +20,11 @@ public class PasswordUtils {
     }
  
     public static void main(String[] args) {
-        String password = createRandomPassword();
-        String encrytedPassword = encryptPassword(password);
-        System.out.println("Password: " + password);
+       
+        String encrytedPassword = encryptPassword("123");
+        System.out.println("Password: " + 123);
         System.out.println("Encryted Password: " + encrytedPassword);
-        String password1 = createRandomPassword();
-        String encrytedPassword1 = encryptPassword(password1);
-        System.out.println("Password: " + password1);
-        System.out.println("Encryted Password: " + encrytedPassword1);
+       
     }
     
     //I do not this this actually works...
