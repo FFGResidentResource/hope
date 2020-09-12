@@ -64,6 +64,33 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 
 > - Views are created to make data extract from json field easy based on per life domain and so on.
 
+
+### Project Screen Shots:
+
+![Admin vs Non Admin SC](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/AdminVsNonAdminSCView.png.png?raw=true)
+![AllResident](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/All_Resident.png?raw=true)
+![onboardingModify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/OnboardingModify.png?raw=true)
+![referralForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/referralform.png?raw=true)
+![intakeForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeForm1.png?raw=true)
+![intakeCont...](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeForm2.png?raw=true)
+![Housing Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Housing.png?raw=true)
+![Money Mgmt Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_MoneyManagement.png?raw=true)
+![Employment Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Employment.png?raw=true)
+![Education Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Education.png?raw=true)
+![NetworkSupport Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_NetworkSupport.png?raw=true)
+![Household Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Household.png?raw=true)
+![DisabilityPhysicalHealth Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_DisabilityHealth.png?raw=true)
+![actionPlan](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Action_Plan1.png?raw=true)
+![actionPlan Contd..](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Action_Plan2.png?raw=true)
+![Contact notes](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/ContactNotes.png?raw=true)
+![Report1](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports1.png?raw=true)
+![Report2](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports2.png?raw=true)
+![Report3](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports3.png?raw=true)
+![Report4](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Report4.png?raw=true)
+![Report5](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Report5.png?raw=true)
+
+
+
 ### Software Download and Setup
 
 > - Download JDK1.8 from [JDK](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
