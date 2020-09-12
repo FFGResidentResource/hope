@@ -1,4 +1,8 @@
-# <ins>*Resident Resource Network - Hope* </ins>
+# <ins>*Resident Resource Network - Hope *  </ins>
+
+### Project Architecture
+
+![Architecture](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/architecture.png?raw=true)
 
 ### Technological Stack for this Project
 
@@ -14,6 +18,42 @@
 Java / spring - Intermediate knowledge is required
 Others (thymeleaf/ bootstrap / jquery/ etc..) - Beginners knowledge should be enough to maintain project.
 PostgreSql - Good to have SQL knowledge that should be enough.
+
+ 
+### Production Deployment and prerequisites
+
+In order to deploy to production, please see database-setup-prod.dml.sql you need to modify this file and add few things: (look for all "TODO" in this file) and add accordingly
+
+> - Cross check Property Table and validate each insert statements to see if properties names, county , state , city all looks correct 
+> - Create Insert Statements for REFERRAL_PARTNER TABLE - (basically All Agencies names)
+> - Insert row into Service coordinator table. <ins> Remember to always insert Encrypted password in DB not direct password </ins>
+> - how to Encrypt Password - see image below
+
+ ![encryptPassword](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/How-to-EncryptPassword.png?raw=true)
+ 
+> - use this encrypted password for your given password and go to section writeup insert into service_coordinator dml (refer example in data.sql for same)
+
+> - once you do this you have to write up insert into user_role table as well (user_id , role_id ) is must. user_id = sc_id from service_coordinator table. ROLE_Id = 1 or 2 (1 = ROLE_ADMIN and 2 = ROLE_USER) - Look for TODO in this .dml.sql file.
+
+> - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents and run in production Schema (this is one time task) - once SC started using website - <ins> *DO NOT run contents of this file as it will overwrite database.* </ins>
+
+> - this concludes Database setup
+
+> - ##### Deploy to Cloud - May have to look Microsoft Azure Spring boot deployment and how routing is done. (we have shown in past how to deploy with Pivotal Cloud Foundry)
+
+### Database Management
+
+> - If you go with ElephantSQL, have their own database backup so you not going to loose any data in case of disaster.
+> - Once resident is in System he/she should be always in system and should never be deleted from the System.
+> - Quarterly and Demographics Report includes Inactive and Active Resident both to produce accurate number of resident served for a given year.
+> - Action Plan, Contact Notes and all 7 life domain assessment maintains system of record by "on_this_date" so you will find this field in these table.
+> - There may be scenario like in 10 years if there are tons of assessment per resident and you want to archive those you should only archive these table - Action Plan / Contact Notes and Resident Assessment Questionnaire but System should be performant enough to handle data quantity easily.
+> - Its good idea to go over database-setup-prod.dml.sql to understand database in depth and then also understand how views are written.
+
+ ![ERDiagram](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/ER-Diagram.png?raw=true)
+
+<ins> *hint:* </ins> please see which dataTaype is json , date, number, varchar etc to look closely how data is getting stored in each
+
 
 ### Software Download and Setup
 
@@ -123,31 +163,9 @@ PostgreSql - Good to have SQL knowledge that should be enough.
 
  ![onboarding modify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-use-onboarding-modify.png?raw=true)
  
- 
-### Production Deployment and prerequisites
 
-In order to deploy to production, please see database-setup-prod.dml.sql you need to modify this file and add few things: (look for all "TODO" in this file) and add accordingly
 
-> - Cross check Property Table and validate each insert statements to see if properties names, county , state , city all looks correct 
-> - Create Insert Statements for REFERRAL_PARTNER TABLE - (basically All Agencies names)
-> - Insert row into Service coordinator table. <ins> Remember to always insert Encrypted password in DB not direct password </ins>
-> - how to Encrypt Password - see image below
 
- ![encryptPassword](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/How-to-EncryptPassword.png?raw=true)
- 
-> - use this encrypted password for your given password and go to section writeup insert into service_coordinator dml (refer example in data.sql for same)
-
-> - once you do this you have to write up insert into user_role table as well (user_id , role_id ) is must. user_id = sc_id from service_coordinator table. ROLE_Id = 1 or 2 (1 = ROLE_ADMIN and 2 = ROLE_USER) - Look for TODO in this .dml.sql file.
-
-> - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents and run in production Schema (this is one time task) - once SC started using website - <ins> *DO NOT run contents of this file as it will overwrite database.* </ins>
-
-> - this concludes Database setup
-
-### Project Architecture
-
-![Architecture](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/architecture.png?raw=true)
-
-### Database Management
 
 
 
