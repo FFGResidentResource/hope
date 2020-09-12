@@ -6,8 +6,8 @@
 > - Spring Boot 2.x or higher (see version in pom.xml) - spring boot comes with embedded tomcat
 > - Thymeleaf for UI bindings to Backing bean
 > - Bootstrap Css for styling
-> - jquery for browser scripting and traversing
-> - PostgreSQL for database - our database can be hosted online like in elephansql platform.
+> - jQuery for browser scripting and traversing
+> - PostgreSQL for database - our database can be hosted online like in elephantsql platform
 > - Datatables.net API for all tabular presentation
 > - C3 D3 Js for all Charting in reports Tab.
 
@@ -137,13 +137,17 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
  
 > - use this encrypted password for your given password and go to section writeup insert into service_coordinator dml (refer example in data.sql for same)
 
-> - once you do this you have to write up insert into user_role table as well (user_id , role_id ) is must. user_id = sc_id from service_coordinator table. ROLE_Id = 1 or 2 - Look for TODO in this .dml.sql file.
+> - once you do this you have to write up insert into user_role table as well (user_id , role_id ) is must. user_id = sc_id from service_coordinator table. ROLE_Id = 1 or 2 (1 = ROLE_ADMIN and 2 = ROLE_USER) - Look for TODO in this .dml.sql file.
 
-> - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents into DBeaver tool into Logged in production Schema (this is one time task) - once SC started using website - DO NOT run contents of this file as it will overwrite database.
+> - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents and run in production Schema (this is one time task) - once SC started using website - <ins> *DO NOT run contents of this file as it will overwrite database.* </ins>
 
 > - this concludes Database setup
 
 ### Project Architecture
+
+https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=Untitled%20Diagram.drawio#RvVfbbuIwEP0aHkG5kACP3Npq1V2hor2%2BrEzsJC4mTh1ToF%2B%2F48QhcUJR0UIlBPHxZGzPOTNjOu50s78XKI2%2FckxYx7HwvuPOOo5j9x2noz4WPhTIYNQvgEhQrI0qYEnfiAYtjW4pJplhKDlnkqYmGPAkIYE0MCQE35lmIWfmqimKSAtYBoi10Z8Uy7hAh55V4Q%2BERnG5sm3pmQ0qjTWQxQjzXQ1y5x13KjiXxdNmPyVMBa%2BMS%2FHe3Tuzx40JksiPvLBe4M3iNRgsQs92%2FvxYbL7%2FDbqDwssrYlt94I7jM%2FA3iWEBP1JPJZKlKFHnkAcdHP9lqzY%2FYTQh3VhHYQwmeRC8yqD0NGckjVEisxe1sQVDSVY6h30X%2Fs01Aa5vxDHWd%2BCAoAOi9hajVIEB41s472QXU0mWKQoUuANpqhPJDYORDY8hZWzKGRe5Hxd7ZIj7yo0UfE1qM0Nn5fo%2BzCBGowQwRsI8Fmsig1h7azOhyXklQpJ9DdLM3BO%2BIVIcwETP9kuV6DRx9XBXae6IxTW9OaUQkdZ5dHRdSQEetBouUMawHW0MmaGHXMiYRzxBbF6hE8G3CSbKqwWjyuaR81TH6plIedBpjraSm7xAAMXhl34%2FH%2FxWg55XDmf7%2BuTsoEfvMpDxrQjImWN6uqYgERF5xs4v7FQMzvIpCEOSvprV4%2BrklNXxc9kJeSL1pO1%2FStRH1456%2FupYCHSoGaScQk2qeV4ooEpOp99Mzkalbdj3z9vDQ7GDiv%2FjUf5DEmXNqUr5MhU0iQCbqCYDBVfwZ9UjHesLEicF9IhW0L8N0svCFwDJBKriRBU1Cg1yrCc2FONCXySjb2iV%2B1MK02EF596k480%2BJKCzam%2BV02Pb16sanfVUme1aPWfkuwY7Xe3qMg1VpJcmPAwzEHMzta9Arddi9unp2wOHhqe75EqULfJdyhtkX9gfERmGwan%2B6AdDsgqN4qLejxjKMi2D473HbvbNXA56TyeuMxc3Uds3884etLvo0abeRYe3aqJ%2Bi7kFz2QEmaJuQA1OyjsMRhJlkgty8T1mZWMcWqd4sq2BOyK3JsCzmwR4LQKGJ%2BI%2FuFX8R634z0jKuNoyV3fZaX5ddCxG15BM1vhtK9SvWrSavFPSzo9Z4OOfS%2Fju9XrXu4%2Ba2WNkjJFKBnkXc98sv7fOP9dp55%2FnnbrFWpcLAIbVf6ei0lb%2FQN35Pw%3D%3D
+
+### Database Management
 
 
 
