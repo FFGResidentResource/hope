@@ -4,6 +4,8 @@
 
 ![Architecture](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/architecture.png?raw=true)
 
+### * First time users for local setup please jump to * <ins> Software Download and Setup Step </ins>
+
 ### Technological Stack for this Project
 
 > - Java 1.8 or higher 
@@ -37,9 +39,13 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 
 > - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents and run in production Schema (this is one time task) - once SC started using website - <ins> *DO NOT run contents of this file as it will overwrite database.* </ins>
 
-> - this concludes Database setup
+> - This concludes Database setup
 
-> - ##### Deploy to Cloud - May have to look Microsoft Azure Spring boot deployment and how routing is done. (we have shown in past how to deploy with Pivotal Cloud Foundry)
+### Deploy to Cloud - May have to look Microsoft Azure Spring boot deployment and <ins> how routing <ins> is done. (we have shown in past how to deploy with Pivotal Cloud Foundry)
+	
+	> - routing is nothing but global load balancer url or host url of the project that is connected to source IP of the system
+	> - Memory instance and all have to be defined as per Azure documentation.
+
 
 ### Database Management
 
@@ -52,8 +58,11 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 
  ![ERDiagram](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/ER-Diagram.png?raw=true)
 
+> - we extracted ER Diagram from DBeaver tool and then saved as PNG in repo, if more tables are created in future ER Diagram needs to be recreated and export as PNG.
+
 <ins> *hint:* </ins> please see which dataTaype is json , date, number, varchar etc to look closely how data is getting stored in each
 
+> - Views are created to make data extract from json field easy based on per life domain and so on.
 
 ### Software Download and Setup
 
