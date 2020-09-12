@@ -72,7 +72,7 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 ![onboardingModify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/OnboardingModify.PNG?raw=true)
 ![referralForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/referralform.PNG?raw=true)
 ![intakeForm](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeForm1.PNG?raw=true)
-![intakeCont...](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeForm2.PNG?raw=true)
+![intakeCont...](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/intakeform2.PNG?raw=true)
 ![Housing Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Housing.PNG?raw=true)
 ![Money Mgmt Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_MoneyManagement.PNG?raw=true)
 ![Employment Questionnaire](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Q_Employment.PNG?raw=true)
