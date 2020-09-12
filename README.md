@@ -1,5 +1,20 @@
 # <ins>*Resident Resource Network - Hope* </ins>
 
+### Technological Stack for this Project
+
+> - Java 1.8 or higher 
+> - Spring Boot 2.x or higher (see version in pom.xml) - spring boot comes with embedded tomcat
+> - Thymeleaf for UI bindings to Backing bean
+> - Bootstrap Css for styling
+> - jquery for browser scripting and traversing
+> - PostgreSQL for database - our database can be hosted online like in elephansql platform.
+> - Datatables.net API for all tabular presentation
+> - C3 D3 Js for all Charting in reports Tab.
+
+Java / spring - Intermediate knowledge is required
+Others (thymeleaf/ bootstrap / jquery/ etc..) - Beginners knowledge should be enough to maintain project.
+PostgreSql - Good to have SQL knowledge that should be enough.
+
 ### Software Download and Setup
 
 > - Download JDK1.8 from [JDK](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
@@ -127,3 +142,8 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 > - Once this file - database-setup-prod.dml.sql is modified, saved,  copy paste entire contents into DBeaver tool into Logged in production Schema (this is one time task) - once SC started using website - DO NOT run contents of this file as it will overwrite database.
 
 > - this concludes Database setup
+
+### Project Architecture
+
+
+
