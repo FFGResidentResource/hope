@@ -577,6 +577,13 @@ CREATE table SERVICE_COORDINATOR (
 	
 );
 
+--TODO INSERT INTO SERVICE_COORDINATOR (password should be alaways Encrypted before writing it into insert statements, how to encrypt password steps is shown in readme file)
+-- OR there is dbadmin1/123 is one, as first login, after that more Admin SC should be created from app itself Once done, logging with other AdminSC, you can inactivate this dbadmin1.
+
+insert into SERVICE_COORDINATOR ( USER_NAME, ENCRYPTED_PASSWORD, ACTIVE, EMAIL)
+values ( 'dbadmin1', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu',TRUE,'dbadmin1@email.com');
+
+
 CREATE table RESIDENT (
 	
 	RESIDENT_ID		BIGSERIAL PRIMARY KEY,
@@ -598,7 +605,7 @@ CREATE table RESIDENT (
 	ALLOW_CONTACT	BOOLEAN DEFAULT FALSE,
 	WANTS_SURVEY	BOOLEAN DEFAULT FALSE,
 	PHOTO_RELEASE	BOOLEAN DEFAULT FALSE,
-	DATE_ADDED		TIMESTAMP,
+	DATE_ADDED		TIMESTAMP DEFAULT NOW(),
 	DATE_MODIFIED	TIMESTAMP,
 	MODIFIED_BY		VARCHAR(50),
 	SERVICE_COORD	VARCHAR(50),
@@ -736,6 +743,13 @@ alter table APP_ROLE
 alter table APP_ROLE
   add constraint APP_ROLE_UK unique (ROLE_NAME);
  
+  
+insert into app_role (ROLE_ID, ROLE_NAME)
+values (1, 'ROLE_ADMIN');
+ 
+insert into app_role (ROLE_ID, ROLE_NAME)
+values (2, 'ROLE_USER');
+ 
 -- Create table
 CREATE table USER_ROLE
 (
@@ -744,7 +758,10 @@ CREATE table USER_ROLE
   ROLE_ID INT NOT NULL
 );
 
---  
+-- TODO for each service Coordinator you need entry in USER_ROLE Table (please see common_error screen capture at the end of Readme file as a result if you don't have entry in USER_ROLE Table)
+
+INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES( 1,1);
+INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES( 1,2);
  
 alter table USER_ROLE
   add constraint USER_ROLE_UK unique (USER_ID, ROLE_ID);
@@ -769,12 +786,6 @@ CREATE TABLE Persistent_Logins (
 commit;
 
 -------------------------------------------
- 
-insert into app_role (ROLE_ID, ROLE_NAME)
-values (1, 'ROLE_ADMIN');
- 
-insert into app_role (ROLE_ID, ROLE_NAME)
-values (2, 'ROLE_USER');
 
 
 --Following table will contain each record entry whenver Resident table is modified, so system won;t loose records
