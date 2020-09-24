@@ -200,8 +200,8 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
  ![onboarding modify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/how-to-use-onboarding-modify.png?raw=true)
  
 
+### When you get following page meaning you are missing entry in USER_ROLE Table
 
-
-
+![Common Error](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/common_error.png?raw=true)
 
 
