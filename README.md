@@ -67,6 +67,8 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 
 ### Project Screen Shots:
 
+Engagement and Intake pending numbers don;t automatically updates while you are logged in. Once you logout and login back you will see numbers.
+
 ![Admin vs Non Admin SC](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/AdminVsNonAdminSCView.png?raw=true)
 ![AllResident](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/All_Resident.PNG?raw=true)
 ![onboardingModify](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/OnboardingModify.PNG?raw=true)
@@ -88,6 +90,7 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 ![Report3](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Reports3.PNG?raw=true)
 ![Report4](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Report4.PNG?raw=true)
 ![Report5](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Report5.PNG?raw=true)
+![Resident Audit](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/Audits.PNG?raw=true)
 
 
 
