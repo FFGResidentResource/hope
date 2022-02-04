@@ -48,6 +48,25 @@ public class CoordinatorController extends BaseController {
         return "adminPage";
     }
 
+	@RequestMapping(value = "/property", method = RequestMethod.GET)
+	public String propertyPage(@ModelAttribute ServiceCoordinator serviceCoordinator,
+							Model model, Principal principal) {
+		if (principal != null) {
+			populateSCinModel(model, principal);
+		}
+
+		List<Property> allProperty = serviceCoordinatorService.getAllProperty();
+
+		ServiceCoordinator sc = new ServiceCoordinator();
+		sc.setPropertyList(allProperty);
+		sc.setAllTakenEmails(serviceCoordinatorService.getAllTakenEmails());
+		sc.setAllTakenUserNames(serviceCoordinatorService.getAllTakenUserNames());
+
+		model.addAttribute("serviceCoordinator", sc);
+
+		return "propertyPage";
+	}
+
     @PostMapping("/saveServiceCoordinator")
 	public String saveServiceCoordinator(Model model, Principal principal, @ModelAttribute("serviceCoordinator") @Valid ServiceCoordinator sc,
 			BindingResult bindingResult) {
