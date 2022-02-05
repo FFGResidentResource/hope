@@ -111,6 +111,7 @@ jQuery(document).ready(
 
                         jQuery("#inputPropertyName").val(currentRow.propertyName);
                         jQuery("#inputNumberUnits").val(currentRow.unit);
+                        jQuery("#inputNumberResidents").val(currentRow.noOfResident);
                         // todo: set rest of inputs for current row
                     }
                 });
