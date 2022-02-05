@@ -121,28 +121,45 @@ label{
 					<div class="row">
 
 						<div class="form-group">
-							<label for="inputEmail1" class="col-sm-4 control-label">Email
-								& User Name</label>
+							<label for="inputPropertyName" class="col-sm-4 control-label">Property Name</label>
 							<div class="col-sm-4">
-								<input type="email" class="form-control" id="inputEmail1"
-									placeholder="Email" th:field="*{email}" required>
-							</div>
-							<div class="col-sm-4">
-								<input class="form-control" id="userName1"
-									placeholder="User Name" th:field="*{userName}" required>
+								<input class="form-control" id="inputPropertyName"
+									placeholder="Property Name" th:field="*{propName}" required>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="inputPassword1" class="col-sm-4 control-label">Password
-								& Confirm</label>
+							<label for="inputNumberUnits" class="col-sm-4 control-label"># Units</label>
 							<div class="col-sm-4">
-								<input type="password" class="form-control" id="inputPassword1"
-									placeholder="Password" th:field="*{password}" required>
+								<input class="form-control" id="inputNumberUnits"
+									   placeholder="0" th:field="*{scId}" required>
 							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="inputUnitFee" class="col-sm-4 control-label">Unit Fee</label>
 							<div class="col-sm-4">
-								<input type="password" class="form-control" id="inputPassword2"
-									placeholder="Confirm Password" th:field="*{confirmPassword}" required>
+								<input class="form-control" id="inputUnitFee"
+									   placeholder="0" th:field="*{scId}" required>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="inputNumberResidents" class="col-sm-4 control-label">Unit Fee</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="inputNumberResidents"
+									   placeholder="0" th:field="*{scId}" required>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<div class="checkbox">
+									<label> <input type="checkbox" th:field="*{admin}" id="_isResidentCouncil"
+												   onclick="adminCheck(this);">
+										Resident Council
+									</label>
+								</div>
 							</div>
 						</div>
 
