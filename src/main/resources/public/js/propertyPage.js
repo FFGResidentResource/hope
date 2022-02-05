@@ -111,7 +111,11 @@ jQuery(document).ready(
 
                         jQuery("#inputPropertyName").val(currentRow.propertyName);
                         jQuery("#inputNumberUnits").val(currentRow.unit);
+                        jQuery("#inputUnitFee").val(currentRow.unitFee);
                         jQuery("#inputNumberResidents").val(currentRow.noOfResident);
+                        jQuery("#inputCity").val(currentRow.city);
+                        jQuery("#inputState").val(currentRow.state);
+                        jQuery("#inputCounty").val(currentRow.county);
                         // todo: set rest of inputs for current row
                     }
                 });
