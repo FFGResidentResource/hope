@@ -50,7 +50,7 @@ label{
 
 	<div class="container">
 		<form th:action="@{/saveServiceCoordinator}" method='POST'
-			th:object="${serviceCoordinator}" class="form-horizontal">
+			th:object="${property}" class="form-horizontal">
 
 			<div class="row">
 				<div class="col-sm-12">
@@ -94,11 +94,6 @@ label{
 								</table>
 							</div>
 
-							<div class="row text-center bs-linebreak hidden-print">
-								<input type="hidden" id="_scId" name="serviceCoordinatorID"
-									value="" /> <input type="hidden" id="takenNames"
-									name="takenUserNames" th:field="*{allTakenUserNames}" />
-							</div>
 						</div>
 					</div>
 				</div>
@@ -124,7 +119,7 @@ label{
 							<label for="inputPropertyName" class="col-sm-4 control-label">Property Name</label>
 							<div class="col-sm-4">
 								<input class="form-control" id="inputPropertyName"
-									placeholder="Property Name" th:field="*{propName}" required>
+									placeholder="Property Name" th:field="*{propertyName}" required>
 							</div>
 						</div>
 
@@ -132,7 +127,7 @@ label{
 							<label for="inputNumberUnits" class="col-sm-4 control-label"># Units</label>
 							<div class="col-sm-4">
 								<input class="form-control" id="inputNumberUnits"
-									   placeholder="0" th:field="*{scId}" required>
+									   placeholder="0" th:field="*{unit}" required>
 							</div>
 						</div>
 
@@ -140,7 +135,7 @@ label{
 							<label for="inputUnitFee" class="col-sm-4 control-label">Unit Fee</label>
 							<div class="col-sm-4">
 								<input class="form-control" id="inputUnitFee"
-									   placeholder="0" th:field="*{scId}" required>
+									   placeholder="0" th:field="*{unitFee}" required>
 							</div>
 						</div>
 
@@ -148,14 +143,14 @@ label{
 							<label for="inputNumberResidents" class="col-sm-4 control-label">Unit Fee</label>
 							<div class="col-sm-4">
 								<input class="form-control" id="inputNumberResidents"
-									   placeholder="0" th:field="*{scId}" required>
+									   placeholder="0" th:field="*{noOfResident}" required>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<div class="col-sm-offset-4 col-sm-8">
 								<div class="checkbox">
-									<label> <input type="checkbox" th:field="*{admin}" id="_isResidentCouncil"
+									<label> <input type="checkbox" th:field="*{residentCouncil}" id="_isResidentCouncil"
 												   onclick="adminCheck(this);">
 										Resident Council
 									</label>
@@ -166,7 +161,7 @@ label{
 						<div class="form-group">
 							<div class="col-sm-offset-4 col-sm-8">
 								<div class="checkbox">
-									<label> <input type="checkbox" th:field="*{admin}" id="_isAdmin"
+									<label> <input type="checkbox" th:field="*{active}" id="_isAdmin"
 									onclick="adminCheck(this);">
 										Active
 									</label>
