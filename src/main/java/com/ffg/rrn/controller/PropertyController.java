@@ -1,7 +1,6 @@
 package com.ffg.rrn.controller;
 
 import com.ffg.rrn.model.Property;
-import com.ffg.rrn.model.ServiceCoordinator;
 import com.ffg.rrn.service.PropertyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,7 @@ public class PropertyController extends BaseController {
             populateSCinModel(model, principal);
         }
 
-        List<Property> allProperty = propertyService.getAllProperty();
+        List<Property> allProperty = propertyService.getAllProperties();
 
         Property aProperty = new Property();
         aProperty.setPropertyList(allProperty);

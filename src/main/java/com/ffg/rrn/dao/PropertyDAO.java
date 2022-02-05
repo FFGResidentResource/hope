@@ -78,6 +78,7 @@ public class PropertyDAO extends JdbcDaoSupport{
 
     public List<Property> getAllProperty() {
         PropertyMapper rowMapper = new PropertyMapper();
-        return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+        List<Property> ret = this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+        return ret;
     }
 }

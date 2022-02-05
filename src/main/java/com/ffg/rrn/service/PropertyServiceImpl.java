@@ -13,7 +13,7 @@ public class PropertyServiceImpl {
     @Autowired
     private PropertyDAO propertyDAO;
 
-    public List<Property> getAllProperty() {
+    public List<Property> getAllProperties() {
         return this.propertyDAO.getAllProperty();
     }
 }

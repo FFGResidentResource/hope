@@ -2,143 +2,136 @@ var table;
 var currentRow;
 
 jQuery(document).ready(
-	function() {
-	    
-	    jQuery('a[id^="_load"]').attr('disabled', true);
-	    
-	    jQuery('input[id^="_prop_"]').prop('disabled', jQuery('#_isAdmin').prop('checked'));
-	    
-	    jQuery.ajax({
-		type : "POST",
-		contentType : "application/json",
-		url : "/getAllServiceCoordinators",
-		dataType : 'json',
-		cache : false,
-		timeout : 600000,
-		success : function(data) {
-		    table = jQuery('#scTable').DataTable(
-			    {
-				"data" : data,
-				"columns" : [
-				    {data : 'active',
-					render : function(t, type, row) {
-					    if (row.active) {return 'ACTIVE'; } else {return 'INACTIVE';}						
-					    }
-				    },
-				    {data : 'userName'},
-				    {data : 'email'},
-				    {data : 'createdOn.time',
-					    render : {
-						_ : 'display',
-						sort : 'timestamp'
-					    },
-					    render : function(t, type, row) {
-						return moment(row.createdOn).format("MM/DD/YY hh:mm A");
-					    }},
-				    {data : 'lastLogin.time',
-					    render : {
-						_ : 'display',
-						sort : 'timestamp'
-					    },
-					    render : function(t, type, row) {
-						if(row.lastLogin != null){
-						    return moment(row.lastLogin).format("MM/DD/YY hh:mm A");
-						}else{
-						    return '';
-						}
-					    }
-				    },				   
-				    {data : 'propName'}				    
-				    ],
-				"order" : [ [ 3, "desc" ] ],
-				pageLength : 8,
-				pagingType : "full_numbers",
-				"initComplete" : function(settings, json) {
-				    
-				    // This prints all radio Options on
-				    // AllResident DataTables.
-				    jQuery('.dataTables_length').addClass('hideme');				   
-				}
-			    });
-		    
-		    jQuery('#scTable tbody').on('click', 'tr', function() {
+    function () {
 
-			var tr = $(this);
-			currentRow = table.row(this).data();
+        jQuery('a[id^="_load"]').attr('disabled', true);
 
-			console.log(currentRow);
+        jQuery('input[id^="_prop_"]').prop('disabled', jQuery('#_isAdmin').prop('checked'));
 
-			if ($(this).hasClass('selected')) {
-			    $(this).removeClass('selected');
-			    jQuery('a[id^="_load"]').attr('disabled', true);
-			    
-			    jQuery('select').prop('selectedIndex', '');
-			    jQuery('input:text').val('');
-			    jQuery('#inputEmail1').val('');
-			    jQuery('#inputPassword1').val('');
-			    jQuery('#inputPassword2').val('');
-			    jQuery('#_isAdmin').prop('checked', false);
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/getAllProperties",
+            dataType: 'json',
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                table = jQuery('#propertyTable').DataTable(
+                    {
+                        "data": data,
+                        "columns": [
+                            {
+                                data: 'active',
+                                render: function (t, type, row) {
+                                    if (row.active) {
+                                        return 'ACTIVE';
+                                    } else {
+                                        return 'INACTIVE';
+                                    }
+                                }
+                            },
+                            {data: 'propertyName'},
+                            {data: 'unit'},
+                            {data: 'unitFee'},
+                            {data: 'noOfResident'},
+                            {
+                                data: 'residentCouncil',
+                                render: function (t, type, row) {
+                                    if (row.active) {
+                                        return 'YES';
+                                    } else {
+                                        return 'NO';
+                                    }
+                                }
+                            },
+                            {data: 'city'},
+                            {data: 'state'},
+                            {data: 'county'},
+                            {
+                                data: 'checked',
+                                render: function (t, type, row) {
+                                    if (row.active) {
+                                        return 'YES';
+                                    } else {
+                                        return 'NO';
+                                    }
+                                }
+                            }
+                        ],
+                        "order": [[3, "desc"]],
+                        pageLength: 8,
+                        pagingType: "full_numbers",
+                        "initComplete": function (settings, json) {
 
-				
-				jQuery('input[id^="_prop_"]').prop('checked',false);
-				jQuery('input[id^="_prop_"]').prop('disabled', false);	
+                            // This prints all radio Options on
+                            // AllResident DataTables.
+                            jQuery('.dataTables_length').addClass('hideme');
+                        }
+                    });
 
-			    
-			} else {
-			    
-			    table.$('tr.selected').removeClass('selected');
-			    $(this).addClass('selected');
-			    
-			    jQuery("#inputEmail1").val(currentRow.email);
-			    jQuery("#userName1").val(currentRow.userName);		    
-			    jQuery('#_property').val((currentRow.propertyId == 0) ? '' : currentRow.propertyId);
-			    jQuery('#_isAdmin').prop('checked', currentRow.admin);
-			    jQuery('#_property').prop('disabled', currentRow.admin);
-			    
-			    if(currentRow.admin == true){
-					jQuery('input[id^="_prop_"]').removeAttr('required');
-					jQuery('input[id^="_prop_"]').prop('checked',false);
-					jQuery('input[id^="_prop_"]').prop('disabled', true);			
-			    }else{
-				
-				jQuery('input[id^="_prop_"]').prop('checked',false);
-				jQuery('input[id^="_prop_"]').prop('disabled', false);
-				JSON.parse(currentRow.assignedProperties).forEach(function (value){
-   					jQuery("#_prop_"+value).prop('checked', true);
-				});
-				
-				}
-			    
-			    jQuery('a[id^="_load"]').attr('disabled', false);
-			    
-			    var suffix = '&userName=' + currentRow.userName;
-			    var assessmentLinks = jQuery('a[id^="_load"]');
+                jQuery('#propertyTable tbody').on('click', 'tr', function () {
 
-			    jQuery.each(assessmentLinks, function(idx, obj) {
-				var currHref = jQuery(obj).attr('href');
-				var prefix = currHref.split('&');
-				jQuery(obj).attr('href', prefix[0] + suffix);
-			    });
-			}
-		    });
-		},
-		error : function(e) {
-		    console.log("ERROR : ", e);
-		}
-	    });
-	});
+                    var tr = $(this);
+                    currentRow = table.row(this).data();
+
+                    console.log(currentRow);
+
+                    if ($(this).hasClass('selected')) {
+                        $(this).removeClass('selected');
+                        jQuery('a[id^="_load"]').attr('disabled', true);
+
+                        jQuery('select').prop('selectedIndex', '');
+                        jQuery('input:text').val('');
+                        jQuery('#inputPropertyName').val('');
+                        jQuery('#inputNumberUnits').val(0);
+                        jQuery('#inputUnitFee').val(0);
+                        jQuery('#inputNumberResidents').val(0);
+                        jQuery('#_isResidentCouncil').prop('checked', false);
+                        jQuery("#_isAdmin").prop('checked', false);
 
 
-function adminCheck(that){
-	jQuery("input[id^='_prop_']").prop('checked', false);
-	jQuery("input[id^='_prop_']").prop('disabled', jQuery(that).prop('checked'));
+                        jQuery('input[id^="_prop_"]').prop('checked', false);
+                        jQuery('input[id^="_prop_"]').prop('disabled', false);
+
+
+                    } else {
+                        table.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+
+                        jQuery('input:text').val('');
+                        jQuery('#inputPropertyName').val('');
+                        jQuery('#inputNumberUnits').val(0);
+                        jQuery('#inputUnitFee').val(0);
+                        jQuery('#inputNumberResidents').val(0);
+                        jQuery('#_isResidentCouncil').prop('checked', false);
+                        jQuery("#_isAdmin").prop('checked', false);
+
+                        table.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+
+                        jQuery("#inputPropertyName").val(currentRow.propertyName);
+                        jQuery("#inputNumberUnits").val(currentRow.unit);
+                        // todo: set rest of inputs for current row
+                    }
+                });
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
+    });
+
+
+function adminCheck(that) {
+    jQuery("input[id^='_prop_']").prop('checked', false);
+    jQuery("input[id^='_prop_']").prop('disabled', jQuery(that).prop('checked'));
 }
 
 /**
- * 
+ *
  * @returns
  */
-function validateFields(){
-    
+function validateFields() {
+
     debugger;
 }
