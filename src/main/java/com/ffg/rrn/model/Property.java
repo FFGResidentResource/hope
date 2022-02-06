@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,10 +33,12 @@ public class Property {
 
     private Boolean checked;
 
-    @JsonView
+    // DEBUG @JsonView
     private List<Property> propertyList;
 
     public Property() {
+        propertyId = Integer.MAX_VALUE;
+        propertyList = new ArrayList<Property>();
     }
 
     public Property(int propertyId, String propertyName, int unit, int unitFee, Boolean active, int noOfResident, Boolean residentCouncil, String city, String state, String county, Boolean checked) {

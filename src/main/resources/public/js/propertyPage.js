@@ -81,6 +81,7 @@ jQuery(document).ready(
                         jQuery('a[id^="_load"]').attr('disabled', true);
 
                         jQuery('select').prop('selectedIndex', '');
+                        jQuery('#inputPropertyId').val(0);
                         jQuery('input:text').val('');
                         jQuery('#inputPropertyName').val('');
                         jQuery('#inputNumberUnits').val(0);
@@ -97,7 +98,7 @@ jQuery(document).ready(
                     } else {
                         table.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
-
+                        jQuery('#inputPropertyId').val(0);
                         jQuery('input:text').val('');
                         jQuery('#inputPropertyName').val('');
                         jQuery('#inputNumberUnits').val(0);
@@ -116,7 +117,6 @@ jQuery(document).ready(
                         jQuery("#inputCity").val(currentRow.city);
                         jQuery("#inputState").val(currentRow.state);
                         jQuery("#inputCounty").val(currentRow.county);
-                        // todo: set rest of inputs for current row
                     }
                 });
             },
