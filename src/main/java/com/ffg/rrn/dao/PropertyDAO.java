@@ -3,8 +3,12 @@ package com.ffg.rrn.dao;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.model.Property;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,6 +20,8 @@ import javax.validation.Valid;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.toIntExact;
@@ -27,7 +33,7 @@ public class PropertyDAO extends JdbcDaoSupport {
     // todo: SERVICE_PROVIDER is unmapped
     // private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_ID, PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE,  ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?,?)";
     // insert into property (prop_id, prop_name, city, state, county, unit, unit_fee, active, total_residents, resident_council, service_provider) DEFAULT VALUES
-    private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_ID, PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET PROP_NAME=?, CITY=?, STATE=?, COUNTY=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_ID=?";
 
     @Autowired
@@ -37,22 +43,31 @@ public class PropertyDAO extends JdbcDaoSupport {
 
     public long insertNewProperty(@Valid Property property) {
 
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-        String[] pkColumnNames = new String[]{"prop_id"};
-
-        int propId = 50; // keyHolder.getKey().intValue();
-        property.setPropertyId(propId);
-
-        System.out.println("propId: "+propId);
+        System.out.println("propId: " + property.getPropertyId());
         try {
-            this.getJdbcTemplate().execute("insert into property (prop_id, prop_name, city, state, county, unit, " +
-                    "unit_fee, active, total_residents, resident_council, service_provider) " +
-                    "VALUES (1234, 'Botany Bay', 'A', 'b', 'c', 10, 10, true, 100, false, NULL);");
-        } catch(Exception ex) {
+
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            this.getJdbcTemplate().update(cnx -> {
+                PreparedStatement preparedStatement = cnx.prepareStatement(SQL_INSERT_PROPERTY);
+                preparedStatement.setString(1, property.getPropertyName());
+                preparedStatement.setString(2, property.getCity());
+                preparedStatement.setString(3, property.getState());
+                preparedStatement.setString(4, property.getCounty());
+                preparedStatement.setInt(5, property.getUnit());
+                preparedStatement.setInt(6, property.getUnitFee());
+                preparedStatement.setBoolean(7, property.getActive());
+                preparedStatement.setInt(8, property.getNoOfResident());
+                preparedStatement.setBoolean(9, property.getResidentCouncil());
+                return preparedStatement;
+            }, keyHolder);
+        } catch (DuplicateKeyException dke) {
+            System.out.println("Duplicate key, trying update instead...");
+            // todo: implement
+        } catch (Exception ex) {
             System.out.println("Ignoring error:" + ex);
         }
 
-        return propId;
+        return -1;
     }
 
     private PreparedStatement buildInsertProperty(Connection connection, @Valid Property property, String[] pkColumnNames) throws SQLException {
