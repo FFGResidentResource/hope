@@ -62,7 +62,6 @@ public class PropertyDAO extends JdbcDaoSupport {
             preparedStatement.setString(9, property.getPropertyName());
             return preparedStatement;
         }, keyHolder);
-        System.out.println("Rows updated: "+rows);
         return rows;
     }
 
@@ -84,9 +83,9 @@ public class PropertyDAO extends JdbcDaoSupport {
                 return preparedStatement;
             }, keyHolder);
         } catch (DuplicateKeyException dke) {
-            System.out.println("Duplicate key, trying update instead...");
             updateExistingProperty(property);
         } catch (Exception ex) {
+            // todo: better error handling, let UI move forward and log the error
             System.out.println("Ignoring error:" + ex);
         }
     }
@@ -98,16 +97,14 @@ public class PropertyDAO extends JdbcDaoSupport {
 
     public Long saveProperty(Property property) {
 
-        System.out.println("saveProperty "+property.getPropertyId());
-        System.out.println("Num Units: "+property.getUnit());
         try {
 
             try {
-                // todo: implement existence check
-                System.out.println("Update existing property");
                 if(updateExistingProperty(property)==0)
                     insertNewProperty(property);
             } catch (EmptyResultDataAccessException e) {
+                // todo: better error handling, is this even thrown anymore now that we're not preceding every write
+                // with a query?
                 System.out.println("Create new property entry");
                 insertNewProperty(property);
             }

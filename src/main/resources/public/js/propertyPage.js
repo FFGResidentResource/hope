@@ -37,7 +37,7 @@ jQuery(document).ready(
                             {
                                 data: 'residentCouncil',
                                 render: function (t, type, row) {
-                                    if (row.active) {
+                                    if (row.residentCouncil) {
                                         return 'YES';
                                     } else {
                                         return 'NO';
@@ -46,17 +46,7 @@ jQuery(document).ready(
                             },
                             {data: 'city'},
                             {data: 'state'},
-                            {data: 'county'},
-                            {
-                                data: 'checked',
-                                render: function (t, type, row) {
-                                    if (row.active) {
-                                        return 'YES';
-                                    } else {
-                                        return 'NO';
-                                    }
-                                }
-                            }
+                            {data: 'county'}
                         ],
                         "order": [[3, "desc"]],
                         pageLength: 8,
@@ -133,4 +123,24 @@ function activeCheck(that) {
 function validateFields() {
 
     debugger;
+}
+
+function resetInputFields() {
+        $(this).removeClass('selected');
+        table.$('tr.selected').removeClass('selected');
+
+        jQuery('a[id^="_load"]').attr('disabled', true);
+
+        jQuery('select').prop('selectedIndex', '');
+        jQuery('#inputPropertyId').val(currentRow.propertyId);
+        jQuery('input:text').val('');
+        jQuery('#inputPropertyName').val('');
+        jQuery('#inputNumberUnits').val(0);
+        jQuery('#inputUnitFee').val(0);
+        jQuery('#inputNumberResidents').val(0);
+        jQuery('#_isResidentCouncil').prop('checked', currentRow.residentCouncil);
+        jQuery("#_isActive").prop('checked', true);
+
+        jQuery('input[id^="_prop_"]').prop('checked', true);
+        jQuery('input[id^="_prop_"]').prop('disabled', false);
 }

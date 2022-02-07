@@ -61,22 +61,6 @@
                             <div class="col-sm-4">
                                 <span class="panel-title"><strong>All Properties</strong></span>
                             </div>
-                            <div class="col-sm-offset-4 col-sm-2">
-                                <a id="_loadInactivate" class="btn btn-default btn-sm"
-                                   th:href="@{/inactivateSC?active=false}"> <span
-                                        class="glyphicon glyphicon-ban-circle" style="color: red;"
-                                        aria-hidden="true"></span>&nbsp;Inactivate [Prop]
-                                </a>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <a id="_loadActivate" class="btn btn-default btn-sm"
-                                   th:href="@{/activateSC?active=true}"> <span
-                                        class="glyphicon glyphicon-flash" style="color: goldenrod;"
-                                        aria-hidden="true"></span>&nbsp;Activate [Prop]
-                                </a>
-                            </div>
-
                         </div>
                     </div>
                     <div class="panel-body">
@@ -93,7 +77,6 @@
                                     <th>City</th>
                                     <th>State</th>
                                     <th>County</th>
-                                    <th>Checked</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -220,7 +203,9 @@
                                        class="btn btn-primary btn-lg" value="Save Property"
                                        onclick="debugger; validateFields();">
                                 <input type="button" id="_propertyFormResetForNewProperty"
-                                       class="btn btn-primary btn-lg" value="New Property">
+                                       class="btn btn-primary btn-lg" value="New Property"
+                                       onclick="resetInputFields();"
+                                >
                             </div>
                         </div>
                     </div>
