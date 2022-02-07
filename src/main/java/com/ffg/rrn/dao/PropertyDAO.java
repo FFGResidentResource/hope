@@ -41,12 +41,40 @@ public class PropertyDAO extends JdbcDaoSupport {
         this.setDataSource(dataSource);
     }
 
-    public long insertNewProperty(@Valid Property property) {
+    /**
+     * Update the existing property by id.
+     *
+     * @param property
+     * @return number of rows updated, should be 1 for unduplicated keys
+     * @throws SQLException
+     */
+    public int updateExistingProperty(@Valid Property property) throws SQLException {
 
-        System.out.println("propId: " + property.getPropertyId());
+        this.getJdbcTemplate().getDataSource().getConnection().setAutoCommit(true);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rows = this.getJdbcTemplate().update(cnx -> {
+            PreparedStatement preparedStatement = cnx.prepareStatement(SQL_UPDATE_PROPERTY);
+            preparedStatement.setString(1, property.getPropertyName());
+            preparedStatement.setString(2, property.getCity());
+            preparedStatement.setString(3, property.getState());
+            preparedStatement.setString(4, property.getCounty());
+            preparedStatement.setInt(5, property.getUnit());
+            preparedStatement.setInt(6, property.getUnitFee());
+            preparedStatement.setBoolean(7, property.getActive());
+            preparedStatement.setInt(8, property.getNoOfResident());
+            preparedStatement.setBoolean(9, property.getResidentCouncil());
+            preparedStatement.setInt(10, property.getPropertyId());
+            return preparedStatement;
+        }, keyHolder);
+        System.out.println("Rows updated: "+rows);
+        return rows;
+    }
+
+    public void insertNewProperty(@Valid Property property) throws SQLException {
+
         try {
-
             KeyHolder keyHolder = new GeneratedKeyHolder();
+            this.getJdbcTemplate().getDataSource().getConnection().setAutoCommit(true);
             this.getJdbcTemplate().update(cnx -> {
                 PreparedStatement preparedStatement = cnx.prepareStatement(SQL_INSERT_PROPERTY);
                 preparedStatement.setString(1, property.getPropertyName());
@@ -62,75 +90,40 @@ public class PropertyDAO extends JdbcDaoSupport {
             }, keyHolder);
         } catch (DuplicateKeyException dke) {
             System.out.println("Duplicate key, trying update instead...");
-            // todo: implement
+            updateExistingProperty(property);
         } catch (Exception ex) {
             System.out.println("Ignoring error:" + ex);
         }
-
-        return -1;
-    }
-
-    private PreparedStatement buildInsertProperty(Connection connection, @Valid Property property, String[] pkColumnNames) throws SQLException {
-
-        System.out.println("buildInsertProperty");
-
-        PreparedStatement ps = connection.prepareStatement(SQL_INSERT_PROPERTY, pkColumnNames);
-
-        ps.setLong(1, property.getPropertyId());
-        ps.setString(2, property.getPropertyName());
-        ps.setString(3, property.getCity());
-        ps.setString(4, property.getState());
-        ps.setString(5, property.getCounty());
-        ps.setLong(6, property.getUnit());
-        ps.setLong(7, property.getUnitFee());
-        ps.setBoolean(8, property.getActive());
-        ps.setLong(9, property.getNoOfResident());
-        ps.setBoolean(10, property.getResidentCouncil());
-
-        return ps;
-    }
-
-    private PreparedStatement buildUpdateProperty(Connection connection, Property property, String[] pkColumnNames) throws SQLException {
-
-        System.out.println("buildUpdateProperty");
-
-        PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_PROPERTY, pkColumnNames);
-
-        ps.setString(1, property.getPropertyName());
-        ps.setString(2, property.getCity());
-        ps.setString(3, property.getState());
-        ps.setString(4, property.getCounty());
-        ps.setLong(5, property.getUnit());
-        ps.setLong(6, property.getUnitFee());
-        ps.setBoolean(7, property.getActive());
-        ps.setLong(8, property.getNoOfResident());
-        ps.setBoolean(9, property.getResidentCouncil());
-        ps.setLong(10, property.getPropertyId());
-
-        return ps;
     }
 
     public List<Property> getAllProperty() {
-        System.out.println("getAllProperty");
         PropertyMapper rowMapper = new PropertyMapper();
         return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
     }
 
     public Long saveProperty(Property property) {
 
-        System.out.println("saveProperty");
-
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-        String[] pkColumnNames = new String[]{"prop_id"};
-
+        System.out.println("saveProperty "+property.getPropertyId());
+        System.out.println("Num Units: "+property.getUnit());
         try {
-            // If no records found, it will go in Catch Exception else next line
-            this.getJdbcTemplate().queryForObject("select 1 from property where prop_id = ? ", new Object[]{property.getPropertyId()}, Integer.class);
-            this.getJdbcTemplate().update(conn -> buildUpdateProperty(conn, property, pkColumnNames), keyHolder);
-        } catch (EmptyResultDataAccessException e) {
-            insertNewProperty(property);
-        }
 
-        return Long.valueOf(property.getPropertyId());
+            try {
+                // todo: implement existence check
+                System.out.println("Update existing property");
+                if(updateExistingProperty(property)==0)
+                    insertNewProperty(property);
+                else
+                    throw new IllegalStateException("Duplicate keys detected on update");
+            } catch (EmptyResultDataAccessException e) {
+                System.out.println("Create new property entry");
+                insertNewProperty(property);
+            }
+
+            return Long.valueOf(property.getPropertyId());
+        } catch(Exception e) {
+            // DEBUG
+            e.printStackTrace();
+            return -1L;
+        }
     }
 }

@@ -37,7 +37,6 @@ public class Property {
     private List<Property> propertyList;
 
     public Property() {
-        propertyId = Integer.MAX_VALUE;
         propertyList = new ArrayList<Property>();
     }
 

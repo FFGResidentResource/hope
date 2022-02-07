@@ -130,7 +130,7 @@
                         <label for="inputPropertyId" class="col-sm-4 control-label">Property Id</label>
                         <div class="col-sm-4">
                             <input class="form-control" id="inputPropertyId"
-                                   placeholder="Property id" th:field="${property.propertyId}" required>
+                                   placeholder="Property Id" th:field="${property.propertyId}" required>
                         </div>
                     </div>
 
@@ -219,6 +219,8 @@
                                 <input type="submit" id="_propertyForm"
                                        class="btn btn-primary btn-lg" value="Save Property"
                                        onclick="debugger; validateFields();">
+                                <input type="button" id="_propertyFormResetForNewProperty"
+                                       class="btn btn-primary btn-lg" value="New Property">
                             </div>
                         </div>
                     </div>
