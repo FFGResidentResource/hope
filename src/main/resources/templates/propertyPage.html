@@ -170,7 +170,7 @@
                         <div class="col-sm-offset-4 col-sm-8">
                             <div class="checkbox">
                                 <label> <input type="checkbox" th:field="*{residentCouncil}" id="_isResidentCouncil"
-                                               onclick="adminCheck(this);">
+                                               onclick="activeCheck(this);">
                                     Resident Council
                                 </label>
                             </div>
@@ -204,8 +204,8 @@
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-8">
                             <div class="checkbox">
-                                <label> <input type="checkbox" th:field="*{active}" id="_isAdmin"
-                                               onclick="adminCheck(this);">
+                                <label> <input type="checkbox" th:field="*{active}" id="_isActive"
+                                               onclick="activeCheck(this);">
                                     Active
                                 </label>
                             </div>

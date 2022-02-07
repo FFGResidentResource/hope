@@ -6,7 +6,7 @@ jQuery(document).ready(
 
         jQuery('a[id^="_load"]').attr('disabled', true);
 
-        jQuery('input[id^="_prop_"]').prop('disabled', jQuery('#_isAdmin').prop('checked'));
+        jQuery('input[id^="_prop_"]').prop('disabled', jQuery('#_isActive').prop('checked'));
 
         jQuery.ajax({
             type: "POST",
@@ -81,11 +81,11 @@ jQuery(document).ready(
                         jQuery('#inputNumberUnits').val(0);
                         jQuery('#inputUnitFee').val(0);
                         jQuery('#inputNumberResidents').val(0);
-                        jQuery('#_isResidentCouncil').prop('checked', false);
-                        jQuery("#_isAdmin").prop('checked', false);
+                        jQuery('#_isResidentCouncil').prop('checked', currentRow.residentCouncil);
+                        jQuery("#_isActive").prop('checked', true);
 
 
-                        jQuery('input[id^="_prop_"]').prop('checked', false);
+                        jQuery('input[id^="_prop_"]').prop('checked', true);
                         jQuery('input[id^="_prop_"]').prop('disabled', false);
 
 
@@ -98,8 +98,8 @@ jQuery(document).ready(
                         jQuery('#inputNumberUnits').val(0);
                         jQuery('#inputUnitFee').val(0);
                         jQuery('#inputNumberResidents').val(0);
-                        jQuery('#_isResidentCouncil').prop('checked', false);
-                        jQuery("#_isAdmin").prop('checked', false);
+                        jQuery('#_isResidentCouncil').prop('checked', currentRow.residentCouncil);
+                        jQuery("#_isActive").prop('checked', true);
 
                         table.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
@@ -121,7 +121,7 @@ jQuery(document).ready(
     });
 
 
-function adminCheck(that) {
+function activeCheck(that) {
     jQuery("input[id^='_prop_']").prop('checked', false);
     jQuery("input[id^='_prop_']").prop('disabled', jQuery(that).prop('checked'));
 }

@@ -81,7 +81,6 @@ public class PropertyDAO extends JdbcDaoSupport {
                 preparedStatement.setBoolean(7, property.getActive());
                 preparedStatement.setInt(8, property.getNoOfResident());
                 preparedStatement.setBoolean(9, property.getResidentCouncil());
-                cnx.setAutoCommit(true);
                 return preparedStatement;
             }, keyHolder);
         } catch (DuplicateKeyException dke) {
