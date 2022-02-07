@@ -31,10 +31,8 @@ import static java.lang.Math.toIntExact;
 public class PropertyDAO extends JdbcDaoSupport {
 
     // todo: SERVICE_PROVIDER is unmapped
-    // private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_ID, PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE,  ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?,?)";
-    // insert into property (prop_id, prop_name, city, state, county, unit, unit_fee, active, total_residents, resident_council, service_provider) DEFAULT VALUES
     private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?)";
-    private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET PROP_NAME=?, CITY=?, STATE=?, COUNTY=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_ID=?";
+    private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET CITY=?, STATE=?, COUNTY=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_NAME=?";
 
     @Autowired
     public PropertyDAO(DataSource dataSource) {
@@ -50,20 +48,18 @@ public class PropertyDAO extends JdbcDaoSupport {
      */
     public int updateExistingProperty(@Valid Property property) throws SQLException {
 
-        this.getJdbcTemplate().getDataSource().getConnection().setAutoCommit(true);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rows = this.getJdbcTemplate().update(cnx -> {
             PreparedStatement preparedStatement = cnx.prepareStatement(SQL_UPDATE_PROPERTY);
-            preparedStatement.setString(1, property.getPropertyName());
-            preparedStatement.setString(2, property.getCity());
-            preparedStatement.setString(3, property.getState());
-            preparedStatement.setString(4, property.getCounty());
-            preparedStatement.setInt(5, property.getUnit());
-            preparedStatement.setInt(6, property.getUnitFee());
-            preparedStatement.setBoolean(7, property.getActive());
-            preparedStatement.setInt(8, property.getNoOfResident());
-            preparedStatement.setBoolean(9, property.getResidentCouncil());
-            preparedStatement.setInt(10, property.getPropertyId());
+            preparedStatement.setString(1, property.getCity());
+            preparedStatement.setString(2, property.getState());
+            preparedStatement.setString(3, property.getCounty());
+            preparedStatement.setInt(4, property.getUnit());
+            preparedStatement.setInt(5, property.getUnitFee());
+            preparedStatement.setBoolean(6, property.getActive());
+            preparedStatement.setInt(7, property.getNoOfResident());
+            preparedStatement.setBoolean(8, property.getResidentCouncil());
+            preparedStatement.setString(9, property.getPropertyName());
             return preparedStatement;
         }, keyHolder);
         System.out.println("Rows updated: "+rows);
@@ -74,7 +70,6 @@ public class PropertyDAO extends JdbcDaoSupport {
 
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            this.getJdbcTemplate().getDataSource().getConnection().setAutoCommit(true);
             this.getJdbcTemplate().update(cnx -> {
                 PreparedStatement preparedStatement = cnx.prepareStatement(SQL_INSERT_PROPERTY);
                 preparedStatement.setString(1, property.getPropertyName());
@@ -86,6 +81,7 @@ public class PropertyDAO extends JdbcDaoSupport {
                 preparedStatement.setBoolean(7, property.getActive());
                 preparedStatement.setInt(8, property.getNoOfResident());
                 preparedStatement.setBoolean(9, property.getResidentCouncil());
+                cnx.setAutoCommit(true);
                 return preparedStatement;
             }, keyHolder);
         } catch (DuplicateKeyException dke) {
@@ -112,8 +108,6 @@ public class PropertyDAO extends JdbcDaoSupport {
                 System.out.println("Update existing property");
                 if(updateExistingProperty(property)==0)
                     insertNewProperty(property);
-                else
-                    throw new IllegalStateException("Duplicate keys detected on update");
             } catch (EmptyResultDataAccessException e) {
                 System.out.println("Create new property entry");
                 insertNewProperty(property);
