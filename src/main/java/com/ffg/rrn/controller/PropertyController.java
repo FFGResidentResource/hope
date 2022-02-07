@@ -48,17 +48,21 @@ public class PropertyController extends BaseController {
     public String saveProperty(Model model, Principal principal, @ModelAttribute("property") @Valid Property property,
                                          BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
+        System.out.println("boopity doo");
+        try {
+            System.out.println("doo wop ditty wop oh yeah");
 
-            List<Property> allProperty = propertyService.getAllProperties();
-            property.setPropertyList(allProperty);
-
-            model.addAttribute("property", property);
-
-            return "propertyPage";
+            propertyService.saveProperty(property);
+            System.out.println("wop wop biddy pop");
         }
-        propertyService.saveProperty(property);
-
-        return "redirect:/property";
+        catch(Exception ex) {
+            System.out.println("Exception detected...");
+            ex.printStackTrace();
+            throw ex;
+        }
+        finally{
+            System.out.println("Redirecting...");
+            return "redirect:/property";
+        }
     }
 }

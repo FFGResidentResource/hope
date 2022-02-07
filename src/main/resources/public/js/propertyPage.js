@@ -60,13 +60,7 @@ jQuery(document).ready(
                         ],
                         "order": [[3, "desc"]],
                         pageLength: 8,
-                        pagingType: "full_numbers",
-                        "initComplete": function (settings, json) {
-
-                            // This prints all radio Options on
-                            // AllResident DataTables.
-                            jQuery('.dataTables_length').addClass('hideme');
-                        }
+                        pagingType: "full_numbers"
                     });
 
                 jQuery('#propertyTable tbody').on('click', 'tr', function () {

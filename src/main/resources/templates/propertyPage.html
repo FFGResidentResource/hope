@@ -117,7 +117,7 @@
                         th:class="${e.global}? globalerr : fielderr"><span
                             th:text="${e.global}? '*' : ${e.fieldName}">The field name</span>
                         | <span th:text="${e.message}">The error message</span>
-                        | <span th:text="${e.toString()}">Extra</span></li>
+                        | <span th:text="${e.arguments}">Extra</span></li>
                 </ul>
             </div>
 
@@ -130,7 +130,7 @@
                         <label for="inputPropertyId" class="col-sm-4 control-label">Property Id</label>
                         <div class="col-sm-4">
                             <input class="form-control" id="inputPropertyId"
-                                   placeholder="Property id" th:field="*{propertyId}" required>
+                                   placeholder="Property id" th:field="${property.propertyId}" required>
                         </div>
                     </div>
 
@@ -138,7 +138,7 @@
                         <label for="inputPropertyName" class="col-sm-4 control-label">Property Name</label>
                         <div class="col-sm-4">
                             <input class="form-control" id="inputPropertyName"
-                                   placeholder="Property Name" th:field="*{propertyName}" required>
+                                   placeholder="Property Name" th:field="${property.propertyName}" required>
                         </div>
                     </div>
 

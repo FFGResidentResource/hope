@@ -3,6 +3,7 @@ package com.ffg.rrn.dao;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.model.Property;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,7 +25,9 @@ import static java.lang.Math.toIntExact;
 public class PropertyDAO extends JdbcDaoSupport {
 
     // todo: SERVICE_PROVIDER is unmapped
-    private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_ID, PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE,  ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,to_json(?::json),to_json(?::json),to_json(?::json),to_json(?::json),to_json(?::json),to_json(?::json), to_json(?::json), to_json(?::json),to_json(?::json))";
+    // private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_ID, PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE,  ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    // insert into property (prop_id, prop_name, city, state, county, unit, unit_fee, active, total_residents, resident_council, service_provider) DEFAULT VALUES
+    private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_ID, PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET PROP_NAME=?, CITY=?, STATE=?, COUNTY=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_ID=?";
 
     @Autowired
@@ -37,10 +40,17 @@ public class PropertyDAO extends JdbcDaoSupport {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         String[] pkColumnNames = new String[]{"prop_id"};
 
-        this.getJdbcTemplate().update(conn -> buildInsertProperty(conn, property, pkColumnNames), keyHolder);
-
-        int propId = keyHolder.getKey().intValue();
+        int propId = 50; // keyHolder.getKey().intValue();
         property.setPropertyId(propId);
+
+        System.out.println("propId: "+propId);
+        try {
+            this.getJdbcTemplate().execute("insert into property (prop_id, prop_name, city, state, county, unit, " +
+                    "unit_fee, active, total_residents, resident_council, service_provider) " +
+                    "VALUES (1234, 'Botany Bay', 'A', 'b', 'c', 10, 10, true, 100, false, NULL);");
+        } catch(Exception ex) {
+            System.out.println("Ignoring error:" + ex);
+        }
 
         return propId;
     }
@@ -103,8 +113,6 @@ public class PropertyDAO extends JdbcDaoSupport {
             this.getJdbcTemplate().queryForObject("select 1 from property where prop_id = ? ", new Object[]{property.getPropertyId()}, Integer.class);
             this.getJdbcTemplate().update(conn -> buildUpdateProperty(conn, property, pkColumnNames), keyHolder);
         } catch (EmptyResultDataAccessException e) {
-            property.setPropertyId(toIntExact(keyHolder.getKey().longValue()));
-            // this.getJdbcTemplate().update( conn -> buildInsertProperty(conn, property, pkColumnNames));
             insertNewProperty(property);
         }
 
