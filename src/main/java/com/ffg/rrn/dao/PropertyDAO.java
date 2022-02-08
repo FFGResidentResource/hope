@@ -2,6 +2,8 @@ package com.ffg.rrn.dao;
 
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.model.Property;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -17,10 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import javax.validation.Valid;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +32,9 @@ public class PropertyDAO extends JdbcDaoSupport {
     // todo: SERVICE_PROVIDER is unmapped
     private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET CITY=?, STATE=?, COUNTY=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_NAME=?";
+    private static final String SQL_GETALL_PROPERTIES = "SELECT PROP_NAME, CITY, STATE, COUNTY," +
+            " UNIT, UNIT_FEE, TOTAL_RESIDENTS, RESIDENT_COUNCIL, SERVICE_PROVIDER, ACTIVE FROM PROPERTY " +
+            "ORDER BY PROP_NAME ASC";
 
     @Autowired
     public PropertyDAO(DataSource dataSource) {
@@ -114,6 +116,24 @@ public class PropertyDAO extends JdbcDaoSupport {
             // DEBUG
             e.printStackTrace();
             return -1L;
+        }
+    }
+
+    public JRDataSource getPropertyDataSource() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection cnx = DriverManager
+                    .getConnection("jdbc:postgresql://axon1:5432/rrhope",
+                            "admin", "stonewall");
+            PreparedStatement ps = cnx.prepareStatement(SQL_GETALL_PROPERTIES);
+            ResultSet rs = ps.executeQuery();
+            return new JRResultSetDataSource(rs);
+        } catch(ClassNotFoundException cnf) {
+            cnf.printStackTrace();
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
