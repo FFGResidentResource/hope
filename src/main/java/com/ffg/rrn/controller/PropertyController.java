@@ -3,10 +3,7 @@ package com.ffg.rrn.controller;
 import com.ffg.rrn.model.Property;
 import com.ffg.rrn.model.ServiceCoordinator;
 import com.ffg.rrn.service.PropertyServiceImpl;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,17 +78,19 @@ public class PropertyController extends BaseController {
     @RequestMapping("/reportProperty/{fileName:.+}")
     public ResponseEntity reportProperty(@PathVariable  String fileName) {
 
-        String fileBasePath = "/Development/hope/src/main/resources/reports/";
+        String fileBasePath = "/reports/";
+        JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
 
         try {
             JRDataSource dataSource = propertyService.getPropertyDataSource();
             Map parameters = new HashMap();
-            String sourceFileName = fileBasePath + fileName; // todo: change to reports in resource folder
-            String fillFileName = JasperFillManager.fillReportToFile(sourceFileName, parameters, dataSource);
-            System.out.println("fillFileName:"+fillFileName);
-            String pdfFileName = JasperExportManager.exportReportToPdfFile(fillFileName);
-            System.out.println("PDF File:"+pdfFileName);
-            Path path = Paths.get(pdfFileName);
+            String sourceFileName = fileBasePath + fileName;
+            InputStream jasperFileInputStream = this.getClass().getResourceAsStream(sourceFileName);
+            JasperPrint fillPrint = fillManager.fill(jasperFileInputStream, parameters, dataSource);
+            File tempPdfFile = File.createTempFile("testing", ".pdf");
+            FileOutputStream pdfOutputStream = new FileOutputStream(tempPdfFile);
+            JasperExportManager.exportReportToPdfStream(fillPrint, pdfOutputStream);
+            Path path = tempPdfFile.toPath();
             Resource resource = new UrlResource(path.toUri());
 
             return ResponseEntity.ok()
@@ -101,6 +101,8 @@ public class PropertyController extends BaseController {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (JRException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
