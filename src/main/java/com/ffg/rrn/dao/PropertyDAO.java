@@ -29,9 +29,8 @@ import static java.lang.Math.toIntExact;
 @Transactional
 public class PropertyDAO extends JdbcDaoSupport {
 
-    // todo: SERVICE_PROVIDER is unmapped
-    private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_NAME, CITY, STATE, COUNTY, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?)";
-    private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET CITY=?, STATE=?, COUNTY=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_NAME=?";
+    private static final String SQL_INSERT_PROPERTY = "INSERT INTO PROPERTY (PROP_NAME, CITY, STATE, COUNTY, SERVICE_PROVIDER, UNIT, UNIT_FEE, ACTIVE, TOTAL_RESIDENTS, RESIDENT_COUNCIL) VALUES (?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_PROPERTY = "UPDATE PROPERTY SET CITY=?, STATE=?, COUNTY=?, SERVICE_PROVIDER=?, UNIT=?, UNIT_FEE=?, ACTIVE=?, TOTAL_RESIDENTS=?, RESIDENT_COUNCIL=? WHERE PROP_NAME=?";
     private static final String SQL_GETALL_PROPERTIES = "SELECT PROP_NAME, CITY, STATE, COUNTY," +
             " UNIT, UNIT_FEE, TOTAL_RESIDENTS, RESIDENT_COUNCIL, SERVICE_PROVIDER, ACTIVE FROM PROPERTY " +
             "ORDER BY PROP_NAME ASC";
@@ -56,12 +55,13 @@ public class PropertyDAO extends JdbcDaoSupport {
             preparedStatement.setString(1, property.getCity());
             preparedStatement.setString(2, property.getState());
             preparedStatement.setString(3, property.getCounty());
-            preparedStatement.setInt(4, property.getUnit());
-            preparedStatement.setInt(5, property.getUnitFee());
-            preparedStatement.setBoolean(6, property.getActive());
-            preparedStatement.setInt(7, property.getNoOfResident());
-            preparedStatement.setBoolean(8, property.getResidentCouncil());
-            preparedStatement.setString(9, property.getPropertyName());
+            preparedStatement.setString(4, property.getServiceProvider());
+            preparedStatement.setInt(5, property.getUnit());
+            preparedStatement.setInt(6, property.getUnitFee());
+            preparedStatement.setBoolean(7, property.getActive());
+            preparedStatement.setInt(8, property.getNoOfResident());
+            preparedStatement.setBoolean(9, property.getResidentCouncil());
+            preparedStatement.setString(10, property.getPropertyName());
             return preparedStatement;
         }, keyHolder);
         return rows;
@@ -77,11 +77,12 @@ public class PropertyDAO extends JdbcDaoSupport {
                 preparedStatement.setString(2, property.getCity());
                 preparedStatement.setString(3, property.getState());
                 preparedStatement.setString(4, property.getCounty());
-                preparedStatement.setInt(5, property.getUnit());
-                preparedStatement.setInt(6, property.getUnitFee());
-                preparedStatement.setBoolean(7, property.getActive());
-                preparedStatement.setInt(8, property.getNoOfResident());
-                preparedStatement.setBoolean(9, property.getResidentCouncil());
+                preparedStatement.setString(5, property.getServiceProvider());
+                preparedStatement.setInt(6, property.getUnit());
+                preparedStatement.setInt(7, property.getUnitFee());
+                preparedStatement.setBoolean(8, property.getActive());
+                preparedStatement.setInt(9, property.getNoOfResident());
+                preparedStatement.setBoolean(10, property.getResidentCouncil());
                 return preparedStatement;
             }, keyHolder);
         } catch (DuplicateKeyException dke) {

@@ -31,6 +31,8 @@ public class Property {
     private String state;
     private String county;
 
+    private String serviceProvider;
+
     private Boolean checked;
 
     // DEBUG @JsonView
@@ -40,7 +42,10 @@ public class Property {
         propertyList = new ArrayList<Property>();
     }
 
-    public Property(int propertyId, String propertyName, int unit, int unitFee, Boolean active, int noOfResident, Boolean residentCouncil, String city, String state, String county, Boolean checked) {
+    public Property(int propertyId, String propertyName, int unit, int unitFee,
+                    Boolean active, int noOfResident, Boolean residentCouncil,
+                    String city, String state, String county,
+                    String serviceProvider, Boolean checked) {
         this.propertyId = propertyId;
         this.propertyName = propertyName;
         this.unit = unit;
@@ -51,6 +56,7 @@ public class Property {
         this.city = city;
         this.state = state;
         this.county = county;
+        this.serviceProvider = serviceProvider;
         this.checked = checked;
     }
 

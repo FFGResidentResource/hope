@@ -101,6 +101,7 @@ jQuery(document).ready(
                         jQuery("#inputCity").val(currentRow.city);
                         jQuery("#inputState").val(currentRow.state);
                         jQuery("#inputCounty").val(currentRow.county);
+                        jQuery("#inputServiceProvider").val(currentRow.serviceProvider);
                     }
                 });
             },
