@@ -57,6 +57,7 @@ jQuery(document).ready(
 
                     var tr = $(this);
                     currentRow = table.row(this).data();
+                    selectServiceProviderOption();
 
                     console.log(currentRow);
 
@@ -124,6 +125,16 @@ function activeCheck(that) {
 function validateFields() {
 
     debugger;
+}
+
+function selectServiceProvider() {
+    document.getElementById('inputServiceProvider').value =
+        document.getElementById('cbServiceProvider').value;
+}
+
+function selectServiceProviderOption() {
+    document.getElementById('cbServiceProvider').value =
+        document.getElementById('inputServiceProvider').value;
 }
 
 function resetInputFields() {
