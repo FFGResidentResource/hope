@@ -57,14 +57,12 @@ jQuery(document).ready(
 
                     var tr = $(this);
                     currentRow = table.row(this).data();
-                    selectServiceProviderOption();
 
                     console.log(currentRow);
 
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
                         jQuery('a[id^="_load"]').attr('disabled', true);
-
                         jQuery('select').prop('selectedIndex', '');
                         jQuery('#inputPropertyId').val(currentRow.propertyId);
                         jQuery('input:text').val('');
@@ -79,10 +77,11 @@ jQuery(document).ready(
                         jQuery('input[id^="_prop_"]').prop('checked', true);
                         jQuery('input[id^="_prop_"]').prop('disabled', false);
 
-
+                        selectServiceProviderOption();
                     } else {
                         table.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
+
                         jQuery('#inputPropertyId').val(currentRow.propertyId);
                         jQuery('input:text').val('');
                         jQuery('#inputPropertyName').val('');
@@ -103,6 +102,8 @@ jQuery(document).ready(
                         jQuery("#inputState").val(currentRow.state);
                         jQuery("#inputCounty").val(currentRow.county);
                         jQuery("#inputServiceProvider").val(currentRow.serviceProvider);
+
+                        selectServiceProviderOption();
                     }
                 });
             },
