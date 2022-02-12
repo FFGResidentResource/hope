@@ -78,6 +78,10 @@ jQuery(document).ready(
                         jQuery('input[id^="_prop_"]').prop('disabled', false);
 
                         selectServiceProviderOption();
+
+                        $("#inputServiceProvider").autocomplete({
+                            source: ["ABCAP", "FSA", "ILCAO", "NCR", "OTR", "RRN", "Sourcepoint", "UNK"]
+                        });
                     } else {
                         table.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
@@ -104,6 +108,10 @@ jQuery(document).ready(
                         jQuery("#inputServiceProvider").val(currentRow.serviceProvider);
 
                         selectServiceProviderOption();
+
+                        $("#inputServiceProvider").autocomplete({
+                            source: ["ABCAP", "FSA", "ILCAO", "NCR", "OTR", "RRN", "Sourcepoint", "UNK"]
+                        });
                     }
                 });
             },

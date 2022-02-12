@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class Property {
 
     // DEBUG @JsonView
     private List<Property> propertyList;
+    private List<String> serviceProviders;
 
     public Property() {
         propertyList = new ArrayList<Property>();
@@ -58,6 +60,9 @@ public class Property {
         this.county = county;
         this.serviceProvider = serviceProvider;
         this.checked = checked;
+        this.serviceProviders =  new ArrayList<String>(Arrays.asList(
+                "ABCAP", "FSA", "ILCAO", "NCR", "OTR", "RRN", "Sourcepoint", "UNK"
+        ));
     }
 
     @Override

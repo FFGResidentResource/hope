@@ -17,14 +17,20 @@ public class PropertyServiceImpl {
     private PropertyDAO propertyDAO;
 
     public List<Property> getAllProperties() {
+
         return this.propertyDAO.getAllProperty();
     }
 
     public Long saveProperty(final Property property) {
+
         return this.propertyDAO.saveProperty(property);
     }
 
     public JRDataSource getPropertyDataSource() {
         return this.propertyDAO.getPropertyDataSource();
+    }
+
+    public List<String> getServiceProviders() {
+        return this.propertyDAO.getServiceProviders();
     }
 }

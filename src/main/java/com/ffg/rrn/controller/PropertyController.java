@@ -54,6 +54,13 @@ public class PropertyController extends BaseController {
         return "propertyPage";
     }
 
+    @RequestMapping(value = "/serviceprovider", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> serviceProviders() {
+        List<String> serviceProviders = propertyService.getServiceProviders();
+        return serviceProviders;
+    }
+
     @PostMapping("/saveProperty")
     public String saveProperty(Model model, Principal principal, @ModelAttribute("property") @Valid Property property,
                                          BindingResult bindingResult) {

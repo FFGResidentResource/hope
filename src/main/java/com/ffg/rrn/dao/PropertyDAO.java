@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import javax.validation.Valid;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,6 +93,18 @@ public class PropertyDAO extends JdbcDaoSupport {
             // todo: better error handling, let UI move forward and log the error
             System.out.println("Ignoring error:" + ex);
         }
+    }
+
+    public List<String> getServiceProviders() {
+        List<String> providers = this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL_SERVICE_PROVIDERS,
+                (ResultSetExtractor<List<String>>) resultSet -> {
+                    ArrayList<String> them = new ArrayList<String>();
+                    while(resultSet.next()) {
+                        them.add(resultSet.getString(1));
+                    }
+                    return them;
+                });
+        return providers;
     }
 
     public List<Property> getAllProperty() {

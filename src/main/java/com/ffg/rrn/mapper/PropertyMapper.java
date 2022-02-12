@@ -24,6 +24,9 @@ public class PropertyMapper implements RowMapper<Property> {
 	public static final String PROPERTY_SQL //
 			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY, P.SERVICE_PROVIDER FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";
 
+	public static final String PROPERTY_SQL_SERVICE_PROVIDERS //
+			= "SELECT DISTINCT SERVICE_PROVIDER FROM PROPERTY";
+
 	@Override
 	public Property mapRow(ResultSet rs, int row) throws SQLException {
 
