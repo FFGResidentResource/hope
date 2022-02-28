@@ -45,13 +45,12 @@ window.onbeforeprint = function() {
 
 jQuery(document).ready(function() {
 	if($('#allowcontact').prop("checked")){
-		document.getElementById('viaemail').disabled = true;;
-		document.getElementById('viavoicemail').disabled = true;;
+		document.getElementById('viaemail').disabled = true;
+		document.getElementById('viavoicemail').disabled = true;
 		document.getElementById('viatext').disabled = true;
 		document.getElementById("viaemail").checked = false;
 		document.getElementById("viavoicemail").checked = false;
 		document.getElementById("viatext").checked = false;
-		
 	};
 	
 	var btn = $("#btnDeactivateResident");

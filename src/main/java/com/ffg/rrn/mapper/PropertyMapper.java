@@ -17,12 +17,15 @@ import com.ffg.rrn.model.Property;
 public class PropertyMapper implements RowMapper<Property> {
 	
 	public static final String PROPERTY_SQL_FOR_NON_ADMIN_SC //
-			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY " + 
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY, P.SERVICE_PROVIDER " +
 					"FROM  PROPERTY P where P.ACTIVE = 'TRUE' " + 
 					"and P.prop_id in ( select json_array_elements(assigned_property)::text::int from service_coordinator sc where json_typeof(assigned_property) != 'null' and SC.USER_NAME = ?)";
 
 	public static final String PROPERTY_SQL //
-			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";
+			= "SELECT P.PROP_ID, P.PROP_NAME, P.UNIT, P.UNIT_FEE, P.ACTIVE, P.TOTAL_RESIDENTS, P.RESIDENT_COUNCIL, P.CITY, P.STATE, P.COUNTY, P.SERVICE_PROVIDER FROM  PROPERTY P  where P.ACTIVE = 'TRUE'";
+
+	public static final String PROPERTY_SQL_SERVICE_PROVIDERS //
+			= "SELECT DISTINCT SERVICE_PROVIDER FROM PROPERTY";
 
 	@Override
 	public Property mapRow(ResultSet rs, int row) throws SQLException {
@@ -39,6 +42,7 @@ public class PropertyMapper implements RowMapper<Property> {
 		p.setCity(rs.getString("CITY"));
 		p.setState(rs.getString("STATE"));
 		p.setCounty(rs.getString("COUNTY"));
+		p.setServiceProvider(rs.getString("SERVICE_PROVIDER"));
 		
 		return p;
 	}

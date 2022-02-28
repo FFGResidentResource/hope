@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.ffg.rrn.service.PropertyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,9 @@ public class RestAPIController {
 
 	@Autowired
 	private ServiceCoordinatorServiceImpl serviceCoordinatorService;
+
+	@Autowired
+	private PropertyServiceImpl propertyService;
 	
 	@Autowired
 	private DashboardDao dashDao;
@@ -143,6 +147,14 @@ public class RestAPIController {
 		List<Property> allProperty = residentService.getAllProperty(srvcCoord);
 
 		return ResponseEntity.ok(allProperty);
+	}
+
+	@PostMapping("/getAllProperties")
+	public ResponseEntity<?> getAllProperties() {
+
+		List<Property> allProperties = propertyService.getAllProperties();
+
+		return ResponseEntity.ok(allProperties);
 	}
 	
 	@PostMapping("/genderPercentage")

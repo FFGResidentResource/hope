@@ -6,6 +6,8 @@ jQuery(document).ready(function() {
 	jQuery("a[href='/newResident']").parent().addClass('active');
     } else if (path == '/admin' || path == "/saveServiceCoordinator") {
 	jQuery("a[href='/admin']").parent().addClass('active');
+    } else if (path == '/property' || path == "/saveServiceCoordinator") {
+    jQuery("a[href='/property']").parent().addClass('active');
     } else if (path == '/allResident') {
 	jQuery("a[href='/allResident']").parent().addClass('active');
     } else if (path == '/onboarding' || path == "/saveResident" || path == "/saveReferralForm" || path == "/saveActionPlan" || path == "/saveCaseNotes") {

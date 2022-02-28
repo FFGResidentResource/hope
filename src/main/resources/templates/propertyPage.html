@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resident Resource Network</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/datatables.min.css" rel="stylesheet">
+    <link href="/css/c3.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <style>
+
+        label {
+            display: inline-block;
+            max-width: 100%;
+            font-weight: normal;
+            max-width: none;
+            font-size: smaller;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @media ( min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .navbar-brand > img {
+            height: 100%;
+        }
+
+        .navbar-brand {
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include _menu.html -->
+<th:block th:include="../templates/_menu"></th:block>
+
+
+<div class="container">
+    <form th:action="@{/saveProperty}" method='POST'
+          th:object="${property}" class="form-horizontal">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+
+                        <div class="row hiddent-print">
+                            <div class="col-sm-4">
+                                <span class="panel-title"><strong>All Properties</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12">
+                            <table id="propertyTable" class="display compact" style="width: 100%">
+                                <thead>
+                                <tr>
+                                    <th>Active</th>
+                                    <th>Property Name</th>
+                                    <th># Units</th>
+                                    <th>Fee</th>
+                                    <th># Residents</th>
+                                    <th>Res Council</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>County</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                        <div class="row text-center bs-linebreak hidden-print">
+                            <input type="hidden" id="_propertyId" name="propertyId"
+                                   value=""/>
+                            <input type="hidden" id="existingProperties"
+                                   name="existingProperties"
+                                   th:field="*{propertyList}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12 myPanel">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                <ul>
+                    <li th:each="e : ${#fields.detailedErrors()}"
+                        th:class="${e.global}? globalerr : fielderr"><span
+                            th:text="${e.global}? '*' : ${e.fieldName}">The field name</span>
+                        | <span th:text="${e.message}">The error message</span>
+                        | <span th:text="${e.arguments}">Extra</span></li>
+                </ul>
+            </div>
+
+
+            <div class="col-sm-10">
+
+                <div class="row">
+
+                    <div class="form-group" hidden="true">
+                        <label for="inputPropertyId" class="col-sm-4 control-label">Property Id</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputPropertyId"
+                                   placeholder="Property Id" th:field="${property.propertyId}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPropertyName" class="col-sm-4 control-label">Property Name</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputPropertyName"
+                                   placeholder="Property Name" th:field="${property.propertyName}"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNumberUnits" class="col-sm-4 control-label"># Units</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputNumberUnits"
+                                   placeholder="0" th:field="*{unit}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputUnitFee" class="col-sm-4 control-label">Unit Fee</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputUnitFee"
+                                   placeholder="0" th:field="*{unitFee}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNumberResidents" class="col-sm-4 control-label"># Residents</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputNumberResidents"
+                                   placeholder="0" th:field="*{noOfResident}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <div class="checkbox">
+                                <label> <input type="checkbox" th:field="*{residentCouncil}" id="_isResidentCouncil"
+                                               onclick="activeCheck(this);">
+                                    Resident Council
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputCity" class="col-sm-4 control-label">City</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputCity"
+                                   placeholder="City" th:field="*{city}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputState" class="col-sm-4 control-label">State</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputState"
+                                   placeholder="State" th:field="*{state}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputCounty" class="col-sm-4 control-label">County</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputCounty"
+                                   placeholder="County" th:field="*{county}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <div class="checkbox">
+                                <label> <input type="checkbox" th:field="*{active}" id="_isActive"
+                                               onclick="activeCheck(this);">
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputServiceProvider" class="col-sm-4 control-label">Service Provider</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="inputServiceProvider"
+                                   placeholder="Service Provider" th:field="*{serviceProvider}"
+                                   onchange="selectServiceProviderOption();"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cbServiceProvider" class="col-sm-4 control-label">Service Provider</label>
+                        <select id="cbServiceProvider" onchange="selectServiceProvider();">
+                            <option value="ABCAP">ABCAP</option>
+                            <option value="FSA">FSA</option>
+                            <option value="ILCAO">ILCAO</option>
+                            <option value="NCR">NCR</option>
+                            <option value="OTR">OTR</option>
+                            <option value="RRN">RRN</option>
+                            <option value="Sourcepoint">Sourcepoint</option>
+                            <option value="UNK" selected></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <input type="submit" id="_propertyForm"
+                                       class="btn btn-primary btn-lg" value="Save Property"
+                                       onclick="debugger; validateFields();">
+                                <input type="button" id="_propertyFormResetForNewProperty"
+                                       class="btn btn-primary btn-lg" value="New Property"
+                                       onclick="resetInputFields();"
+                                >
+                                <a href="reportProperty/RRN_Hope_sample2.jasper">
+                                    <input type="button" id="_propertyFormReportAllProperty"
+                                           class="btn btn-primary btn-lg" value="Report"
+                                    >
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/moment.js"></script>
+<script src="/js/moment-timezone.js"></script>
+<script
+        src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+<script
+        src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="/js/datatables.min.js"></script>
+<script type="text/javascript"
+        src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+<script src="/js/propertyPage.js"></script>
+<script src="/js/menu.js"></script>
+
+</body>
+
+</html>
