@@ -17,9 +17,9 @@
 > - Datatables.net API for all tabular presentation
 > - C3 D3 Js for all Charting in reports Tab.
 
-Java / spring - Intermediate knowledge is required
+Java / spring - Intermediate knowledge is required.
 Others (thymeleaf/ bootstrap / jquery/ etc..) - Beginners knowledge should be enough to maintain project.
-PostgreSql - Good to have SQL knowledge that should be enough.
+PostgreSQL - Good to have SQL knowledge that should be enough.
 
  
 ### Production Deployment and prerequisites
@@ -42,14 +42,13 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 > - This concludes Database setup
 
 ### Deploy to Cloud - May have to look Microsoft Azure Spring boot deployment and <ins> how routing <ins> is done. (we have shown in past how to deploy with Pivotal Cloud Foundry)
-	
-	> - routing is nothing but global load balancer url or host url of the project that is connected to source IP of the system
-	> - Memory instance and all have to be defined as per Azure documentation.
 
+> - routing is nothing but global load balancer url or host url of the project that is connected to source IP of the system
+> - Memory instance and all have to be defined as per Azure documentation.
 
 ### Database Management
 
-> - If you go with ElephantSQL, have their own database backup so you not going to loose any data in case of disaster.
+> - If you go with ElephantSQL, have their own database backup so you are not going to loose any data in case of a disaster.
 > - Once resident is in System he/she should be always in system and should never be deleted from the System.
 > - Quarterly and Demographics Report includes Inactive and Active Resident both to produce accurate number of resident served for a given year.
 > - Action Plan, Contact Notes and all 7 life domain assessment maintains system of record by "on_this_date" so you will find this field in these table.
@@ -67,7 +66,7 @@ In order to deploy to production, please see database-setup-prod.dml.sql you nee
 
 ### Project Screen Shots:
 
-Engagement and Intake pending numbers don;t automatically updates while you are logged in. Once you logout and login back you will see numbers.
+Engagement and Intake pending numbers don't automatically updates while you are logged in. Once you logout and login back you will see numbers.
 
 ![Admin vs Non Admin SC](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/AdminVsNonAdminSCView.png?raw=true)
 ![AllResident](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/pages_screenshots/All_Resident.PNG?raw=true)
@@ -97,13 +96,13 @@ Engagement and Intake pending numbers don;t automatically updates while you are 
 ### Software Download and Setup
 
 > - Download JDK1.8 from [JDK](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
-> - Download [Maven](https://maven.apache.org/download.cgi#) choose zip one and unzip in any location and give location of your repository where you want maven to download all related dependencies
+> - Download [Maven](https://maven.apache.org/download.cgi) choose zip one and unzip in any location and give location of your repository where you want maven to download all related dependencies
 
  ![maven Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/mavenSettings.png?raw=true)
  
 > - Download [Eclipse](https://www.eclipse.org/downloads/) or any similar Development Space
 > - Create a folder "workspace" in any drive and open eclipse Project here.
-> - Go to Help Menu under Eclipse then Marketplace and download plugins atleast (eclipse web developer Tool, Dbeaver, Egit)
+> - Go to Help Menu under Eclipse then Marketplace and download plugins atleast (eclipse web developer Tool, DBeaver, Egit)
 > - It may ask to restart eclipse several time after each plugin as shown below but you can do so once after installing all the plugins
 
  ![MarketPlace Step](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/EclipsePlugins.png?raw=true)
@@ -112,7 +111,7 @@ Engagement and Intake pending numbers don;t automatically updates while you are 
  
  ![JRE Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/JDK-Setting.png?raw=true)
 
-> - Download [lombok](https://projectlombok.org/download) and follow instruction from same website. find your eclipse.ini file and add what shown in image below, restart eclipse (Lombok is useful in compiling @Data Annotation locally to support getter/setter else you will get compile time errors on all getter setter)
+> - Download [lombok](https://projectlombok.org/download) and follow instruction from same website. find your eclipse.ini file and add what is shown in the image below, restart eclipse (Lombok is useful in compiling @Data Annotation locally to support getter/setter else you will get compile time errors on all getter setter)
  
  ![Lombok Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/lombok-setting.png?raw=true)
  
@@ -124,11 +123,11 @@ Engagement and Intake pending numbers don;t automatically updates while you are 
  
 > - Download [DBeaver](https://dbeaver.io/download/)
 
-> - Git Clone project from github release 1 Branch - [release1](https://github.com/FFGResidentResource/hope.git)
+> - Git Clone project from the github _Release1_ Branch - [Release1](https://github.com/FFGResidentResource/hope.git)
 
 ### Database configuration
 
-> - we are using Postgresql in our project for backend Relational Database. Please follow link here to create your own account:
+> - we are using PostgreSQL in our project for backend Relational Database. Please follow link here to create your own account:
 
 > - [ElephantSQL](https://www.elephantsql.com/) - Choose <ins> TinyTurle Free </ins> Plan while creating instance (it gives you 20 MB which is more than enough to Store 1000s of record in each table)
  
@@ -136,7 +135,7 @@ Engagement and Intake pending numbers don;t automatically updates while you are 
 
  ![DB Details](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/ElephantSQL-DB-Example.png?raw=true)
  
-> - Let's Open this DB on DBeaver now, open DBeaver that you downloaded from above step and File -> New -> DBeaver (Database Connection) as shown in iamge below:
+> - Let's Open this DB on DBeaver now: open DBeaver that you downloaded from above step and File -> New -> DBeaver (Database Connection) as shown in iamge below:
 
  ![DB Connection Details 1](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-1.png?raw=true)
 
@@ -146,7 +145,7 @@ Engagement and Intake pending numbers don;t automatically updates while you are 
 
  ![DB Connection Details 3](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-3.png?raw=true) 
  
-> - Copy entire contents of data.sql from github location - [data.sql](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/data/data.sql) and put it in new SQL Editor of DBeaver and execute entire SQL Script (Alt +X) in Dbeaver. This will create All tables/ views and insert initial Data
+> - Copy entire contents of data.sql from github location - [data.sql](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/data/data.sql) and put it in new SQL Editor of DBeaver and execute entire SQL Script (Alt +X) in DBeaver. This will create All tables/ views and insert initial Data
 
  ![DB Connection Details 4](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/dbeaver-conn-4.png?raw=true) 
  
