@@ -9,16 +9,16 @@
 ### Technological Stack for this Project
 
 > - Java 1.8 or higher 
-> - Spring Boot 2.x or higher (see version in pom.xml) - spring boot comes with embedded tomcat
-> - Thymeleaf for UI bindings to Backing bean
-> - Bootstrap Css for styling
-> - jQuery for browser scripting and traversing
-> - PostgreSQL for database - our database can be hosted online like in elephantsql platform
-> - Datatables.net API for all tabular presentation
-> - C3 D3 Js for all Charting in reports Tab.
+> - [Spring Boot](https://spring.io/projects/spring-boot) 2.x or higher (see version in pom.xml) - spring boot comes with embedded tomcat
+> - [Thymeleaf](https://www.thymeleaf.org) for UI bindings to Backing bean
+> - [Bootstrap CSS](https://getbootstrap.com/docs/3.4/css/) for styling
+> - [jQuery](https://jquery.com) for browser scripting and traversing
+> - [PostgreSQL](https://www.postgresql.org) for database - our database can be hosted online like in [ElephantSQL](https://www.elephantsql.com/) platform
+> - [Datatables](https://datatables.net/) API for all tabular presentation
+> - [C3.js](https://c3js.org/) for all Charting in reports Tab.
 
-Java / spring - Intermediate knowledge is required.
-Others (thymeleaf/ bootstrap / jquery/ etc..) - Beginners knowledge should be enough to maintain project.
+Java / Spring - Intermediate knowledge is required.
+Others (Thymeleaf / Bootstrap / jQuery / etc..) - Beginners knowledge should be enough to maintain project.
 PostgreSQL - Good to have SQL knowledge that should be enough.
 
  
@@ -102,7 +102,7 @@ Engagement and Intake pending numbers don't automatically updates while you are 
  
 > - Download [Eclipse](https://www.eclipse.org/downloads/) or any similar Development Space
 > - Create a folder "workspace" in any drive and open eclipse Project here.
-> - Go to Help Menu under Eclipse then Marketplace and download plugins atleast (eclipse web developer Tool, DBeaver, Egit)
+> - Go to Help Menu under Eclipse then Marketplace and download plugins atleast: Eclipse Web Developer Tools, DBeaver, Egit, Spring Tools 4
 > - It may ask to restart eclipse several time after each plugin as shown below but you can do so once after installing all the plugins
 
  ![MarketPlace Step](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/EclipsePlugins.png?raw=true)
@@ -111,7 +111,7 @@ Engagement and Intake pending numbers don't automatically updates while you are 
  
  ![JRE Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/JDK-Setting.png?raw=true)
 
-> - Download [lombok](https://projectlombok.org/download) and follow instruction from same website. find your eclipse.ini file and add what is shown in the image below, restart eclipse (Lombok is useful in compiling @Data Annotation locally to support getter/setter else you will get compile time errors on all getter setter)
+> - Download [lombok](https://projectlombok.org/download) and follow the [instructions](https://projectlombok.org/setup/eclipse) from the website. find your eclipse.ini file and add what is shown in the image below, restart eclipse (Lombok is useful in compiling @Data Annotation locally to support getter/setter else you will get compile time errors on all getter setter)
  
  ![Lombok Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/lombok-setting.png?raw=true)
  
@@ -177,11 +177,11 @@ Engagement and Intake pending numbers don't automatically updates while you are 
 
 > - open Application.properties under resources and put url, username and password from ElephantSQL Details tab after logging in ElephanSQL Account
 
- ![Maven Jar Build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/jdbc-setup-and-server-startup.png?raw=true)
+ ![JDBC Configuration](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/jdbc-setup-and-server-startup.png?raw=true)
 
-> - Configure Spring Boot Settings (You may have to add Spring Tool Suite 4 from Eclipse Marketplace as well) and see below Screenshot:
+> - Configure Spring Boot Settings and see below Screenshot:
 
- ![Maven Jar Build](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/run-project-localhost.png?raw=true)
+ ![Spring Boot Settings](https://github.com/FFGResidentResource/hope/blob/Release1/src/main/resources/public/images/project_setup/run-project-localhost.png?raw=true)
 
 > - open http://localhost:8080 Looks port in server logs where your server started. This port can specified in application.properties if you want to override on top of 8080, google how to override spring boot port.
 
