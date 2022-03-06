@@ -13,18 +13,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class PasswordUtils {
 	 
-    // Encryte Password with BCryptPasswordEncoder
+    // Encrypt Password with BCryptPasswordEncoder
     public static String encryptPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }
  
     public static void main(String[] args) {
-       
-        String encrytedPassword = encryptPassword("123");
-        System.out.println("Password: " + 123);
+        String pw = "123";
+        String encrytedPassword = encryptPassword(pw);
+        System.out.println("Password: " + pw);
         System.out.println("Encryted Password: " + encrytedPassword);
-       
     }
     
     //I do not this this actually works...

@@ -58,25 +58,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 
                 if(role.equals("ROLE_ADMIN")) {
                 	sc.setAdmin(true);
-                }               	
-                	
+                }        	
             }
         }
         
-               	
         sc = this.serviceCoordinatorDAO.calculateEngagementAndIntakePending(sc);
         
-
         authority = new SimpleGrantedAuthority("EngagementPercentage=" + sc.getEngagementPercentage());
 		grantList.add(authority);
 		
-		 authority = new SimpleGrantedAuthority("IntakePending=" + sc.getIntakePending());
-			grantList.add(authority);
+		authority = new SimpleGrantedAuthority("IntakePending=" + sc.getIntakePending());
+		grantList.add(authority);
  
         UserDetails userDetails = (UserDetails) new User(sc.getUserName(), //
         		sc.getEncrytedPassword(), grantList);
  
         return userDetails;
+    }
+    
+    public void updateLastLogin(String userName) {
+    	serviceCoordinatorDAO.updateLastLogin(userName);
     }
  
 }

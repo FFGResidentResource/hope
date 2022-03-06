@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Submit URL of login page.
 				.loginProcessingUrl("/j_spring_security_check") // Submit URL
 				.loginPage("/login")//
-				.defaultSuccessUrl("/allResident")//
+				.successHandler(new LoginAuthenticationSuccessHandler(userDetailsService, "/allResident")) // this handler will update the SQL last login column, then handle /allResident 
 				.failureUrl("/login?error=true")//
 				.usernameParameter("username")//
 				.passwordParameter("password")

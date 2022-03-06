@@ -8,8 +8,6 @@ import static java.lang.Math.toIntExact;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +21,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffg.rrn.mapper.PropertyMapper;
 import com.ffg.rrn.mapper.ServiceCoordinatorMapper;
 import com.ffg.rrn.model.Property;
@@ -57,6 +52,8 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 
 	private final static String INACTIVATE_SQL_SERVICECOORDINATOR = "UPDATE SERVICE_COORDINATOR SET ACTIVE = ?, DATE_MODIFIED = NOW() where USER_NAME = ? ";
 
+	private final static String UPDATE_SQL_SERVICECOORDINATOR_LAST_LOGIN = "UPDATE SERVICE_COORDINATOR SET LAST_LOGIN = NOW() where USER_NAME = ?";
+
 	@Autowired
 	public ServiceCoordinatorDAO(DataSource dataSource) {
 		this.setDataSource(dataSource);
@@ -69,8 +66,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		Object[] params = new Object[] { userName };
 		ServiceCoordinatorMapper mapper = new ServiceCoordinatorMapper();
 		try {
-			ServiceCoordinator serviceCordInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);			
-			
+			ServiceCoordinator serviceCordInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
 			return serviceCordInfo;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
@@ -95,7 +91,7 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 			Integer totalIntakePending = this.getJdbcTemplate().queryForObject(intakePendingSQL, new Object[] {serviceCordInfo.getUserName()}, Integer.class);
 			serviceCordInfo.setIntakePending(totalIntakePending);
 									
-		}else {
+		} else {
 			
 			String engagementSql = "select round(count(*) / (select case when count(*) > 0 then count(*) else 1 END from resident where active = TRUE)::float* 100) as percentage "
 					+ 			" from resident where active = TRUE and ack_pr = true ";
@@ -123,6 +119,16 @@ public class ServiceCoordinatorDAO extends JdbcDaoSupport {
 		return scList;
 	}
 
+	private PreparedStatement updateLastLoginPS(Connection conn, String userName) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_SERVICECOORDINATOR_LAST_LOGIN);
+		ps.setString(1, userName);
+		return ps;
+	}
+	
+	public void updateLastLogin(String userName) {
+		 this.getJdbcTemplate().update(conn -> updateLastLoginPS(conn, userName));
+	}
+	
 	public Long inactivateOrActivateSC(String userName, boolean active) {
 
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
