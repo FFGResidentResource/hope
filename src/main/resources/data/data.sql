@@ -837,7 +837,7 @@ CREATE TABLE Persistent_Logins (
 );
 
 
---Following table will contain each record entry whenver Resident table is modified, so system won't loose records
+--Following table will contain each record entry whenever Resident table is modified, so system won't loose records
 create table RESIDENT_AUDITS (
 	audit_id 			BIGSERIAL primary KEY,
 	resident_id 		BIGINT not null,
