@@ -835,9 +835,6 @@ CREATE TABLE Persistent_Logins (
     last_used timestamp not null,
     PRIMARY KEY (series)     
 );
-  
-commit;
-
 
 
 --Following table will contain each record entry whenver Resident table is modified, so system won't loose records
@@ -1776,7 +1773,3 @@ BEGIN
    RETURN floor(random()* (high-low + 1) + low);
 END;
 $$ language 'plpgsql' STRICT;
-
-
-
-commit;
