@@ -30,6 +30,7 @@
 				<div class="col-sm-12">
 
 					<p>
+					<!-- 
 						<span>As a resident of a Wallick-managed community, you
 							have the privilege of having a Service Coordinator for your
 							housing community! Your Service Coordinator is responsible for
@@ -37,6 +38,15 @@
 							community resources that can help you stabilize your housing and
 							become more self-sufficient. Examples of the services that the
 							Service Coordinator can connect you to include:</span>
+							-->
+						<span>
+						Congratulations! Your property manager has made service coordination available at your housing community!
+						Your Service Coordinator is responsible for
+							helping you, and your family, get connected to available
+							community resources that can help you stabilize your housing and
+							become more self-sufficient. Examples of the services that the
+							Service Coordinator can connect you to include:
+						</span>
 					</p>
 
 					<table>
@@ -387,6 +397,7 @@
 														th:text=*{programSrvcAdult}></span>
 												</div></td>
 										</tr>
+										
 									</table>
 
 
@@ -635,7 +646,7 @@
 									</div>
 
 									<div class="col-sm-3">
-										<label class="control-label">Mode Of Transportation: </label>
+										<label class="control-label">Mode of Transportation: </label>
 										<div>
 											<select class="form-control  input-sm" id="_modeTranport" th:field="*{modeOfTransportation}" >
 												<option value="">Select</option>
@@ -723,7 +734,33 @@
 											</select>
 										</div>
 									</div>
+									<!--
+									<div class="col-sm-3">
+										<label class="control-label">Program & Services Desired Youth (2)
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_psy" th:field="*{programSrvcYouth}">
+												<option value="">Select</option>
+												<option th:each="psy : ${resident.programSrvcYouthList}"
+													th:value="${psy}"
+													th:utext="${psy}" />
+											</select>
+										</div>
+									</div>
 									
+									<div class="col-sm-3">
+										<label class="control-label">Program & Services Desired Youth (3)
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_psy" th:field="*{programSrvcYouth}">
+												<option value="">Select</option>
+												<option th:each="psy : ${resident.programSrvcYouthList}"
+													th:value="${psy}"
+													th:utext="${psy}" />
+											</select>
+										</div>
+									</div>
+									-->
 									<div class="col-sm-3">
 										<label class="control-label">Program & Services Desired Adult
 											</label>
@@ -736,6 +773,34 @@
 											</select>
 										</div>
 									</div>
+									<!--
+									<div class="col-sm-3">
+										<label class="control-label">Program & Services Desired Adult (2)
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_psa" th:field="*{programSrvcAdult}">
+												<option value="">Select</option>
+												<option th:each="psa : ${resident.programSrvcAdultList}"
+													th:value="${psa}"
+													th:utext="${psa}" />
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-3">
+										<label class="control-label">Program & Services Desired Adult (3)
+											</label>
+										<div>
+											<select class="form-control  input-sm" id="_psa" th:field="*{programSrvcAdult}">
+												<option value="">Select</option>
+												<option th:each="psa : ${resident.programSrvcAdultList}"
+													th:value="${psa}"
+													th:utext="${psa}" />
+											</select>
+										</div>
+									</div>
+									-->
+									
 								</div>
 								</p></td>
 						</tr>

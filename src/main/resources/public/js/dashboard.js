@@ -177,6 +177,8 @@ function generateReport(){
 	barrierToEduPercentage();
 	psyPercentage();
 	psaPercentage();
+	// TODO: work in progress
+	//currentlyHousedPercentage();
 	
 	generateAllQuarterlyReport();
 	
@@ -278,7 +280,7 @@ function movingUpQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					movingUpChart = generateCategoryChart("#movingUpChart", "Resident Moving Up", groupArray, dataArrayPerf);
+					movingUpChart = generateCategoryChart("#movingUpChart", "Resident Increasing Self-Sufficiency", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -326,7 +328,7 @@ function movingDownQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					movingDownChart= generateCategoryChart("#movingDownChart", "Resident Moving Down", groupArray, dataArrayPerf);
+					movingDownChart= generateCategoryChart("#movingDownChart", "Resident Decreasing Self-Sufficiency", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -375,7 +377,7 @@ function resServedQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					resServedChart= generateCategoryChart("#resServedChart", "Resident Served", groupArray, dataArrayPerf);
+					resServedChart= generateCategoryChart("#resServedChart", "Residents Engaged", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -1020,7 +1022,7 @@ function internetAccessPercentage(){
 					columns : dataArray					
 				})
 			}else{		
-					chartIA = generateChart("#internetAccessChart", "Has Computer with Internet Access");
+					chartIA = generateChart("#internetAccessChart", "Internet Access");
 					
 				}	
 		},		
@@ -1105,7 +1107,7 @@ function occLengthPercentage(){
 }
 
 function safeDayPercentage(){
-	
+	//alert("safeDayPercentage js");
 	var selectedProps = JSON.stringify(selectedProperties);
 	dataArray = null;
 	
@@ -1477,7 +1479,7 @@ function householdPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartHouseHold = generateChart("#householdChart", "Household");
+				chartHouseHold = generateChart("#householdChart", "Head of Household");
 			}
 		},
 		error : function(e) {
@@ -1707,7 +1709,7 @@ function healthPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartHealth = generateChart("#healthChart", "Health");
+				chartHealth = generateChart("#healthChart", "Health Insurance");
 			}
 		},
 		error : function(e) {
@@ -1926,7 +1928,7 @@ function psyPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartPsy = generateChart("#psyChart", "Program and Services desired for Youth  ");
+				chartPsy = generateChart("#psyChart", "Program and Services Desired for Youth  ");
 			}
 		},
 		error : function(e) {
@@ -1967,7 +1969,7 @@ function psaPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartPsa = generateChart("#psaChart", "Program and Services desired for Adult  ");
+				chartPsa = generateChart("#psaChart", "Program and Services Desired for Adults  ");
 			}
 		},
 		error : function(e) {
@@ -2225,3 +2227,64 @@ function pullDashboard(){
     });
     
 }
+
+// TODO: work in progress
+/*
+function currentlyHousedPercentage(){
+	//alert("js - currentlyHousedPercentage");	
+	var selectedProps = JSON.stringify(selectedProperties);
+	//alert(selectedProps);
+	dataArray = null;
+	jQuery.ajax({	
+		type : "POST",
+		contentType : "application/json",
+		url : "/currentlyHousedPercentage",
+		data: selectedProps,
+		dataType : 'json',
+		cache : false,
+		timeout : 60000,
+		success : function(response) {				
+			
+			dataArray = [[response[0].category,response[0].percentage],
+				 		[response[1].category,response[1].percentage],
+						[response[2].category,response[2].percentage],
+						[response[3].category,response[3].percentage]];
+							
+			if(chartSD != null){		
+			alert("load");		
+				chartSD.load({
+					columns : dataArray					
+				})
+			} else {		
+			alert("else");
+				chartSD = generateChart("#currentlyHousedChart", "Feels Safe at Home During the Day");					
+			}	
+		},		
+		error : function(e) {
+		    console.log("ERROR : ", e);
+		}
+    });
+}
+*/  
+
+// TOOD: work in progress
+// new function for pulling Report1
+/*
+function getReport1(that){    	
+    jQuery.ajax({	
+    	type : "POST",
+    	contentType : "application/csv",
+    	url : "/getReport1",
+    	dataType : 'csv',
+    	cache : false,
+    	timeout : 60000,
+    	success : function(response) {
+    			
+    		jQuery("#_getReport1").text(response);	
+    	},		
+    	error : function(e) {
+    	    console.log("ERROR : ", e);
+    	}
+    });
+}    
+*/
