@@ -278,7 +278,7 @@ function movingUpQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					movingUpChart = generateCategoryChart("#movingUpChart", "Resident Moving Up", groupArray, dataArrayPerf);
+					movingUpChart = generateCategoryChart("#movingUpChart", "Resident Increasing Self-Sufficiency", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -326,7 +326,7 @@ function movingDownQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					movingDownChart= generateCategoryChart("#movingDownChart", "Resident Moving Down", groupArray, dataArrayPerf);
+					movingDownChart= generateCategoryChart("#movingDownChart", "Resident Decreasing Self-Sufficiency", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -375,7 +375,7 @@ function resServedQuarterly(){
 					columns : dataArrayPerf					
 				})
 			}else{		
-					resServedChart= generateCategoryChart("#resServedChart", "Resident Served", groupArray, dataArrayPerf);
+					resServedChart= generateCategoryChart("#resServedChart", "Residents Engaged", groupArray, dataArrayPerf);
 					
 				}			
 		},		
@@ -1020,7 +1020,7 @@ function internetAccessPercentage(){
 					columns : dataArray					
 				})
 			}else{		
-					chartIA = generateChart("#internetAccessChart", "Has Computer with Internet Access");
+					chartIA = generateChart("#internetAccessChart", "Internet Access");
 					
 				}	
 		},		
@@ -1105,7 +1105,6 @@ function occLengthPercentage(){
 }
 
 function safeDayPercentage(){
-	
 	var selectedProps = JSON.stringify(selectedProperties);
 	dataArray = null;
 	
@@ -1477,7 +1476,7 @@ function householdPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartHouseHold = generateChart("#householdChart", "Household");
+				chartHouseHold = generateChart("#householdChart", "Head of Household");
 			}
 		},
 		error : function(e) {
@@ -1707,7 +1706,7 @@ function healthPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartHealth = generateChart("#healthChart", "Health");
+				chartHealth = generateChart("#healthChart", "Health Insurance");
 			}
 		},
 		error : function(e) {
@@ -1926,7 +1925,7 @@ function psyPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartPsy = generateChart("#psyChart", "Program and Services desired for Youth  ");
+				chartPsy = generateChart("#psyChart", "Program and Services Desired for Youth");
 			}
 		},
 		error : function(e) {
@@ -1967,7 +1966,7 @@ function psaPercentage(){
 					columns : dataArray
 				})
 			}else{
-				chartPsa = generateChart("#psaChart", "Program and Services desired for Adult  ");
+				chartPsa = generateChart("#psaChart", "Program and Services Desired for Adults");
 			}
 		},
 		error : function(e) {

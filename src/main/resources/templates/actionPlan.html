@@ -58,7 +58,7 @@ body {
 				<div class="col-sm-12 myPanel">
 					<div class="row">
 						<div class="col-sm-8">
-							<h3 style="width: 400px;">ACTION PLAN</h3>
+							<h3 style="width: 400px;">PLAN OF ACTION</h3>
 							<span class="hidden-print" style="color: red; font-size: larger;"
 								th:if="*{firstName == null}" th:text="${message}"></span>
 							<span class="text-danger"
@@ -96,7 +96,7 @@ body {
 
 					<h5>This form is to be used to document the plan of action to
 						be taken to address a resident’s needs.</h5>
-					<div class="hidden-print" style="color:blue;"><h5>If you filling first time for new resident, continue below else if action plan already exists please choose saved action plan from latest date above </h5></div>
+					<div class="hidden-print" style="color:blue;"><h5>If you want to add to a pre-existing action plan, please choose a save action plan from the dates listed in System of Record above.</h5></div>
 
 					<table
 						class="table table-responsive table-bordered table-condensed text-center"
@@ -417,8 +417,10 @@ body {
 										<option value="Avoid moving out becuase of non-payment of rent">Avoid moving out becuase of non-payment of rent</option>
 										<option value="Avoid utility-shut off">Avoid utility-shut off</option>
 										<option value="Purchase a home">Purchase a home</option>
+										<option value="Homebuyers education">Homebuyers education</option>
 										<option value="Other">Other</option>
-								</select></td>
+								</select>
+								</td>
 								<td><input class="form-control input-sm" type="text"
 									id="_inputDateTextAnticipatedHousing" maxlength="10" value=""
 									placeholder="MM/DD/YYYY" /></td>
@@ -988,6 +990,8 @@ body {
 										<option value="Enroll child(ren) in day care">Enroll child(ren) in day care</option>
 										<option value="Complete secondary education program">Complete secondary education program</option>
 										<option value="Complete vocational/job training program">Complete vocational/job training program</option>
+										<option value="Complete High School or ie GED">Complete High School or ie GED</option>
+										<option value="Complete post secondary">Complete post secondary</option>
 										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
@@ -1026,6 +1030,7 @@ body {
 										<option value="">Select</option>
 										<option value="Improve housekeeping skills or conditions">Improve housekeeping skills or conditions</option>
 										<option value="Secure donated materials(e.g. clothes, school supplies, furniture)">Secure donated materials(e.g. clothes, school supplies, furniture)</option>										
+										<option value="Parenting skills">Parenting skills</option>				
 										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
@@ -1049,6 +1054,9 @@ body {
 										<option value="Enroll in or change health insurance">Enroll in or change health insurance</option>
 										<option value="Reduce food insecurity">Reduce food insecurity</option>
 										<option value="Improve ability to manage health/mental health condition">Improve ability to manage health/mental health condition</option>
+										<option value="Adult personal assistance">Adult personal assistance</option>										
+										<option value="Mental health service">Mental health service</option>										
+										<option value="Substance abuse service">Substance abuse service</option>																
 										<option value="Other">Other</option>
 								</select></td>
 								<td><select class="form-control input-sm setable"
