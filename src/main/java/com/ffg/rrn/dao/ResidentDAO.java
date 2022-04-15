@@ -58,7 +58,7 @@ import com.ffg.rrn.utils.AppConstants;
 @Repository
 @Transactional
 public class ResidentDAO extends JdbcDaoSupport {
-
+	
 	private final static String SQL_INSERT_RESIDENT = "INSERT INTO RESIDENT (FIRST_NAME, MIDDLE, LAST_NAME, PROP_ID, ADDRESS, "
 			+ "REF_TYPE, IS_RESIDENT, TEXT_NO, SERVICE_COORD) VALUES (?,?,?,?,?,?,?,?,?)";
 
@@ -195,7 +195,7 @@ public class ResidentDAO extends JdbcDaoSupport {
 	 * @return
 	 */
 	public List<Property> getAllProperty(String serviceCoord) {
-
+		
 		try {
 
 			this.getJdbcTemplate().queryForObject(
@@ -203,7 +203,6 @@ public class ResidentDAO extends JdbcDaoSupport {
 							+ "join app_role ar on ar.role_id = ur.role_id and sc.user_name = ? and ar.role_name = 'ROLE_ADMIN'",
 					new Object[] { serviceCoord }, String.class);
 		} catch (EmptyResultDataAccessException ex) {
-
 			List<Property> properties = new ArrayList<Property>();
 
 			properties = this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL_FOR_NON_ADMIN_SC,
@@ -230,8 +229,23 @@ public class ResidentDAO extends JdbcDaoSupport {
 
 		PropertyMapper rowMapper = new PropertyMapper();
 		return this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
-
 	}
+	
+	
+	/**
+	 * @param serviceCoord
+	 * @return
+	 */
+	public List<Property> getAllProperty() {
+		//try {
+			PropertyMapper rowMapper = new PropertyMapper();
+			List<Property> j = this.getJdbcTemplate().query(PropertyMapper.PROPERTY_SQL, rowMapper);
+			return j;
+		//} catch (EmptyResultDataAccessException ex) {
+
+		//}
+	}
+
 
 	public List<AssessmentType> getAllAType() {
 		AssessmentMapper rowMapper = new AssessmentMapper();
@@ -349,12 +363,15 @@ public class ResidentDAO extends JdbcDaoSupport {
 			// When No resident found - Page will open for NewResident
 			Resident r = new Resident(this.getAllProperty(serviceCoord), this.getAllAType(), this.getAllReferral(),
 					serviceCoord);
+			List<Property> gpl = this.getAllProperty();
+			r.setGlobalPropertyList(gpl);
 			WizardStepCounter wsCounter = new WizardStepCounter();
 			r.setWsCounter(wsCounter);
 			return r;
 		}
-
+		
 		resident.setPropertyList(this.getAllProperty(serviceCoord));
+
 		resident.setRefList(this.getAllReferral());
 		resident.setAtList(this.getAllAType());
 

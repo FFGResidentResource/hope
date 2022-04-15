@@ -110,7 +110,7 @@
 									<select class="form-control  input-sm" id="_property"
 										th:field="*{propertyId}" required>
 										<option value="">Select</option>
-										<option th:each="property : ${resident.propertyList}"
+										<option th:each="property : ${resident.globalPropertyList}"
 											th:value="${property.propertyId}"
 											th:utext="${property.propertyName}" />
 									</select>

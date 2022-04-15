@@ -146,6 +146,10 @@ public class ResidentServiceImpl {
 	public List<Property> getAllProperty(String serviceCoord) {
 		return this.residentDao.getAllProperty(serviceCoord);
 	}
+	
+	public List<Property> getGlobalPropertyList() {
+		return this.residentDao.getAllProperty();
+	}
 
 	public void updateResidentStatus(final Resident resident) {
 		residentDao.updateResidentStatus(resident);
@@ -313,5 +317,5 @@ public class ResidentServiceImpl {
 	public List<ResidentAudit> getResidentAudits(Long residentId) {
 		return residentDao.getResidentAudits(residentId);
 	}
-
-	}
+	
+}
