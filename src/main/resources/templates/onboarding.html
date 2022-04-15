@@ -110,7 +110,7 @@
 									<select class="form-control  input-sm" id="_property"
 										th:field="*{propertyId}" required>
 										<option value="">Select</option>
-										<option th:each="property : ${resident.globalPropertyList}"
+										<option th:each="property : ${resident.propertyList}"
 											th:value="${property.propertyId}"
 											th:utext="${property.propertyName}" />
 									</select>
@@ -218,15 +218,6 @@
 						<div class="caption">
 							<p><h4>Step 3</h4></p>
 							<p>Self-Sufficiency<br>Assessment</p>
-							<p></p>
-							<!-- 
-							<a id="_loadSelfAssessmentButton" class="btn btn-default btn-lg"
-								th:disabled="true"
-								th:href="@{/getCurrentAssessment?lifeDomain=housing}"> <span
-								class=" glyphicon glyphicon-user" style="color: blue;"
-								aria-hidden="true"></span> Self-Sufficiency <br>Assessment
-							</a>
-							-->
 							<div class="caption">							
 							<p>
 								<span id="_hScoreGoal">--/--</span>
