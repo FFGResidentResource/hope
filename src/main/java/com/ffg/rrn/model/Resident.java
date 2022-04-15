@@ -113,6 +113,9 @@ public class Resident {
 
 	@JsonView
 	private List<Property> propertyList;
+	
+	@JsonView
+	private List<Property> globalPropertyList;
 
 	@JsonView
 	private List<AssessmentType> atList;
@@ -312,7 +315,15 @@ public class Resident {
 		this.refList = refList;
 		this.serviceCoord = serviceCoord;
 	}
+	
+	
+	public void setGlobalPropertyList(List<Property> globalPropertyList) {
+		this.globalPropertyList = globalPropertyList;
+		System.out.println("Resident.setGlobalPropertyList(): ");
+		System.out.println(this.globalPropertyList);
+	}
 
+	
 	public Resident(Long residentId, Boolean active, String firstName, String middle, String lastName,
 			String propertyName, String voiceMail, String text, String email, Boolean allowContact, Boolean wantSurvey,
 			Boolean photoRelease, Date dateAdded, String serviceCoord) {
